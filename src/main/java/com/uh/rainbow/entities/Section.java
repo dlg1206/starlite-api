@@ -14,7 +14,7 @@ import java.util.List;
 public class Section {
 
 
-    private final int id;
+    private final String id;     // section not always number
     private final int crn;
     private final String instructor;
     private final int currEnrolled;
@@ -23,7 +23,7 @@ public class Section {
     private final List<String> reqDesCodes = new ArrayList<>();
     private final List<Meeting> meetings = new ArrayList<>();
 
-    public Section(int id, int crn, String instructor, int currEnrolled, int seatsAvailable) {
+    public Section(String id, int crn, String instructor, int currEnrolled, int seatsAvailable) {
         this.id = id;
         this.crn = crn;
         this.instructor = instructor;

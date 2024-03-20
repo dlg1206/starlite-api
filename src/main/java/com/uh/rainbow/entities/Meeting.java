@@ -2,6 +2,7 @@ package com.uh.rainbow.entities;
 
 import com.uh.rainbow.entities.timeblock.TimeBlock_I;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,17 +33,13 @@ public class Meeting {
     }
 
 
-    public static List<Meeting> createMeetings(String dayString, String timeString, String roomString) {
+    public static List<Meeting> createMeetings(String dayString, String timeString, String roomString) throws ParseException {
         List<Meeting> meetings = new ArrayList<>();
 
-        try {
-            List<Day> days = Day.toDays(dayString);
+        List<Day> days = Day.toDays(dayString);
 
-            TimeBlock_I tb = TimeBlock_I.createTimeBlock(timeString);
-            days.forEach((day) -> meetings.add(new Meeting(day, tb.getStart(), tb.getEnd(), roomString)));
-        } catch (Exception e) {
-            System.err.println(e);
-        }
+        TimeBlock_I tb = TimeBlock_I.createTimeBlock(timeString);
+        days.forEach((day) -> meetings.add(new Meeting(day, tb.getStart(), tb.getEnd(), roomString)));
 
 
         return meetings;

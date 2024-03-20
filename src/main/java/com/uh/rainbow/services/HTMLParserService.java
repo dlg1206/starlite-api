@@ -10,6 +10,7 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -92,7 +93,7 @@ public class HTMLParserService {
      *
      * @return List of institution ids and names
      */
-    public List<Identifier> parseInstitutions() {
+    public List<Identifier> parseInstitutions() throws IOException {
         List<Identifier> ids = new ArrayList<>();
         try{
             // Get list
@@ -104,7 +105,7 @@ public class HTMLParserService {
                 ids.add(new Identifier(item.className(), item.text()));
 
         } catch (IOException ignored){
-
+            throw ignored;
         }
 
         return ids;
@@ -116,7 +117,7 @@ public class HTMLParserService {
      * @param instID Institution ID
      * @return List of term ids and names
      */
-    public List<Identifier> parseTerms(String instID) {
+    public List<Identifier> parseTerms(String instID) throws IOException {
         List<Identifier> ids = new ArrayList<>();
         try{
             // Get terms
@@ -126,7 +127,7 @@ public class HTMLParserService {
             ids.addAll(processElements(terms, new URLParamExtractor("t=([0-9]*)")));
 
         } catch (IOException ignored){
-
+            throw ignored;
         }
 
         return ids;
@@ -139,7 +140,7 @@ public class HTMLParserService {
      * @param termID term ID
      * @return List of subject ids and names
      */
-    public List<Identifier> parseSubjects(String instID, String termID) {
+    public List<Identifier> parseSubjects(String instID, String termID) throws IOException {
         List<Identifier> ids = new ArrayList<>();
         try{
             // Get each subject col
@@ -164,13 +165,13 @@ public class HTMLParserService {
             ids.addAll(processElements(rightSubjects, upe));
 
         } catch (IOException ignored){
-
+            throw ignored;
         }
 
         return ids;
     }
 
-    public List<Course> parseCourses(String instID, String termID, String subjectID){
+    public List<Course> parseCourses(String instID, String termID, String subjectID) throws IOException, ParseException {
         Map<String, Course> courses = new HashMap<>();
 
         try{
@@ -184,9 +185,10 @@ public class HTMLParserService {
             Elements rows = Objects.requireNonNull(doc.selectFirst("tbody")).select("tr");
 
             Element row = rows.remove(0);   // prime query
-            while(!rows.isEmpty()){
+            do{
 
                 if(row.select("td").size() < 13){
+                    if(rows.isEmpty()) break;
                     row = rows.remove(0);
                     continue;
                 }
@@ -197,12 +199,11 @@ public class HTMLParserService {
                     courses.put(cid, new Course(
                             cid,                                                        // Course ID
                             row.select("td").get(4).text(),                     // Full course name
-                            Integer.parseInt(row.select("td").get(5).text())    // Credits
+                            row.select("td").get(5).text()   // Credits
                     ));
                 // Parse section
-                // public Section(int id, int crn, String instructor, int currEnrolled, int seatsAvailable)
                 Section section = new Section(
-                        Integer.parseInt(row.select("td").get(3).text()),   // Section Number
+                        row.select("td").get(3).text(),                     // Section Number
                         Integer.parseInt(row.select("td").get(1).text()),   // Course Ref Number
                         row.select("td").get(6).select("abbr").attr("title"),   // Instructor
                         Integer.parseInt(row.select("td").get(7).text()),   // Number Enrolled
@@ -226,16 +227,18 @@ public class HTMLParserService {
                     if(offset == 0)
                         offset = -1;
 
+                    if(rows.isEmpty())  break;
+
                     row = rows.remove(0);
 
                 } while (!rows.isEmpty() && row.select("td").size() > 2 && row.select("td").get(1).text().isEmpty());
 
                 // Update course
                 courses.get(cid).addSection(section);
-            }
+            } while (!rows.isEmpty());
 
-        } catch (IOException ignored){
-
+        } catch (Exception ignored){
+            throw ignored;
         }
 
         return courses.values().stream().toList();

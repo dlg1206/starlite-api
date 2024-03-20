@@ -14,10 +14,10 @@ public class Course {
 
     private final String cid;
     private final String name;
-    private final int credits;
+    private final String credits;       // Credits not always ints
     private final List<Section> sections = new ArrayList<>();
 
-    public Course(String cid, String name, int credits){
+    public Course(String cid, String name, String credits){
         this.cid = cid;
         this.name = name;
         this.credits = credits;
