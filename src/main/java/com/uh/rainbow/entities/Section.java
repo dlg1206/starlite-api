@@ -34,7 +34,7 @@ public class Section {
         this.meetings.add(meeting);
     }
 
-    public void addReqDesCodes(ArrayList<String> codes){
+    public void addReqDesCodes(List<String> codes){
         this.reqDesCodes.addAll(codes);
     }
 }
