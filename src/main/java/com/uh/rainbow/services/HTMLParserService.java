@@ -1,6 +1,7 @@
 package com.uh.rainbow.services;
 
 import com.uh.rainbow.entities.Course;
+import com.uh.rainbow.entities.Day;
 import com.uh.rainbow.entities.Meeting;
 import com.uh.rainbow.entities.Section;
 import org.jsoup.Jsoup;
@@ -197,8 +198,8 @@ public class HTMLParserService {
                 String cid = row.select("td").get(2).text();
                 if(courses.get(cid) == null)
                     courses.put(cid, new Course(
-                            cid,                                                        // Course ID
-                            row.select("td").get(4).text(),                     // Full course name
+                            cid,                                     // Course ID
+                            row.select("td").get(4).text(),  // Full course name
                             row.select("td").get(5).text()   // Credits
                     ));
                 // Parse section
@@ -210,26 +211,42 @@ public class HTMLParserService {
                         Integer.parseInt(row.select("td").get(8).text())    // Seats Available
                 );
 
-                // Add Requirements & Designation Codes if any
-                if(!row.select("td").get(0).text().isEmpty())
-                    section.addReqDesCodes(Arrays.stream(row.select("td").get(0).text().split(",")).toList());
+
+                int initial_offset = 0;
+                // todo add wait list support
+                // account for wait list rows
+                // https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202440&s=THEA
+                if(row.select("td").size() == 15)
+                    initial_offset = 2;
 
                 // Keep processing rows until hit next section
-                int offset = 0;
                 do{
-                    // todo parse dates
+                    int offset = initial_offset;
+
+                    // Different amount of columns per row can cause issues, check for offset
+                    if(!Day.toDays(row.select("td").get(8 + offset).text()).isEmpty())
+                        offset += -1;
+
                     section.addMeetings(Meeting.createMeetings(
                             row.select("td").get(9 + offset).text(),     // Day
-                            row.select("td").get(10 + offset).text(),    // Time
-                            row.select("td").get(11 + offset).select("abbr").attr("title")  // Room
+                            row.select("td").get(10 + offset).text(),    // Times
+                            row.select("td").get(11 + offset).select("abbr").attr("title"),  // Room
+                            row.select("td").get(12 + offset).text()     // Dates
                     ));
-                    // Title is missing empty string in rows with just times
-                    if(offset == 0)
-                        offset = -1;
+
+                    // Add Requirements / Designation Codes / Misc info if any
+                    if(!row.select("td").get(0).text().isEmpty())
+                        section.addDetails(row.select("td").get(0).text());
 
                     if(rows.isEmpty())  break;
 
                     row = rows.remove(0);
+
+                    // Edge case where details on next line but there's no times to process
+                    // https://www.sis.hawaii.edu/uhdad/avail.classes?i=HAW&t=202310&s=FIRE
+                    String details = row.select("td").get(0).text();
+                    if(!details.isEmpty() && row.select("td").size() == 1)
+                        section.addDetails(details);
 
                 } while (!rows.isEmpty() && row.select("td").size() > 2 && row.select("td").get(1).text().isEmpty());
 

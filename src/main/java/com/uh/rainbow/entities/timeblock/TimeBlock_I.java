@@ -27,32 +27,52 @@ public abstract class TimeBlock_I {
         }
     }
 
-    protected String start;
-    protected String end;
+    protected String startTime;
+    protected String startDate;
+    protected String endTime;
+    protected String endDate;
 
     /**
      * Default timeblock constructor
      *
-     * @param start Start time of class
-     * @param end End time of class
+     * @param startTime Start time of class
+     * @param startDate Start Date of class
+     * @param endTime End time of class
+     * @param endDate End Date of class
      */
-    protected TimeBlock_I(String start, String end) {
-        this.start = start;
-        this.end = end;
+    protected TimeBlock_I(String startTime, String startDate, String endTime, String endDate) {
+        this.startTime = startTime;
+        this.startDate = startDate;
+        this.endTime = endTime;
+        this.endDate = endDate;
     }
 
     /**
      * @return Start time
      */
-    public String getStart() {
-        return this.start;
+    public String getStartTime() {
+        return this.startTime;
+    }
+
+    /**
+     * @return Start Date
+     */
+    public String getStartDate() {
+        return this.startDate;
     }
 
     /**
      * @return End time
      */
-    public String getEnd() {
-        return this.end;
+    public String getEndTime() {
+        return this.endTime;
+    }
+
+    /**
+     * @return End Date
+     */
+    public String getEndDate() {
+        return this.endDate;
     }
 
     /**
@@ -62,10 +82,13 @@ public abstract class TimeBlock_I {
      * @return Timeblock with interpreted start and end times
      * @throws ParseException Failed to parse time
      */
-    public static TimeBlock_I createTimeBlock(String timeString) throws ParseException {
+    public static TimeBlock_I createTimeBlock(String timeString, String dateString) throws ParseException {
+
+        String[] dates = dateString.split("-");
+
         // Return special "TBA" block if no time is given
         if (timeString.equalsIgnoreCase("TBA"))
-            return new TBATimeBlock();
+            return new TBATimeBlock(dates[0], dates.length == 2 ? dates[1] : dates[0]);     // Class on 1 day, not range
 
         // Get a/p and separate start and end times
         char tod = timeString.charAt(timeString.length() - 1);
@@ -78,6 +101,6 @@ public abstract class TimeBlock_I {
         if (tod == 'p' && end.before(NOON))
             end = DateUtils.addHours(end, 12);
 
-        return new TimeBlock(start, end);
+        return new TimeBlock(start, dates[0], end, dates.length == 2 ? dates[1] : dates[0]);
     }
 }

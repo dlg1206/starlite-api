@@ -17,14 +17,18 @@ public class Meeting {
 
 
     private final Day day;
-    private final String start;
-    private final String end;
+    private final String startTime;
+    private final String startDate;
+    private final String endTime;
+    private final String endDate;
     private final String room;
 
-    private Meeting(Day day, String start, String end, String room) {
+    private Meeting(Day day, String startTime, String startDate, String endTime, String endDate, String room) {
         this.day = day;
-        this.start = start;
-        this.end = end;
+        this.startTime = startTime;
+        this.startDate = startDate;
+        this.endTime = endTime;
+        this.endDate = endDate;
         this.room = room;
     }
 
@@ -33,13 +37,15 @@ public class Meeting {
     }
 
 
-    public static List<Meeting> createMeetings(String dayString, String timeString, String roomString) throws ParseException {
+    public static List<Meeting> createMeetings(String dayString, String timeString, String roomString, String dateString) throws ParseException {
         List<Meeting> meetings = new ArrayList<>();
 
         List<Day> days = Day.toDays(dayString);
 
-        TimeBlock_I tb = TimeBlock_I.createTimeBlock(timeString);
-        days.forEach((day) -> meetings.add(new Meeting(day, tb.getStart(), tb.getEnd(), roomString)));
+        TimeBlock_I tb = TimeBlock_I.createTimeBlock(timeString, dateString);
+        days.forEach((day) -> meetings.add(
+                new Meeting(day, tb.getStartTime(), tb. getStartDate(), tb.getEndTime(), tb.getEndDate(), roomString))
+        );
 
 
         return meetings;

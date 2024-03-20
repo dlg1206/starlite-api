@@ -20,7 +20,7 @@ public class Section {
     private final int currEnrolled;
     private final int seatsAvailable;
 
-    private final List<String> reqDesCodes = new ArrayList<>();
+    private final List<String> additionalDetails = new ArrayList<>();
     private final List<Meeting> meetings = new ArrayList<>();
 
     public Section(String id, int crn, String instructor, int currEnrolled, int seatsAvailable) {
@@ -36,7 +36,7 @@ public class Section {
         this.meetings.sort(Comparator.comparingInt(Meeting::getDow));   // sort meetings by day of week
     }
 
-    public void addReqDesCodes(List<String> codes) {
-        this.reqDesCodes.addAll(codes);
+    public void addDetails(String details) {
+        this.additionalDetails.add(details);
     }
 }

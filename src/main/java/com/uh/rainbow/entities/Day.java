@@ -72,6 +72,7 @@ public enum Day {
         }
         for (int i = 0; i < code.length(); i++)
             days.add(Day.toDay(code.substring(i, i + 1)));
+        while(days.remove(null));    // remove nulls
         return days;
     }
 }

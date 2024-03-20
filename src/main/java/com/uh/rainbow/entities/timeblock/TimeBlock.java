@@ -18,11 +18,13 @@ public class TimeBlock extends TimeBlock_I {
     /**
      * Create a new time block using Date times
      *
-     * @param start Start time
-     * @param end End time
+     * @param startTime Start time of class
+     * @param startDate Start Date of class
+     * @param endTime End time of class
+     * @param endDate End Date of class
      */
-    protected TimeBlock(Date start, Date end) {
-        super(output.format(start), output.format(end));
+    protected TimeBlock(Date startTime, String startDate, Date endTime, String endDate ) {
+        super(output.format(startTime), startDate, output.format(endTime), endDate);
     }
 
 }
