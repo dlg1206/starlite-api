@@ -216,10 +216,10 @@ public class HTMLParserService {
                 // Keep processing rows until hit next section
                 int offset = 0;
                 do{
-                    section.addMeeting(new Meeting(
+                    // todo parse dates
+                    section.addMeetings(Meeting.createMeetings(
                             row.select("td").get(9 + offset).text(),     // Day
-                            row.select("td").get(10 + offset).text(),    // Start Time
-                            row.select("td").get(10 + offset).text(),    // End Time
+                            row.select("td").get(10 + offset).text(),    // Time
                             row.select("td").get(11 + offset).select("abbr").attr("title")  // Room
                     ));
                     // Title is missing empty string in rows with just times

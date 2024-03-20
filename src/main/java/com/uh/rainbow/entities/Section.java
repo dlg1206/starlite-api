@@ -1,6 +1,7 @@
 package com.uh.rainbow.entities;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -22,7 +23,7 @@ public class Section {
     private final List<String> reqDesCodes = new ArrayList<>();
     private final List<Meeting> meetings = new ArrayList<>();
 
-    public Section(int id, int crn, String instructor, int currEnrolled, int seatsAvailable){
+    public Section(int id, int crn, String instructor, int currEnrolled, int seatsAvailable) {
         this.id = id;
         this.crn = crn;
         this.instructor = instructor;
@@ -30,11 +31,12 @@ public class Section {
         this.seatsAvailable = seatsAvailable;
     }
 
-    public void addMeeting(Meeting meeting){
-        this.meetings.add(meeting);
+    public void addMeetings(List<Meeting> meetings) {
+        this.meetings.addAll(meetings);
+        this.meetings.sort(Comparator.comparingInt(Meeting::getDow));   // sort meetings by day of week
     }
 
-    public void addReqDesCodes(List<String> codes){
+    public void addReqDesCodes(List<String> codes) {
         this.reqDesCodes.addAll(codes);
     }
 }
