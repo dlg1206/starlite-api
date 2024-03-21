@@ -36,7 +36,7 @@ public class HTMLParserService {
     }
 
     /**
-     * Regex parser that extracts params from a url
+     * Regex parser that extracts params from an url
      */
     private static class URLParamExtractor{
 

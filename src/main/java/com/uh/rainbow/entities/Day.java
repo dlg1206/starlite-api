@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * <b>File:</b> Day.java
  * <p>
- * <b>Description:</b>
+ * <b>Description:</b> Day of Week Enum
  *
  * @author Derek Garcia
  */
@@ -22,14 +22,28 @@ public enum Day {
 
     private final int dow;
 
+    /**
+     * Create new day with a numeric value
+     *
+     * @param dow Day of Week
+     */
     Day(int dow) {
         this.dow = dow;
     }
 
+    /**
+     * @return Day of week
+     */
     public int getDow() {
         return this.dow;
     }
 
+    /**
+     * Convert UH Day code to Day enum
+     *
+     * @param code string code ID
+     * @return Day Enum, null if not
+     */
     private static Day toDay(String code) {
         switch (code.toLowerCase()) {
             case "u" -> {
@@ -62,6 +76,14 @@ public enum Day {
         }
     }
 
+    /**
+     * Convert a string of UH day codes to Day enums
+     * <p>
+     * ie MW -> Monday, Wednesday
+     *
+     * @param code Day code string
+     * @return List of Days
+     */
     public static List<Day> toDays(String code) {
         List<Day> days = new ArrayList<>();
         Day day = toDay(code);

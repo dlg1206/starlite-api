@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * <b>File:</b> Meeting.java
  * <p>
- * <b>Description:</b>
+ * <b>Description:</b> Representation of a meeting period
  *
  * @author Derek Garcia
  */
@@ -23,6 +23,16 @@ public class Meeting {
     private final String endDate;
     private final String room;
 
+    /**
+     * Create new meeting
+     *
+     * @param day Day of Week
+     * @param startTime Start time
+     * @param startDate Start date
+     * @param endTime End Time
+     * @param endDate End date
+     * @param room Room
+     */
     private Meeting(Day day, String startTime, String startDate, String endTime, String endDate, String room) {
         this.day = day;
         this.startTime = startTime;
@@ -32,11 +42,24 @@ public class Meeting {
         this.room = room;
     }
 
+    /**
+     * @return Day of week meeting occurs on
+     */
     public int getDow() {
         return this.day.getDow();
     }
 
 
+    /**
+     * Create new meetings parsed from UH style input parameters
+     *
+     * @param dayString Day string formatted D*
+     * @param timeString Time formatted HHmm-HHmm(?:a|p)
+     * @param roomString Room name
+     * @param dateString Date formatted DD/MM(?:|-DD/MM)
+     * @return List of parsed meetings
+     * @throws ParseException Fail to parse time or day block
+     */
     public static List<Meeting> createMeetings(String dayString, String timeString, String roomString, String dateString) throws ParseException {
         List<Meeting> meetings = new ArrayList<>();
 
@@ -46,7 +69,6 @@ public class Meeting {
         days.forEach((day) -> meetings.add(
                 new Meeting(day, tb.getStartTime(), tb. getStartDate(), tb.getEndTime(), tb.getEndDate(), roomString))
         );
-
 
         return meetings;
     }
