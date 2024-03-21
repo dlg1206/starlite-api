@@ -1,0 +1,275 @@
+<html><!-- OWA_CACHE will timeout in 10 minutes. --><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link rel="stylesheet" type="text/css" title="Default text size" href="//www.hawaii.edu/myuh/availcss/availMAU.css">
+    <title>University of Hawaii Maui College - Class Availability</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script type="text/javascript">
+function UpdateTableHeaders() {
+$("div.divListOfClasses").each(function() {
+var originalHeaderRow = $(".tableFloatingHeaderOriginal", this);
+var floatingHeaderRow = $(".tableFloatingHeader", this);
+var offset = $(this).offset();
+var scrollTop = $(window).scrollTop();
+if ((scrollTop > offset.top) && (scrollTop < offset.top + $(this).height())) {
+floatingHeaderRow.css("visibility", "visible");
+floatingHeaderRow.css("top", Math.min(scrollTop - offset.top, $(this).height() - floatingHeaderRow.height()) + "px");
+$("th", floatingHeaderRow).each(function(index) {
+var cellWidth = $("th", originalHeaderRow).eq(index).css('width');
+$(this).css('width', cellWidth);
+});
+floatingHeaderRow.css("width", $(this).css("width"));
+}
+else {
+floatingHeaderRow.css("visibility", "hidden");
+floatingHeaderRow.css("top", "0px");
+}
+});
+}
+$(document).ready(function() {
+$("table.listOfClasses").each(function() {
+$(this).wrap("<div class=\"divListOfClasses\" style=\"position:relative\"></div>");
+var originalHeaderRow = $("tr:first", this)
+originalHeaderRow.before(originalHeaderRow.clone());
+var clonedHeaderRow = $("tr:first", this)
+clonedHeaderRow.addClass("tableFloatingHeader");
+clonedHeaderRow.css("position", "absolute");
+clonedHeaderRow.css("top", "0px");
+clonedHeaderRow.css("left", $(this).css("margin-left"));
+clonedHeaderRow.css("visibility", "hidden");
+originalHeaderRow.addClass("tableFloatingHeaderOriginal");
+});
+UpdateTableHeaders();
+$(window).scroll(UpdateTableHeaders);
+$(window).resize(UpdateTableHeaders);
+});
+</script>
+</head>
+<body>
+<div class="header">
+    <p class="system">
+        <a href="./avail.classes" class="system_link">University of Hawaii</a>
+        <a href="https://hawaii-maui.verbacompare.com/" target="_blank" class="book_link," style="color: white; text-decoration: none; float: right">Textbooks/Course Materials</a>
+    </p>
+    <p class="institution">
+        <a href="./avail.classes?i=MAU" class="title_link">University of Hawaii Maui College</a>
+        •
+        Class Availability
+    </p><p class="transfer-info">
+    <a href="http://www.hawaii.edu/admissions/transfers.html">(UH Transfer Information)</a>
+</p>
+</div>
+<p class="backlink">
+    <a href="https://www.hawaii.edu/myuhinfo/class-availability/">Back to list of UH System Institutions</a>
+</p>
+<div class="bodydiv">
+    <p><b>Active and upcoming terms at
+        <a href="./avail.classes?i=MAU">University of Hawaii Maui College</a>
+        :</b></p>
+    <ul class="terms">
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=202510">Fall 2024</a>
+            - <span style="color:#CC3333"><b>Draft</b></span>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=202440">Summer 2024</a>
+            - <span style="color:#CC3333"><b>Draft</b></span>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=202430">Spring 2024</a>
+            - <span style="color:#CC3333"><b>New</b></span>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=202410">Fall 2023</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=202340">Summer 2023</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=202330">Spring 2023</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=202310">Fall 2022</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=202240">Summer 2022</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=202230">Spring 2022</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=202210">Fall 2021</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=202140">Summer 2021</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=202130">Spring 2021</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=202110">Fall 2020</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=202040">Summer 2020</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=202030">Spring 2020</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=202010">Fall 2019</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201940">Summer 2019</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201930">Spring 2019</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201910">Fall 2018</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201840">Summer 2018</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201830">Spring 2018</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201810">Fall 2017</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201740">Summer 2017</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201730">Spring 2017</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201710">Fall 2016</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201640">Summer 2016</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201630">Spring 2016</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201610">Fall 2015</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201540">Summer 2015</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201530">Spring 2015</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201510">Fall 2014</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201440">Summer 2014</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201430">Spring 2014</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201410">Fall 2013</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201340">Summer 2013</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201330">Spring 2013</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201310">Fall 2012</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201240">Summer 2012</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201230">Spring 2012</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201210">Fall 2011</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201140">Summer 2011</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201130">Spring 2011</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201110">Fall 2010</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201040">Summer 2010</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201030">Spring 2010</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=201010">Fall 2009</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=200940">Summer 2009</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=200930">Spring 2009</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=200910">Fall 2008</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=200840">Summer 2008</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=200830">Spring 2008</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=200810">Fall 2007</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=200740">Summer 2007</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=200730">Spring 2007</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=200710">Fall 2006</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=200640">Summer 2006</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=200630">Spring 2006</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=200610">Fall 2005</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=200540">Summer 2005</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=200530">Spring 2005</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=200510">Fall 2004</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=200440">Summer 2004</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=200430">Spring 2004</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=200410">Fall 2003</a>
+        </li>
+        <li>
+            <a href="./avail.classes?i=MAU&amp;t=200340">Summer 2003</a>
+        </li>
+    </ul>
+</div>
+<div class="footer">
+    <hr size="1" width="100%">
+    <p class="copyright">©2024 <a href="http://www.hawaii.edu/">University of Hawaii</a></p>
+    <p class="updated">Updated: 03/21/2024 11:19:40 AM HST</p>
+</div>
+
+</body></html>

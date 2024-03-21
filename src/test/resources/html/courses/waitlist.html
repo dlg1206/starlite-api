@@ -1,0 +1,630 @@
+<html><!-- OWA_CACHE will timeout in 10 minutes. --><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link rel="stylesheet" type="text/css" title="Default text size" href="//www.hawaii.edu/myuh/availcss/availMAN.css">
+    <title>University of Hawaii at Manoa - Summer 2024 - THEA</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script type="text/javascript">
+function UpdateTableHeaders() {
+$("div.divListOfClasses").each(function() {
+var originalHeaderRow = $(".tableFloatingHeaderOriginal", this);
+var floatingHeaderRow = $(".tableFloatingHeader", this);
+var offset = $(this).offset();
+var scrollTop = $(window).scrollTop();
+if ((scrollTop > offset.top) && (scrollTop < offset.top + $(this).height())) {
+floatingHeaderRow.css("visibility", "visible");
+floatingHeaderRow.css("top", Math.min(scrollTop - offset.top, $(this).height() - floatingHeaderRow.height()) + "px");
+$("th", floatingHeaderRow).each(function(index) {
+var cellWidth = $("th", originalHeaderRow).eq(index).css('width');
+$(this).css('width', cellWidth);
+});
+floatingHeaderRow.css("width", $(this).css("width"));
+}
+else {
+floatingHeaderRow.css("visibility", "hidden");
+floatingHeaderRow.css("top", "0px");
+}
+});
+}
+$(document).ready(function() {
+$("table.listOfClasses").each(function() {
+$(this).wrap("<div class=\"divListOfClasses\" style=\"position:relative\"></div>");
+var originalHeaderRow = $("tr:first", this)
+originalHeaderRow.before(originalHeaderRow.clone());
+var clonedHeaderRow = $("tr:first", this)
+clonedHeaderRow.addClass("tableFloatingHeader");
+clonedHeaderRow.css("position", "absolute");
+clonedHeaderRow.css("top", "0px");
+clonedHeaderRow.css("left", $(this).css("margin-left"));
+clonedHeaderRow.css("visibility", "hidden");
+originalHeaderRow.addClass("tableFloatingHeaderOriginal");
+});
+UpdateTableHeaders();
+$(window).scroll(UpdateTableHeaders);
+$(window).resize(UpdateTableHeaders);
+});
+</script>
+</head>
+<!-- uh_avail_style_rec is not null -->
+<!-- uh_avail_style_rec.term_code = 202440 -->
+<!-- uh_avail_style_rec.style = M -->
+<body>
+<div class="header">
+    <p class="system">
+        <a href="./avail.classes" class="system_link">University of Hawaii</a>
+        <a href="https://hawaii-manoa.verbacompare.com/" target="_blank" class="book_link," style="color: white; text-decoration: none; float: right">Textbooks/Course Materials</a>
+    </p>
+    <p class="institution">
+        <a href="./avail.classes?i=MAN" class="title_link">University of Hawaii at Manoa</a>
+        •
+        Summer 2024 Class Availability
+    </p>
+    <p class="transfer-info">
+        <a href="http://www.hawaii.edu/admissions/transfers.html">(UH Transfer Information)</a>
+    </p>
+</div>
+<div class="header2">
+    <p class="backlink">
+        <a href="./avail.classes?i=MAN&amp;t=202440">Back to list of subjects</a>
+        <b><big>&nbsp;&nbsp;Click on the CRN for additional class information.</big></b>
+    </p>
+</div> <!-- header2 -->
+<h1>Theatre (THEA)</h1>
+<!-- f_listcrse called for i: 'MAN t: '202440' -->
+<!-- uh_avail_inst_rec.inst_desc: 'University of Hawaii at Manoa' -->
+<!-- SCRIPT_NAME: /uhdad -->
+<!-- PATH_INFO: /avail.classes -->
+<!-- VPDI DUMP -->
+<!-- session_user: WWW_USER -->
+<!-- sessionid: 270990644 -->
+<!-- type_context: CC -->
+<!-- code_context: ALLQ -->
+<!-- lmod_context:  -->
+<!-- inst_code: WIN -->
+<!-- multi_context: OVERRIDE -->
+<!-- proc_context: HAW -->
+<!-- hierarchy_context: RESTRICT -->
+<!-- primary_context:  -->
+<!-- secondary_context:  -->
+<!-- current_inst_code: HAW -->
+<!-- sect_rec: i 'MAN', term: '202440', ssbsect_crn: '97354', ssrmeet: '97354' -->
+<!-- pt. a -->
+<!-- pt. b -->
+<!-- pt. c -->
+<!-- pt. d -->
+<!-- pt. e -->
+<div class="divListOfClasses" style="position:relative"><table class="listOfClasses" border="0" cellpadding="2" cellspacing="0" width="100%">
+    <!-- pt. f -->
+    <!-- uh_avail_inst_rec.show_enrl = Y -->
+    <thead>
+    <tr style="background: rgb(212, 212, 212); position: absolute; top: 0px; left: 0px; visibility: hidden;" class="tableFloatingHeader">
+        <th><abbr title="Requirements &amp; Designation Codes (see legend below)">GenEd/Focus/<br>Special Des.</abbr></th>
+        <th>CRN</th>
+        <th>Course</th>
+        <th>Section</th>
+        <th>Title</th>
+        <th>Credits</th>
+        <th>Instructor</th>
+        <th><abbr title="Currently Enrolled">Curr.<br>Enrolled</abbr></th>
+        <th><abbr title="Number of seats still available">Seats<br>avail.</abbr></th>
+        <th><abbr title="Number of waitlist seats">Curr.<br>Waitlisted</abbr></th>
+        <th><abbr title="Number of waitlist seats still available">Wait<br>avail.</abbr></th>
+        <th>Days</th>
+        <th>Time</th>
+        <th>Room</th>
+        <th>Dates</th>
+    </tr><tr style="background:#D4D4D4;" class="tableFloatingHeaderOriginal">
+        <th><abbr title="Requirements &amp; Designation Codes (see legend below)">GenEd/Focus/<br>Special Des.</abbr></th>
+        <th>CRN</th>
+        <th>Course</th>
+        <th>Section</th>
+        <th>Title</th>
+        <th>Credits</th>
+        <th>Instructor</th>
+        <th><abbr title="Currently Enrolled">Curr.<br>Enrolled</abbr></th>
+        <th><abbr title="Number of seats still available">Seats<br>avail.</abbr></th>
+        <th><abbr title="Number of waitlist seats">Curr.<br>Waitlisted</abbr></th>
+        <th><abbr title="Number of waitlist seats still available">Wait<br>avail.</abbr></th>
+        <th>Days</th>
+        <th>Time</th>
+        <th>Room</th>
+        <th>Dates</th>
+    </tr>
+    </thead>
+    <!-- pt. g -->
+    <tbody><tr class="odd">
+        <td class="default">DA,WI</td>
+        <!-- pt. h -->
+        <td class="default"><a href="./avail.class?i=MAN&amp;t=202440&amp;c=97354">97354</a></td>
+        <td nowrap="nowrap" class="default">THEA 101</td>
+        <td class="default">701</td>
+        <!-- ssrmeet_array_length = 0 -->
+        <!-- ssrmeet_array_length = 1 -->
+        <td class="default">Intro to World Drama &amp; Theatre</td>
+        <td class="default">3</td>
+        <td class="default"><abbr title="Miglena I Ivanova"><span class="abbr" title="Miglena I Ivanova">M I Ivanova</span></abbr></td>
+        <td class="default" align="center">3</td>
+        <td class="default" align="center">9</td>
+        <td class="default" align="center">0</td>
+        <td class="default" align="center">10</td>
+        <td class="default">TBA</td>
+        <td class="default">TBA</td>
+        <td class="default"><abbr title="Online Online Asynchronous"><span class="abbr" title="Online Online Asynchronous">ONLINE ASYNC</span></abbr></td>
+        <td class="default">07/01-08/09</td>
+    </tr>
+    <!-- sect_rec: i 'MAN', term: '202440', ssbsect_crn: '97493', ssrmeet: '97493' -->
+    <!-- pt. a -->
+    <!-- pt. b -->
+    <!-- pt. c -->
+    <!-- pt. d -->
+    <!-- pt. e -->
+    <!-- pt. f -->
+    <!-- pt. g -->
+    <tr>
+        <td class="default">DH,TXT0,WI</td>
+        <!-- pt. h -->
+        <td class="default"><a href="./avail.class?i=MAN&amp;t=202440&amp;c=97493">97493</a></td>
+        <td nowrap="nowrap" class="default">THEA 152</td>
+        <td class="default">601</td>
+        <!-- ssrmeet_array_length = 0 -->
+        <!-- ssrmeet_array_length = 1 -->
+        <td class="default">Live on Stage<br>(CL DNCE 152)</td>
+        <td class="default">3</td>
+        <td class="default"><abbr title="Robert M Kelty"><span class="abbr" title="Robert M Kelty">R M Kelty</span></abbr></td>
+        <td class="default" align="center">0</td>
+        <td class="default" align="center">9</td>
+        <td class="default" align="center">0</td>
+        <td class="default" align="center">10</td>
+        <td class="default">TBA</td>
+        <td class="default">TBA</td>
+        <td class="default"><abbr title="Online Online Asynchronous"><span class="abbr" title="Online Online Asynchronous">ONLINE ASYNC</span></abbr></td>
+        <td class="default">05/20-06/28</td>
+    </tr>
+    <!-- sect_rec: i 'MAN', term: '202440', ssbsect_crn: '97890', ssrmeet: '97890' -->
+    <!-- pt. a -->
+    <!-- pt. b -->
+    <!-- pt. c -->
+    <!-- pt. d -->
+    <!-- pt. e -->
+    <!-- pt. f -->
+    <!-- pt. g -->
+    <tr class="odd">
+        <td class="default">DH,TXT0,WI</td>
+        <!-- pt. h -->
+        <td class="default"><a href="./avail.class?i=MAN&amp;t=202440&amp;c=97890">97890</a></td>
+        <td nowrap="nowrap" class="default">THEA 152</td>
+        <td class="default">701</td>
+        <!-- ssrmeet_array_length = 0 -->
+        <!-- ssrmeet_array_length = 1 -->
+        <td class="default">Live on Stage<br>(DNCE 152)</td>
+        <td class="default">3</td>
+        <td class="default"><abbr title="Jonathan C Sypert"><span class="abbr" title="Jonathan C Sypert">J C Sypert</span></abbr></td>
+        <td class="default" align="center">0</td>
+        <td class="default" align="center">0</td>
+        <td class="default" align="center">0</td>
+        <td class="default" align="center">10</td>
+        <td class="default">TBA</td>
+        <td class="default">TBA</td>
+        <td class="default"><abbr title="Online Online Asynchronous"><span class="abbr" title="Online Online Asynchronous">ONLINE ASYNC</span></abbr></td>
+        <td class="default">07/01-08/09</td>
+    </tr>
+    <!-- sect_rec: i 'MAN', term: '202440', ssbsect_crn: '97884', ssrmeet: '97884' -->
+    <!-- pt. a -->
+    <!-- pt. b -->
+    <!-- pt. c -->
+    <!-- pt. d -->
+    <!-- pt. e -->
+    <!-- pt. f -->
+    <!-- pt. g -->
+    <tr>
+        <td class="default">DA,TXT0,WI</td>
+        <!-- pt. h -->
+        <td class="default"><a href="./avail.class?i=MAN&amp;t=202440&amp;c=97884">97884</a></td>
+        <td nowrap="nowrap" class="default">THEA 221</td>
+        <td class="default">601</td>
+        <!-- ssrmeet_array_length = 0 -->
+        <!-- ssrmeet_array_length = 1 -->
+        <td class="default">Intro Acting Stage Screen</td>
+        <td class="default">3</td>
+        <td class="default"><abbr title="To Be Announced"><span class="abbr" title="To Be Announced">TBA</span></abbr></td>
+        <td class="default" align="center">0</td>
+        <td class="default" align="center">12</td>
+        <td class="default" align="center">0</td>
+        <td class="default" align="center">10</td>
+        <td class="default">MTWRF</td>
+        <td nowrap="nowrap" class="default">1030-<spacer>1150a</spacer></td>
+        <td class="default"><abbr title="Online Online Synchronous"><span class="abbr" title="Online Online Synchronous">ONLINE SYNC</span></abbr></td>
+        <td class="default">05/20-06/28</td>
+    </tr>
+    <!-- sect_rec: i 'MAN', term: '202440', ssbsect_crn: '97886', ssrmeet: '97886' -->
+    <!-- pt. a -->
+    <!-- pt. b -->
+    <!-- pt. c -->
+    <!-- pt. d -->
+    <!-- pt. e -->
+    <!-- pt. f -->
+    <!-- pt. g -->
+    <tr class="odd">
+        <td class="default">DA,TXT0,WI</td>
+        <!-- pt. h -->
+        <td class="default"><a href="./avail.class?i=MAN&amp;t=202440&amp;c=97886">97886</a></td>
+        <td nowrap="nowrap" class="default">THEA 221</td>
+        <td class="default">602</td>
+        <!-- ssrmeet_array_length = 0 -->
+        <!-- ssrmeet_array_length = 1 -->
+        <!-- ssrmeet_array_length = 2 -->
+        <td class="default" rowspan="2">Intro Acting Stage Screen</td>
+        <td class="default">3</td>
+        <td class="default"><abbr title="To Be Announced"><span class="abbr" title="To Be Announced">TBA</span></abbr></td>
+        <td class="default" align="center">0</td>
+        <td class="default" align="center">16</td>
+        <td class="default" align="center">0</td>
+        <td class="default" align="center">10</td>
+        <td class="default">MTWR</td>
+        <td nowrap="nowrap" class="default">1030-<spacer>1150a</spacer></td>
+        <td class="default"><abbr title="Sakamaki Hall Sakamaki Hall Room A101"><span class="abbr" title="Sakamaki Hall Sakamaki Hall Room A101">SAKAM A101</span></abbr></td>
+        <td class="default">05/20-06/28</td>
+    </tr>
+    <tr class="odd">
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">F</td>
+        <td nowrap="nowrap" class="default">1030-<spacer>1150a</spacer></td>
+        <td class="default"><abbr title="Online Online Synchronous"><span class="abbr" title="Online Online Synchronous">ONLINE SYNC</span></abbr></td>
+        <td class="default">05/20-06/28</td>
+    </tr>
+    <!-- sect_rec: i 'MAN', term: '202440', ssbsect_crn: '97886', ssrmeet: '97886' -->
+    <!-- sect_rec: i 'MAN', term: '202440', ssbsect_crn: '97887', ssrmeet: '97887' -->
+    <!-- pt. a -->
+    <!-- pt. b -->
+    <!-- pt. c -->
+    <!-- pt. d -->
+    <!-- pt. e -->
+    <!-- pt. f -->
+    <!-- pt. g -->
+    <tr>
+        <td class="default">DA,TXT0,WI</td>
+        <!-- pt. h -->
+        <td class="default"><a href="./avail.class?i=MAN&amp;t=202440&amp;c=97887">97887</a></td>
+        <td nowrap="nowrap" class="default">THEA 221</td>
+        <td class="default">603</td>
+        <!-- ssrmeet_array_length = 0 -->
+        <!-- ssrmeet_array_length = 1 -->
+        <!-- ssrmeet_array_length = 2 -->
+        <td class="default" rowspan="2">Intro Acting Stage Screen</td>
+        <td class="default">3</td>
+        <td class="default"><abbr title="To Be Announced"><span class="abbr" title="To Be Announced">TBA</span></abbr></td>
+        <td class="default" align="center">0</td>
+        <td class="default" align="center">16</td>
+        <td class="default" align="center">0</td>
+        <td class="default" align="center">10</td>
+        <td class="default">MTWR</td>
+        <td nowrap="nowrap" class="default">1200-<spacer>0120p</spacer></td>
+        <td class="default"><abbr title="Sakamaki Hall Sakamaki Hall Room A101"><span class="abbr" title="Sakamaki Hall Sakamaki Hall Room A101">SAKAM A101</span></abbr></td>
+        <td class="default">05/20-06/28</td>
+    </tr>
+    <tr>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">F</td>
+        <td nowrap="nowrap" class="default">1200-<spacer>0120p</spacer></td>
+        <td class="default"><abbr title="Online Online Synchronous"><span class="abbr" title="Online Online Synchronous">ONLINE SYNC</span></abbr></td>
+        <td class="default">05/20-06/28</td>
+    </tr>
+    <!-- sect_rec: i 'MAN', term: '202440', ssbsect_crn: '97887', ssrmeet: '97887' -->
+    <!-- sect_rec: i 'MAN', term: '202440', ssbsect_crn: '97888', ssrmeet: '97888' -->
+    <!-- pt. a -->
+    <!-- pt. b -->
+    <!-- pt. c -->
+    <!-- pt. d -->
+    <!-- pt. e -->
+    <!-- pt. f -->
+    <!-- pt. g -->
+    <tr class="odd">
+        <td class="default">DA,TXT0,WI</td>
+        <!-- pt. h -->
+        <td class="default"><a href="./avail.class?i=MAN&amp;t=202440&amp;c=97888">97888</a></td>
+        <td nowrap="nowrap" class="default">THEA 221</td>
+        <td class="default">701</td>
+        <!-- ssrmeet_array_length = 0 -->
+        <!-- ssrmeet_array_length = 1 -->
+        <td class="default">Intro Acting Stage Screen</td>
+        <td class="default">3</td>
+        <td class="default"><abbr title="Elizabeth A Ung"><span class="abbr" title="Elizabeth A Ung">E A Ung</span></abbr></td>
+        <td class="default" align="center">0</td>
+        <td class="default" align="center">12</td>
+        <td class="default" align="center">0</td>
+        <td class="default" align="center">10</td>
+        <td class="default">MTWRF</td>
+        <td nowrap="nowrap" class="default">1030-<spacer>1150a</spacer></td>
+        <td class="default"><abbr title="Online Online Synchronous"><span class="abbr" title="Online Online Synchronous">ONLINE SYNC</span></abbr></td>
+        <td class="default">07/01-08/09</td>
+    </tr>
+    <!-- sect_rec: i 'MAN', term: '202440', ssbsect_crn: '97889', ssrmeet: '97889' -->
+    <!-- pt. a -->
+    <!-- pt. b -->
+    <!-- pt. c -->
+    <!-- pt. d -->
+    <!-- pt. e -->
+    <!-- pt. f -->
+    <!-- pt. g -->
+    <tr>
+        <td class="default">DA,TXT0,WI</td>
+        <!-- pt. h -->
+        <td class="default"><a href="./avail.class?i=MAN&amp;t=202440&amp;c=97889">97889</a></td>
+        <td nowrap="nowrap" class="default">THEA 221</td>
+        <td class="default">702</td>
+        <!-- ssrmeet_array_length = 0 -->
+        <!-- ssrmeet_array_length = 1 -->
+        <!-- ssrmeet_array_length = 2 -->
+        <td class="default" rowspan="2">Intro Acting Stage Screen</td>
+        <td class="default">3</td>
+        <td class="default"><abbr title="Emmanuele Jones V Mante"><span class="abbr" title="Emmanuele Jones V Mante">E V Mante</span></abbr></td>
+        <td class="default" align="center">0</td>
+        <td class="default" align="center">16</td>
+        <td class="default" align="center">0</td>
+        <td class="default" align="center">10</td>
+        <td class="default">MTWR</td>
+        <td nowrap="nowrap" class="default">1200-<spacer>0120p</spacer></td>
+        <td class="default"><abbr title="Kuykendall Hall Room 208"><span class="abbr" title="Kuykendall Hall Room 208">KUY 208</span></abbr></td>
+        <td class="default">07/01-08/09</td>
+    </tr>
+    <tr>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">F</td>
+        <td nowrap="nowrap" class="default">1200-<spacer>0120p</spacer></td>
+        <td class="default"><abbr title="Online Online Synchronous"><span class="abbr" title="Online Online Synchronous">ONLINE SYNC</span></abbr></td>
+        <td class="default">07/01-08/09</td>
+    </tr>
+    <!-- sect_rec: i 'MAN', term: '202440', ssbsect_crn: '97889', ssrmeet: '97889' -->
+    <!-- sect_rec: i 'MAN', term: '202440', ssbsect_crn: '98084', ssrmeet: '98084' -->
+    <!-- pt. a -->
+    <!-- pt. b -->
+    <!-- pt. c -->
+    <!-- pt. d -->
+    <!-- pt. e -->
+    <!-- pt. f -->
+    <!-- pt. g -->
+    <tr class="odd">
+        <td class="default">DA,TXT0,WI</td>
+        <!-- pt. h -->
+        <td class="default"><a href="./avail.class?i=MAN&amp;t=202440&amp;c=98084">98084</a></td>
+        <td nowrap="nowrap" class="default">THEA 318</td>
+        <td class="default">601</td>
+        <!-- ssrmeet_array_length = 0 -->
+        <!-- ssrmeet_array_length = 1 -->
+        <!-- ssrmeet_array_length = 2 -->
+        <td class="default" rowspan="2">Playwriting</td>
+        <td class="default">3</td>
+        <td class="default"><abbr title="Michael Poblete"><span class="abbr" title="Michael Poblete">M Poblete</span></abbr></td>
+        <td class="default" align="center">3</td>
+        <td class="default" align="center">9</td>
+        <td class="default" align="center">0</td>
+        <td class="default" align="center">10</td>
+        <td class="default">WF</td>
+        <td nowrap="nowrap" class="default">1130-<spacer>0145p</spacer></td>
+        <td class="default"><abbr title="Online Online Synchronous"><span class="abbr" title="Online Online Synchronous">ONLINE SYNC</span></abbr></td>
+        <td class="default">05/20-06/28</td>
+    </tr>
+    <tr class="odd">
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">&nbsp;</td>
+        <td class="default">MT</td>
+        <td class="default">TBA</td>
+        <td class="default"><abbr title="Online Online Asynchronous"><span class="abbr" title="Online Online Asynchronous">ONLINE ASYNC</span></abbr></td>
+        <td class="default">05/20-06/28</td>
+    </tr>
+    <!-- sect_rec: i 'MAN', term: '202440', ssbsect_crn: '98084', ssrmeet: '98084' -->
+    <!-- sect_rec: i 'MAN', term: '202440', ssbsect_crn: '98121', ssrmeet: '98121' -->
+    <!-- pt. a -->
+    <!-- pt. b -->
+    <!-- pt. c -->
+    <!-- pt. d -->
+    <!-- pt. e -->
+    <!-- pt. f -->
+    <!-- pt. g -->
+    <tr>
+        <td class="default">DA,TXT0</td>
+        <!-- pt. h -->
+        <td class="default"><a href="./avail.class?i=MAN&amp;t=202440&amp;c=98121">98121</a></td>
+        <td nowrap="nowrap" class="default">THEA 421</td>
+        <td class="default">701</td>
+        <!-- ssrmeet_array_length = 0 -->
+        <!-- ssrmeet_array_length = 1 -->
+        <td class="default">Musical Theatre</td>
+        <td class="default">3</td>
+        <td class="default"><abbr title="Douglas C Kreeger"><span class="abbr" title="Douglas C Kreeger">D C Kreeger</span></abbr></td>
+        <td class="default" align="center">0</td>
+        <td class="default" align="center">10</td>
+        <td class="default" align="center">0</td>
+        <td class="default" align="center">10</td>
+        <td class="default">MW</td>
+        <td nowrap="nowrap" class="default">0900-<spacer>1230p</spacer></td>
+        <td class="default"><abbr title="Online Online Synchronous"><span class="abbr" title="Online Online Synchronous">ONLINE SYNC</span></abbr></td>
+        <td class="default">07/01-08/09</td>
+    </tr>
+    </tbody></table></div>
+<span class="infotext"> <hr size="1" width="100%">
+<table class="legend" cellpadding="0" cellspacing="0" border="0" width="100%">
+   <tbody><tr>
+      <td>
+      <table cellpadding="0" cellspacing="0" border="0" width="100%">
+         <tbody><tr>
+         <th colspan="6">General Education Requirements:</th>
+         </tr>
+         <tr>
+            <td><b>FGA</b></td>
+            <td width="33%">= Foundation GMP-A</td>
+            <td><b>DA</b></td>
+            <td width="33%">= Diversification-Arts</td>
+            <td><b>DP</b></td>
+            <td width="33%">= Diversification-Physical Science</td>
+         </tr>
+         <tr>
+            <td><b>FGB</b></td>
+            <td>= Foundation GMP-B</td>
+            <td><b>DB</b></td>
+            <td>= Diversification-Biological Science</td>
+            <td><b>DS</b></td>
+            <td>= Diversification-Social Science</td>
+         </tr>
+         <tr>
+            <td><b>FGC</b></td>
+            <td>= Foundation GMP-C</td>
+            <td><b>DH</b></td>
+            <td>= Diversification-Humanities</td>
+            <td><b>DY</b></td>
+            <td>= Diversification-Laboratory (science)  </td>
+         </tr>
+         <tr>
+            <td><b>FQ</b></td>
+            <td>= Foundation Quantitative Reasoning</td>
+            <td><b>DL</b></td>
+            <td>= Diversification-Literatures</td>
+            <td><b>HSL</b></td>
+            <td>= Hawaiian or Second Language</td>
+         </tr>
+         <tr>
+            <td><b>FS</b></td>
+            <td>= Foundation Symbolic Reasoning</td>
+            <td colspan="2"> </td>
+            <td><b>NI</b></td>
+            <td>= Non-introductory Course</td>
+         </tr>
+         <tr>
+            <td><b>FW</b></td>
+            <td>= Foundation Written Communication</td>
+      </tr>
+</tbody></table>
+</td>
+
+</tr>
+</tbody></table>
+ <hr size="1" width="100%">
+
+<table class="legend" cellpadding="0" cellspacing="0" border="0" width="100%">
+   <tbody><tr>
+   <th colspan="2">Focus Requirements:</th>
+   </tr>
+   <tr>
+      <td><b>ETH</b></td>
+      <td width="100%">= Contemporary Ethical Issues</td>
+   </tr>
+   <tr>
+      <td><b>HAP</b></td>
+      <td>= Hawaiian, Asian, and Pacific Issues</td>
+   </tr>
+   <tr>
+      <td><b>OC</b></td>
+      <td>= Oral Communication</td>
+   </tr>
+   <tr>
+      <td><b>WI</b></td>
+      <td>= Writing Intensive</td>
+   </tr>
+</tbody></table>
+
+
+ <p style="padding: 4px; margin: 0; font-size: 80%">
+NOTE:  Courses numbered 600 and above are restricted to classified graduate students only. All unclassified students must obtain approval from the department to register.
+</p>
+ <hr size="1" width="100%">
+
+     <table class="legend" cellpadding="0" cellspacing="0" border="0" width="75%">
+         <tbody><tr>
+            <th colspan="3">Special Designation:</th>
+         </tr>
+                  <tr>
+            <td><b>FONL</b></td>
+            <td width="25%">= Fully Online</td>
+            <td><b>C19</b></td>
+            <td width="25%">= Online due to COVID-19</td>
+            <td><b>OI</b></td>
+            <td width="25%">= Off Island</td>
+            <td><b>IDAP</b></td>
+            <td width="25%">= eBook Access</td>
+         </tr>
+            <tr><td><b>EC</b></td>
+            <td width="25%">= Early College</td>
+            <td><b>H19</b></td>
+            <td width="25%">= Hybrid due to COVID-19</td>
+            <td><b>OS</b></td>
+            <td width="25%">= Off-Site</td>
+            <td><b>TXT0</b></td>
+            <td width="25%">= Textbook Cost $0</td>
+         </tr>
+
+
+     </tbody></table>
+
+
+
+ <p>
+</p><hr size="1" width="100%">
+<table class="legend" cellpadding="0" cellspacing="0" border="0" width="53%">
+   <tbody><tr>
+      <td>
+      <table cellpadding="0" cellspacing="0" border="0" width="100%">
+         <tbody><tr>
+            <th colspan="6">Class Meeting Days:</th></tr><tr>
+            <td><b>M</b></td>
+            <td width="33%">= Monday</td>
+            <td><b>R</b></td>
+            <td width="33%">= Thursday</td>
+            <td><b>U</b></td>
+            <td>= Sunday</td></tr>
+
+            <tr><td><b>T</b></td>
+            <td>= Tuesday</td>
+            <td><b>F</b></td>
+            <td>= Friday</td>
+             <td><b>TBA</b></td>
+             <td>= To Be Announced/Arranged</td>
+         </tr>
+
+        <tr>    <td><b>W</b></td>
+            <td>= Wednesday</td>
+             <td><b>S</b></td><td width="33%">= Saturday</td></tr>
+
+
+     </tbody></table></td></tr></tbody></table>
+<p></p></span>
+<div class="footer">
+    <hr size="1" width="100%">
+    <p class="copyright">©2024 <a href="http://www.hawaii.edu/">University of Hawaii</a></p>
+    <p class="updated">Updated: 03/21/2024 11:45:17 AM HST</p>
+</div>
+
+</body></html>

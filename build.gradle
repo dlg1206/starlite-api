@@ -8,7 +8,7 @@ group = 'com.uh'
 version = '0.0.0'
 
 java {
-    sourceCompatibility = '21'
+    sourceCompatibility = '17'
 }
 
 repositories {
@@ -16,6 +16,12 @@ repositories {
 }
 
 dependencies {
+    // jsoup HTML parser library @ https://jsoup.org/
+    implementation 'org.jsoup:jsoup:1.17.2'
+    implementation 'org.apache.commons:commons-lang3:3.14.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     implementation 'org.springframework.boot:spring-boot-starter'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
