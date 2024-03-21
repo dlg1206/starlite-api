@@ -1,0 +1,281 @@
+<html><!-- OWA_CACHE will timeout in 10 minutes. --><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link rel="stylesheet" type="text/css" title="Default text size" href="//www.hawaii.edu/myuh/availcss/availWOA.css">
+    <title>University of Hawaii West Oahu - Spring 2022</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script type="text/javascript">
+function UpdateTableHeaders() {
+$("div.divListOfClasses").each(function() {
+var originalHeaderRow = $(".tableFloatingHeaderOriginal", this);
+var floatingHeaderRow = $(".tableFloatingHeader", this);
+var offset = $(this).offset();
+var scrollTop = $(window).scrollTop();
+if ((scrollTop > offset.top) && (scrollTop < offset.top + $(this).height())) {
+floatingHeaderRow.css("visibility", "visible");
+floatingHeaderRow.css("top", Math.min(scrollTop - offset.top, $(this).height() - floatingHeaderRow.height()) + "px");
+$("th", floatingHeaderRow).each(function(index) {
+var cellWidth = $("th", originalHeaderRow).eq(index).css('width');
+$(this).css('width', cellWidth);
+});
+floatingHeaderRow.css("width", $(this).css("width"));
+}
+else {
+floatingHeaderRow.css("visibility", "hidden");
+floatingHeaderRow.css("top", "0px");
+}
+});
+}
+$(document).ready(function() {
+$("table.listOfClasses").each(function() {
+$(this).wrap("<div class=\"divListOfClasses\" style=\"position:relative\"></div>");
+var originalHeaderRow = $("tr:first", this)
+originalHeaderRow.before(originalHeaderRow.clone());
+var clonedHeaderRow = $("tr:first", this)
+clonedHeaderRow.addClass("tableFloatingHeader");
+clonedHeaderRow.css("position", "absolute");
+clonedHeaderRow.css("top", "0px");
+clonedHeaderRow.css("left", $(this).css("margin-left"));
+clonedHeaderRow.css("visibility", "hidden");
+originalHeaderRow.addClass("tableFloatingHeaderOriginal");
+});
+UpdateTableHeaders();
+$(window).scroll(UpdateTableHeaders);
+$(window).resize(UpdateTableHeaders);
+});
+</script>
+</head>
+<body>
+<div class="header">
+    <p class="system">
+        <a href="./avail.classes" class="system_link">University of Hawaii</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="./avail.classes?i=WOA&amp;t=202230&amp;frames=i" class="no_frames">FRAMES</a>
+        <a href="https://hawaii-westoahu.verbacompare.com/" target="_blank" class="book_link," style="color: white; text-decoration: none; float: right">Textbooks/Course Materials</a>
+    </p>
+    <p class="institution">
+        <a href="./avail.classes?i=WOA" class="title_link">University of Hawaii West Oahu</a>
+        •
+        Spring 2022 Class Availability
+    </p>
+    <p class="transfer-info">
+        <a href="http://www.hawaii.edu/admissions/transfers.html">(UH Transfer Information)</a>
+    </p>
+</div>
+<p class="backlink">
+    <a href="./avail.classes?i=WOA">Back to list of terms available for University of Hawaii West Oahu</a>
+</p>
+<div class="bodydiv">
+    <p style="margin-bottom: 0">
+        <b>Subjects offered by
+            <a href="./avail.classes?i=WOA">University of Hawaii West Oahu</a>
+            for Spring 2022:</b>
+    </p>
+    <div style="border: 1px solid #333; background-color: #f7f7f7; font-size: smaller; padding: 0.2em 0.8em 0; width: 80%; margin-top: 1em; margin-left: auto; margin-right: auto;">
+        <span class="infotext"> <p><b>The University of Hawai'i-West O'ahu offers a variety of instructional formats, including entirely online (scheduled/synchronous or unscheduled/asynchronous), face-to-face/in-person, and hybrid (classes with online and in-person instruction).</b></p></span>
+    </div>
+</div><!-- bodydiv -->
+<div class="columns">
+    <div class="leftcolumn">
+        <ul class="subjects">
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=ACC">Accounting (ACC)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=AS">Aerospace Studies (AS)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=ANTH">Anthropology (ANTH)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=APSC">Applied Science (APSC)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=ART">Art (ART)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=BIOC">Biochemistry (BIOC)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=BIOL">Biology (BIOL)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=BUSA">Business Administration (BUSA)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=CHEM">Chemistry (CHEM)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=CHNS">Chinese (CHNS)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=CM">Creative Media (CM)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=CYBR">Cyber Security (CYBR)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=ECED">Early Childhood Education (ECED)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=ECON">Economics (ECON)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=EDUC">Education, Interdisciplinary (EDUC)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=EDEF">Educational Foundations (EDEF)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=ETEC">Educational Technology (ETEC)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=EDEE">Elementary Education (EDEE)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=ENG">English (ENG)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=FMGT">Facilities Management (FMGT)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=FIN">Finance (FIN)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=FORS">Forensics (FORS)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=GEOG">Geography (GEOG)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=GEOL">Geology (GEOL)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=HPST">Hawaii-Pacific Studies (HPST)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=HAW">Hawaiian (HAW)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=HWST">Hawaiian Studies (HWST)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=HLTH">Health (HLTH)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=HIM">Health Information Management (HIM)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=HIST">History (HIST)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=HOST">Hospitality &amp; Tourism (HOST)</a>
+            </li>
+        </ul>
+    </div>
+    <div class="rightcolumn">
+        <ul class="subjects">
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=HUM">Humanities (HUM)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=ILO">Ilokano (ILO)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=ISA">Info Security &amp; Assurance (ISA)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=ITS">Information Technology (ITS)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=ICS">Information&amp; Computer Sciences (ICS)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=JPNS">Japanese (JPNS)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=KOR">Korean (KOR)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=LBST">Labor Studies (LBST)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=MGT">Management (MGT)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=MKT">Marketing (MKT)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=MATH">Mathematics (MATH)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=MET">Meteorology (MET)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=MICR">Microbiology (MICR)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=MSL">Military Science &amp; Leadership (MSL)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=MUS">Music (MUS)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=NSCI">Natural Science (NSCI)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=OCN">Oceanography (OCN)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=PACS">Pacific Islands Studies (PACS)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=PHIL">Philosophy (PHIL)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=PHYS">Physics (PHYS)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=PHYL">Physiology (PHYL)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=POLS">Political Science (POLS)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=PSY">Psychology (PSY)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=PUBA">Public Administration (PUBA)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=EDSE">Secondary Education (EDSE)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=SSCI">Social Sciences (SSCI)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=SOC">Sociology (SOC)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=SPED">Special Education (SPED)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=SD">Student Development (SD)</a>
+            </li>
+            <li>
+                <a href="./avail.classes?i=WOA&amp;t=202230&amp;s=SCFS">Sustainable Community Food Sys (SCFS)</a>
+            </li>
+        </ul>
+    </div><!-- rightcolumn -->
+</div><!-- to hold columns -->
+<div class="footer"><!-- footer div 1 -->
+    <p align="center">
+        <a href="./avail.classes?i=WOA&amp;t=202230&amp;frames=i">VIEW USING FRAMES</a>
+    </p>
+</div><!-- footer div 1 -->
+<div class="footer">
+    <hr size="1" width="100%">
+    <p class="copyright">©2024 <a href="http://www.hawaii.edu/">University of Hawaii</a></p>
+    <p class="updated">Updated: 03/21/2024 11:20:49 AM HST</p>
+</div>
+
+</body></html>
