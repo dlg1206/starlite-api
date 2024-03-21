@@ -27,6 +27,15 @@ public abstract class TimeBlock_I {
         }
     }
 
+    private final static Date SIX_AM;
+    static {
+        try {
+            SIX_AM = INPUT.parse("0600");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     protected String startTime;
     protected String startDate;
     protected String endTime;
@@ -96,6 +105,14 @@ public abstract class TimeBlock_I {
 
         Date start = INPUT.parse(times[0]);
         Date end = INPUT.parse(times[1]);
+
+        /*
+        Mark start in afternoon if 'p' and before 7
+        Handles edge case "0100-0200p", class doesn't start at 1 am but "0900-0200p" class probably starts at 9
+        6 AM arbitrary start that assuming no classes occur before
+         */
+        if (tod == 'p' && start.before(SIX_AM))
+            start = DateUtils.addHours(start, 12);
 
         // Mark end in afternoon if 'p'
         if (tod == 'p' && end.before(NOON))
