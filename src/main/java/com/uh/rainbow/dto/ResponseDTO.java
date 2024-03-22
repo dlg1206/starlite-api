@@ -11,8 +11,9 @@ import java.util.Date;
  *
  * @author Derek Garcia
  */
-public record ResponseDTO(Date timestamp, String msg) {
-   public ResponseDTO(String msg){
-       this(new java.util.Date(), msg);
-   }
+public class ResponseDTO{
+    public Date timestamp;
+    public ResponseDTO(){
+       this.timestamp = new Date();
+    }
 }

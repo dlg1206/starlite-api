@@ -1,5 +1,6 @@
 package com.uh.rainbow.controller;
 
+import com.uh.rainbow.dto.IdentifierDTO;
 import com.uh.rainbow.dto.ResponseDTO;
 import com.uh.rainbow.services.HTMLParserService;
 import org.slf4j.Logger;
@@ -9,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
 
 /**
  * <b>File:</b> RainbowController.java
@@ -43,9 +46,20 @@ public class RainbowController {
     ?instructor
     */
 
-    @GetMapping(value = "/ping")
-    public ResponseEntity<ResponseDTO> ping(){
-        return new ResponseEntity<>(new ResponseDTO("pong!"), HttpStatus.OK);
+//    @GetMapping(value = "/ping")
+//    public ResponseEntity<ResponseDTO> ping(){
+//        return new ResponseEntity<>(new IdentifierDTO("pong!"), HttpStatus.OK);
+//    }
+
+    @GetMapping(value = "/campuses")
+    public ResponseEntity<ResponseDTO> getAllCampuses(){
+        try{
+            IdentifierDTO ids = this.htmlParserService.parseInstitutions();
+            return new ResponseEntity<>(ids, HttpStatus.OK);
+        } catch (IOException e){
+            return new ResponseEntity<>(new IdentifierDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
 

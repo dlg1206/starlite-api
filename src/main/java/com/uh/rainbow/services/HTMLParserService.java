@@ -1,5 +1,6 @@
 package com.uh.rainbow.services;
 
+import com.uh.rainbow.dto.IdentifierDTO;
 import com.uh.rainbow.entities.Course;
 import com.uh.rainbow.entities.Day;
 import com.uh.rainbow.entities.Meeting;
@@ -94,20 +95,14 @@ public class HTMLParserService {
      *
      * @return List of institution ids and names
      */
-    public List<Identifier> parseInstitutions() throws IOException {
-        List<Identifier> ids = new ArrayList<>();
-        try{
-            // Get list
-            Document doc = Jsoup.connect(UH_ROOT).get();
-            Elements institutions = doc.select("ul.institutions").select("li");
+    public IdentifierDTO parseInstitutions() throws IOException {
+        IdentifierDTO ids = new IdentifierDTO();
 
-            // Convert to key pair
-            for(Element item : institutions)
-                ids.add(new Identifier(item.className(), item.text()));
-
-        } catch (IOException ignored){
-            throw ignored;
-        }
+        // Get list
+        Document doc = Jsoup.connect(UH_ROOT).get();
+        doc.select("ul.institutions").select("li").forEach(
+                (item) -> ids.addIdentifier(item.className(), item.text())
+        );
 
         return ids;
     }
