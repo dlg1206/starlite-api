@@ -4,6 +4,7 @@ import com.uh.rainbow.dto.CourseDTO;
 import com.uh.rainbow.dto.IdentifiersDTO;
 import com.uh.rainbow.entities.Course;
 import com.uh.rainbow.entities.Section;
+import com.uh.rainbow.util.CourseFilter;
 import com.uh.rainbow.util.RowCursor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -161,7 +162,7 @@ public class HTMLParserService {
      * @return List of courses available
      * @throws IOException Fail to get html
      */
-    public List<CourseDTO> parseCourses(String instID, String termID, String subjectID) throws IOException {
+    public List<CourseDTO> parseCourses(CourseFilter cf, String instID, String termID, String subjectID) throws IOException {
 
         // Get each subject col
         Document doc = Jsoup.connect(UH_ROOT)
@@ -172,7 +173,7 @@ public class HTMLParserService {
 
         // Parse all courses
         Map<String, Course> courses = new HashMap<>();
-        RowCursor cur = new RowCursor(Objects.requireNonNull(doc.selectFirst("tbody")).select("tr"));
+        RowCursor cur = new RowCursor(cf, Objects.requireNonNull(doc.selectFirst("tbody")).select("tr"));
         while (cur.findSection()) {
             // Get course info, each section row will have course info
             Course c = cur.getCourse();

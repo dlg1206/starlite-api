@@ -5,6 +5,7 @@ import com.uh.rainbow.entities.Day;
 import com.uh.rainbow.entities.Meeting;
 import com.uh.rainbow.entities.Section;
 import org.jsoup.nodes.Element;
+import com.uh.rainbow.util.CourseFilter;
 import org.jsoup.select.Elements;
 
 import java.text.ParseException;
@@ -19,6 +20,7 @@ import java.util.List;
  */
 public class RowCursor {
 
+    private final CourseFilter courseFilter;
     private final Elements table;
 
     /**
@@ -26,7 +28,8 @@ public class RowCursor {
      *
      * @param table List of rows that compose a table
      */
-    public RowCursor(Elements table) {
+    public RowCursor(CourseFilter courseFilter, Elements table) {
+        this.courseFilter = courseFilter;
         this.table = table;
     }
 
@@ -48,11 +51,11 @@ public class RowCursor {
             return false;
 
         String crn = row.select("td").get(1).text();
-        if (crn.isEmpty())
+        if (crn.isEmpty() || !this.courseFilter.validCRN(crn))
             return false;
 
         String cid = row.select("td").get(2).text();
-        if (cid.isEmpty())
+        if (cid.isEmpty() || !this.courseFilter.validCID(cid))
             return false;
 
         String sid = row.select("td").get(3).text();
@@ -60,7 +63,7 @@ public class RowCursor {
             return false;
 
         String instructor = row.select("td").get(6).select("abbr").attr("title");
-        if (instructor.isEmpty())
+        if (instructor.isEmpty() || !this.courseFilter.validInstructor(instructor))
             return false;
 
         String numEnrolled = row.select("td").get(7).text();
@@ -68,16 +71,13 @@ public class RowCursor {
             return false;
 
         String seatsAvailable = row.select("td").get(8).text();
-        return !seatsAvailable.isEmpty();
-
-        // Row contains a section
-
+        return !seatsAvailable.isEmpty();   // Row contains a section
     }
 
     /**
      * Peek at top row in table to see if it contains a course
      *
-     * @return True if course, false otherwise
+     * @return True if has course, false otherwise
      */
     private boolean hasCourse() {
         // If no rows left, then no Courses
@@ -87,11 +87,11 @@ public class RowCursor {
         Element row = this.table.get(0);     // peek
 
         String cid = row.select("td").get(2).text();
-        if (cid.isEmpty())
+        if (cid.isEmpty() || !this.courseFilter.validCID(cid))
             return false;
 
         String name = row.select("td").get(4).text();
-        if (name.isEmpty())
+        if (name.isEmpty() || !this.courseFilter.keywordsMatch(name))
             return false;
 
         String credits = row.select("td").get(5).text();
@@ -139,7 +139,7 @@ public class RowCursor {
             return false;
 
         String room = row.select("td").get(11 + offset).select("abbr").attr("title");
-        if (room.isEmpty())
+        if (room.isEmpty() || this.courseFilter.validOnline(room))
             return false;
 
         String dates = row.select("td").get(12 + offset).text();

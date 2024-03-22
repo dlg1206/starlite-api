@@ -4,18 +4,17 @@ import com.uh.rainbow.dto.CoursesDTO;
 import com.uh.rainbow.dto.IdentifiersDTO;
 import com.uh.rainbow.dto.ResponseDTO;
 import com.uh.rainbow.services.HTMLParserService;
+import com.uh.rainbow.util.CourseFilter;
 import org.jsoup.HttpStatusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * <b>File:</b> RainbowController.java
@@ -29,27 +28,9 @@ import java.io.IOException;
 @RestController(value = "rainbowController")
 public class RainbowController {
     // Spring-configured logger
-    public static final Logger LOGGER = LoggerFactory.getLogger(RainbowController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RainbowController.class);
 
     private final HTMLParserService htmlParserService = new HTMLParserService();
-
-    /*
-    Endpoints
-    /campuses
-    /campuses/{id}/terms
-    /campuses/{id}/terms/{id}/subjects
-    /campuses/{id}/terms/{id}/courses
-    ?crn
-    ?cid
-    ?code
-    ?subject
-    ?start-after
-    ?end-before
-    ?online
-    ?keyword
-    ?instructor
-    */
-
 
     @GetMapping(value = "/campuses")
     public ResponseEntity<ResponseDTO> getAllCampuses() {
@@ -94,14 +75,27 @@ public class RainbowController {
     }
 
     @GetMapping(value = "/campuses/{instID}/terms/{termID}/courses")
-    public ResponseEntity<ResponseDTO> getAllCourses(@PathVariable String instID, @PathVariable String termID) {
+    public ResponseEntity<ResponseDTO> getAllCourses(
+            @PathVariable String instID,
+            @PathVariable String termID,
+            @RequestParam(required = false) List<String> crn,
+            @RequestParam(required = false) List<String> sub,
+            @RequestParam(required = false) List<String> code,
+            @RequestParam(required = false) String start_after,
+            @RequestParam(required = false) String end_before,
+            @RequestParam(required = false) String online,
+            @RequestParam(required = false) List<String> instructor,
+            @RequestParam(required = false) List<String> keyword) {
         try {
             var subjects = this.htmlParserService.parseSubjects(instID, termID);
             CoursesDTO dto = new CoursesDTO();
+            CourseFilter cf = new CourseFilter(crn, code, sub, start_after, end_before, online, instructor, keyword);
             for (var s : subjects.getIdentifiers()) {
-                dto.addCourses(this.htmlParserService.parseCourses(instID, termID, s.id()));
+                // skip if not in filter
+                if(!cf.validSubject(s.id()))
+                    continue;
+                dto.addCourses(this.htmlParserService.parseCourses(cf, instID, termID, s.id()));
             }
-
             return new ResponseEntity<>(dto, HttpStatus.OK);
         } catch (HttpStatusException e) {
             return new ResponseEntity<>(new CoursesDTO(), HttpStatusCode.valueOf(e.getStatusCode()));
