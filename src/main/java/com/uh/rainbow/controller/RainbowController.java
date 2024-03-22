@@ -35,7 +35,6 @@ public class RainbowController {
     Endpoints
     /campuses
     /campuses/{id}/terms
-    /campuses/{id}/terms/{id}
     /campuses/{id}/terms/{id}/subjects
     /campuses/{id}/terms/{id}/courses
     ?crn
@@ -69,6 +68,18 @@ public class RainbowController {
     public ResponseEntity<ResponseDTO> getAllTerms(@PathVariable String instID) {
         try {
             IdentifierDTO ids = this.htmlParserService.parseTerms(instID.toUpperCase());
+            return new ResponseEntity<>(ids, HttpStatus.OK);
+        } catch (HttpStatusException e){
+            return new ResponseEntity<>(new IdentifierDTO(), HttpStatus.NOT_FOUND);
+        } catch (IOException e){
+            return new ResponseEntity<>(new IdentifierDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(value = "/campuses/{instID}/terms/{termID}/subjects")
+    public ResponseEntity<ResponseDTO> getAllSubjects(@PathVariable String instID, @PathVariable String termID) {
+        try {
+            IdentifierDTO ids = this.htmlParserService.parseSubjects(instID.toUpperCase(), termID);
             return new ResponseEntity<>(ids, HttpStatus.OK);
         } catch (HttpStatusException e){
             return new ResponseEntity<>(new IdentifierDTO(), HttpStatus.NOT_FOUND);
