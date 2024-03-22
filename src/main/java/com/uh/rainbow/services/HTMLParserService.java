@@ -5,7 +5,6 @@ import com.uh.rainbow.entities.Course;
 import com.uh.rainbow.entities.Day;
 import com.uh.rainbow.entities.Meeting;
 import com.uh.rainbow.entities.Section;
-import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -64,22 +63,19 @@ public class HTMLParserService {
     /**
      * Process a list of li elements with href
      *
+     * @param dto Data Transfer Object to update
      * @param elements List of elements to process
      * @param upe URL Param extractor to use
-     * @return List of extracted ids and names
      */
-    private IdentifierDTO processElements(Elements elements, URLParamExtractor upe){
-        IdentifierDTO ids = new IdentifierDTO();
+    private void updateDTO(IdentifierDTO dto, Elements elements, URLParamExtractor upe){
         // Process each element
         for(Element item : elements){
             // Extract ID from url
             item = Objects.requireNonNull(item.selectFirst("a"));
             String termID = upe.extract(item.attr("href"));
 
-            ids.addIdentifier(termID, item.text());
+            dto.addIdentifier(termID, item.text());
         }
-
-        return ids;
     }
 
     /**
@@ -88,15 +84,15 @@ public class HTMLParserService {
      * @return List of institution ids and names
      */
     public IdentifierDTO parseInstitutions() throws IOException {
-        IdentifierDTO ids = new IdentifierDTO();
+        IdentifierDTO dto = new IdentifierDTO();
 
         // Get list
         Document doc = Jsoup.connect(UH_ROOT).get();
         doc.select("ul.institutions").select("li").forEach(
-                (item) -> ids.addIdentifier(item.className(), item.text())
+                (item) -> dto.addIdentifier(item.className(), item.text())
         );
 
-        return ids;
+        return dto;
     }
 
     /**
@@ -106,12 +102,14 @@ public class HTMLParserService {
      * @return List of term ids and names
      */
     public IdentifierDTO parseTerms(String instID) throws IOException {
+        IdentifierDTO dto = new IdentifierDTO(instID);
 
         // Get terms
         Document doc = Jsoup.connect(UH_ROOT).data("i", instID).get();
         Elements terms = doc.select("ul.terms").select("li");
+        updateDTO(dto, terms, new URLParamExtractor("t=([0-9]*)"));
 
-        return processElements(terms, new URLParamExtractor("t=([0-9]*)"));
+        return dto;
     }
 
     /**
@@ -122,7 +120,7 @@ public class HTMLParserService {
      * @return List of subject ids and names
      */
     public IdentifierDTO parseSubjects(String instID, String termID) throws IOException {
-        IdentifierDTO ids = new IdentifierDTO();
+        IdentifierDTO dto = new IdentifierDTO(instID, termID);
 
         // Get each subject col
         Document doc = Jsoup.connect(UH_ROOT)
@@ -142,10 +140,10 @@ public class HTMLParserService {
 
         // Process each list
         URLParamExtractor upe = new URLParamExtractor("s=(\\w*)");
-        ids.addIdentifiers(processElements(leftSubjects, upe).getIdentifiers());
-        ids.addIdentifiers(processElements(rightSubjects, upe).getIdentifiers());
+        updateDTO(dto, leftSubjects, upe);
+        updateDTO(dto, rightSubjects, upe);
 
-        return ids;
+        return dto;
     }
 
     public List<Course> parseCourses(String instID, String termID, String subjectID) throws IOException, ParseException {

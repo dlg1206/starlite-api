@@ -7,6 +7,7 @@ import org.jsoup.HttpStatusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,10 +48,6 @@ public class RainbowController {
     ?instructor
     */
 
-//    @GetMapping(value = "/ping")
-//    public ResponseEntity<ResponseDTO> ping(){
-//        return new ResponseEntity<>(new IdentifierDTO("pong!"), HttpStatus.OK);
-//    }
 
     @GetMapping(value = "/campuses")
     public ResponseEntity<ResponseDTO> getAllCampuses(){
@@ -58,7 +55,7 @@ public class RainbowController {
             IdentifierDTO ids = this.htmlParserService.parseInstitutions();
             return new ResponseEntity<>(ids, HttpStatus.OK);
         } catch (HttpStatusException e){
-            return new ResponseEntity<>(new IdentifierDTO(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new IdentifierDTO(), HttpStatusCode.valueOf(e.getStatusCode()));
         } catch (IOException e){
             return new ResponseEntity<>(new IdentifierDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -70,9 +67,9 @@ public class RainbowController {
             IdentifierDTO ids = this.htmlParserService.parseTerms(instID.toUpperCase());
             return new ResponseEntity<>(ids, HttpStatus.OK);
         } catch (HttpStatusException e){
-            return new ResponseEntity<>(new IdentifierDTO(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new IdentifierDTO(instID), HttpStatusCode.valueOf(e.getStatusCode()));
         } catch (IOException e){
-            return new ResponseEntity<>(new IdentifierDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new IdentifierDTO(instID), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -82,9 +79,9 @@ public class RainbowController {
             IdentifierDTO ids = this.htmlParserService.parseSubjects(instID.toUpperCase(), termID);
             return new ResponseEntity<>(ids, HttpStatus.OK);
         } catch (HttpStatusException e){
-            return new ResponseEntity<>(new IdentifierDTO(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new IdentifierDTO(instID, termID), HttpStatusCode.valueOf(e.getStatusCode()));
         } catch (IOException e){
-            return new ResponseEntity<>(new IdentifierDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new IdentifierDTO(instID, termID), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

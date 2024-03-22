@@ -17,15 +17,23 @@ public class IdentifierDTO extends ResponseDTO{
         super();
     }
 
+    public IdentifierDTO(String instID){
+        super(instID);
+    }
+
+    public IdentifierDTO(String instID, String termID){
+        super(instID, termID);
+    }
+
+    public IdentifierDTO(String instID, String termID, String subjectID){
+        super(instID, termID, subjectID);
+    }
+
     public void addIdentifier(String id, String name){
         Map<String, String> idObject = new LinkedHashMap<>();
         idObject.put("id", id);
         idObject.put("name", name);
         this.identifiers.add(idObject);
-    }
-
-    public void addIdentifiers(List<Map<String, String>> identifiers){
-        this.identifiers.addAll(identifiers);
     }
 
     public List<Map<String, String>> getIdentifiers() {
