@@ -5,6 +5,7 @@ import com.uh.rainbow.entities.Course;
 import com.uh.rainbow.entities.Day;
 import com.uh.rainbow.entities.Meeting;
 import com.uh.rainbow.entities.Section;
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -26,15 +27,6 @@ import java.util.regex.Pattern;
  */
 @Service
 public class HTMLParserService {
-
-    /**
-     * Util identifier
-     *
-     * @param id ID of resource
-     * @param name Full or simple name of resorce
-     */
-    public record Identifier(String id, String name) {
-    }
 
     /**
      * Regex parser that extracts params from an url
@@ -76,15 +68,15 @@ public class HTMLParserService {
      * @param upe URL Param extractor to use
      * @return List of extracted ids and names
      */
-    private List<Identifier> processElements(Elements elements, URLParamExtractor upe){
-        List<Identifier> ids = new ArrayList<>();
+    private IdentifierDTO processElements(Elements elements, URLParamExtractor upe){
+        IdentifierDTO ids = new IdentifierDTO();
         // Process each element
         for(Element item : elements){
             // Extract ID from url
             item = Objects.requireNonNull(item.selectFirst("a"));
             String termID = upe.extract(item.attr("href"));
 
-            ids.add(new Identifier(termID, item.text()));
+            ids.addIdentifier(termID, item.text());
         }
 
         return ids;
@@ -113,20 +105,13 @@ public class HTMLParserService {
      * @param instID Institution ID
      * @return List of term ids and names
      */
-    public List<Identifier> parseTerms(String instID) throws IOException {
-        List<Identifier> ids = new ArrayList<>();
-        try{
-            // Get terms
-            Document doc = Jsoup.connect(UH_ROOT).data("i", instID).get();
-            Elements terms = doc.select("ul.terms").select("li");
+    public IdentifierDTO parseTerms(String instID) throws IOException {
 
-            ids.addAll(processElements(terms, new URLParamExtractor("t=([0-9]*)")));
+        // Get terms
+        Document doc = Jsoup.connect(UH_ROOT).data("i", instID).get();
+        Elements terms = doc.select("ul.terms").select("li");
 
-        } catch (IOException ignored){
-            throw ignored;
-        }
-
-        return ids;
+        return processElements(terms, new URLParamExtractor("t=([0-9]*)"));
     }
 
     /**
@@ -136,33 +121,29 @@ public class HTMLParserService {
      * @param termID term ID
      * @return List of subject ids and names
      */
-    public List<Identifier> parseSubjects(String instID, String termID) throws IOException {
-        List<Identifier> ids = new ArrayList<>();
-        try{
-            // Get each subject col
-            Document doc = Jsoup.connect(UH_ROOT)
-                    .data("i", instID)
-                    .data("t", termID)
-                    .get();
+    public IdentifierDTO parseSubjects(String instID, String termID) throws IOException {
+        IdentifierDTO ids = new IdentifierDTO();
 
-            Elements leftSubjects = doc
-                    .select("div.leftcolumn")
-                    .select("ul.subjects")
-                    .select("li");
+        // Get each subject col
+        Document doc = Jsoup.connect(UH_ROOT)
+                .data("i", instID)
+                .data("t", termID)
+                .get();
 
-            Elements rightSubjects = doc
-                    .select("div.rightcolumn")
-                    .select("ul.subjects")
-                    .select("li");
+        Elements leftSubjects = doc
+                .select("div.leftcolumn")
+                .select("ul.subjects")
+                .select("li");
 
-            // Process each list
-            URLParamExtractor upe = new URLParamExtractor("s=(\\w*)");
-            ids.addAll(processElements(leftSubjects, upe));
-            ids.addAll(processElements(rightSubjects, upe));
+        Elements rightSubjects = doc
+                .select("div.rightcolumn")
+                .select("ul.subjects")
+                .select("li");
 
-        } catch (IOException ignored){
-            throw ignored;
-        }
+        // Process each list
+        URLParamExtractor upe = new URLParamExtractor("s=(\\w*)");
+        ids.addIdentifiers(processElements(leftSubjects, upe).getIdentifiers());
+        ids.addIdentifiers(processElements(rightSubjects, upe).getIdentifiers());
 
         return ids;
     }

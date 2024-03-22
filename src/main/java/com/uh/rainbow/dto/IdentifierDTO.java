@@ -24,6 +24,10 @@ public class IdentifierDTO extends ResponseDTO{
         this.identifiers.add(idObject);
     }
 
+    public void addIdentifiers(List<Map<String, String>> identifiers){
+        this.identifiers.addAll(identifiers);
+    }
+
     public List<Map<String, String>> getIdentifiers() {
         return this.identifiers;
     }
