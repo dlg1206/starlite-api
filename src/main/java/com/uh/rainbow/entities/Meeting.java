@@ -49,6 +49,30 @@ public class Meeting {
         return this.day.getDow();
     }
 
+    public Day getDay(){
+        return this.day;
+    }
+
+    public String getstart_time(){
+        return this.startTime;
+    }
+
+    public String getstart_date(){
+        return this.startDate;
+    }
+
+    public String getend_time() {
+        return this.endTime;
+    }
+
+    public String getend_date() {
+        return this.endDate;
+    }
+
+    public String getroom() {
+        return this.room;
+    }
+
 
     /**
      * Create new meetings parsed from UH style input parameters

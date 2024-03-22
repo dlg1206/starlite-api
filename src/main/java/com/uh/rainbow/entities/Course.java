@@ -39,5 +39,19 @@ public class Course {
         this.sections.add(section);
     }
 
+    public String getCid() {
+        return this.cid;
+    }
 
+    public String getName(){
+        return this.name;
+    }
+
+    public String getCredits(){
+        return this.credits;
+    }
+
+    public List<Section> getSections() {
+        return this.sections;
+    }
 }

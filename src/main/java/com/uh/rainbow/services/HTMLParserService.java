@@ -1,5 +1,6 @@
 package com.uh.rainbow.services;
 
+import com.uh.rainbow.dto.CourseDTO;
 import com.uh.rainbow.dto.IdentifierDTO;
 import com.uh.rainbow.entities.Course;
 import com.uh.rainbow.entities.Day;
@@ -146,92 +147,94 @@ public class HTMLParserService {
         return dto;
     }
 
-    public List<Course> parseCourses(String instID, String termID, String subjectID) throws IOException, ParseException {
+    public CourseDTO parseCourses(String instID, String termID, String subjectID) throws IOException {
+        CourseDTO dto = new CourseDTO(instID, termID, subjectID);
         Map<String, Course> courses = new HashMap<>();
 
-        try{
-            // Get each subject col
-            Document doc = Jsoup.connect(UH_ROOT)
-                    .data("i", instID)
-                    .data("t", termID)
-                    .data("s", subjectID)
-                    .get();
+        // Get each subject col
+        Document doc = Jsoup.connect(UH_ROOT)
+                .data("i", instID)
+                .data("t", termID)
+                .data("s", subjectID)
+                .get();
 
-            Elements rows = Objects.requireNonNull(doc.selectFirst("tbody")).select("tr");
+        Elements rows = Objects.requireNonNull(doc.selectFirst("tbody")).select("tr");
 
-            Element row = rows.remove(0);   // prime query
+        Element row = rows.remove(0);   // prime query
+        do{
+            // Skip empty row
+            if(row.select("td").size() < 13){
+                if(rows.isEmpty()) break;
+                row = rows.remove(0);
+                continue;
+            }
+
+            // Add new course if dne
+            String cid = row.select("td").get(2).text();
+            if(courses.get(cid) == null)
+                courses.put(cid, new Course(
+                        cid,                                     // Course ID
+                        row.select("td").get(4).text(),  // Full course name
+                        row.select("td").get(5).text()   // Credits
+                ));
+            // Parse section
+            Section section = new Section(
+                    row.select("td").get(3).text(),                     // Section Number
+                    Integer.parseInt(row.select("td").get(1).text()),   // Course Ref Number
+                    row.select("td").get(6).select("abbr").attr("title"),   // Instructor
+                    Integer.parseInt(row.select("td").get(7).text()),   // Number Enrolled
+                    Integer.parseInt(row.select("td").get(8).text())    // Seats Available
+            );
+
+
+            int initial_offset = 0;
+            // todo add wait list support
+            // account for wait list rows
+            // https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202440&s=THEA
+            if(row.select("td").size() == 15)
+                initial_offset = 2;
+
+            // Keep processing rows until hit next section
             do{
+                int offset = initial_offset;
 
-                if(row.select("td").size() < 13){
-                    if(rows.isEmpty()) break;
-                    row = rows.remove(0);
-                    continue;
-                }
-
-                // Add new course if dne
-                String cid = row.select("td").get(2).text();
-                if(courses.get(cid) == null)
-                    courses.put(cid, new Course(
-                            cid,                                     // Course ID
-                            row.select("td").get(4).text(),  // Full course name
-                            row.select("td").get(5).text()   // Credits
-                    ));
-                // Parse section
-                Section section = new Section(
-                        row.select("td").get(3).text(),                     // Section Number
-                        Integer.parseInt(row.select("td").get(1).text()),   // Course Ref Number
-                        row.select("td").get(6).select("abbr").attr("title"),   // Instructor
-                        Integer.parseInt(row.select("td").get(7).text()),   // Number Enrolled
-                        Integer.parseInt(row.select("td").get(8).text())    // Seats Available
-                );
-
-
-                int initial_offset = 0;
-                // todo add wait list support
-                // account for wait list rows
-                // https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202440&s=THEA
-                if(row.select("td").size() == 15)
-                    initial_offset = 2;
-
-                // Keep processing rows until hit next section
-                do{
-                    int offset = initial_offset;
-
-                    // Different amount of columns per row can cause issues, check for offset
-                    if(!Day.toDays(row.select("td").get(8 + offset).text()).isEmpty())
-                        offset += -1;
-
+                // Different amount of columns per row can cause issues, check for offset
+                if(!Day.toDays(row.select("td").get(8 + offset).text()).isEmpty())
+                    offset -= 1;
+                try{
                     section.addMeetings(Meeting.createMeetings(
                             row.select("td").get(9 + offset).text(),     // Day
                             row.select("td").get(10 + offset).text(),    // Times
                             row.select("td").get(11 + offset).select("abbr").attr("title"),  // Room
                             row.select("td").get(12 + offset).text()     // Dates
                     ));
+                } catch (ParseException e) {
+                    section.addFailedMeeting();
+                    dto.addError();
+                }
 
-                    // Add Requirements / Designation Codes / Misc info if any
-                    if(!row.select("td").get(0).text().isEmpty())
-                        section.addDetails(row.select("td").get(0).text());
+                // Add Requirements / Designation Codes / Misc info if any
+                if(!row.select("td").get(0).text().isEmpty())
+                    section.addDetails(row.select("td").get(0).text());
 
-                    if(rows.isEmpty())  break;
+                if(rows.isEmpty())  break;
 
-                    row = rows.remove(0);
+                row = rows.remove(0);
 
-                    // Edge case where details on next line but there's no times to process
-                    // https://www.sis.hawaii.edu/uhdad/avail.classes?i=HAW&t=202310&s=FIRE
-                    String details = row.select("td").get(0).text();
-                    if(!details.isEmpty() && row.select("td").size() == 1)
-                        section.addDetails(details);
+                // Edge case where details on next line but there's no times to process
+                // https://www.sis.hawaii.edu/uhdad/avail.classes?i=HAW&t=202310&s=FIRE
+                String details = row.select("td").get(0).text();
+                if(!details.isEmpty() && row.select("td").size() == 1)
+                    section.addDetails(details);
 
-                } while (!rows.isEmpty() && row.select("td").size() > 2 && row.select("td").get(1).text().isEmpty());
+            } while (!rows.isEmpty() && row.select("td").size() > 2 && row.select("td").get(1).text().isEmpty());
 
-                // Update course
-                courses.get(cid).addSection(section);
-            } while (!rows.isEmpty());
+            // Update course
+            courses.get(cid).addSection(section);
+        } while (!rows.isEmpty());
 
-        } catch (Exception ignored){
-            throw ignored;
-        }
-
-        return courses.values().stream().toList();
+        // Update DTO
+        dto.setCourses(courses.values().stream().toList());
+        return dto;
     }
 }

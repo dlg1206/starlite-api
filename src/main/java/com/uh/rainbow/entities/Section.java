@@ -12,6 +12,7 @@ import java.util.List;
  * @author Derek Garcia
  */
 public class Section {
+    private int failedMeetings = 0;     // Assume no failed meetings
     private final String id;     // section not always number
     private final int crn;
     private final String instructor;
@@ -54,5 +55,40 @@ public class Section {
      */
     public void addDetails(String details) {
         this.additionalDetails.add(details);
+    }
+
+    public void addFailedMeeting(){
+        this.failedMeetings += 1;
+    }
+
+    public int getfailed_meetings(){
+        return this.failedMeetings;
+    }
+    public String getid(){
+        return this.id;
+    }
+
+    public int getcrn(){
+        return this.crn;
+    }
+
+    public String getinstructor(){
+        return this.instructor;
+    }
+
+    public int getcurr_enrolled(){
+        return this.currEnrolled;
+    }
+
+    public int getseats_available(){
+        return this.seatsAvailable;
+    }
+
+    public List<String> getadditional_details(){
+        return this.additionalDetails;
+    }
+
+    public List<Meeting> getmeetings(){
+        return this.meetings;
     }
 }

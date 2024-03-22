@@ -25,10 +25,6 @@ public class IdentifierDTO extends ResponseDTO{
         super(instID, termID);
     }
 
-    public IdentifierDTO(String instID, String termID, String subjectID){
-        super(instID, termID, subjectID);
-    }
-
     public void addIdentifier(String id, String name){
         Map<String, String> idObject = new LinkedHashMap<>();
         idObject.put("id", id);
