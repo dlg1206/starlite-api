@@ -1,6 +1,6 @@
 package com.uh.rainbow.controller;
 
-import com.uh.rainbow.dto.CourseDTO;
+import com.uh.rainbow.dto.CoursesDTO;
 import com.uh.rainbow.dto.IdentifiersDTO;
 import com.uh.rainbow.dto.ResponseDTO;
 import com.uh.rainbow.services.HTMLParserService;
@@ -52,15 +52,15 @@ public class RainbowController {
 
 
     @GetMapping(value = "/campuses")
-    public ResponseEntity<ResponseDTO> getAllCampuses(){
-        try{
+    public ResponseEntity<ResponseDTO> getAllCampuses() {
+        try {
             return new ResponseEntity<>(
                     this.htmlParserService.parseInstitutions(),
                     HttpStatus.OK
             );
-        } catch (HttpStatusException e){
+        } catch (HttpStatusException e) {
             return new ResponseEntity<>(new IdentifiersDTO(), HttpStatusCode.valueOf(e.getStatusCode()));
-        } catch (IOException e){
+        } catch (IOException e) {
             return new ResponseEntity<>(new IdentifiersDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -72,9 +72,9 @@ public class RainbowController {
                     this.htmlParserService.parseTerms(instID.toUpperCase()),
                     HttpStatus.OK
             );
-        } catch (HttpStatusException e){
+        } catch (HttpStatusException e) {
             return new ResponseEntity<>(new IdentifiersDTO(instID), HttpStatusCode.valueOf(e.getStatusCode()));
-        } catch (IOException e){
+        } catch (IOException e) {
             return new ResponseEntity<>(new IdentifiersDTO(instID), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -86,31 +86,29 @@ public class RainbowController {
                     this.htmlParserService.parseSubjects(instID.toUpperCase(), termID),
                     HttpStatus.OK
             );
-        } catch (HttpStatusException e){
+        } catch (HttpStatusException e) {
             return new ResponseEntity<>(new IdentifiersDTO(instID, termID), HttpStatusCode.valueOf(e.getStatusCode()));
-        } catch (IOException e){
+        } catch (IOException e) {
             return new ResponseEntity<>(new IdentifiersDTO(instID, termID), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @GetMapping(value = "/campuses/{instID}/terms/{termID}/subjects/{subjectID}/courses")
-    public ResponseEntity<ResponseDTO> getAllCourses(@PathVariable String instID, @PathVariable String termID, @PathVariable String subjectID) {
+    @GetMapping(value = "/campuses/{instID}/terms/{termID}/courses")
+    public ResponseEntity<ResponseDTO> getAllCourses(@PathVariable String instID, @PathVariable String termID) {
         try {
-            return new ResponseEntity<>(
-                    this.htmlParserService.parseCourses(instID.toUpperCase(), termID, subjectID.toUpperCase()),
-                    HttpStatus.OK
-            );
-        } catch (HttpStatusException e){
-            return new ResponseEntity<>(new CourseDTO(instID, termID, subjectID), HttpStatusCode.valueOf(e.getStatusCode()));
-        } catch (IOException e){
-            return new ResponseEntity<>(new CourseDTO(instID, termID, subjectID), HttpStatus.INTERNAL_SERVER_ERROR);
+            var subjects = this.htmlParserService.parseSubjects(instID, termID);
+            CoursesDTO dto = new CoursesDTO();
+            for (var s : subjects.getIdentifiers()) {
+                dto.addCourses(this.htmlParserService.parseCourses(instID, termID, s.id()));
+            }
+
+            return new ResponseEntity<>(dto, HttpStatus.OK);
+        } catch (HttpStatusException e) {
+            return new ResponseEntity<>(new CoursesDTO(), HttpStatusCode.valueOf(e.getStatusCode()));
+        } catch (IOException e) {
+            return new ResponseEntity<>(new CoursesDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
-
-
-
 
 
 }

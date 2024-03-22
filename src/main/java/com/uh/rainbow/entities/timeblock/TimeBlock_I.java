@@ -28,6 +28,7 @@ public abstract class TimeBlock_I {
     }
 
     private final static Date SIX_AM;
+
     static {
         try {
             SIX_AM = INPUT.parse("0600");
@@ -46,8 +47,8 @@ public abstract class TimeBlock_I {
      *
      * @param startTime Start time of class
      * @param startDate Start Date of class
-     * @param endTime End time of class
-     * @param endDate End Date of class
+     * @param endTime   End time of class
+     * @param endDate   End Date of class
      */
     protected TimeBlock_I(String startTime, String startDate, String endTime, String endDate) {
         this.startTime = startTime;

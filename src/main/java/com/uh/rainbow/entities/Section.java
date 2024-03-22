@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class Section {
     private int failedMeetings = 0;     // Assume no failed meetings
-    private final String id;     // section not always number
+    private final String id;            // section not always number
     private final int crn;
     private final String instructor;
     private final int currEnrolled;
@@ -24,10 +24,10 @@ public class Section {
     /**
      * Create new Section
      *
-     * @param id ID of section
-     * @param crn Course Reference Number
-     * @param instructor Name of section instructor
-     * @param currEnrolled Number of people enrolled
+     * @param id             ID of section
+     * @param crn            Course Reference Number
+     * @param instructor     Name of section instructor
+     * @param currEnrolled   Number of people enrolled
      * @param seatsAvailable Number of seats available
      */
     public Section(String id, int crn, String instructor, int currEnrolled, int seatsAvailable) {
@@ -57,38 +57,39 @@ public class Section {
         this.additionalDetails.add(details);
     }
 
-    public void addFailedMeeting(){
+    public void addFailedMeeting() {
         this.failedMeetings += 1;
     }
 
-    public int getfailed_meetings(){
+    public int getfailed_meetings() {
         return this.failedMeetings;
     }
-    public String getid(){
+
+    public String getid() {
         return this.id;
     }
 
-    public int getcrn(){
+    public int getcrn() {
         return this.crn;
     }
 
-    public String getinstructor(){
+    public String getinstructor() {
         return this.instructor;
     }
 
-    public int getcurr_enrolled(){
+    public int getcurr_enrolled() {
         return this.currEnrolled;
     }
 
-    public int getseats_available(){
+    public int getseats_available() {
         return this.seatsAvailable;
     }
 
-    public List<String> getadditional_details(){
+    public List<String> getadditional_details() {
         return this.additionalDetails;
     }
 
-    public List<Meeting> getmeetings(){
+    public List<Meeting> getmeetings() {
         return this.meetings;
     }
 }

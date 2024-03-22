@@ -9,7 +9,7 @@ import java.util.Date;
  *
  * @author Derek Garcia
  */
-public class ResponseDTO{
+public class ResponseDTO {
     private final Date timestamp = new Date();
 
     public Date getTimestamp() {

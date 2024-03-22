@@ -1,5 +1,8 @@
 package com.uh.rainbow.entities;
 
+import com.uh.rainbow.dto.CourseDTO;
+import com.uh.rainbow.util.SourceURLBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +15,7 @@ import java.util.List;
  */
 public class Course {
 
+    private int errors = 0;
     private final String cid;
     private final String name;
     private final String credits;       // Credits not always ints
@@ -20,38 +24,39 @@ public class Course {
     /**
      * Create new Course
      *
-     * @param cid Course ID ( ICS 101 )
-     * @param name Full name of course
+     * @param cid     Course ID ( ICS 101 )
+     * @param name    Full name of course
      * @param credits Credits for course
      */
-    public Course(String cid, String name, String credits){
+    public Course(String cid, String name, String credits) {
         this.cid = cid;
         this.name = name;
         this.credits = credits;
     }
+
+    public CourseDTO toCourseDTO(String instID, String termID, String subjectID) {
+        return new CourseDTO(
+                SourceURLBuilder.build(instID, termID, subjectID),
+                this.errors,
+                this.cid,
+                this.name,
+                this.credits,
+                this.sections
+        );
+    }
+
+
+    public void addError() {
+        this.errors += 1;
+    }
+
 
     /**
      * Add a new section for this course
      *
      * @param section Section to add
      */
-    public void addSection(Section section){
+    public void addSection(Section section) {
         this.sections.add(section);
-    }
-
-    public String getCid() {
-        return this.cid;
-    }
-
-    public String getName(){
-        return this.name;
-    }
-
-    public String getCredits(){
-        return this.credits;
-    }
-
-    public List<Section> getSections() {
-        return this.sections;
     }
 }

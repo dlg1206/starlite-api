@@ -31,7 +31,7 @@ public class HTMLParserService {
     /**
      * Regex parser that extracts params from an url
      */
-    private static class URLParamExtractor{
+    private static class URLParamExtractor {
 
         private final Pattern regex;
 
@@ -40,7 +40,7 @@ public class HTMLParserService {
          *
          * @param regex Regex to use to extract from url
          */
-        public URLParamExtractor(String regex){
+        public URLParamExtractor(String regex) {
             this.regex = Pattern.compile(regex);
         }
 
@@ -50,7 +50,7 @@ public class HTMLParserService {
          * @param url URL to extract param from
          * @return Value of param
          */
-        public String extract(String url){
+        public String extract(String url) {
             Matcher matcher = this.regex.matcher(url);
             if (matcher.find())
                 return matcher.group(1);
@@ -64,13 +64,13 @@ public class HTMLParserService {
     /**
      * Process a list of li elements with href
      *
-     * @param dto Data Transfer Object to update
+     * @param dto      Data Transfer Object to update
      * @param elements List of elements to process
-     * @param upe URL Param extractor to use
+     * @param upe      URL Param extractor to use
      */
-    private void updateDTO(IdentifiersDTO dto, Elements elements, URLParamExtractor upe){
+    private void updateDTO(IdentifiersDTO dto, Elements elements, URLParamExtractor upe) {
         // Process each element
-        for(Element item : elements){
+        for (Element item : elements) {
             // Extract ID from url
             item = Objects.requireNonNull(item.selectFirst("a"));
             String termID = upe.extract(item.attr("href"));
@@ -147,8 +147,7 @@ public class HTMLParserService {
         return dto;
     }
 
-    public CourseDTO parseCourses(String instID, String termID, String subjectID) throws IOException {
-        CourseDTO dto = new CourseDTO(instID, termID, subjectID);
+    public List<CourseDTO> parseCourses(String instID, String termID, String subjectID) throws IOException {
         Map<String, Course> courses = new HashMap<>();
 
         // Get each subject col
@@ -161,17 +160,17 @@ public class HTMLParserService {
         Elements rows = Objects.requireNonNull(doc.selectFirst("tbody")).select("tr");
 
         Element row = rows.remove(0);   // prime query
-        do{
+        do {
             // Skip empty row
-            if(row.select("td").size() < 13){
-                if(rows.isEmpty()) break;
+            if (row.select("td").size() < 13) {
+                if (rows.isEmpty()) break;
                 row = rows.remove(0);
                 continue;
             }
 
             // Add new course if dne
             String cid = row.select("td").get(2).text();
-            if(courses.get(cid) == null)
+            if (courses.get(cid) == null)
                 courses.put(cid, new Course(
                         cid,                                     // Course ID
                         row.select("td").get(4).text(),  // Full course name
@@ -191,17 +190,17 @@ public class HTMLParserService {
             // todo add wait list support
             // account for wait list rows
             // https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202440&s=THEA
-            if(row.select("td").size() == 15)
+            if (row.select("td").size() == 15)
                 initial_offset = 2;
 
             // Keep processing rows until hit next section
-            do{
+            do {
                 int offset = initial_offset;
 
                 // Different amount of columns per row can cause issues, check for offset
-                if(!Day.toDays(row.select("td").get(8 + offset).text()).isEmpty())
+                if (!Day.toDays(row.select("td").get(8 + offset).text()).isEmpty())
                     offset -= 1;
-                try{
+                try {
                     section.addMeetings(Meeting.createMeetings(
                             row.select("td").get(9 + offset).text(),     // Day
                             row.select("td").get(10 + offset).text(),    // Times
@@ -210,21 +209,21 @@ public class HTMLParserService {
                     ));
                 } catch (ParseException e) {
                     section.addFailedMeeting();
-                    dto.addError();
+                    courses.get(cid).addError();
                 }
 
                 // Add Requirements / Designation Codes / Misc info if any
-                if(!row.select("td").get(0).text().isEmpty())
+                if (!row.select("td").get(0).text().isEmpty())
                     section.addDetails(row.select("td").get(0).text());
 
-                if(rows.isEmpty())  break;
+                if (rows.isEmpty()) break;
 
                 row = rows.remove(0);
 
                 // Edge case where details on next line but there's no times to process
                 // https://www.sis.hawaii.edu/uhdad/avail.classes?i=HAW&t=202310&s=FIRE
                 String details = row.select("td").get(0).text();
-                if(!details.isEmpty() && row.select("td").size() == 1)
+                if (!details.isEmpty() && row.select("td").size() == 1)
                     section.addDetails(details);
 
             } while (!rows.isEmpty() && row.select("td").size() > 2 && row.select("td").get(1).text().isEmpty());
@@ -233,8 +232,10 @@ public class HTMLParserService {
             courses.get(cid).addSection(section);
         } while (!rows.isEmpty());
 
-        // Update DTO
-        dto.setCourses(courses.values().stream().toList());
-        return dto;
+
+        // Return DTOs
+        ArrayList<CourseDTO> dtos = new ArrayList<>();
+        courses.values().stream().toList().forEach((c) -> dtos.add(c.toCourseDTO(instID, termID, subjectID)));
+        return dtos;
     }
 }
