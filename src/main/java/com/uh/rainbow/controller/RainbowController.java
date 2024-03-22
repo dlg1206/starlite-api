@@ -1,9 +1,8 @@
 package com.uh.rainbow.controller;
 
 import com.uh.rainbow.dto.CourseDTO;
-import com.uh.rainbow.dto.IdentifierDTO;
+import com.uh.rainbow.dto.IdentifiersDTO;
 import com.uh.rainbow.dto.ResponseDTO;
-import com.uh.rainbow.entities.Course;
 import com.uh.rainbow.services.HTMLParserService;
 import org.jsoup.HttpStatusException;
 import org.slf4j.Logger;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.util.List;
 
 /**
  * <b>File:</b> RainbowController.java
@@ -62,9 +59,9 @@ public class RainbowController {
                     HttpStatus.OK
             );
         } catch (HttpStatusException e){
-            return new ResponseEntity<>(new IdentifierDTO(), HttpStatusCode.valueOf(e.getStatusCode()));
+            return new ResponseEntity<>(new IdentifiersDTO(), HttpStatusCode.valueOf(e.getStatusCode()));
         } catch (IOException e){
-            return new ResponseEntity<>(new IdentifierDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new IdentifiersDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -76,9 +73,9 @@ public class RainbowController {
                     HttpStatus.OK
             );
         } catch (HttpStatusException e){
-            return new ResponseEntity<>(new IdentifierDTO(instID), HttpStatusCode.valueOf(e.getStatusCode()));
+            return new ResponseEntity<>(new IdentifiersDTO(instID), HttpStatusCode.valueOf(e.getStatusCode()));
         } catch (IOException e){
-            return new ResponseEntity<>(new IdentifierDTO(instID), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new IdentifiersDTO(instID), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -90,9 +87,9 @@ public class RainbowController {
                     HttpStatus.OK
             );
         } catch (HttpStatusException e){
-            return new ResponseEntity<>(new IdentifierDTO(instID, termID), HttpStatusCode.valueOf(e.getStatusCode()));
+            return new ResponseEntity<>(new IdentifiersDTO(instID, termID), HttpStatusCode.valueOf(e.getStatusCode()));
         } catch (IOException e){
-            return new ResponseEntity<>(new IdentifierDTO(instID, termID), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new IdentifiersDTO(instID, termID), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

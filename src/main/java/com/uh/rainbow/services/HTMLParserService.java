@@ -1,7 +1,7 @@
 package com.uh.rainbow.services;
 
 import com.uh.rainbow.dto.CourseDTO;
-import com.uh.rainbow.dto.IdentifierDTO;
+import com.uh.rainbow.dto.IdentifiersDTO;
 import com.uh.rainbow.entities.Course;
 import com.uh.rainbow.entities.Day;
 import com.uh.rainbow.entities.Meeting;
@@ -68,13 +68,13 @@ public class HTMLParserService {
      * @param elements List of elements to process
      * @param upe URL Param extractor to use
      */
-    private void updateDTO(IdentifierDTO dto, Elements elements, URLParamExtractor upe){
+    private void updateDTO(IdentifiersDTO dto, Elements elements, URLParamExtractor upe){
         // Process each element
         for(Element item : elements){
             // Extract ID from url
             item = Objects.requireNonNull(item.selectFirst("a"));
             String termID = upe.extract(item.attr("href"));
-
+            // Update DTO
             dto.addIdentifier(termID, item.text());
         }
     }
@@ -84,8 +84,8 @@ public class HTMLParserService {
      *
      * @return List of institution ids and names
      */
-    public IdentifierDTO parseInstitutions() throws IOException {
-        IdentifierDTO dto = new IdentifierDTO();
+    public IdentifiersDTO parseInstitutions() throws IOException {
+        IdentifiersDTO dto = new IdentifiersDTO();
 
         // Get list
         Document doc = Jsoup.connect(UH_ROOT).get();
@@ -102,8 +102,8 @@ public class HTMLParserService {
      * @param instID Institution ID
      * @return List of term ids and names
      */
-    public IdentifierDTO parseTerms(String instID) throws IOException {
-        IdentifierDTO dto = new IdentifierDTO(instID);
+    public IdentifiersDTO parseTerms(String instID) throws IOException {
+        IdentifiersDTO dto = new IdentifiersDTO(instID);
 
         // Get terms
         Document doc = Jsoup.connect(UH_ROOT).data("i", instID).get();
@@ -120,8 +120,8 @@ public class HTMLParserService {
      * @param termID term ID
      * @return List of subject ids and names
      */
-    public IdentifierDTO parseSubjects(String instID, String termID) throws IOException {
-        IdentifierDTO dto = new IdentifierDTO(instID, termID);
+    public IdentifiersDTO parseSubjects(String instID, String termID) throws IOException {
+        IdentifiersDTO dto = new IdentifiersDTO(instID, termID);
 
         // Get each subject col
         Document doc = Jsoup.connect(UH_ROOT)
