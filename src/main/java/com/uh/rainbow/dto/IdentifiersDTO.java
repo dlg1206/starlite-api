@@ -24,7 +24,7 @@ public class IdentifiersDTO extends ResponseDTO {
 
     public IdentifiersDTO(String instID) {
         super();
-        this.source = SourceURLBuilder.build(instID);
+        this.source = SourceURLBuilder.build(instID.toUpperCase());
     }
 
     public IdentifiersDTO(String instID, String termID) {

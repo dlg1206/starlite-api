@@ -13,7 +13,8 @@ import java.util.List;
  */
 public class Section {
     private int failedMeetings = 0;     // Assume no failed meetings
-    private final String id;            // section not always number
+    private final String cid;
+    private final String sid;            // section not always number
     private final int crn;
     private final String instructor;
     private final int currEnrolled;
@@ -24,16 +25,17 @@ public class Section {
     /**
      * Create new Section
      *
-     * @param id             ID of section
+     * @param sid            ID of section
      * @param crn            Course Reference Number
      * @param instructor     Name of section instructor
      * @param currEnrolled   Number of people enrolled
      * @param seatsAvailable Number of seats available
      */
-    public Section(String id, int crn, String instructor, int currEnrolled, int seatsAvailable) {
-        this.id = id;
+    public Section(int crn, String cid, String sid, String instructor, int currEnrolled, int seatsAvailable) {
         this.crn = crn;
-        this.instructor = instructor;
+        this.cid = cid.strip();
+        this.sid = sid.strip();
+        this.instructor = instructor.strip();
         this.currEnrolled = currEnrolled;
         this.seatsAvailable = seatsAvailable;
     }
@@ -65,8 +67,12 @@ public class Section {
         return this.failedMeetings;
     }
 
-    public String getid() {
-        return this.id;
+    public String getcid() {
+        return this.cid;
+    }
+
+    public String getsid() {
+        return this.sid;
     }
 
     public int getcrn() {

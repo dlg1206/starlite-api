@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class Course {
 
-    private int errors = 0;
+    private final int errors = 0;
     private final String cid;
     private final String name;
     private final String credits;       // Credits not always ints
@@ -29,8 +29,8 @@ public class Course {
      * @param credits Credits for course
      */
     public Course(String cid, String name, String credits) {
-        this.cid = cid;
-        this.name = name;
+        this.cid = cid.strip();
+        this.name = name.strip();
         this.credits = credits;
     }
 
@@ -45,12 +45,6 @@ public class Course {
         );
     }
 
-
-    public void addError() {
-        this.errors += 1;
-    }
-
-
     /**
      * Add a new section for this course
      *
@@ -58,5 +52,9 @@ public class Course {
      */
     public void addSection(Section section) {
         this.sections.add(section);
+    }
+
+    public String getCID() {
+        return this.cid;
     }
 }

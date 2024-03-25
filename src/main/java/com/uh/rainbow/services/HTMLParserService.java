@@ -3,23 +3,23 @@ package com.uh.rainbow.services;
 import com.uh.rainbow.dto.CourseDTO;
 import com.uh.rainbow.dto.IdentifiersDTO;
 import com.uh.rainbow.entities.Course;
-import com.uh.rainbow.entities.Day;
-import com.uh.rainbow.entities.Meeting;
 import com.uh.rainbow.entities.Section;
+import com.uh.rainbow.util.RowCursor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * <b>File:</b> HTMLParser.java
+ * <b>File:</b> HTMLParserService.java
  * <p>
  * <b>Description:</b> Queries UH urls and processes the resulting HTML
  *
@@ -27,6 +27,8 @@ import java.util.regex.Pattern;
  */
 @Service
 public class HTMLParserService {
+    // Spring-configured logger
+    public static final Logger LOGGER = LoggerFactory.getLogger(HTMLParserService.class);
 
     /**
      * Regex parser that extracts params from an url
@@ -83,6 +85,7 @@ public class HTMLParserService {
      * Parse the list of UH institutions
      *
      * @return List of institution ids and names
+     * @throws IOException Fail to get html
      */
     public IdentifiersDTO parseInstitutions() throws IOException {
         IdentifiersDTO dto = new IdentifiersDTO();
@@ -101,12 +104,13 @@ public class HTMLParserService {
      *
      * @param instID Institution ID
      * @return List of term ids and names
+     * @throws IOException Fail to get html
      */
     public IdentifiersDTO parseTerms(String instID) throws IOException {
         IdentifiersDTO dto = new IdentifiersDTO(instID);
 
         // Get terms
-        Document doc = Jsoup.connect(UH_ROOT).data("i", instID).get();
+        Document doc = Jsoup.connect(UH_ROOT).data("i", instID.toUpperCase()).get();
         Elements terms = doc.select("ul.terms").select("li");
         updateDTO(dto, terms, new URLParamExtractor("t=([0-9]*)"));
 
@@ -119,13 +123,14 @@ public class HTMLParserService {
      * @param instID Institution ID
      * @param termID term ID
      * @return List of subject ids and names
+     * @throws IOException Fail to get html
      */
     public IdentifiersDTO parseSubjects(String instID, String termID) throws IOException {
-        IdentifiersDTO dto = new IdentifiersDTO(instID, termID);
+        IdentifiersDTO dto = new IdentifiersDTO(instID.toUpperCase(), termID);
 
         // Get each subject col
         Document doc = Jsoup.connect(UH_ROOT)
-                .data("i", instID)
+                .data("i", instID.toUpperCase())
                 .data("t", termID)
                 .get();
 
@@ -147,91 +152,36 @@ public class HTMLParserService {
         return dto;
     }
 
+    /**
+     * Parse the list of available courses for an institution, term, and subject
+     *
+     * @param instID    Institution ID
+     * @param termID    term ID
+     * @param subjectID subject ID
+     * @return List of courses available
+     * @throws IOException Fail to get html
+     */
     public List<CourseDTO> parseCourses(String instID, String termID, String subjectID) throws IOException {
-        Map<String, Course> courses = new HashMap<>();
 
         // Get each subject col
         Document doc = Jsoup.connect(UH_ROOT)
-                .data("i", instID)
+                .data("i", instID.toUpperCase())
                 .data("t", termID)
-                .data("s", subjectID)
+                .data("s", subjectID.toUpperCase())
                 .get();
 
-        Elements rows = Objects.requireNonNull(doc.selectFirst("tbody")).select("tr");
+        // Parse all courses
+        Map<String, Course> courses = new HashMap<>();
+        RowCursor cur = new RowCursor(Objects.requireNonNull(doc.selectFirst("tbody")).select("tr"));
+        while (cur.findSection()) {
+            // Get course info, each section row will have course info
+            Course c = cur.getCourse();
+            courses.putIfAbsent(c.getCID(), c);
 
-        Element row = rows.remove(0);   // prime query
-        do {
-            // Skip empty row
-            if (row.select("td").size() < 13) {
-                if (rows.isEmpty()) break;
-                row = rows.remove(0);
-                continue;
-            }
-
-            // Add new course if dne
-            String cid = row.select("td").get(2).text();
-            if (courses.get(cid) == null)
-                courses.put(cid, new Course(
-                        cid,                                     // Course ID
-                        row.select("td").get(4).text(),  // Full course name
-                        row.select("td").get(5).text()   // Credits
-                ));
-            // Parse section
-            Section section = new Section(
-                    row.select("td").get(3).text(),                     // Section Number
-                    Integer.parseInt(row.select("td").get(1).text()),   // Course Ref Number
-                    row.select("td").get(6).select("abbr").attr("title"),   // Instructor
-                    Integer.parseInt(row.select("td").get(7).text()),   // Number Enrolled
-                    Integer.parseInt(row.select("td").get(8).text())    // Seats Available
-            );
-
-
-            int initial_offset = 0;
-            // todo add wait list support
-            // account for wait list rows
-            // https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202440&s=THEA
-            if (row.select("td").size() == 15)
-                initial_offset = 2;
-
-            // Keep processing rows until hit next section
-            do {
-                int offset = initial_offset;
-
-                // Different amount of columns per row can cause issues, check for offset
-                if (!Day.toDays(row.select("td").get(8 + offset).text()).isEmpty())
-                    offset -= 1;
-                try {
-                    section.addMeetings(Meeting.createMeetings(
-                            row.select("td").get(9 + offset).text(),     // Day
-                            row.select("td").get(10 + offset).text(),    // Times
-                            row.select("td").get(11 + offset).select("abbr").attr("title"),  // Room
-                            row.select("td").get(12 + offset).text()     // Dates
-                    ));
-                } catch (ParseException e) {
-                    section.addFailedMeeting();
-                    courses.get(cid).addError();
-                }
-
-                // Add Requirements / Designation Codes / Misc info if any
-                if (!row.select("td").get(0).text().isEmpty())
-                    section.addDetails(row.select("td").get(0).text());
-
-                if (rows.isEmpty()) break;
-
-                row = rows.remove(0);
-
-                // Edge case where details on next line but there's no times to process
-                // https://www.sis.hawaii.edu/uhdad/avail.classes?i=HAW&t=202310&s=FIRE
-                String details = row.select("td").get(0).text();
-                if (!details.isEmpty() && row.select("td").size() == 1)
-                    section.addDetails(details);
-
-            } while (!rows.isEmpty() && row.select("td").size() > 2 && row.select("td").get(1).text().isEmpty());
-
-            // Update course
-            courses.get(cid).addSection(section);
-        } while (!rows.isEmpty());
-
+            // Get all remaining section info
+            Section section = cur.getSection();
+            courses.get(section.getcid()).addSection(section);
+        }
 
         // Return DTOs
         ArrayList<CourseDTO> dtos = new ArrayList<>();
