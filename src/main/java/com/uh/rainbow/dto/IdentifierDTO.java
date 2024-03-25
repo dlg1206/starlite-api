@@ -7,5 +7,5 @@ package com.uh.rainbow.dto;
  *
  * @author Derek Garcia
  */
-public record IdentifierDTO() {
+public record IdentifierDTO(String id, String name) {
 }

@@ -20,10 +20,10 @@ public class TimeBlock extends TimeBlock_I {
      *
      * @param startTime Start time of class
      * @param startDate Start Date of class
-     * @param endTime End time of class
-     * @param endDate End Date of class
+     * @param endTime   End time of class
+     * @param endDate   End Date of class
      */
-    protected TimeBlock(Date startTime, String startDate, Date endTime, String endDate ) {
+    protected TimeBlock(Date startTime, String startDate, Date endTime, String endDate) {
         super(output.format(startTime), startDate, output.format(endTime), endDate);
     }
 

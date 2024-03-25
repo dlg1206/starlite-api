@@ -12,7 +12,9 @@ import java.util.List;
  * @author Derek Garcia
  */
 public class Section {
-    private final String id;     // section not always number
+    private int failedMeetings = 0;     // Assume no failed meetings
+    private final String cid;
+    private final String sid;            // section not always number
     private final int crn;
     private final String instructor;
     private final int currEnrolled;
@@ -23,16 +25,17 @@ public class Section {
     /**
      * Create new Section
      *
-     * @param id ID of section
-     * @param crn Course Reference Number
-     * @param instructor Name of section instructor
-     * @param currEnrolled Number of people enrolled
+     * @param sid            ID of section
+     * @param crn            Course Reference Number
+     * @param instructor     Name of section instructor
+     * @param currEnrolled   Number of people enrolled
      * @param seatsAvailable Number of seats available
      */
-    public Section(String id, int crn, String instructor, int currEnrolled, int seatsAvailable) {
-        this.id = id;
+    public Section(int crn, String cid, String sid, String instructor, int currEnrolled, int seatsAvailable) {
         this.crn = crn;
-        this.instructor = instructor;
+        this.cid = cid.strip();
+        this.sid = sid.strip();
+        this.instructor = instructor.strip();
         this.currEnrolled = currEnrolled;
         this.seatsAvailable = seatsAvailable;
     }
@@ -54,5 +57,45 @@ public class Section {
      */
     public void addDetails(String details) {
         this.additionalDetails.add(details);
+    }
+
+    public void addFailedMeeting() {
+        this.failedMeetings += 1;
+    }
+
+    public int getfailed_meetings() {
+        return this.failedMeetings;
+    }
+
+    public String getcid() {
+        return this.cid;
+    }
+
+    public String getsid() {
+        return this.sid;
+    }
+
+    public int getcrn() {
+        return this.crn;
+    }
+
+    public String getinstructor() {
+        return this.instructor;
+    }
+
+    public int getcurr_enrolled() {
+        return this.currEnrolled;
+    }
+
+    public int getseats_available() {
+        return this.seatsAvailable;
+    }
+
+    public List<String> getadditional_details() {
+        return this.additionalDetails;
+    }
+
+    public List<Meeting> getmeetings() {
+        return this.meetings;
     }
 }

@@ -1,23 +1,25 @@
 package com.uh.rainbow.services;
 
+import com.uh.rainbow.dto.CourseDTO;
+import com.uh.rainbow.dto.IdentifiersDTO;
 import com.uh.rainbow.entities.Course;
-import com.uh.rainbow.entities.Day;
-import com.uh.rainbow.entities.Meeting;
 import com.uh.rainbow.entities.Section;
+import com.uh.rainbow.util.RowCursor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * <b>File:</b> HTMLParser.java
+ * <b>File:</b> HTMLParserService.java
  * <p>
  * <b>Description:</b> Queries UH urls and processes the resulting HTML
  *
@@ -25,20 +27,13 @@ import java.util.regex.Pattern;
  */
 @Service
 public class HTMLParserService {
-
-    /**
-     * Util identifier
-     *
-     * @param id ID of resource
-     * @param name Full or simple name of resorce
-     */
-    public record Identifier(String id, String name) {
-    }
+    // Spring-configured logger
+    public static final Logger LOGGER = LoggerFactory.getLogger(HTMLParserService.class);
 
     /**
      * Regex parser that extracts params from an url
      */
-    private static class URLParamExtractor{
+    private static class URLParamExtractor {
 
         private final Pattern regex;
 
@@ -47,7 +42,7 @@ public class HTMLParserService {
          *
          * @param regex Regex to use to extract from url
          */
-        public URLParamExtractor(String regex){
+        public URLParamExtractor(String regex) {
             this.regex = Pattern.compile(regex);
         }
 
@@ -57,7 +52,7 @@ public class HTMLParserService {
          * @param url URL to extract param from
          * @return Value of param
          */
-        public String extract(String url){
+        public String extract(String url) {
             Matcher matcher = this.regex.matcher(url);
             if (matcher.find())
                 return matcher.group(1);
@@ -71,45 +66,37 @@ public class HTMLParserService {
     /**
      * Process a list of li elements with href
      *
+     * @param dto      Data Transfer Object to update
      * @param elements List of elements to process
-     * @param upe URL Param extractor to use
-     * @return List of extracted ids and names
+     * @param upe      URL Param extractor to use
      */
-    private List<Identifier> processElements(Elements elements, URLParamExtractor upe){
-        List<Identifier> ids = new ArrayList<>();
+    private void updateDTO(IdentifiersDTO dto, Elements elements, URLParamExtractor upe) {
         // Process each element
-        for(Element item : elements){
+        for (Element item : elements) {
             // Extract ID from url
             item = Objects.requireNonNull(item.selectFirst("a"));
             String termID = upe.extract(item.attr("href"));
-
-            ids.add(new Identifier(termID, item.text()));
+            // Update DTO
+            dto.addIdentifier(termID, item.text());
         }
-
-        return ids;
     }
 
     /**
      * Parse the list of UH institutions
      *
      * @return List of institution ids and names
+     * @throws IOException Fail to get html
      */
-    public List<Identifier> parseInstitutions() throws IOException {
-        List<Identifier> ids = new ArrayList<>();
-        try{
-            // Get list
-            Document doc = Jsoup.connect(UH_ROOT).get();
-            Elements institutions = doc.select("ul.institutions").select("li");
+    public IdentifiersDTO parseInstitutions() throws IOException {
+        IdentifiersDTO dto = new IdentifiersDTO();
 
-            // Convert to key pair
-            for(Element item : institutions)
-                ids.add(new Identifier(item.className(), item.text()));
+        // Get list
+        Document doc = Jsoup.connect(UH_ROOT).get();
+        doc.select("ul.institutions").select("li").forEach(
+                (item) -> dto.addIdentifier(item.className(), item.text())
+        );
 
-        } catch (IOException ignored){
-            throw ignored;
-        }
-
-        return ids;
+        return dto;
     }
 
     /**
@@ -117,21 +104,17 @@ public class HTMLParserService {
      *
      * @param instID Institution ID
      * @return List of term ids and names
+     * @throws IOException Fail to get html
      */
-    public List<Identifier> parseTerms(String instID) throws IOException {
-        List<Identifier> ids = new ArrayList<>();
-        try{
-            // Get terms
-            Document doc = Jsoup.connect(UH_ROOT).data("i", instID).get();
-            Elements terms = doc.select("ul.terms").select("li");
+    public IdentifiersDTO parseTerms(String instID) throws IOException {
+        IdentifiersDTO dto = new IdentifiersDTO(instID);
 
-            ids.addAll(processElements(terms, new URLParamExtractor("t=([0-9]*)")));
+        // Get terms
+        Document doc = Jsoup.connect(UH_ROOT).data("i", instID.toUpperCase()).get();
+        Elements terms = doc.select("ul.terms").select("li");
+        updateDTO(dto, terms, new URLParamExtractor("t=([0-9]*)"));
 
-        } catch (IOException ignored){
-            throw ignored;
-        }
-
-        return ids;
+        return dto;
     }
 
     /**
@@ -140,124 +123,69 @@ public class HTMLParserService {
      * @param instID Institution ID
      * @param termID term ID
      * @return List of subject ids and names
+     * @throws IOException Fail to get html
      */
-    public List<Identifier> parseSubjects(String instID, String termID) throws IOException {
-        List<Identifier> ids = new ArrayList<>();
-        try{
-            // Get each subject col
-            Document doc = Jsoup.connect(UH_ROOT)
-                    .data("i", instID)
-                    .data("t", termID)
-                    .get();
+    public IdentifiersDTO parseSubjects(String instID, String termID) throws IOException {
+        IdentifiersDTO dto = new IdentifiersDTO(instID.toUpperCase(), termID);
 
-            Elements leftSubjects = doc
-                    .select("div.leftcolumn")
-                    .select("ul.subjects")
-                    .select("li");
+        // Get each subject col
+        Document doc = Jsoup.connect(UH_ROOT)
+                .data("i", instID.toUpperCase())
+                .data("t", termID)
+                .get();
 
-            Elements rightSubjects = doc
-                    .select("div.rightcolumn")
-                    .select("ul.subjects")
-                    .select("li");
+        Elements leftSubjects = doc
+                .select("div.leftcolumn")
+                .select("ul.subjects")
+                .select("li");
 
-            // Process each list
-            URLParamExtractor upe = new URLParamExtractor("s=(\\w*)");
-            ids.addAll(processElements(leftSubjects, upe));
-            ids.addAll(processElements(rightSubjects, upe));
+        Elements rightSubjects = doc
+                .select("div.rightcolumn")
+                .select("ul.subjects")
+                .select("li");
 
-        } catch (IOException ignored){
-            throw ignored;
-        }
+        // Process each list
+        URLParamExtractor upe = new URLParamExtractor("s=(\\w*)");
+        updateDTO(dto, leftSubjects, upe);
+        updateDTO(dto, rightSubjects, upe);
 
-        return ids;
+        return dto;
     }
 
-    public List<Course> parseCourses(String instID, String termID, String subjectID) throws IOException, ParseException {
+    /**
+     * Parse the list of available courses for an institution, term, and subject
+     *
+     * @param instID    Institution ID
+     * @param termID    term ID
+     * @param subjectID subject ID
+     * @return List of courses available
+     * @throws IOException Fail to get html
+     */
+    public List<CourseDTO> parseCourses(String instID, String termID, String subjectID) throws IOException {
+
+        // Get each subject col
+        Document doc = Jsoup.connect(UH_ROOT)
+                .data("i", instID.toUpperCase())
+                .data("t", termID)
+                .data("s", subjectID.toUpperCase())
+                .get();
+
+        // Parse all courses
         Map<String, Course> courses = new HashMap<>();
+        RowCursor cur = new RowCursor(Objects.requireNonNull(doc.selectFirst("tbody")).select("tr"));
+        while (cur.findSection()) {
+            // Get course info, each section row will have course info
+            Course c = cur.getCourse();
+            courses.putIfAbsent(c.getCID(), c);
 
-        try{
-            // Get each subject col
-            Document doc = Jsoup.connect(UH_ROOT)
-                    .data("i", instID)
-                    .data("t", termID)
-                    .data("s", subjectID)
-                    .get();
-
-            Elements rows = Objects.requireNonNull(doc.selectFirst("tbody")).select("tr");
-
-            Element row = rows.remove(0);   // prime query
-            do{
-
-                if(row.select("td").size() < 13){
-                    if(rows.isEmpty()) break;
-                    row = rows.remove(0);
-                    continue;
-                }
-
-                // Add new course if dne
-                String cid = row.select("td").get(2).text();
-                if(courses.get(cid) == null)
-                    courses.put(cid, new Course(
-                            cid,                                     // Course ID
-                            row.select("td").get(4).text(),  // Full course name
-                            row.select("td").get(5).text()   // Credits
-                    ));
-                // Parse section
-                Section section = new Section(
-                        row.select("td").get(3).text(),                     // Section Number
-                        Integer.parseInt(row.select("td").get(1).text()),   // Course Ref Number
-                        row.select("td").get(6).select("abbr").attr("title"),   // Instructor
-                        Integer.parseInt(row.select("td").get(7).text()),   // Number Enrolled
-                        Integer.parseInt(row.select("td").get(8).text())    // Seats Available
-                );
-
-
-                int initial_offset = 0;
-                // todo add wait list support
-                // account for wait list rows
-                // https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202440&s=THEA
-                if(row.select("td").size() == 15)
-                    initial_offset = 2;
-
-                // Keep processing rows until hit next section
-                do{
-                    int offset = initial_offset;
-
-                    // Different amount of columns per row can cause issues, check for offset
-                    if(!Day.toDays(row.select("td").get(8 + offset).text()).isEmpty())
-                        offset += -1;
-
-                    section.addMeetings(Meeting.createMeetings(
-                            row.select("td").get(9 + offset).text(),     // Day
-                            row.select("td").get(10 + offset).text(),    // Times
-                            row.select("td").get(11 + offset).select("abbr").attr("title"),  // Room
-                            row.select("td").get(12 + offset).text()     // Dates
-                    ));
-
-                    // Add Requirements / Designation Codes / Misc info if any
-                    if(!row.select("td").get(0).text().isEmpty())
-                        section.addDetails(row.select("td").get(0).text());
-
-                    if(rows.isEmpty())  break;
-
-                    row = rows.remove(0);
-
-                    // Edge case where details on next line but there's no times to process
-                    // https://www.sis.hawaii.edu/uhdad/avail.classes?i=HAW&t=202310&s=FIRE
-                    String details = row.select("td").get(0).text();
-                    if(!details.isEmpty() && row.select("td").size() == 1)
-                        section.addDetails(details);
-
-                } while (!rows.isEmpty() && row.select("td").size() > 2 && row.select("td").get(1).text().isEmpty());
-
-                // Update course
-                courses.get(cid).addSection(section);
-            } while (!rows.isEmpty());
-
-        } catch (Exception ignored){
-            throw ignored;
+            // Get all remaining section info
+            Section section = cur.getSection();
+            courses.get(section.getcid()).addSection(section);
         }
 
-        return courses.values().stream().toList();
+        // Return DTOs
+        ArrayList<CourseDTO> dtos = new ArrayList<>();
+        courses.values().stream().toList().forEach((c) -> dtos.add(c.toCourseDTO(instID, termID, subjectID)));
+        return dtos;
     }
 }

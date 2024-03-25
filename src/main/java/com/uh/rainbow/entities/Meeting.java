@@ -26,12 +26,12 @@ public class Meeting {
     /**
      * Create new meeting
      *
-     * @param day Day of Week
+     * @param day       Day of Week
      * @param startTime Start time
      * @param startDate Start date
-     * @param endTime End Time
-     * @param endDate End date
-     * @param room Room
+     * @param endTime   End Time
+     * @param endDate   End date
+     * @param room      Room
      */
     private Meeting(Day day, String startTime, String startDate, String endTime, String endDate, String room) {
         this.day = day;
@@ -49,11 +49,35 @@ public class Meeting {
         return this.day.getDow();
     }
 
+    public Day getDay() {
+        return this.day;
+    }
+
+    public String getstart_time() {
+        return this.startTime;
+    }
+
+    public String getstart_date() {
+        return this.startDate;
+    }
+
+    public String getend_time() {
+        return this.endTime;
+    }
+
+    public String getend_date() {
+        return this.endDate;
+    }
+
+    public String getroom() {
+        return this.room;
+    }
+
 
     /**
      * Create new meetings parsed from UH style input parameters
      *
-     * @param dayString Day string formatted D*
+     * @param dayString  Day string formatted D*
      * @param timeString Time formatted HHmm-HHmm(?:a|p)
      * @param roomString Room name
      * @param dateString Date formatted DD/MM(?:|-DD/MM)
@@ -67,7 +91,7 @@ public class Meeting {
 
         TimeBlock_I tb = TimeBlock_I.createTimeBlock(timeString, dateString);
         days.forEach((day) -> meetings.add(
-                new Meeting(day, tb.getStartTime(), tb. getStartDate(), tb.getEndTime(), tb.getEndDate(), roomString))
+                new Meeting(day, tb.getStartTime(), tb.getStartDate(), tb.getEndTime(), tb.getEndDate(), roomString))
         );
 
         return meetings;
