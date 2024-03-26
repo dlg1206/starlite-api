@@ -5,7 +5,6 @@ import com.uh.rainbow.entities.Day;
 import com.uh.rainbow.entities.Meeting;
 import com.uh.rainbow.entities.Section;
 import org.jsoup.nodes.Element;
-import com.uh.rainbow.util.CourseFilter;
 import org.jsoup.select.Elements;
 
 import java.text.ParseException;
@@ -135,11 +134,11 @@ public class RowCursor {
             return false;
 
         String times = row.select("td").get(10 + offset).text();
-        if (times.isEmpty())
+        if (times.isEmpty() || !this.courseFilter.validTimes(times))
             return false;
 
         String room = row.select("td").get(11 + offset).select("abbr").attr("title");
-        if (room.isEmpty() || this.courseFilter.validOnline(room))
+        if (room.isEmpty() || !this.courseFilter.validOnline(room))
             return false;
 
         String dates = row.select("td").get(12 + offset).text();
@@ -172,8 +171,10 @@ public class RowCursor {
      * @return List of Meetings
      * @throws ParseException Failed to parse meetings
      */
-    private List<Meeting> getMeetings() throws ParseException {
-        assert hasMeeting();    // assert meeting to process
+    private List<Meeting> getMeetings() throws Exception {
+        // assert meeting to process
+        if(!hasMeeting())
+            throw new Exception("No meetings");
 
         Element row = this.table.get(0);     // peek
 
@@ -221,9 +222,10 @@ public class RowCursor {
      *
      * @return Section
      */
-    public Section getSection() {
-
-        assert hasSection();    // assert section to process
+    public Section getSection() throws Exception {
+        // assert section to process
+        if(!hasSection())
+            throw new Exception("No Sections");
 
         Element row = this.table.get(0);     // peek
         // todo add wait list support
@@ -243,6 +245,8 @@ public class RowCursor {
                 section.addMeetings(getMeetings());
             } catch (ParseException e) {
                 section.addFailedMeeting();
+            } catch (Exception ignore){
+
             }
 
             // Add Requirements / Designation Codes / Misc info if any

@@ -57,4 +57,8 @@ public class Course {
     public String getCID() {
         return this.cid;
     }
+
+    public List<Section> getSections(){
+        return this.sections;
+    }
 }

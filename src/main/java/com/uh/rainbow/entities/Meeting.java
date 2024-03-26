@@ -1,6 +1,9 @@
 package com.uh.rainbow.entities;
 
-import com.uh.rainbow.entities.timeblock.TimeBlock_I;
+
+import com.uh.rainbow.entities.timeblock.TimeBlock;
+import com.uh.rainbow.entities.timeblock.simple.SimpleDate;
+import com.uh.rainbow.entities.timeblock.simple.SimpleTime;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -17,27 +20,24 @@ public class Meeting {
 
 
     private final Day day;
-    private final String startTime;
-    private final String startDate;
-    private final String endTime;
-    private final String endDate;
+    private final SimpleTime startTime;
+    private final SimpleTime endTime;
+    private final SimpleDate startDate;
+    private final SimpleDate endDate;
+
     private final String room;
 
     /**
      * Create new meeting
      *
      * @param day       Day of Week
-     * @param startTime Start time
-     * @param startDate Start date
-     * @param endTime   End Time
-     * @param endDate   End date
      * @param room      Room
      */
-    private Meeting(Day day, String startTime, String startDate, String endTime, String endDate, String room) {
+    private Meeting(Day day, SimpleTime startTime, SimpleTime endTime, SimpleDate startDate, SimpleDate endDate, String room) {
         this.day = day;
         this.startTime = startTime;
-        this.startDate = startDate;
         this.endTime = endTime;
+        this.startDate = startDate;
         this.endDate = endDate;
         this.room = room;
     }
@@ -53,26 +53,25 @@ public class Meeting {
         return this.day;
     }
 
-    public String getstart_time() {
-        return this.startTime;
+    public String getStart_time() {
+        return this.startTime.toString();
     }
 
-    public String getstart_date() {
-        return this.startDate;
+    public String getEnd_time() {
+        return this.endTime.toString();
     }
 
-    public String getend_time() {
-        return this.endTime;
+    public String getStart_date() {
+        return this.startDate.toString();
     }
 
-    public String getend_date() {
-        return this.endDate;
+    public String getEnd_date() {
+        return this.endDate.toString();
     }
 
-    public String getroom() {
+    public String getRoom() {
         return this.room;
     }
-
 
     /**
      * Create new meetings parsed from UH style input parameters
@@ -89,13 +88,12 @@ public class Meeting {
 
         List<Day> days = Day.toDays(dayString);
 
-        TimeBlock_I tb = TimeBlock_I.createTimeBlock(timeString, dateString);
+        TimeBlock tb = new TimeBlock(timeString, dateString);
         days.forEach((day) -> meetings.add(
-                new Meeting(day, tb.getStartTime(), tb.getStartDate(), tb.getEndTime(), tb.getEndDate(), roomString))
+                new Meeting(day, tb.getStartTime(), tb.getEndTime(), tb.getStartDate(), tb.getEndDate(), roomString))
         );
 
         return meetings;
     }
-
 
 }

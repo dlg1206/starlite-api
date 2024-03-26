@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ import java.util.List;
  * @author Derek Garcia
  */
 
-@RequestMapping("/rainbow/v1")
+@RequestMapping("/v1")
 @RestController(value = "rainbowController")
 public class RainbowController {
     // Spring-configured logger
@@ -101,6 +102,8 @@ public class RainbowController {
             return new ResponseEntity<>(new CoursesDTO(), HttpStatusCode.valueOf(e.getStatusCode()));
         } catch (IOException e) {
             return new ResponseEntity<>(new CoursesDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
         }
     }
 

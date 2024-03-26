@@ -178,15 +178,24 @@ public class HTMLParserService {
             // Get course info, each section row will have course info
             Course c = cur.getCourse();
             courses.putIfAbsent(c.getCID(), c);
+            try{
+                // Get all remaining section info
+                Section section = cur.getSection();
+                if(!section.getmeetings().isEmpty())
+                    courses.get(section.getcid()).addSection(section);
+            } catch (Exception ignored){
 
-            // Get all remaining section info
-            Section section = cur.getSection();
-            courses.get(section.getcid()).addSection(section);
+            }
+
         }
 
         // Return DTOs
         ArrayList<CourseDTO> dtos = new ArrayList<>();
-        courses.values().stream().toList().forEach((c) -> dtos.add(c.toCourseDTO(instID, termID, subjectID)));
+        for(Course c : courses.values().stream().toList()){
+            if(!c.getSections().isEmpty())
+                dtos.add(c.toCourseDTO(instID, termID, subjectID));
+        }
+
         return dtos;
     }
 }
