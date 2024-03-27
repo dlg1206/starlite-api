@@ -3,7 +3,7 @@ package com.uh.rainbow.services;
 import com.uh.rainbow.dto.CourseDTO;
 import com.uh.rainbow.dto.IdentifiersDTO;
 import com.uh.rainbow.entities.Section;
-import com.uh.rainbow.util.Filter;
+import com.uh.rainbow.util.filter.CourseFilter;
 import com.uh.rainbow.util.RowCursor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -161,7 +161,7 @@ public class HTMLParserService {
      * @return List of courses available
      * @throws IOException Fail to get html
      */
-    public List<CourseDTO> parseCourses(Filter cf, String instID, String termID, String subjectID) throws IOException {
+    public List<CourseDTO> parseCourses(CourseFilter cf, String instID, String termID, String subjectID) throws IOException {
 
         // Get each subject col
         Document doc = Jsoup.connect(UH_ROOT)

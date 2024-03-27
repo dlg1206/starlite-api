@@ -1,4 +1,4 @@
-package com.uh.rainbow.util;
+package com.uh.rainbow.util.filter;
 
 import com.uh.rainbow.entities.Meeting;
 import com.uh.rainbow.entities.Section;
@@ -18,8 +18,7 @@ import java.util.regex.Pattern;
  *
  * @author Derek Garcia
  */
-public class Filter {
-
+public class CourseFilter {
 
     /**
      * Builder for Course Filter
@@ -29,6 +28,8 @@ public class Filter {
         private Set<String> crns = null;
         private Pattern codes = null;
         private Set<String> subjects = null;
+
+        private RegexFilter days = null;
         private SimpleTime startAfter = null;
         private SimpleTime endAfter = null;
         private int online = -1;
@@ -77,6 +78,23 @@ public class Filter {
             if (subjects != null) {
                 subjects.replaceAll(String::toUpperCase);
                 this.subjects = new HashSet<>(subjects);
+            }
+            return this;
+        }
+
+        /**
+         * Set list of days for meetings using UH day codes.
+         * Prepending with '!' to inverse the search
+         * ie "!M" -> sections not on monday
+         *
+         * @param days list of days to filter by
+         * @return CourseFilterBuilder
+         */
+        public Builder setDays(List<String> days) {
+            if (days != null) {
+                RegexFilter.Builder builder = new RegexFilter.Builder();
+                days.forEach(builder::addString);
+                this.days = builder.build();
             }
             return this;
         }
@@ -179,14 +197,15 @@ public class Filter {
          *
          * @return Course Filter
          */
-        public Filter build() {
-            return new Filter(crns, codes, subjects, startAfter, endAfter, online, synchronous, instructors, keywords);
+        public CourseFilter build() {
+            return new CourseFilter(crns, codes, subjects, days, startAfter, endAfter, online, synchronous, instructors, keywords);
         }
     }
 
     private final Set<String> crns;
     private final Pattern codes;
     private final Set<String> subjects;
+    private final RegexFilter days;
     private final SimpleTime startAfter;
     private final SimpleTime endBefore;
     private final int online;
@@ -201,17 +220,19 @@ public class Filter {
      * @param crns        Set of Course Reference Numbers
      * @param codes       Set of Course codes
      * @param subjects    Set of subjects
+     * @param days Regex of days to filter by
      * @param startAfter  Earliest time a class can start
      * @param endBefore   Latest time a class can end at
      * @param online      Boolean whether to include or exclude online classes ( default both )
      * @param synchronous Boolean whether to include or exclude online sync classes ( default both )
-     * @param instructors List of instructors to search for
-     * @param keywords    List of keywords to search for
+     * @param instructors Regex of instructors to search for
+     * @param keywords    Regex of keywords to search for
      */
-    private Filter(
+    private CourseFilter(
             Set<String> crns,
             Pattern codes,
             Set<String> subjects,
+            RegexFilter days,
             SimpleTime startAfter,
             SimpleTime endBefore,
             int online,
@@ -222,6 +243,7 @@ public class Filter {
         this.crns = crns;
         this.codes = codes;
         this.subjects = subjects;
+        this.days = days;
         this.startAfter = startAfter;
         this.endBefore = endBefore;
         this.online = online;
@@ -247,7 +269,7 @@ public class Filter {
         int numSync = 0;
         for (Meeting m : section.getMeetings()) {
             // Fail immediately if violate time
-            if (!(validStartTime(m.getStartTime()) && validEndTime(m.getEndTime())))
+            if (!(validDay(m.getDay().toCode()) && validStartTime(m.getStartTime()) && validEndTime(m.getEndTime())))
                 return false;
 
             // update meeting type counts
@@ -294,6 +316,20 @@ public class Filter {
             return false;
 
         return true;
+    }
+
+    /**
+     * Check if day is valid
+     *
+     * @param day day to look for
+     * @return true if found, false otherwise
+     */
+    private boolean validDay(String day) {
+        // Default accept
+        if (this.days == null)
+            return true;
+        // Attempt to match day
+        return this.days.test(day);
     }
 
     /**

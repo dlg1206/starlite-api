@@ -49,10 +49,12 @@ public class Meeting {
         return this.day.getDow();
     }
 
+    public Day getDay() {
+        return this.day;
+    }
     public SimpleTime getStartTime() {
         return this.startTime;
     }
-
     public SimpleTime getEndTime() {
         return this.endTime;
     }
