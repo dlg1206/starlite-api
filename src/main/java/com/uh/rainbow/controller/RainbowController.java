@@ -84,6 +84,7 @@ public class RainbowController {
             @RequestParam(required = false) String start_after,
             @RequestParam(required = false) String end_before,
             @RequestParam(required = false) String online,
+            @RequestParam(required = false) String sync,
             @RequestParam(required = false) List<String> instructor,
             @RequestParam(required = false) List<String> keyword) {
         try {
@@ -97,6 +98,7 @@ public class RainbowController {
                     .setStartAfter(start_after)
                     .setEndBefore(end_before)
                     .setOnline(online)
+                    .setSynchronous(sync)
                     .setInstructors(instructor)
                     .setKeywords(keyword)
                     .build();

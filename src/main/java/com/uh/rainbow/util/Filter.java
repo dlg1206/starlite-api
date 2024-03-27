@@ -32,6 +32,7 @@ public class Filter {
         private SimpleTime startAfter = null;
         private SimpleTime endAfter = null;
         private int online = -1;
+        private int synchronous = -1;
         private Pattern instructors = null;
         private Pattern keywords = null;
 
@@ -119,10 +120,31 @@ public class Filter {
          * @return CourseFilterBuilder
          */
         public Builder setOnline(String online) {
-            if (online != null)
+            if (online != null){
                 this.online = Boolean.parseBoolean(online) ? 1 : 0;
+            } else {
+                this.online = 1;
+            }
+
             return this;
         }
+
+        /**
+         * Set synchronous preference
+         *
+         * @param sync Boolean string to indicate synchronous preference. 1 syn, 0 sync, default both
+         * @return CourseFilterBuilder
+         */
+        public Builder setSynchronous(String sync) {
+            if (sync != null){
+                this.synchronous = Boolean.parseBoolean(sync) ? 1 : 0;
+            } else {
+                this.synchronous = 1;
+            }
+
+            return this;
+        }
+
 
         /**
          * Set list of instructors to search for
@@ -158,7 +180,7 @@ public class Filter {
          * @return Course Filter
          */
         public Filter build() {
-            return new Filter(crns, codes, subjects, startAfter, endAfter, online, instructors, keywords);
+            return new Filter(crns, codes, subjects, startAfter, endAfter, online, synchronous, instructors, keywords);
         }
     }
 
@@ -168,19 +190,21 @@ public class Filter {
     private final SimpleTime startAfter;
     private final SimpleTime endBefore;
     private final int online;
+    private final int synchronous;
     private final Pattern instructors;
     private final Pattern keywords;
 
     /**
      * Create new course filter
-     * todo async / sync, days of week
+     * todo days of week
      *
      * @param crns        Set of Course Reference Numbers
      * @param codes       Set of Course codes
      * @param subjects    Set of subjects
      * @param startAfter  Earliest time a class can start
      * @param endBefore   Latest time a class can end at
-     * @param online      Boolean whether to include or exclude online classes
+     * @param online      Boolean whether to include or exclude online classes ( default both )
+     * @param synchronous Boolean whether to include or exclude online sync classes ( default both )
      * @param instructors List of instructors to search for
      * @param keywords    List of keywords to search for
      */
@@ -191,6 +215,7 @@ public class Filter {
             SimpleTime startAfter,
             SimpleTime endBefore,
             int online,
+            int synchronous,
             Pattern instructors,
             Pattern keywords) {
 
@@ -200,6 +225,7 @@ public class Filter {
         this.startAfter = startAfter;
         this.endBefore = endBefore;
         this.online = online;
+        this.synchronous = synchronous;
         this.instructors = instructors;
         this.keywords = keywords;
     }
@@ -218,17 +244,22 @@ public class Filter {
 
         // Validate meeting details
         int numOnline = 0;
+        int numSync = 0;
         for (Meeting m : section.getMeetings()) {
+            // Fail immediately if violate time
             if (!(validStartTime(m.getStartTime()) && validEndTime(m.getEndTime())))
                 return false;
 
-            numOnline += m.getRoom().toLowerCase().contains("online") ? 1 : 0;
+            // update meeting type counts
+            String lowerRoom = m.getRoom().toLowerCase();
+            numOnline += lowerRoom.contains("online") ? 1 : 0;
+            numSync += !lowerRoom.contains("asynchronous") ? 1 : 0;     // +1 if in-person / online sync
+
         }
 
-        // Fail if only online meetings
-        return validOnline(numOnline, section.getMeetings().size());
-
-        // pass all checks
+        // Fail if fail meeting validation
+        int totalMeetings = section.getMeetings().size();
+        return validMeetingType(this.online, numOnline, totalMeetings) && validMeetingType(this.synchronous, numSync, totalMeetings);
     }
 
 
@@ -297,26 +328,29 @@ public class Filter {
     }
 
     /**
-     * Check if only online meetings
+     * Check if all meetings meet the meeting type preference
+     * 0: exclude all
+     * 1: exclusively meeting type
+     * default: accept all
      *
-     * @param numOnlineMeetings Number of online meetings for section
+     * @param preference int preference for the meeting
+     * @param meetingCount Number of meetings that match the preference
      * @param totalMeetings     Total number of meetings for section
      * @return true if found, false otherwise
      */
-    private boolean validOnline(int numOnlineMeetings, int totalMeetings) {
-        // Default accept
-        if (this.online == -1)
-            return true;
-
-        switch (this.online) {
+    private boolean validMeetingType(int preference, int meetingCount, int totalMeetings) {
+        switch (preference) {
             case 0 -> {
-                return numOnlineMeetings != totalMeetings;
-            }    // at least 1 meeting not online
+                // No meetings of this type
+                return meetingCount == 0;
+            }
             case 1 -> {
-                return numOnlineMeetings == totalMeetings;
-            }    // all meetings online
+                // all meetings online
+                return meetingCount == totalMeetings;
+            }
             default -> {
-                return false;
+                // accept both
+                return true;
             }
         }
     }
