@@ -27,7 +27,7 @@ public class Filter {
     public static class Builder {
 
         private Set<String> crns = null;
-        private Set<String> codes = null;
+        private Pattern codes = null;
         private Set<String> subjects = null;
         private SimpleTime startAfter = null;
         private SimpleTime endAfter = null;
@@ -49,13 +49,20 @@ public class Filter {
 
         /**
          * Set course numbers ( 101, 301, etc )
+         * Wild cards can also be used ie 1** will return and 100 level course
          *
          * @param codes Course numbers
          * @return CourseFilterBuilder
          */
         public Builder setCourseNumbers(List<String> codes) {
-            if (codes != null)
-                this.codes = new HashSet<>(codes);
+            if (codes != null){
+                // replace * with regex numbers
+                String regex = StringUtils.join(codes, "|")
+                        .replace("**", "[0-9]{2}")
+                        .replace("*", "[0-9]");
+
+                this.codes = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+            }
             return this;
         }
 
@@ -156,7 +163,7 @@ public class Filter {
     }
 
     private final Set<String> crns;
-    private final Set<String> codes;
+    private final Pattern codes;
     private final Set<String> subjects;
     private final SimpleTime startAfter;
     private final SimpleTime endBefore;
@@ -166,7 +173,7 @@ public class Filter {
 
     /**
      * Create new course filter
-     * todo async / sync, days of week, advanced course code filtering (10*)
+     * todo async / sync, days of week
      *
      * @param crns        Set of Course Reference Numbers
      * @param codes       Set of Course codes
@@ -179,7 +186,7 @@ public class Filter {
      */
     private Filter(
             Set<String> crns,
-            Set<String> codes,
+            Pattern codes,
             Set<String> subjects,
             SimpleTime startAfter,
             SimpleTime endBefore,
@@ -252,7 +259,10 @@ public class Filter {
         if (this.subjects != null && !this.subjects.contains(cid.split(" ")[0]))
             return false;
 
-        return this.codes == null || this.codes.contains(cid.split(" ")[1]);
+        if(this.codes != null && !this.codes.matcher(cid.split(" ")[1]).find())
+            return false;
+
+        return true;
     }
 
     /**
