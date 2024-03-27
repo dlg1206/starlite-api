@@ -1,4 +1,4 @@
-package com.uh.rainbow.entities;
+package com.uh.rainbow.entities.timeblock;
 
 import org.junit.jupiter.api.Test;
 
