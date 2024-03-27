@@ -2,7 +2,6 @@ package com.uh.rainbow.entities.timeblock;
 
 import com.uh.rainbow.entities.timeblock.simple.SimpleDate;
 import com.uh.rainbow.entities.timeblock.simple.SimpleTime;
-import org.apache.commons.lang3.time.DateUtils;
 
 import java.text.ParseException;
 import java.util.concurrent.TimeUnit;
@@ -15,10 +14,10 @@ import java.util.concurrent.TimeUnit;
  * @author Derek Garcia
  */
 public class TimeBlock {
-    private SimpleTime startTime;
-    private SimpleTime endTime;
-    private SimpleDate startDate;
-    private SimpleDate endDate;
+    private final SimpleTime startTime;
+    private final SimpleTime endTime;
+    private final SimpleDate startDate;
+    private final SimpleDate endDate;
 
 
     /**
@@ -33,7 +32,7 @@ public class TimeBlock {
         this.startDate = new SimpleDate(dates[0]);
         this.endDate = new SimpleDate(dates.length == 2 ? dates[1] : dates[0]);
 
-        if(timeString.equalsIgnoreCase("TBA")){
+        if (timeString.equalsIgnoreCase("TBA")) {
             this.startTime = new SimpleTime(timeString);
             this.endTime = new SimpleTime(timeString);
             return;
@@ -51,8 +50,8 @@ public class TimeBlock {
         6 AM arbitrary start that assuming no classes occur before
          */
 
-        if(tod == 'p'){
-            if(this.startTime.beforeOrEqual(new SimpleTime("0600")) == 1)
+        if (tod == 'p') {
+            if (this.startTime.beforeOrEqual(new SimpleTime("0600")) == 1)
                 this.startTime.addHours(12);
 
             // Mark end in afternoon if 'p'
@@ -60,14 +59,9 @@ public class TimeBlock {
                 this.endTime.addHours(12);
 
             // If the class is longer than 5 hours, start is probably in am
-            if(this.startTime.duration(this.endTime, TimeUnit.HOURS) > 5)
+            if (this.startTime.duration(this.endTime, TimeUnit.HOURS) > 5)
                 this.startTime.addHours(12);
         }
-
-
-
-
-
 
     }
 
@@ -75,15 +69,15 @@ public class TimeBlock {
         return this.startTime;
     }
 
-    public SimpleTime getEndTime(){
+    public SimpleTime getEndTime() {
         return this.endTime;
     }
 
-    public SimpleDate getStartDate(){
+    public SimpleDate getStartDate() {
         return this.startDate;
     }
 
-    public SimpleDate getEndDate(){
+    public SimpleDate getEndDate() {
         return this.endDate;
     }
 }

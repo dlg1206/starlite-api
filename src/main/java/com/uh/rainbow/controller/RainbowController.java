@@ -4,7 +4,7 @@ import com.uh.rainbow.dto.CoursesDTO;
 import com.uh.rainbow.dto.IdentifiersDTO;
 import com.uh.rainbow.dto.ResponseDTO;
 import com.uh.rainbow.services.HTMLParserService;
-import com.uh.rainbow.util.CourseFilter;
+import com.uh.rainbow.util.Filter;
 import org.jsoup.HttpStatusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,7 +90,7 @@ public class RainbowController {
             var subjects = this.htmlParserService.parseSubjects(instID, termID);
             CoursesDTO dto = new CoursesDTO();
             // Build filter
-            CourseFilter cf = new CourseFilter.Builder()
+            Filter cf = new Filter.Builder()
                     .setCRNs(crn)
                     .setSubjects(sub)
                     .setCourseNumbers(code)

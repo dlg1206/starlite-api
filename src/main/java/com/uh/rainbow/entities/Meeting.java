@@ -30,8 +30,8 @@ public class Meeting {
     /**
      * Create new meeting
      *
-     * @param day       Day of Week
-     * @param room      Room
+     * @param day  Day of Week
+     * @param room Room
      */
     private Meeting(Day day, SimpleTime startTime, SimpleTime endTime, SimpleDate startDate, SimpleDate endDate, String room) {
         this.day = day;
@@ -49,24 +49,12 @@ public class Meeting {
         return this.day.getDow();
     }
 
-    public Day getDay() {
-        return this.day;
+    public SimpleTime getStartTime() {
+        return this.startTime;
     }
 
-    public String getStart_time() {
-        return this.startTime.toString();
-    }
-
-    public String getEnd_time() {
-        return this.endTime.toString();
-    }
-
-    public String getStart_date() {
-        return this.startDate.toString();
-    }
-
-    public String getEnd_date() {
-        return this.endDate.toString();
+    public SimpleTime getEndTime() {
+        return this.endTime;
     }
 
     public String getRoom() {
