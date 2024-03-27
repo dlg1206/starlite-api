@@ -34,8 +34,8 @@ public class CourseFilter {
         private SimpleTime endAfter = null;
         private int online = -1;
         private int synchronous = -1;
-        private Pattern instructors = null;
-        private Pattern keywords = null;
+        private RegexFilter instructors = null;
+        private RegexFilter keywords = null;
 
         /**
          * Set Course Reference numbers
@@ -93,7 +93,8 @@ public class CourseFilter {
         public Builder setDays(List<String> days) {
             if (days != null) {
                 RegexFilter.Builder builder = new RegexFilter.Builder();
-                days.forEach(builder::addString);
+                // + "{1}$" ensures only one occurrence of string
+                days.forEach( (d) -> { d = d + "{1}$"; builder.addString(d); });
                 this.days = builder.build();
             }
             return this;
@@ -172,8 +173,9 @@ public class CourseFilter {
          */
         public Builder setInstructors(List<String> instructors) {
             if (instructors != null) {
-                instructors.replaceAll(String::toLowerCase);
-                this.instructors = Pattern.compile(StringUtils.join(instructors, "|"), Pattern.CASE_INSENSITIVE);
+                RegexFilter.Builder builder = new RegexFilter.Builder();
+                instructors.forEach(builder::addString);
+                this.instructors = builder.build();
             }
             return this;
         }
@@ -186,8 +188,9 @@ public class CourseFilter {
          */
         public Builder setKeywords(List<String> keywords) {
             if (keywords != null) {
-                keywords.replaceAll(String::toLowerCase);
-                this.keywords = Pattern.compile(StringUtils.join(keywords, "|"), Pattern.CASE_INSENSITIVE);
+                RegexFilter.Builder builder = new RegexFilter.Builder();
+                keywords.forEach(builder::addString);
+                this.keywords = builder.build();
             }
             return this;
         }
@@ -210,8 +213,8 @@ public class CourseFilter {
     private final SimpleTime endBefore;
     private final int online;
     private final int synchronous;
-    private final Pattern instructors;
-    private final Pattern keywords;
+    private final RegexFilter instructors;
+    private final RegexFilter keywords;
 
     /**
      * Create new course filter
@@ -237,8 +240,8 @@ public class CourseFilter {
             SimpleTime endBefore,
             int online,
             int synchronous,
-            Pattern instructors,
-            Pattern keywords) {
+            RegexFilter instructors,
+            RegexFilter keywords) {
 
         this.crns = crns;
         this.codes = codes;
@@ -402,7 +405,7 @@ public class CourseFilter {
         if (this.instructors == null)
             return true;
         // Attempt to match instructor
-        return this.instructors.matcher(instructor).find();
+        return this.instructors.test(instructor);
     }
 
     /**
@@ -417,7 +420,7 @@ public class CourseFilter {
             return true;
 
         // Attempt to match keywords
-        return this.keywords.matcher(string).find();
+        return this.keywords.test(string);
     }
 
     /**

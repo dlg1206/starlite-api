@@ -19,6 +19,8 @@ class RegexFilter{
      * Build for Regex Filter
      */
     public static class Builder{
+        private final String ACCEPT_ALL = "[\\w\\W]";
+        private final String REJECT_ALL = "[^\\w\\W]";
         private final List<String> accept = new ArrayList<>();
         private final List<String> reject = new ArrayList<>();
 
@@ -28,11 +30,10 @@ class RegexFilter{
          * @param string String to add. Strings starting with '!' will be rejected, all else is accepted
          */
         public void addString(String string){
-            // + "{1}$" ensures only one occurrence of string
             if (string.charAt(0) != '!') {
-                this.accept.add(string + "{1}$");
+                this.accept.add(string);
             } else {
-                this.reject.add(string.substring(1) + "{1}$");  // strip leading '!'
+                this.reject.add(string.substring(1));  // strip leading '!'
             }
         }
 
@@ -42,9 +43,15 @@ class RegexFilter{
          * @return RegexFilter
          */
         public RegexFilter build(){
+            // Default accept so accept == true
+            String acceptRegex = this.accept.isEmpty() ? ACCEPT_ALL : StringUtils.join(this.accept, "|");
+
+            // Default reject all so !reject == true
+            String rejectRegex = this.reject.isEmpty() ? REJECT_ALL : StringUtils.join(this.reject, "|");
+
             return new RegexFilter(
-                    Pattern.compile(StringUtils.join(this.accept, "|"), Pattern.CASE_INSENSITIVE),
-                    Pattern.compile(StringUtils.join(this.reject, "|"), Pattern.CASE_INSENSITIVE));
+                    Pattern.compile(acceptRegex, Pattern.CASE_INSENSITIVE),
+                    Pattern.compile(rejectRegex, Pattern.CASE_INSENSITIVE));
         }
     }
     private final Pattern accept;
