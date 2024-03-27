@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -90,7 +89,18 @@ public class RainbowController {
         try {
             var subjects = this.htmlParserService.parseSubjects(instID, termID);
             CoursesDTO dto = new CoursesDTO();
-            CourseFilter cf = new CourseFilter(crn, code, sub, start_after, end_before, online, instructor, keyword);
+            // Build filter
+            CourseFilter cf = new CourseFilter.Builder()
+                    .setCRNs(crn)
+                    .setSubjects(sub)
+                    .setCourseNumbers(code)
+                    .setStartAfter(start_after)
+                    .setEndBefore(end_before)
+                    .setOnline(online)
+                    .setInstructors(instructor)
+                    .setKeywords(keyword)
+                    .build();
+
             for (var s : subjects.getIdentifiers()) {
                 // skip if not in filter
                 if(!cf.validSubject(s.id()))
@@ -102,8 +112,6 @@ public class RainbowController {
             return new ResponseEntity<>(new CoursesDTO(), HttpStatusCode.valueOf(e.getStatusCode()));
         } catch (IOException e) {
             return new ResponseEntity<>(new CoursesDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
         }
     }
 
