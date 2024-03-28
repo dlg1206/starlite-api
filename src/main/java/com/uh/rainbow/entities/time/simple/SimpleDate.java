@@ -1,4 +1,4 @@
-package com.uh.rainbow.entities.timeblock.simple;
+package com.uh.rainbow.entities.time.simple;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -29,7 +29,7 @@ public class SimpleDate extends Simple {
     @Override
     public String toString() {
         // TBA string
-        if(this.timeReference == null)
+        if (this.timeReference == null)
             return TBA_STRING;
 
         return OUTPUT_FORMATTER.format(this.timeReference);

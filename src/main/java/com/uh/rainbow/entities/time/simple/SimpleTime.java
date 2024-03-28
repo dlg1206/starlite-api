@@ -1,4 +1,4 @@
-package com.uh.rainbow.entities.timeblock.simple;
+package com.uh.rainbow.entities.time.simple;
 
 import org.apache.commons.lang3.time.DateUtils;
 
@@ -34,7 +34,7 @@ public class SimpleTime extends Simple {
      */
     public void addHours(int numHours) {
         // Can't add time to null / TBA
-        if(this.timeReference == null)
+        if (this.timeReference == null)
             return;
         this.timeReference = DateUtils.addHours(this.timeReference, numHours);
     }
@@ -42,7 +42,7 @@ public class SimpleTime extends Simple {
     @Override
     public String toString() {
         // TBA string
-        if(this.timeReference == null)
+        if (this.timeReference == null)
             return TBA_STRING;
 
         return OUTPUT_FORMATTER.format(this.timeReference);

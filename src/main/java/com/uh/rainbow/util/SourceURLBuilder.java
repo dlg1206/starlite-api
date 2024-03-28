@@ -15,14 +15,14 @@ public abstract class SourceURLBuilder {
     }
 
     public static String build(String instID) {
-        return String.format("%s?i=%s", UH_ROOT, instID);
+        return String.format("%s?i=%s", UH_ROOT, instID.toUpperCase());
     }
 
     public static String build(String instID, String termID) {
-        return String.format("%s?i=%s&t=%s", UH_ROOT, instID, termID);
+        return String.format("%s?i=%s&t=%s", UH_ROOT, instID.toUpperCase(), termID);
     }
 
     public static String build(String instID, String termID, String subjectID) {
-        return String.format("%s?i=%s&t=%s&s=%s", UH_ROOT, instID, termID, subjectID);
+        return String.format("%s?i=%s&t=%s&s=%s", UH_ROOT, instID.toUpperCase(), termID, subjectID.toUpperCase());
     }
 }

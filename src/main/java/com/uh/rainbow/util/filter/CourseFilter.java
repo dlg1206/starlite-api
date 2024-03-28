@@ -2,7 +2,7 @@ package com.uh.rainbow.util.filter;
 
 import com.uh.rainbow.entities.Meeting;
 import com.uh.rainbow.entities.Section;
-import com.uh.rainbow.entities.timeblock.simple.SimpleTime;
+import com.uh.rainbow.entities.time.simple.SimpleTime;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.ParseException;
@@ -57,7 +57,7 @@ public class CourseFilter {
          * @return CourseFilterBuilder
          */
         public Builder setCourseNumbers(List<String> codes) {
-            if (codes != null){
+            if (codes != null) {
                 // replace * with regex numbers
                 String regex = StringUtils.join(codes, "|")
                         .replace("**", "[0-9]{2}")
@@ -94,7 +94,10 @@ public class CourseFilter {
             if (days != null) {
                 RegexFilter.Builder builder = new RegexFilter.Builder();
                 // + "{1}$" ensures only one occurrence of string
-                days.forEach( (d) -> { d = d + "{1}$"; builder.addString(d); });
+                days.forEach((d) -> {
+                    d = d + "{1}$";
+                    builder.addString(d);
+                });
                 this.days = builder.build();
             }
             return this;
@@ -139,11 +142,8 @@ public class CourseFilter {
          * @return CourseFilterBuilder
          */
         public Builder setOnline(String online) {
-            if (online != null){
+            if (online != null)
                 this.online = Boolean.parseBoolean(online) ? 1 : 0;
-            } else {
-                this.online = 1;
-            }
 
             return this;
         }
@@ -155,11 +155,8 @@ public class CourseFilter {
          * @return CourseFilterBuilder
          */
         public Builder setSynchronous(String sync) {
-            if (sync != null){
+            if (sync != null)
                 this.synchronous = Boolean.parseBoolean(sync) ? 1 : 0;
-            } else {
-                this.synchronous = 1;
-            }
 
             return this;
         }
@@ -218,12 +215,11 @@ public class CourseFilter {
 
     /**
      * Create new course filter
-     * todo days of week
      *
      * @param crns        Set of Course Reference Numbers
      * @param codes       Set of Course codes
      * @param subjects    Set of subjects
-     * @param days Regex of days to filter by
+     * @param days        Regex of days to filter by
      * @param startAfter  Earliest time a class can start
      * @param endBefore   Latest time a class can end at
      * @param online      Boolean whether to include or exclude online classes ( default both )
@@ -264,7 +260,7 @@ public class CourseFilter {
     public boolean validSection(Section section) {
 
         // Validate section details
-        if (!(validCRN(section.getCRN()) && validCID(section.getCID()) && validInstructor(section.getInstructor()) && keywordsMatch(section.getName())))
+        if (!(validCRN(section.getCRN()) && validCID(section.getCourse().cid()) && validInstructor(section.getInstructor()) && keywordsMatch(section.getCourse().name())))
             return false;
 
         // Validate meeting details
@@ -315,10 +311,7 @@ public class CourseFilter {
         if (this.subjects != null && !this.subjects.contains(cid.split(" ")[0]))
             return false;
 
-        if(this.codes != null && !this.codes.matcher(cid.split(" ")[1]).find())
-            return false;
-
-        return true;
+        return this.codes == null || this.codes.matcher(cid.split(" ")[1]).find();
     }
 
     /**
@@ -372,9 +365,9 @@ public class CourseFilter {
      * 1: exclusively meeting type
      * default: accept all
      *
-     * @param preference int preference for the meeting
-     * @param meetingCount Number of meetings that match the preference
-     * @param totalMeetings     Total number of meetings for section
+     * @param preference    int preference for the meeting
+     * @param meetingCount  Number of meetings that match the preference
+     * @param totalMeetings Total number of meetings for section
      * @return true if found, false otherwise
      */
     private boolean validMeetingType(int preference, int meetingCount, int totalMeetings) {

@@ -1,4 +1,4 @@
-package com.uh.rainbow.entities.timeblock.simple;
+package com.uh.rainbow.entities.time.simple;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -20,7 +20,7 @@ public abstract class Simple extends Date {
     /**
      * Create a new simple "time" interface for date
      *
-     * @param formatString SimpleDateFormat string to use
+     * @param formatString  SimpleDateFormat string to use
      * @param timeReference "Time Reference", either time or date, to use
      * @throws ParseException Failed to parse timeReference
      */
@@ -36,13 +36,13 @@ public abstract class Simple extends Date {
     /**
      * Calculate duration between this Time Reference and other time reference
      *
-     * @param other Other time to compare to
+     * @param other    Other time to compare to
      * @param timeUnit Time Unit to convert into
      * @return -1 if null / TBA, else long value of the given time unit
      */
-    public long duration(Simple other, TimeUnit timeUnit){
+    public long duration(Simple other, TimeUnit timeUnit) {
         // Can't compare TBA dates, so err
-        if(this.timeReference == null || other.timeReference == null)
+        if (this.timeReference == null || other.timeReference == null)
             return -1;
         // Calc diff b/w times
         long diff = Math.abs(this.timeReference.getTime() - other.timeReference.getTime());

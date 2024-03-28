@@ -13,12 +13,12 @@ import java.util.regex.Pattern;
  *
  * @author Derek Garcia
  */
-class RegexFilter{
+class RegexFilter {
 
     /**
      * Build for Regex Filter
      */
-    public static class Builder{
+    public static class Builder {
         private final String ACCEPT_ALL = "[\\w\\W]";
         private final String REJECT_ALL = "[^\\w\\W]";
         private final List<String> accept = new ArrayList<>();
@@ -29,7 +29,7 @@ class RegexFilter{
          *
          * @param string String to add. Strings starting with '!' will be rejected, all else is accepted
          */
-        public void addString(String string){
+        public void addString(String string) {
             if (string.charAt(0) != '!') {
                 this.accept.add(string);
             } else {
@@ -42,7 +42,7 @@ class RegexFilter{
          *
          * @return RegexFilter
          */
-        public RegexFilter build(){
+        public RegexFilter build() {
             // Default accept so accept == true
             String acceptRegex = this.accept.isEmpty() ? ACCEPT_ALL : StringUtils.join(this.accept, "|");
 
@@ -54,6 +54,7 @@ class RegexFilter{
                     Pattern.compile(rejectRegex, Pattern.CASE_INSENSITIVE));
         }
     }
+
     private final Pattern accept;
     private final Pattern reject;
 
@@ -63,7 +64,7 @@ class RegexFilter{
      * @param accept Regex of patterns to accept
      * @param reject Regex of patterns to reject
      */
-    private RegexFilter(Pattern accept, Pattern reject){
+    private RegexFilter(Pattern accept, Pattern reject) {
         this.accept = accept;
         this.reject = reject;
     }
@@ -74,7 +75,7 @@ class RegexFilter{
      * @param string String to test
      * @return True if accepted and not rejected, false otherwise
      */
-    public boolean test(String string){
+    public boolean test(String string) {
         return this.accept.matcher(string).find() && !this.reject.matcher(string).find();
     }
 }

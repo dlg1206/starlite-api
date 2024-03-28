@@ -1,7 +1,7 @@
-package com.uh.rainbow.entities.timeblock;
+package com.uh.rainbow.entities.time;
 
-import com.uh.rainbow.entities.timeblock.simple.SimpleDate;
-import com.uh.rainbow.entities.timeblock.simple.SimpleTime;
+import com.uh.rainbow.entities.time.simple.SimpleDate;
+import com.uh.rainbow.entities.time.simple.SimpleTime;
 
 import java.text.ParseException;
 import java.util.concurrent.TimeUnit;

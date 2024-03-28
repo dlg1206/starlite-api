@@ -1,9 +1,10 @@
 package com.uh.rainbow.entities;
 
 
-import com.uh.rainbow.entities.timeblock.TimeBlock;
-import com.uh.rainbow.entities.timeblock.simple.SimpleDate;
-import com.uh.rainbow.entities.timeblock.simple.SimpleTime;
+import com.uh.rainbow.dto.meeting.MeetingDTO;
+import com.uh.rainbow.entities.time.TimeBlock;
+import com.uh.rainbow.entities.time.simple.SimpleDate;
+import com.uh.rainbow.entities.time.simple.SimpleTime;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -43,22 +44,52 @@ public class Meeting {
     }
 
     /**
+     * Convert meeting into DTO
+     *
+     * @return MeetingDTO
+     */
+    public MeetingDTO toDTO() {
+        return new MeetingDTO(
+                this.day.toString(),
+                this.room,
+                this.startTime.toString(),
+                this.endTime.toString(),
+                this.startDate.toString(),
+                this.endDate.toString()
+        );
+    }
+
+    /**
      * @return Day of week meeting occurs on
      */
     public int getDow() {
         return this.day.getDow();
     }
 
+    /**
+     * @return Day of Week
+     */
     public Day getDay() {
         return this.day;
     }
+
+    /**
+     * @return Start Time
+     */
     public SimpleTime getStartTime() {
         return this.startTime;
     }
+
+    /**
+     * @return End Time
+     */
     public SimpleTime getEndTime() {
         return this.endTime;
     }
 
+    /**
+     * @return Meeting Room
+     */
     public String getRoom() {
         return this.room;
     }

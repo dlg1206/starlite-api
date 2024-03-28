@@ -1,10 +1,11 @@
 package com.uh.rainbow.services;
 
-import com.uh.rainbow.dto.CourseDTO;
-import com.uh.rainbow.dto.IdentifiersDTO;
+import com.uh.rainbow.dto.course.CourseDTO;
+import com.uh.rainbow.dto.identifier.IdentifierDTO;
 import com.uh.rainbow.entities.Section;
-import com.uh.rainbow.util.filter.CourseFilter;
 import com.uh.rainbow.util.RowCursor;
+import com.uh.rainbow.util.SourceURLBuilder;
+import com.uh.rainbow.util.filter.CourseFilter;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -66,19 +67,21 @@ public class HTMLParserService {
     /**
      * Process a list of li elements with href
      *
-     * @param dto      Data Transfer Object to update
      * @param elements List of elements to process
      * @param upe      URL Param extractor to use
      */
-    private void updateDTO(IdentifiersDTO dto, Elements elements, URLParamExtractor upe) {
+    private List<IdentifierDTO> extractIdentifiers(Elements elements, URLParamExtractor upe) {
+        List<IdentifierDTO> identifiers = new ArrayList<>();
         // Process each element
-        for (Element item : elements) {
+        while (!elements.isEmpty()) {
+            Element item = elements.remove(0);  // pop
             // Extract ID from url
             item = Objects.requireNonNull(item.selectFirst("a"));
             String termID = upe.extract(item.attr("href"));
-            // Update DTO
-            dto.addIdentifier(termID, item.text());
+            identifiers.add(new IdentifierDTO(termID, item.text()));
         }
+
+        return identifiers;
     }
 
     /**
@@ -87,16 +90,16 @@ public class HTMLParserService {
      * @return List of institution ids and names
      * @throws IOException Fail to get html
      */
-    public IdentifiersDTO parseInstitutions() throws IOException {
-        IdentifiersDTO dto = new IdentifiersDTO();
+    public List<IdentifierDTO> parseInstitutions() throws IOException {
+        List<IdentifierDTO> identifiers = new ArrayList<>();
 
         // Get list
         Document doc = Jsoup.connect(UH_ROOT).get();
         doc.select("ul.institutions").select("li").forEach(
-                (item) -> dto.addIdentifier(item.className(), item.text())
+                (item) -> identifiers.add(new IdentifierDTO(item.className(), item.text()))
         );
 
-        return dto;
+        return identifiers;
     }
 
     /**
@@ -106,15 +109,13 @@ public class HTMLParserService {
      * @return List of term ids and names
      * @throws IOException Fail to get html
      */
-    public IdentifiersDTO parseTerms(String instID) throws IOException {
-        IdentifiersDTO dto = new IdentifiersDTO(instID);
+    public List<IdentifierDTO> parseTerms(String instID) throws IOException {
 
         // Get terms
         Document doc = Jsoup.connect(UH_ROOT).data("i", instID.toUpperCase()).get();
         Elements terms = doc.select("ul.terms").select("li");
-        updateDTO(dto, terms, new URLParamExtractor("t=([0-9]*)"));
+        return extractIdentifiers(terms, new URLParamExtractor("t=([0-9]*)"));
 
-        return dto;
     }
 
     /**
@@ -125,8 +126,8 @@ public class HTMLParserService {
      * @return List of subject ids and names
      * @throws IOException Fail to get html
      */
-    public IdentifiersDTO parseSubjects(String instID, String termID) throws IOException {
-        IdentifiersDTO dto = new IdentifiersDTO(instID.toUpperCase(), termID);
+    public List<IdentifierDTO> parseSubjects(String instID, String termID) throws IOException {
+        List<IdentifierDTO> identifiers = new ArrayList<>();
 
         // Get each subject col
         Document doc = Jsoup.connect(UH_ROOT)
@@ -146,10 +147,10 @@ public class HTMLParserService {
 
         // Process each list
         URLParamExtractor upe = new URLParamExtractor("s=(\\w*)");
-        updateDTO(dto, leftSubjects, upe);
-        updateDTO(dto, rightSubjects, upe);
+        identifiers.addAll(extractIdentifiers(leftSubjects, upe));
+        identifiers.addAll(extractIdentifiers(rightSubjects, upe));
 
-        return dto;
+        return identifiers;
     }
 
     /**
@@ -171,7 +172,7 @@ public class HTMLParserService {
                 .get();
 
         // Parse all courses
-        Map<String, List<Section>> courses = new HashMap<>();
+        Map<String, CourseDTO> courses = new HashMap<>();
 
         RowCursor cur = new RowCursor(Objects.requireNonNull(doc.selectFirst("tbody")).select("tr"));
         while (cur.findSection()) {
@@ -184,8 +185,11 @@ public class HTMLParserService {
                     continue;
 
                 // Add valid course
-                courses.putIfAbsent(section.getCID(), new ArrayList<>());
-                courses.get(section.getCID()).add(section);
+                courses.putIfAbsent(
+                        section.getCourse().cid(),
+                        new CourseDTO(SourceURLBuilder.build(instID, termID, subjectID), section.getCourse())
+                );
+                courses.get(section.getCourse().cid()).sections().add(section.toDTO());
 
             } catch (Exception e) {
                 System.err.println(e);
@@ -193,9 +197,8 @@ public class HTMLParserService {
 
         }
 
-        // Return DTOs
-        ArrayList<CourseDTO> dtos = new ArrayList<>();
-
-        return dtos;
+        return courses.values().stream()
+                .sorted(Comparator.comparing(CourseDTO::cid))   // sort by CID
+                .toList();
     }
 }

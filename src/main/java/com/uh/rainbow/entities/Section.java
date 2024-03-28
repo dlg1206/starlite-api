@@ -1,5 +1,7 @@
 package com.uh.rainbow.entities;
 
+import com.uh.rainbow.dto.section.SectionDTO;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -59,26 +61,55 @@ public class Section {
         this.additionalDetails.add(details);
     }
 
+    /**
+     * Report failed meeting
+     */
     public void addFailedMeeting() {
         this.failedMeetings += 1;
     }
 
+    /**
+     * Convert Section into DTO
+     *
+     * @return Section DTO
+     */
+    public SectionDTO toDTO() {
+        SectionDTO sectionDTO = new SectionDTO(
+                this.sid,
+                this.crn,
+                this.instructor,
+                this.currEnrolled,
+                this.seatsAvailable,
+                this.failedMeetings
+        );
+        this.meetings.forEach((m) -> sectionDTO.meetings().add(m.toDTO()));
+        return sectionDTO;
+    }
+
+    /**
+     * @return Course Reference Number
+     */
     public String getCRN() {
         return Integer.toString(this.crn);
     }
 
-    public String getCID() {
-        return course.cid();
+    /**
+     * @return Course Details
+     */
+    public Course getCourse() {
+        return this.course;
     }
 
+    /**
+     * @return Section Instructor
+     */
     public String getInstructor() {
         return this.instructor;
     }
 
-    public String getName() {
-        return this.course.name();
-    }
-
+    /**
+     * @return List of meetings for section
+     */
     public List<Meeting> getMeetings() {
         return this.meetings;
     }

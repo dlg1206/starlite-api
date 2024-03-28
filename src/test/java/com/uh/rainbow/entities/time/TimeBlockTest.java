@@ -1,10 +1,4 @@
-package com.uh.rainbow.entities.timeblock;
-
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+package com.uh.rainbow.entities.time;
 
 /**
  * <b>File:</b> TimeBlockTest.java
