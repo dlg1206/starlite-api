@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0](https://github.com/dlg1206/rainbows-api/compare/v0.3.0...v0.4.0) (2024-03-28)
+
+
+### Features
+
+* add new subject endpoint with filter options ([a5dbe6b](https://github.com/dlg1206/rainbows-api/commit/a5dbe6b5eed8ce09c47a8da15207b359edb7f2a7))
+
 ## [0.3.0](https://github.com/dlg1206/rainbows-api/compare/v0.2.0...v0.3.0) (2024-03-28)
 
 
