@@ -13,14 +13,14 @@ import java.util.regex.Pattern;
  *
  * @author Derek Garcia
  */
-class RegexFilter {
+public class RegexFilter {
 
     /**
      * Build for Regex Filter
      */
     public static class Builder {
-        private final String ACCEPT_ALL = "[\\w\\W]";
-        private final String REJECT_ALL = "[^\\w\\W]";
+        private final static String ACCEPT_ALL = "[\\w\\W]";
+        private final static String REJECT_ALL = "[^\\w\\W]";
         private final List<String> accept = new ArrayList<>();
         private final List<String> reject = new ArrayList<>();
 
@@ -29,12 +29,13 @@ class RegexFilter {
          *
          * @param string String to add. Strings starting with '!' will be rejected, all else is accepted
          */
-        public void addString(String string) {
+        public Builder addString(String string) {
             if (string.charAt(0) != '!') {
                 this.accept.add(string);
             } else {
                 this.reject.add(string.substring(1));  // strip leading '!'
             }
+            return this;
         }
 
         /**
