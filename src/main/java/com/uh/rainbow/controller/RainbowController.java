@@ -64,7 +64,7 @@ public class RainbowController {
     }
 
     @GetMapping(value = "/campuses/{instID}/terms/{termID}/subjects")
-    public ResponseEntity<ResponseDTO> getAllSubjects(@PathVariable String instID, @PathVariable String termID) {
+    public ResponseEntity<ResponseDTO> getCourses(@PathVariable String instID, @PathVariable String termID) {
         try {
             return new ResponseEntity<>(
                     new IdentifierResponseDTO(this.htmlParserService.parseSubjects(instID, termID), instID, termID),
@@ -77,8 +77,45 @@ public class RainbowController {
         }
     }
 
+    @GetMapping(value = "/campuses/{instID}/terms/{termID}/subjects/{subjectID}")
+    public ResponseEntity<ResponseDTO> getCourses(
+            @PathVariable String instID,
+            @PathVariable String termID,
+            @PathVariable String subjectID,
+            @RequestParam(required = false) List<String> crn,
+            @RequestParam(required = false) List<String> code,
+            @RequestParam(required = false) String start_after,
+            @RequestParam(required = false) String end_before,
+            @RequestParam(required = false) String online,
+            @RequestParam(required = false) String sync,
+            @RequestParam(required = false) List<String> instructor,
+            @RequestParam(required = false) List<String> keyword) {
+        try {
+            // Build filter
+            CourseFilter cf = new CourseFilter.Builder()
+                    .setCRNs(crn)
+                    .setCourseNumbers(code)
+                    .setStartAfter(start_after)
+                    .setEndBefore(end_before)
+                    .setOnline(online)
+                    .setSynchronous(sync)
+                    .setInstructors(instructor)
+                    .setKeywords(keyword)
+                    .build();
+            List<CourseDTO> courseDTOs = this.htmlParserService.parseCourses(cf, instID, termID, subjectID);
+            return new ResponseEntity<>(
+                    new CourseResponseDTO(courseDTOs),
+                    HttpStatus.OK
+            );
+        } catch (HttpStatusException e) {
+            return new ResponseEntity<>(new ResponseDTO(), HttpStatusCode.valueOf(e.getStatusCode()));
+        } catch (IOException e) {
+            return new ResponseEntity<>(new ResponseDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping(value = "/campuses/{instID}/terms/{termID}/courses")
-    public ResponseEntity<ResponseDTO> getAllCourses(
+    public ResponseEntity<ResponseDTO> getCourses(
             @PathVariable String instID,
             @PathVariable String termID,
             @RequestParam(required = false) List<String> crn,
