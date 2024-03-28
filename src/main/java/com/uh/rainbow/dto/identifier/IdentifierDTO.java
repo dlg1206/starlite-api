@@ -1,9 +1,9 @@
-package com.uh.rainbow.dto;
+package com.uh.rainbow.dto.identifier;
 
 /**
  * <b>File:</b> IdentifierDTO.java
  * <p>
- * <b>Description:</b>
+ * <b>Description:</b> IdentifierDTO
  *
  * @author Derek Garcia
  */

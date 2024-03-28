@@ -39,6 +39,40 @@ public enum Day {
     }
 
     /**
+     * Convert Day enum to UH Day code
+     *
+     * @return UH Day code
+     */
+    public String toCode() {
+        switch (this) {
+            case SUNDAY -> {
+                return "U";
+            }
+            case MONDAY -> {
+                return "M";
+            }
+            case TUESDAY -> {
+                return "T";
+            }
+            case WEDNESDAY -> {
+                return "W";
+            }
+            case THURSDAY -> {
+                return "R";
+            }
+            case FRIDAY -> {
+                return "F";
+            }
+            case SATURDAY -> {
+                return "S";
+            }
+            default -> {
+                return "TBA";
+            }
+        }
+    }
+
+    /**
      * Convert UH Day code to Day enum
      *
      * @param code string code ID
