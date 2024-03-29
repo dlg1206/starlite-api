@@ -2,6 +2,7 @@ package com.uh.rainbow.controller;
 
 import com.uh.rainbow.dto.course.CourseDTO;
 import com.uh.rainbow.dto.identifier.IdentifierDTO;
+import com.uh.rainbow.dto.response.BadAccessResponseDTO;
 import com.uh.rainbow.dto.response.CourseResponseDTO;
 import com.uh.rainbow.dto.response.IdentifierResponseDTO;
 import com.uh.rainbow.dto.response.ResponseDTO;
@@ -37,9 +38,10 @@ public class RainbowController {
 
     @GetMapping(value = "/campuses")
     public ResponseEntity<ResponseDTO> getAllCampuses() {
+        SourceURL source = new SourceURL();
         try {
             return new ResponseEntity<>(
-                    new IdentifierResponseDTO(new SourceURL().toString(), this.htmlParserService.parseInstitutions()),
+                    new IdentifierResponseDTO(source, this.htmlParserService.parseInstitutions()),
                     HttpStatus.OK
             );
         } catch (HttpStatusException e) {
@@ -48,7 +50,7 @@ public class RainbowController {
                     .addDetails(e.getStatusCode());
             LOGGER.warn(mb);
             LOGGER.debug(mb.addDetails(e));
-            return new ResponseEntity<>(new ResponseDTO(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new BadAccessResponseDTO(e), HttpStatus.BAD_REQUEST);
         } catch (IOException e) {
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.INST).addDetails(e));
             return new ResponseEntity<>(new ResponseDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -57,9 +59,10 @@ public class RainbowController {
 
     @GetMapping(value = "/campuses/{instID}/terms")
     public ResponseEntity<ResponseDTO> getAllTerms(@PathVariable String instID) {
+        SourceURL source = new SourceURL(instID);
         try {
             return new ResponseEntity<>(
-                    new IdentifierResponseDTO(new SourceURL(instID).toString(), this.htmlParserService.parseTerms(instID)),
+                    new IdentifierResponseDTO(source, this.htmlParserService.parseTerms(instID)),
                     HttpStatus.OK
             );
         } catch (HttpStatusException e) {
@@ -68,7 +71,7 @@ public class RainbowController {
                     .addDetails(e.getStatusCode());
             LOGGER.warn(mb);
             LOGGER.debug(mb.addDetails(e));
-            return new ResponseEntity<>(new ResponseDTO(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new BadAccessResponseDTO(e), HttpStatus.BAD_REQUEST);
         } catch (IOException e) {
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.TERM).addDetails(e));
             return new ResponseEntity<>(new ResponseDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -77,9 +80,10 @@ public class RainbowController {
 
     @GetMapping(value = "/campuses/{instID}/terms/{termID}/subjects")
     public ResponseEntity<ResponseDTO> getCourses(@PathVariable String instID, @PathVariable String termID) {
+        SourceURL source = new SourceURL(instID, termID);
         try {
             return new ResponseEntity<>(
-                    new IdentifierResponseDTO(new SourceURL(instID, termID).toString(), this.htmlParserService.parseSubjects(instID, termID)),
+                    new IdentifierResponseDTO(source, this.htmlParserService.parseSubjects(instID, termID)),
                     HttpStatus.OK
             );
         } catch (HttpStatusException e) {
@@ -88,7 +92,7 @@ public class RainbowController {
                     .addDetails(e.getStatusCode());
             LOGGER.warn(mb);
             LOGGER.debug(mb.addDetails(e));
-            return new ResponseEntity<>(new ResponseDTO(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new BadAccessResponseDTO(e), HttpStatus.BAD_REQUEST);
         } catch (IOException e) {
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.SUBJECT).addDetails(e));
             return new ResponseEntity<>(new ResponseDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -109,6 +113,7 @@ public class RainbowController {
             @RequestParam(required = false) List<String> day,
             @RequestParam(required = false) List<String> instructor,
             @RequestParam(required = false) List<String> keyword) {
+        SourceURL source = new SourceURL(instID, termID, subjectID);
         try {
             // Build filter
             CourseFilter cf = new CourseFilter.Builder()
@@ -133,10 +138,10 @@ public class RainbowController {
                     .addDetails(e.getStatusCode());
             LOGGER.warn(mb);
             LOGGER.debug(mb.addDetails(e));
-            return new ResponseEntity<>(new ResponseDTO(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new BadAccessResponseDTO(e), HttpStatus.BAD_REQUEST);
         } catch (IOException e) {
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.SUBJECT).addDetails(e));
-            return new ResponseEntity<>(new ResponseDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -155,6 +160,7 @@ public class RainbowController {
             @RequestParam(required = false) List<String> instructor,
             @RequestParam(required = false) List<String> keyword) {
 
+        SourceURL subjectSource = new SourceURL(instID, termID);
         try {
             
             Instant start = Instant.now();
@@ -202,7 +208,7 @@ public class RainbowController {
                     .addDetails(e.getStatusCode());
             LOGGER.warn(mb);
             LOGGER.debug(mb.addDetails(e));
-            return new ResponseEntity<>(new ResponseDTO(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new BadAccessResponseDTO(e), HttpStatus.BAD_REQUEST);
         } catch (IOException e) {
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails(e));
             return new ResponseEntity<>(new ResponseDTO(), HttpStatus.INTERNAL_SERVER_ERROR);

@@ -23,8 +23,8 @@ public class IdentifierResponseDTO extends ResponseDTO {
      * @param source URL source of the identifiers
      * @param identifiers List of identifiers
      */
-    public IdentifierResponseDTO(String source, List<IdentifierDTO> identifiers) {
-        this.source = source;
+    public IdentifierResponseDTO(SourceURL source, List<IdentifierDTO> identifiers) {
+        this.source = source.toString();
         this.identifiers = identifiers;
     }
 

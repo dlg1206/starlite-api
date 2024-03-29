@@ -198,7 +198,7 @@ public class HTMLParserService {
                 // Add valid course
                 courses.putIfAbsent(
                         section.getCourse().cid(),
-                        new CourseDTO(source.toString(), section.getCourse())
+                        new CourseDTO(source, section.getCourse())
                 );
                 courses.get(section.getCourse().cid()).sections().add(section.toDTO());
 
