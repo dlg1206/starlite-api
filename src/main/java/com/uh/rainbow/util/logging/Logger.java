@@ -4,6 +4,8 @@ import com.uh.rainbow.controller.RainbowController;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 /**
@@ -14,6 +16,7 @@ import java.util.Arrays;
  * @author Derek Garcia
  */
 public class Logger {
+
     private final org.slf4j.Logger log;
     public Logger(Class reference){
         this.log = LoggerFactory.getLogger(reference);
@@ -25,15 +28,15 @@ public class Logger {
         this.log.info("Request to endpoint: " + fullEndpoint);
     }
 
-    public void success(String msg){
-        this.log.error("Reason: " + msg);
-    }
-
     public void warn(String msg){
         this.log.warn("Reason: " + msg);
     }
 
     public void error(String msg){
         this.log.error("Reason: " + msg);
+    }
+
+    public DurationLogger createDurationLogger(){
+        return new DurationLogger(this.log);
     }
 }

@@ -4,6 +4,8 @@ import com.uh.rainbow.entities.Course;
 import com.uh.rainbow.entities.Day;
 import com.uh.rainbow.entities.Meeting;
 import com.uh.rainbow.entities.Section;
+import com.uh.rainbow.services.HTMLParserService;
+import com.uh.rainbow.util.logging.Logger;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -18,6 +20,7 @@ import java.util.List;
  * @author Derek Garcia
  */
 public class RowCursor {
+    public static final Logger LOGGER = new Logger(RowCursor.class);
     private final Elements table;
 
     /**
@@ -69,7 +72,7 @@ public class RowCursor {
                 return false;
 
         } catch (Exception e) {
-            System.err.println(e);
+            LOGGER.warn("Failed to parse meeting | Row: %s".formatted(this.table.get(0).text()));
             return false;
         }
         return true;
@@ -170,6 +173,7 @@ public class RowCursor {
                 return false;
 
         } catch (Exception e) {
+            LOGGER.warn("Failed to parse section | Row: %s".formatted(this.table.get(0).text()));
             return false;
         }
         return true;
@@ -229,15 +233,19 @@ public class RowCursor {
             } catch (ParseException e) {
                 section.addFailedMeeting();
             } catch (Exception e) {
-                System.err.println(e);
+                LOGGER.error("Failed to add meetings");
             }
 
             // Add Requirements / Designation Codes / Misc info if any
             if (!this.table.get(0).select("td").get(0).text().isEmpty())
                 section.addDetails(this.table.get(0).select("td").get(0).text());
+
             this.table.remove(0);    // pop
 
-            // Add details if not for the next section
+            /*
+            Next row has details for THIS section
+            Example: https://www.sis.hawaii.edu/uhdad/avail.classes?i=HAW&t=202510&s=FIRE
+             */
             if (!(this.table.isEmpty()
                     || hasSection()    // looking for next section to not overlap meetings
                     || this.table.get(0).select("td").get(0).text().isEmpty()))

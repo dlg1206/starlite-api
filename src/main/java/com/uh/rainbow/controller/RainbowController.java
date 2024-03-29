@@ -7,6 +7,7 @@ import com.uh.rainbow.dto.response.IdentifierResponseDTO;
 import com.uh.rainbow.dto.response.ResponseDTO;
 import com.uh.rainbow.services.HTMLParserService;
 import com.uh.rainbow.util.filter.CourseFilter;
+import com.uh.rainbow.util.logging.DurationLogger;
 import com.uh.rainbow.util.logging.Logger;
 import org.jsoup.HttpStatusException;
 import org.springframework.http.HttpStatus;
@@ -140,6 +141,7 @@ public class RainbowController {
 
         try {
             LOGGER.logEndpointAccess("/campuses/%s/terms/%s/courses".formatted(instID, termID));
+            DurationLogger dlog = LOGGER.createDurationLogger();
             List<IdentifierDTO> subjects = this.htmlParserService.parseSubjects(instID, termID);
             List<CourseDTO> courseDTOs = new ArrayList<>();
             // Build filter
@@ -161,6 +163,7 @@ public class RainbowController {
                     continue;
                 courseDTOs.addAll(this.htmlParserService.parseCourses(cf, instID, termID, s.id()));
             }
+            dlog.reportElapsed();
             return new ResponseEntity<>(new CourseResponseDTO(courseDTOs), HttpStatus.OK);
         } catch (HttpStatusException e) {
             LOGGER.warn("Failed to fetch HTML | Code: " + HttpStatusCode.valueOf(e.getStatusCode()));
