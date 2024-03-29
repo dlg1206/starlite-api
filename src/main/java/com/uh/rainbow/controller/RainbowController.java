@@ -96,6 +96,7 @@ public class RainbowController {
             @RequestParam(required = false) String end_before,
             @RequestParam(required = false) String online,
             @RequestParam(required = false) String sync,
+            @RequestParam(required = false) List<String> day,
             @RequestParam(required = false) List<String> instructor,
             @RequestParam(required = false) List<String> keyword) {
         try {
@@ -108,6 +109,7 @@ public class RainbowController {
                     .setEndBefore(end_before)
                     .setOnline(online)
                     .setSynchronous(sync)
+                    .setDays(day)
                     .setInstructors(instructor)
                     .setKeywords(keyword)
                     .build();
@@ -136,6 +138,7 @@ public class RainbowController {
             @RequestParam(required = false) String end_before,
             @RequestParam(required = false) String online,
             @RequestParam(required = false) String sync,
+            @RequestParam(required = false) List<String> day,
             @RequestParam(required = false) List<String> instructor,
             @RequestParam(required = false) List<String> keyword) {
 
@@ -153,6 +156,7 @@ public class RainbowController {
                     .setEndBefore(end_before)
                     .setOnline(online)
                     .setSynchronous(sync)
+                    .setDays(day)
                     .setInstructors(instructor)
                     .setKeywords(keyword)
                     .build();
