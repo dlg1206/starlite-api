@@ -3,18 +3,19 @@ package com.uh.rainbow.services;
 import com.uh.rainbow.dto.course.CourseDTO;
 import com.uh.rainbow.dto.identifier.IdentifierDTO;
 import com.uh.rainbow.entities.Section;
+import com.uh.rainbow.exceptions.SectionNotFoundException;
 import com.uh.rainbow.util.RowCursor;
-import com.uh.rainbow.util.SourceURLBuilder;
+import com.uh.rainbow.util.SourceURL;
 import com.uh.rainbow.util.filter.CourseFilter;
-import com.uh.rainbow.util.logging.DurationLogger;
 import com.uh.rainbow.util.logging.Logger;
-import org.jsoup.Jsoup;
+import com.uh.rainbow.util.logging.MessageBuilder;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -61,8 +62,6 @@ public class HTMLParserService {
 
     }
 
-    private static final String UH_ROOT = "https://www.sis.hawaii.edu/uhdad/avail.classes";
-
     /**
      * Process a list of li elements with href
      *
@@ -83,6 +82,14 @@ public class HTMLParserService {
         return identifiers;
     }
 
+    private Document query(MessageBuilder.Type type, SourceURL source) throws IOException {
+        Instant start = Instant.now();
+        LOGGER.info(new MessageBuilder(type).addDetails("Querying " + source));
+        Document doc = source.query();
+        LOGGER.info(new MessageBuilder(type).setDuration(start));
+        return doc;
+    }
+
     /**
      * Parse the list of UH institutions
      *
@@ -91,13 +98,15 @@ public class HTMLParserService {
      */
     public List<IdentifierDTO> parseInstitutions() throws IOException {
         List<IdentifierDTO> identifiers = new ArrayList<>();
-        DurationLogger dlog = LOGGER.createDurationLogger();
+        Instant start = Instant.now();
         // Get list
-        Document doc = Jsoup.connect(UH_ROOT).get();
+        Document doc = query(MessageBuilder.Type.INST, new SourceURL());
         doc.select("ul.institutions").select("li").forEach(
                 (item) -> identifiers.add(new IdentifierDTO(item.className(), item.text()))
         );
-        dlog.reportInst(identifiers.size());
+        LOGGER.info(new MessageBuilder(MessageBuilder.Type.INST)
+                .addDetails("Found %s campus%s".formatted(identifiers.size(), identifiers.size() == 1 ? "" : "es"))
+                .setDuration(start));
         return identifiers;
     }
 
@@ -109,12 +118,16 @@ public class HTMLParserService {
      * @throws IOException Fail to get html
      */
     public List<IdentifierDTO> parseTerms(String instID) throws IOException {
-        DurationLogger dlog = LOGGER.createDurationLogger();
+        Instant start = Instant.now();
         // Get terms
-        Document doc = Jsoup.connect(UH_ROOT).data("i", instID.toUpperCase()).get();
+        Document doc = query(MessageBuilder.Type.TERM, new SourceURL(instID));
+
         Elements terms = doc.select("ul.terms").select("li");
         List<IdentifierDTO> identifiers = extractIdentifiers(terms, new URLParamExtractor("t=([0-9]*)"));
-        dlog.reportTerms(instID, identifiers.size());
+        LOGGER.info(new MessageBuilder(MessageBuilder.Type.TERM)
+                .addDetails(instID)
+                .addDetails("Found %s term%s".formatted(identifiers.size(), identifiers.size() == 1 ? "" : "s"))
+                .setDuration(start));
         return identifiers;
     }
 
@@ -128,12 +141,9 @@ public class HTMLParserService {
      */
     public List<IdentifierDTO> parseSubjects(String instID, String termID) throws IOException {
         List<IdentifierDTO> identifiers = new ArrayList<>();
-        DurationLogger dlog = LOGGER.createDurationLogger();
+        Instant start = Instant.now();
         // Get each subject col
-        Document doc = Jsoup.connect(UH_ROOT)
-                .data("i", instID.toUpperCase())
-                .data("t", termID)
-                .get();
+        Document doc = query(MessageBuilder.Type.SUBJECT, new SourceURL(instID, termID));
 
         Elements leftSubjects = doc
                 .select("div.leftcolumn")
@@ -150,7 +160,10 @@ public class HTMLParserService {
         identifiers.addAll(extractIdentifiers(leftSubjects, upe));
         identifiers.addAll(extractIdentifiers(rightSubjects, upe));
 
-        dlog.reportSubjects(instID, termID, identifiers.size());
+        LOGGER.info(new MessageBuilder(MessageBuilder.Type.SUBJECT)
+                .addDetails(instID, termID)
+                .addDetails("Found %s subject%s".formatted(identifiers.size(), identifiers.size() == 1 ? "" : "s"))
+                .setDuration(start));
         return identifiers;
     }
 
@@ -164,17 +177,13 @@ public class HTMLParserService {
      * @throws IOException Fail to get html
      */
     public List<CourseDTO> parseCourses(CourseFilter cf, String instID, String termID, String subjectID) throws IOException {
-        DurationLogger dlog = LOGGER.createDurationLogger();
+        Instant start = Instant.now();
         // Get each subject col
-        Document doc = Jsoup.connect(UH_ROOT)
-                .data("i", instID.toUpperCase())
-                .data("t", termID)
-                .data("s", subjectID.toUpperCase())
-                .get();
+        SourceURL source = new SourceURL(instID, termID, subjectID);
+        Document doc = query(MessageBuilder.Type.COURSE, source);
 
         // Parse all courses
         Map<String, CourseDTO> courses = new HashMap<>();
-
         RowCursor cur = new RowCursor(Objects.requireNonNull(doc.selectFirst("tbody")).select("tr"));
         while (cur.findSection()) {
             try {
@@ -188,16 +197,20 @@ public class HTMLParserService {
                 // Add valid course
                 courses.putIfAbsent(
                         section.getCourse().cid(),
-                        new CourseDTO(SourceURLBuilder.build(instID, termID, subjectID), section.getCourse())
+                        new CourseDTO(source, section.getCourse())
                 );
                 courses.get(section.getCourse().cid()).sections().add(section.toDTO());
 
-            } catch (Exception e) {
-                LOGGER.error(e.getLocalizedMessage());
+            } catch (SectionNotFoundException e) {
+                LOGGER.info(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails(instID, termID, subjectID).addDetails(e));
             }
-
         }
-        dlog.reportCourses(instID, termID, subjectID, courses.size());
+
+        LOGGER.info(new MessageBuilder(MessageBuilder.Type.COURSE)
+                .addDetails(instID, termID, subjectID)
+                .addDetails("Found %s course%s".formatted(courses.size(), courses.size() == 1 ? "" : "s"))
+                .setDuration(start));
+
         return courses.values().stream()
                 .sorted(Comparator.comparing(CourseDTO::cid))   // sort by CID
                 .toList();

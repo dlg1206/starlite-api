@@ -1,42 +1,63 @@
 package com.uh.rainbow.util.logging;
 
-import com.uh.rainbow.controller.RainbowController;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
-
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.Arrays;
 
 /**
  * <b>File:</b> Logger.java
  * <p>
- * <b>Description:</b>
+ * <b>Description:</b> Wrapper for slf4j.Logger to use standardized messages
  *
  * @author Derek Garcia
  */
 public class Logger {
 
     private final org.slf4j.Logger log;
-    public Logger(Class reference){
+
+    /**
+     * Create new logger for class
+     *
+     * @param reference Class reference
+     */
+    public Logger(Class reference) {
         this.log = LoggerFactory.getLogger(reference);
     }
 
-
-    public void logEndpointAccess(String... path){
-        String fullEndpoint = StringUtils.join(path);
-        this.log.info("Request to endpoint: " + fullEndpoint);
+    /**
+     * Log a debug message
+     *
+     * @param mb MessageBuilder loaded with message details
+     */
+    public void debug(MessageBuilder mb) {
+        this.log.debug(mb.build());
     }
 
-    public void warn(String msg){
-        this.log.warn("Reason: " + msg);
+    /**
+     * Log an info message
+     *
+     * @param mb MessageBuilder loaded with message details
+     */
+    public void info(MessageBuilder mb) {
+        this.log.info(mb.build());
     }
 
-    public void error(String msg){
-        this.log.error("Reason: " + msg);
+    /**
+     * Log a warn message
+     *
+     * @param mb MessageBuilder loaded with message details
+     */
+    public void warn(MessageBuilder mb) {
+        this.log.warn(mb.build());
     }
 
-    public DurationLogger createDurationLogger(){
-        return new DurationLogger(this.log);
+
+    /**
+     * Log an error message
+     *
+     * @param mb MessageBuilder loaded with message details
+     */
+    public void error(MessageBuilder mb) {
+        this.log.error(mb.build());
     }
+
+
 }
