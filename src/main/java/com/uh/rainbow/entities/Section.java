@@ -80,7 +80,8 @@ public class Section {
                 this.instructor,
                 this.currEnrolled,
                 this.seatsAvailable,
-                this.failedMeetings
+                this.failedMeetings,
+                this.additionalDetails
         );
         this.meetings.forEach((m) -> sectionDTO.meetings().add(m.toDTO()));
         return sectionDTO;

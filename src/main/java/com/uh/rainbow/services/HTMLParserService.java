@@ -6,12 +6,12 @@ import com.uh.rainbow.entities.Section;
 import com.uh.rainbow.util.RowCursor;
 import com.uh.rainbow.util.SourceURLBuilder;
 import com.uh.rainbow.util.filter.CourseFilter;
+import com.uh.rainbow.util.logging.DurationLogger;
+import com.uh.rainbow.util.logging.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -28,8 +28,7 @@ import java.util.regex.Pattern;
  */
 @Service
 public class HTMLParserService {
-    // Spring-configured logger
-    public static final Logger LOGGER = LoggerFactory.getLogger(HTMLParserService.class);
+    public static final Logger LOGGER = new Logger(HTMLParserService.class);
 
     /**
      * Regex parser that extracts params from an url
@@ -92,13 +91,13 @@ public class HTMLParserService {
      */
     public List<IdentifierDTO> parseInstitutions() throws IOException {
         List<IdentifierDTO> identifiers = new ArrayList<>();
-
+        DurationLogger dlog = LOGGER.createDurationLogger();
         // Get list
         Document doc = Jsoup.connect(UH_ROOT).get();
         doc.select("ul.institutions").select("li").forEach(
                 (item) -> identifiers.add(new IdentifierDTO(item.className(), item.text()))
         );
-
+        dlog.reportInst(identifiers.size());
         return identifiers;
     }
 
@@ -110,12 +109,13 @@ public class HTMLParserService {
      * @throws IOException Fail to get html
      */
     public List<IdentifierDTO> parseTerms(String instID) throws IOException {
-
+        DurationLogger dlog = LOGGER.createDurationLogger();
         // Get terms
         Document doc = Jsoup.connect(UH_ROOT).data("i", instID.toUpperCase()).get();
         Elements terms = doc.select("ul.terms").select("li");
-        return extractIdentifiers(terms, new URLParamExtractor("t=([0-9]*)"));
-
+        List<IdentifierDTO> identifiers = extractIdentifiers(terms, new URLParamExtractor("t=([0-9]*)"));
+        dlog.reportTerms(instID, identifiers.size());
+        return identifiers;
     }
 
     /**
@@ -128,7 +128,7 @@ public class HTMLParserService {
      */
     public List<IdentifierDTO> parseSubjects(String instID, String termID) throws IOException {
         List<IdentifierDTO> identifiers = new ArrayList<>();
-
+        DurationLogger dlog = LOGGER.createDurationLogger();
         // Get each subject col
         Document doc = Jsoup.connect(UH_ROOT)
                 .data("i", instID.toUpperCase())
@@ -150,6 +150,7 @@ public class HTMLParserService {
         identifiers.addAll(extractIdentifiers(leftSubjects, upe));
         identifiers.addAll(extractIdentifiers(rightSubjects, upe));
 
+        dlog.reportSubjects(instID, termID, identifiers.size());
         return identifiers;
     }
 
@@ -163,7 +164,7 @@ public class HTMLParserService {
      * @throws IOException Fail to get html
      */
     public List<CourseDTO> parseCourses(CourseFilter cf, String instID, String termID, String subjectID) throws IOException {
-
+        DurationLogger dlog = LOGGER.createDurationLogger();
         // Get each subject col
         Document doc = Jsoup.connect(UH_ROOT)
                 .data("i", instID.toUpperCase())
@@ -192,11 +193,11 @@ public class HTMLParserService {
                 courses.get(section.getCourse().cid()).sections().add(section.toDTO());
 
             } catch (Exception e) {
-                System.err.println(e);
+                LOGGER.error(e.getLocalizedMessage());
             }
 
         }
-
+        dlog.reportCourses(instID, termID, subjectID, courses.size());
         return courses.values().stream()
                 .sorted(Comparator.comparing(CourseDTO::cid))   // sort by CID
                 .toList();
