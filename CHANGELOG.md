@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.3](https://github.com/dlg1206/rainbows-api/compare/v0.4.2...v0.4.3) (2024-03-29)
+
+
+### Features
+
+* add bad request response when no corresponding UH page ([5358092](https://github.com/dlg1206/rainbows-api/commit/5358092df28c781166545999da8c85f548990b30))
+* add error response on internal error ([aa9c6ff](https://github.com/dlg1206/rainbows-api/commit/aa9c6ff0973803b29b5c17602d09a667c8279e73))
+* add not found exceptions for course ([beeb2c8](https://github.com/dlg1206/rainbows-api/commit/beeb2c86374d018c68514afff2b6bd213d0d04b9))
+
 ### [0.4.2](https://github.com/dlg1206/rainbows-api/compare/v0.4.1...v0.4.2) (2024-03-29)
 
 
