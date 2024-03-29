@@ -3,6 +3,7 @@ package com.uh.rainbow.services;
 import com.uh.rainbow.dto.course.CourseDTO;
 import com.uh.rainbow.dto.identifier.IdentifierDTO;
 import com.uh.rainbow.entities.Section;
+import com.uh.rainbow.exceptions.SectionNotFoundException;
 import com.uh.rainbow.util.RowCursor;
 import com.uh.rainbow.util.SourceURL;
 import com.uh.rainbow.util.filter.CourseFilter;
@@ -184,7 +185,6 @@ public class HTMLParserService {
 
         // Parse all courses
         Map<String, CourseDTO> courses = new HashMap<>();
-
         RowCursor cur = new RowCursor(Objects.requireNonNull(doc.selectFirst("tbody")).select("tr"));
         while (cur.findSection()) {
             try {
@@ -202,15 +202,16 @@ public class HTMLParserService {
                 );
                 courses.get(section.getCourse().cid()).sections().add(section.toDTO());
 
-            } catch (Exception e) {
-                LOGGER.error(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails(e));
+            } catch (SectionNotFoundException e) {
+                LOGGER.info(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails(instID, termID, subjectID).addDetails(e));
             }
-
         }
+
         LOGGER.info(new MessageBuilder(MessageBuilder.Type.COURSE)
-                .addDetails(instID, termID, subjectID)
-                .addDetails("Found %s course%s".formatted(courses.size(), courses.size() == 1 ? "" : "s"))
-                .setDuration(start));
+            .addDetails(instID, termID, subjectID)
+            .addDetails("Found %s course%s".formatted(courses.size(), courses.size() == 1 ? "" : "s"))
+            .setDuration(start));
+
         return courses.values().stream()
                 .sorted(Comparator.comparing(CourseDTO::cid))   // sort by CID
                 .toList();

@@ -4,7 +4,8 @@ import com.uh.rainbow.entities.Course;
 import com.uh.rainbow.entities.Day;
 import com.uh.rainbow.entities.Meeting;
 import com.uh.rainbow.entities.Section;
-import com.uh.rainbow.util.logging.Logger;
+import com.uh.rainbow.exceptions.MeetingNotFoundException;
+import com.uh.rainbow.exceptions.SectionNotFoundException;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -19,7 +20,6 @@ import java.util.List;
  * @author Derek Garcia
  */
 public class RowCursor {
-    public static final Logger LOGGER = new Logger(RowCursor.class);
     private final Elements table;
 
     /**
@@ -52,7 +52,6 @@ public class RowCursor {
             // Different amount of columns per row can cause issues, check for offset
             if (!Day.toDays(row.select("td").get(8 + offset).text()).isEmpty())
                 offset -= 1;
-
 
             String days = row.select("td").get(9 + offset).text();
             if (days.isEmpty())
@@ -96,16 +95,18 @@ public class RowCursor {
         return false;
     }
 
+
     /**
      * Parse the top row into a list of meetings
      *
-     * @return List of Meetings
-     * @throws ParseException Failed to parse meetings
+     * @return List of meetings
+     * @throws MeetingNotFoundException No meetings found in the first row
+     * @throws ParseException           Failed to parse dates
      */
-    private List<Meeting> getMeetings() throws Exception {
+    private List<Meeting> getMeetings() throws MeetingNotFoundException, ParseException {
         // assert meeting to process
         if (!hasMeeting())
-            throw new Exception("No meetings");
+            throw new MeetingNotFoundException();
 
         Element row = this.table.get(0);     // peek
 
@@ -196,15 +197,17 @@ public class RowCursor {
         return false;
     }
 
+
     /**
      * Parse the top row into a section and get all meetings for that section
      *
      * @return Section
+     * @throws SectionNotFoundException First row has no section to parse
      */
-    public Section getSection() throws Exception {
+    public Section getSection() throws SectionNotFoundException {
         // assert section to process
         if (!hasSection())
-            throw new Exception("No Sections");
+            throw new SectionNotFoundException();
 
         Element row = this.table.get(0);     // peek
 
@@ -230,7 +233,10 @@ public class RowCursor {
                 // Add meetings
                 section.addMeetings(getMeetings());
             } catch (ParseException e) {
+                // failed to pase meeting
                 section.addFailedMeeting();
+            } catch (MeetingNotFoundException ignored) {
+                // no meeting in first row
             }
 
             // Add Requirements / Designation Codes / Misc info if any
