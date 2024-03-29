@@ -1,7 +1,7 @@
 package com.uh.rainbow.dto.response;
 
 import com.uh.rainbow.dto.identifier.IdentifierDTO;
-import com.uh.rainbow.util.SourceURLBuilder;
+import com.uh.rainbow.util.SourceURL;
 
 import java.util.List;
 
@@ -20,33 +20,12 @@ public class IdentifierResponseDTO extends ResponseDTO {
     /**
      * Create new Identifier Response using root UH url
      *
+     * @param source URL source of the identifiers
      * @param identifiers List of identifiers
      */
-    public IdentifierResponseDTO(List<IdentifierDTO> identifiers) {
-        this.source = SourceURLBuilder.build();
+    public IdentifierResponseDTO(String source, List<IdentifierDTO> identifiers) {
+        this.source = source;
         this.identifiers = identifiers;
     }
 
-    /**
-     * Create new Identifier Response using institution
-     *
-     * @param identifiers List of identifiers
-     * @param instID      Campus / Institution ID
-     */
-    public IdentifierResponseDTO(List<IdentifierDTO> identifiers, String instID) {
-        this.source = SourceURLBuilder.build(instID);
-        this.identifiers = identifiers;
-    }
-
-    /**
-     * Create new Identifier Response using institution and term
-     *
-     * @param identifiers List of identifiers
-     * @param instID      Campus / Institution ID
-     * @param termID      Term ID for campus
-     */
-    public IdentifierResponseDTO(List<IdentifierDTO> identifiers, String instID, String termID) {
-        this.source = SourceURLBuilder.build(instID, termID);
-        this.identifiers = identifiers;
-    }
 }

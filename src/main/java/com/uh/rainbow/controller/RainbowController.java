@@ -6,16 +6,17 @@ import com.uh.rainbow.dto.response.CourseResponseDTO;
 import com.uh.rainbow.dto.response.IdentifierResponseDTO;
 import com.uh.rainbow.dto.response.ResponseDTO;
 import com.uh.rainbow.services.HTMLParserService;
+import com.uh.rainbow.util.SourceURL;
 import com.uh.rainbow.util.filter.CourseFilter;
-import com.uh.rainbow.util.logging.DurationLogger;
 import com.uh.rainbow.util.logging.Logger;
+import com.uh.rainbow.util.logging.MessageBuilder;
 import org.jsoup.HttpStatusException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,16 +38,19 @@ public class RainbowController {
     @GetMapping(value = "/campuses")
     public ResponseEntity<ResponseDTO> getAllCampuses() {
         try {
-            LOGGER.logEndpointAccess("/campuses");
             return new ResponseEntity<>(
-                    new IdentifierResponseDTO(this.htmlParserService.parseInstitutions()),
+                    new IdentifierResponseDTO(new SourceURL().toString(), this.htmlParserService.parseInstitutions()),
                     HttpStatus.OK
             );
         } catch (HttpStatusException e) {
-            LOGGER.warn("Failed to fetch HTML | Code: " + HttpStatusCode.valueOf(e.getStatusCode()));
+            MessageBuilder mb = new MessageBuilder(MessageBuilder.Type.INST)
+                    .addDetails("Failed to fetch HTML")
+                    .addDetails(e.getStatusCode());
+            LOGGER.warn(mb);
+            LOGGER.debug(mb.addDetails(e));
             return new ResponseEntity<>(new ResponseDTO(), HttpStatus.NOT_FOUND);
         } catch (IOException e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error(new MessageBuilder(MessageBuilder.Type.INST).addDetails(e));
             return new ResponseEntity<>(new ResponseDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -54,16 +58,19 @@ public class RainbowController {
     @GetMapping(value = "/campuses/{instID}/terms")
     public ResponseEntity<ResponseDTO> getAllTerms(@PathVariable String instID) {
         try {
-            LOGGER.logEndpointAccess("/campuses/%s/terms".formatted(instID));
             return new ResponseEntity<>(
-                    new IdentifierResponseDTO(this.htmlParserService.parseTerms(instID), instID),
+                    new IdentifierResponseDTO(new SourceURL(instID).toString(), this.htmlParserService.parseTerms(instID)),
                     HttpStatus.OK
             );
         } catch (HttpStatusException e) {
-            LOGGER.warn("Failed to fetch HTML | Code: " + HttpStatusCode.valueOf(e.getStatusCode()));
+            MessageBuilder mb = new MessageBuilder(MessageBuilder.Type.TERM)
+                    .addDetails("Failed to fetch HTML")
+                    .addDetails(e.getStatusCode());
+            LOGGER.warn(mb);
+            LOGGER.debug(mb.addDetails(e));
             return new ResponseEntity<>(new ResponseDTO(), HttpStatus.NOT_FOUND);
         } catch (IOException e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error(new MessageBuilder(MessageBuilder.Type.TERM).addDetails(e));
             return new ResponseEntity<>(new ResponseDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -71,16 +78,19 @@ public class RainbowController {
     @GetMapping(value = "/campuses/{instID}/terms/{termID}/subjects")
     public ResponseEntity<ResponseDTO> getCourses(@PathVariable String instID, @PathVariable String termID) {
         try {
-            LOGGER.logEndpointAccess("/campuses/%s/terms/%s/subjects".formatted(instID, termID));
             return new ResponseEntity<>(
-                    new IdentifierResponseDTO(this.htmlParserService.parseSubjects(instID, termID), instID, termID),
+                    new IdentifierResponseDTO(new SourceURL(instID, termID).toString(), this.htmlParserService.parseSubjects(instID, termID)),
                     HttpStatus.OK
             );
         } catch (HttpStatusException e) {
-            LOGGER.warn("Failed to fetch HTML | Code: " + HttpStatusCode.valueOf(e.getStatusCode()));
+            MessageBuilder mb = new MessageBuilder(MessageBuilder.Type.SUBJECT)
+                    .addDetails("Failed to fetch HTML")
+                    .addDetails(e.getStatusCode());
+            LOGGER.warn(mb);
+            LOGGER.debug(mb.addDetails(e));
             return new ResponseEntity<>(new ResponseDTO(), HttpStatus.NOT_FOUND);
         } catch (IOException e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error(new MessageBuilder(MessageBuilder.Type.SUBJECT).addDetails(e));
             return new ResponseEntity<>(new ResponseDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -100,7 +110,6 @@ public class RainbowController {
             @RequestParam(required = false) List<String> instructor,
             @RequestParam(required = false) List<String> keyword) {
         try {
-            LOGGER.logEndpointAccess("/campuses/%s/terms/%s/subjects/%s".formatted(instID, termID, subjectID));
             // Build filter
             CourseFilter cf = new CourseFilter.Builder()
                     .setCRNs(crn)
@@ -119,10 +128,14 @@ public class RainbowController {
                     HttpStatus.OK
             );
         } catch (HttpStatusException e) {
-            LOGGER.warn("Failed to fetch HTML | Code: " + HttpStatusCode.valueOf(e.getStatusCode()));
+            MessageBuilder mb = new MessageBuilder(MessageBuilder.Type.SUBJECT)
+                    .addDetails("Failed to fetch HTML")
+                    .addDetails(e.getStatusCode());
+            LOGGER.warn(mb);
+            LOGGER.debug(mb.addDetails(e));
             return new ResponseEntity<>(new ResponseDTO(), HttpStatus.NOT_FOUND);
         } catch (IOException e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error(new MessageBuilder(MessageBuilder.Type.SUBJECT).addDetails(e));
             return new ResponseEntity<>(new ResponseDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -143,8 +156,8 @@ public class RainbowController {
             @RequestParam(required = false) List<String> keyword) {
 
         try {
-            LOGGER.logEndpointAccess("/campuses/%s/terms/%s/courses".formatted(instID, termID));
-            DurationLogger dlog = LOGGER.createDurationLogger();
+            
+            Instant start = Instant.now();
             List<IdentifierDTO> subjects = this.htmlParserService.parseSubjects(instID, termID);
             List<CourseDTO> courseDTOs = new ArrayList<>();
             // Build filter
@@ -161,19 +174,37 @@ public class RainbowController {
                     .setKeywords(keyword)
                     .build();
 
+            int numSites = 0;
             for (IdentifierDTO s : subjects) {
                 // skip if not in filter
                 if (!cf.validSubject(s.id()))
                     continue;
-                courseDTOs.addAll(this.htmlParserService.parseCourses(cf, instID, termID, s.id()));
+                try{
+                    courseDTOs.addAll(this.htmlParserService.parseCourses(cf, instID, termID, s.id()));
+                    numSites += 1;
+                } catch (HttpStatusException e){
+                    MessageBuilder mb = new MessageBuilder(MessageBuilder.Type.COURSE)
+                            .addDetails("Skipping %s".formatted(new SourceURL(instID, termID, s.id())))
+                            .addDetails("Failed to fetch HTML")
+                            .addDetails(e.getStatusCode());
+                    LOGGER.warn(mb);
+                    LOGGER.debug(mb.addDetails(e));
+                }
+                
             }
-            dlog.reportElapsed();
+            LOGGER.info(new MessageBuilder(MessageBuilder.Type.COURSE)
+                    .addDetails("Parsed %s site%s".formatted(numSites, numSites == 1 ? "" : "s"))
+                    .setDuration(start));
             return new ResponseEntity<>(new CourseResponseDTO(courseDTOs), HttpStatus.OK);
         } catch (HttpStatusException e) {
-            LOGGER.warn("Failed to fetch HTML | Code: " + HttpStatusCode.valueOf(e.getStatusCode()));
+            MessageBuilder mb = new MessageBuilder(MessageBuilder.Type.COURSE)
+                    .addDetails("Failed to fetch HTML")
+                    .addDetails(e.getStatusCode());
+            LOGGER.warn(mb);
+            LOGGER.debug(mb.addDetails(e));
             return new ResponseEntity<>(new ResponseDTO(), HttpStatus.NOT_FOUND);
         } catch (IOException e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails(e));
             return new ResponseEntity<>(new ResponseDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

@@ -4,7 +4,6 @@ import com.uh.rainbow.entities.Course;
 import com.uh.rainbow.entities.Day;
 import com.uh.rainbow.entities.Meeting;
 import com.uh.rainbow.entities.Section;
-import com.uh.rainbow.services.HTMLParserService;
 import com.uh.rainbow.util.logging.Logger;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -71,8 +70,8 @@ public class RowCursor {
             if (dates.isEmpty())
                 return false;
 
-        } catch (Exception e) {
-            LOGGER.warn("Failed to parse meeting | Row: %s".formatted(this.table.get(0).text()));
+        } catch (IndexOutOfBoundsException e) {
+            // Row too short to parse
             return false;
         }
         return true;
@@ -172,8 +171,8 @@ public class RowCursor {
             if (seatsAvailable.isEmpty())
                 return false;
 
-        } catch (Exception e) {
-            LOGGER.warn("Failed to parse section | Row: %s".formatted(this.table.get(0).text()));
+        } catch (IndexOutOfBoundsException e) {
+            // Row too short to parse
             return false;
         }
         return true;
@@ -232,8 +231,6 @@ public class RowCursor {
                 section.addMeetings(getMeetings());
             } catch (ParseException e) {
                 section.addFailedMeeting();
-            } catch (Exception e) {
-                LOGGER.error("Failed to add meetings");
             }
 
             // Add Requirements / Designation Codes / Misc info if any

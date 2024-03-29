@@ -1,8 +1,11 @@
 package com.uh.rainbow.util.filter;
 
+import com.uh.rainbow.controller.RainbowController;
 import com.uh.rainbow.entities.Meeting;
 import com.uh.rainbow.entities.Section;
 import com.uh.rainbow.entities.time.simple.SimpleTime;
+import com.uh.rainbow.util.logging.Logger;
+import com.uh.rainbow.util.logging.MessageBuilder;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.ParseException;
@@ -19,23 +22,22 @@ import java.util.regex.Pattern;
  * @author Derek Garcia
  */
 public class CourseFilter {
+    private final static Logger LOGGER = new Logger(CourseFilter.class);
 
     /**
      * Builder for Course Filter
      */
     public static class Builder {
-
-        private Set<String> crns = null;
-        private Pattern codes = null;
-        private Set<String> subjects = null;
-
-        private RegexFilter days = null;
-        private SimpleTime startAfter = null;
-        private SimpleTime endAfter = null;
+        private Set<String> crns;
+        private Pattern codes;
+        private Set<String> subjects;
+        private RegexFilter days;
+        private SimpleTime startAfter;
+        private SimpleTime endAfter;
         private int online = -1;
         private int synchronous = -1;
-        private RegexFilter instructors = null;
-        private RegexFilter keywords = null;
+        private RegexFilter instructors;
+        private RegexFilter keywords;
 
         /**
          * Set Course Reference numbers
@@ -114,7 +116,7 @@ public class CourseFilter {
                 if (startAfter != null)
                     this.startAfter = new SimpleTime(startAfter);
             } catch (ParseException ignored) {
-                // todo add logger
+                LOGGER.error(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails("Failed to Parse time string '%s'".formatted(startAfter)));
             }
             return this;
         }
@@ -130,7 +132,7 @@ public class CourseFilter {
                 if (endBefore != null)
                     this.endAfter = new SimpleTime(endBefore);
             } catch (ParseException ignored) {
-                // todo add logger
+                LOGGER.error(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails("Failed to Parse time string '%s'".formatted(startAfter)));
             }
             return this;
         }
