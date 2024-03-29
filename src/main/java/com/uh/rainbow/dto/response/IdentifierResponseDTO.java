@@ -20,7 +20,7 @@ public class IdentifierResponseDTO extends ResponseDTO {
     /**
      * Create new Identifier Response using root UH url
      *
-     * @param source URL source of the identifiers
+     * @param source      URL source of the identifiers
      * @param identifiers List of identifiers
      */
     public IdentifierResponseDTO(SourceURL source, List<IdentifierDTO> identifiers) {

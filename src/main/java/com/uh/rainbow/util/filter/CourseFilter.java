@@ -1,6 +1,5 @@
 package com.uh.rainbow.util.filter;
 
-import com.uh.rainbow.controller.RainbowController;
 import com.uh.rainbow.entities.Meeting;
 import com.uh.rainbow.entities.Section;
 import com.uh.rainbow.entities.time.simple.SimpleTime;

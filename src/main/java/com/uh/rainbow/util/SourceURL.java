@@ -24,7 +24,7 @@ public class SourceURL {
     /**
      * Build url with no params
      */
-    public SourceURL(){
+    public SourceURL() {
     }
 
     /**
@@ -50,8 +50,8 @@ public class SourceURL {
     /**
      * Build url with instID, termID, and subjectID params
      *
-     * @param instID Institution ID
-     * @param termID Term ID
+     * @param instID    Institution ID
+     * @param termID    Term ID
      * @param subjectID Subject ID
      */
     public SourceURL(String instID, String termID, String subjectID) {

@@ -7,8 +7,8 @@ package com.uh.rainbow.exceptions;
  *
  * @author Derek Garcia
  */
-public class MeetingNotFoundException extends Exception{
-    public MeetingNotFoundException(){
+public class MeetingNotFoundException extends Exception {
+    public MeetingNotFoundException() {
         super("No Meetings Found");
     }
 }

@@ -9,7 +9,6 @@ import com.uh.rainbow.util.SourceURL;
 import com.uh.rainbow.util.filter.CourseFilter;
 import com.uh.rainbow.util.logging.Logger;
 import com.uh.rainbow.util.logging.MessageBuilder;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -208,9 +207,9 @@ public class HTMLParserService {
         }
 
         LOGGER.info(new MessageBuilder(MessageBuilder.Type.COURSE)
-            .addDetails(instID, termID, subjectID)
-            .addDetails("Found %s course%s".formatted(courses.size(), courses.size() == 1 ? "" : "s"))
-            .setDuration(start));
+                .addDetails(instID, termID, subjectID)
+                .addDetails("Found %s course%s".formatted(courses.size(), courses.size() == 1 ? "" : "s"))
+                .setDuration(start));
 
         return courses.values().stream()
                 .sorted(Comparator.comparing(CourseDTO::cid))   // sort by CID

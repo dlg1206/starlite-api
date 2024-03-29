@@ -2,10 +2,7 @@ package com.uh.rainbow.controller;
 
 import com.uh.rainbow.dto.course.CourseDTO;
 import com.uh.rainbow.dto.identifier.IdentifierDTO;
-import com.uh.rainbow.dto.response.BadAccessResponseDTO;
-import com.uh.rainbow.dto.response.CourseResponseDTO;
-import com.uh.rainbow.dto.response.IdentifierResponseDTO;
-import com.uh.rainbow.dto.response.ResponseDTO;
+import com.uh.rainbow.dto.response.*;
 import com.uh.rainbow.services.HTMLParserService;
 import com.uh.rainbow.util.SourceURL;
 import com.uh.rainbow.util.filter.CourseFilter;
@@ -36,66 +33,75 @@ public class RainbowController {
     private final static Logger LOGGER = new Logger(RainbowController.class);
     private final HTMLParserService htmlParserService = new HTMLParserService();
 
+    /**
+     * Util logging method for reporting HTTP failures
+     *
+     * @param type Log type
+     * @param e HttpStatusException
+     */
+    private void reportHTTPAccessError(MessageBuilder.Type type, HttpStatusException e){
+        MessageBuilder mb = new MessageBuilder(type)
+                .addDetails("Failed to fetch HTML")
+                .addDetails(e.getStatusCode());
+        LOGGER.warn(mb);
+        LOGGER.debug(mb.addDetails(e));
+    }
+
     @GetMapping(value = "/campuses")
     public ResponseEntity<ResponseDTO> getAllCampuses() {
-        SourceURL source = new SourceURL();
         try {
+            // Get all campuses
             return new ResponseEntity<>(
-                    new IdentifierResponseDTO(source, this.htmlParserService.parseInstitutions()),
+                    new IdentifierResponseDTO(new SourceURL(), this.htmlParserService.parseInstitutions()),
                     HttpStatus.OK
             );
         } catch (HttpStatusException e) {
-            MessageBuilder mb = new MessageBuilder(MessageBuilder.Type.INST)
-                    .addDetails("Failed to fetch HTML")
-                    .addDetails(e.getStatusCode());
-            LOGGER.warn(mb);
-            LOGGER.debug(mb.addDetails(e));
+            // Report and return html access failure
+            reportHTTPAccessError(MessageBuilder.Type.INST, e);
             return new ResponseEntity<>(new BadAccessResponseDTO(e), HttpStatus.BAD_REQUEST);
         } catch (IOException e) {
+            // Internal server error
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.INST).addDetails(e));
-            return new ResponseEntity<>(new ResponseDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new APIErrorResponseDTO(e), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping(value = "/campuses/{instID}/terms")
     public ResponseEntity<ResponseDTO> getAllTerms(@PathVariable String instID) {
-        SourceURL source = new SourceURL(instID);
         try {
+            // Get all terms
             return new ResponseEntity<>(
-                    new IdentifierResponseDTO(source, this.htmlParserService.parseTerms(instID)),
+                    new IdentifierResponseDTO(new SourceURL(instID), this.htmlParserService.parseTerms(instID)),
                     HttpStatus.OK
             );
         } catch (HttpStatusException e) {
-            MessageBuilder mb = new MessageBuilder(MessageBuilder.Type.TERM)
-                    .addDetails("Failed to fetch HTML")
-                    .addDetails(e.getStatusCode());
-            LOGGER.warn(mb);
-            LOGGER.debug(mb.addDetails(e));
+            // Report and return html access failure
+            reportHTTPAccessError(MessageBuilder.Type.TERM, e);
             return new ResponseEntity<>(new BadAccessResponseDTO(e), HttpStatus.BAD_REQUEST);
         } catch (IOException e) {
+            // Internal server error
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.TERM).addDetails(e));
-            return new ResponseEntity<>(new ResponseDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new APIErrorResponseDTO(e), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping(value = "/campuses/{instID}/terms/{termID}/subjects")
     public ResponseEntity<ResponseDTO> getCourses(@PathVariable String instID, @PathVariable String termID) {
-        SourceURL source = new SourceURL(instID, termID);
+
         try {
+            // Get all subjects
             return new ResponseEntity<>(
-                    new IdentifierResponseDTO(source, this.htmlParserService.parseSubjects(instID, termID)),
+                    new IdentifierResponseDTO(new SourceURL(instID, termID), this.htmlParserService.parseSubjects(instID, termID)),
                     HttpStatus.OK
             );
         } catch (HttpStatusException e) {
-            MessageBuilder mb = new MessageBuilder(MessageBuilder.Type.SUBJECT)
-                    .addDetails("Failed to fetch HTML")
-                    .addDetails(e.getStatusCode());
-            LOGGER.warn(mb);
-            LOGGER.debug(mb.addDetails(e));
+            // Report and return html access failure
+            reportHTTPAccessError(MessageBuilder.Type.SUBJECT, e);
             return new ResponseEntity<>(new BadAccessResponseDTO(e), HttpStatus.BAD_REQUEST);
         } catch (IOException e) {
+            // Internal server error
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.SUBJECT).addDetails(e));
-            return new ResponseEntity<>(new ResponseDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new APIErrorResponseDTO(e), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -113,7 +119,6 @@ public class RainbowController {
             @RequestParam(required = false) List<String> day,
             @RequestParam(required = false) List<String> instructor,
             @RequestParam(required = false) List<String> keyword) {
-        SourceURL source = new SourceURL(instID, termID, subjectID);
         try {
             // Build filter
             CourseFilter cf = new CourseFilter.Builder()
@@ -127,21 +132,20 @@ public class RainbowController {
                     .setInstructors(instructor)
                     .setKeywords(keyword)
                     .build();
+            // Get all courses for subject
             List<CourseDTO> courseDTOs = this.htmlParserService.parseCourses(cf, instID, termID, subjectID);
             return new ResponseEntity<>(
                     new CourseResponseDTO(courseDTOs),
                     HttpStatus.OK
             );
         } catch (HttpStatusException e) {
-            MessageBuilder mb = new MessageBuilder(MessageBuilder.Type.SUBJECT)
-                    .addDetails("Failed to fetch HTML")
-                    .addDetails(e.getStatusCode());
-            LOGGER.warn(mb);
-            LOGGER.debug(mb.addDetails(e));
+            // Report and return html access failure
+            reportHTTPAccessError(MessageBuilder.Type.SUBJECT, e);
             return new ResponseEntity<>(new BadAccessResponseDTO(e), HttpStatus.BAD_REQUEST);
         } catch (IOException e) {
+            // Internal Server Error
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.SUBJECT).addDetails(e));
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new APIErrorResponseDTO(e), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -160,12 +164,11 @@ public class RainbowController {
             @RequestParam(required = false) List<String> instructor,
             @RequestParam(required = false) List<String> keyword) {
 
-        SourceURL subjectSource = new SourceURL(instID, termID);
         try {
-            
+            // Get all available subjects
             Instant start = Instant.now();
             List<IdentifierDTO> subjects = this.htmlParserService.parseSubjects(instID, termID);
-            List<CourseDTO> courseDTOs = new ArrayList<>();
+
             // Build filter
             CourseFilter cf = new CourseFilter.Builder()
                     .setCRNs(crn)
@@ -180,40 +183,43 @@ public class RainbowController {
                     .setKeywords(keyword)
                     .build();
 
+            // Parse each subject for courses
             int numSites = 0;
+            List<String> failedSources = new ArrayList<>();
+            List<CourseDTO> courseDTOs = new ArrayList<>();
             for (IdentifierDTO s : subjects) {
                 // skip if not in filter
                 if (!cf.validSubject(s.id()))
                     continue;
-                try{
+                SourceURL source = new SourceURL(instID, termID, s.id());
+                // Attempt to parse
+                try {
                     courseDTOs.addAll(this.htmlParserService.parseCourses(cf, instID, termID, s.id()));
                     numSites += 1;
-                } catch (HttpStatusException e){
-                    MessageBuilder mb = new MessageBuilder(MessageBuilder.Type.COURSE)
-                            .addDetails("Skipping %s".formatted(new SourceURL(instID, termID, s.id())))
-                            .addDetails("Failed to fetch HTML")
-                            .addDetails(e.getStatusCode());
-                    LOGGER.warn(mb);
-                    LOGGER.debug(mb.addDetails(e));
+                } catch (HttpStatusException e) {
+                    // Report html access failure, add to failed sources and continue
+                    reportHTTPAccessError(MessageBuilder.Type.COURSE, e);
+                    LOGGER.warn(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails("Skipping %s".formatted(source)));
+                    failedSources.add(source.toString());
+                } catch (IOException e) {
+                    // Internal server error, add to failed sources and continue
+                    LOGGER.error(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails(e));
+                    failedSources.add(source.toString());
                 }
-                
             }
+            // Report Success and return results
             LOGGER.info(new MessageBuilder(MessageBuilder.Type.COURSE)
                     .addDetails("Parsed %s site%s".formatted(numSites, numSites == 1 ? "" : "s"))
                     .setDuration(start));
-            return new ResponseEntity<>(new CourseResponseDTO(courseDTOs), HttpStatus.OK);
+            return new ResponseEntity<>(new CourseResponseDTO(courseDTOs, failedSources), HttpStatus.OK);
         } catch (HttpStatusException e) {
-            MessageBuilder mb = new MessageBuilder(MessageBuilder.Type.COURSE)
-                    .addDetails("Failed to fetch HTML")
-                    .addDetails(e.getStatusCode());
-            LOGGER.warn(mb);
-            LOGGER.debug(mb.addDetails(e));
+            // Report and return html access failure
+            reportHTTPAccessError(MessageBuilder.Type.COURSE, e);
             return new ResponseEntity<>(new BadAccessResponseDTO(e), HttpStatus.BAD_REQUEST);
         } catch (IOException e) {
+            // Internal Server error
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails(e));
-            return new ResponseEntity<>(new ResponseDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new APIErrorResponseDTO(e), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
 }

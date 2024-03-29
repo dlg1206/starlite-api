@@ -7,8 +7,8 @@ package com.uh.rainbow.exceptions;
  *
  * @author Derek Garcia
  */
-public class SectionNotFoundException extends Exception{
-    public SectionNotFoundException(){
+public class SectionNotFoundException extends Exception {
+    public SectionNotFoundException() {
         super("No Sections Found");
     }
 }
