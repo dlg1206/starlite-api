@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.2](https://github.com/dlg1206/rainbows-api/compare/v0.4.1...v0.4.2) (2024-03-29)
+
+
+### Bug Fixes
+
+* add missing day param ([564aae8](https://github.com/dlg1206/rainbows-api/commit/564aae835e46f710d0aa18b588274585e7f53ca3))
+* add missing day param to courses and subject endpoint ([6073a02](https://github.com/dlg1206/rainbows-api/commit/6073a02ed31283114f335a9c39760c366797fdd6))
+
 ### [0.4.1](https://github.com/dlg1206/rainbows-api/compare/v0.4.0...v0.4.1) (2024-03-29)
 
 ## [0.4.0](https://github.com/dlg1206/rainbows-api/compare/v0.3.0...v0.4.0) (2024-03-28)
