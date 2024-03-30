@@ -82,11 +82,18 @@ public class HTMLParserService {
         return identifiers;
     }
 
+    /**
+     * Query wrapper for logging
+     *
+     * @param type Type of logging message
+     * @param source Source URL
+     * @return HTML content of source URL
+     * @throws IOException Failed to get url
+     */
     private Document query(MessageBuilder.Type type, SourceURL source) throws IOException {
         Instant start = Instant.now();
-        LOGGER.info(new MessageBuilder(type).addDetails("Querying " + source));
         Document doc = source.query();
-        LOGGER.info(new MessageBuilder(type).setDuration(start));
+        LOGGER.info(new MessageBuilder(type).addDetails("Queried " + source).setDuration(start));
         return doc;
     }
 
@@ -164,6 +171,7 @@ public class HTMLParserService {
                 .addDetails(instID, termID)
                 .addDetails("Found %s subject%s".formatted(identifiers.size(), identifiers.size() == 1 ? "" : "s"))
                 .setDuration(start));
+
         return identifiers;
     }
 

@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * <b>File:</b> RainbowController.java
@@ -37,9 +39,9 @@ public class RainbowController {
      * Util logging method for reporting HTTP failures
      *
      * @param type Log type
-     * @param e HttpStatusException
+     * @param e    HttpStatusException
      */
-    private void reportHTTPAccessError(MessageBuilder.Type type, HttpStatusException e){
+    private void reportHTTPAccessError(MessageBuilder.Type type, HttpStatusException e) {
         MessageBuilder mb = new MessageBuilder(type)
                 .addDetails("Failed to fetch HTML")
                 .addDetails(e.getStatusCode());
@@ -184,30 +186,49 @@ public class RainbowController {
                     .build();
 
             // Parse each subject for courses
-            int numSites = 0;
             List<String> failedSources = new ArrayList<>();
-            List<CourseDTO> courseDTOs = new ArrayList<>();
+            List<CompletableFuture<List<CourseDTO>>> futures = new ArrayList<>();
             for (IdentifierDTO s : subjects) {
+
                 // skip if not in filter
                 if (!cf.validSubject(s.id()))
                     continue;
+
+                // Add async job to queue
                 SourceURL source = new SourceURL(instID, termID, s.id());
-                // Attempt to parse
+                futures.add(CompletableFuture
+                        .supplyAsync(() -> {
+                            try {
+                                // Attempt to parse
+                                return this.htmlParserService.parseCourses(cf, instID, termID, s.id());
+                            } catch (HttpStatusException e) {
+                                // Report html access failure, add to failed sources and continue
+                                reportHTTPAccessError(MessageBuilder.Type.COURSE, e);
+                                LOGGER.warn(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails("Skipping %s".formatted(source)));
+                                failedSources.add(source.toString());
+                            } catch (IOException e) {
+                                // Internal server error, add to failed sources and continue
+                                LOGGER.error(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails(e));
+                                failedSources.add(source.toString());
+                            }
+                            return new ArrayList<>();   // empty results
+                        }));
+            }
+            // Join each thread / wait for each to finish
+            futures.forEach(CompletableFuture::join);
+
+            // Get all results
+            List<CourseDTO> courseDTOs = new ArrayList<>();
+            for (CompletableFuture<List<CourseDTO>> result : futures) {
                 try {
-                    courseDTOs.addAll(this.htmlParserService.parseCourses(cf, instID, termID, s.id()));
-                    numSites += 1;
-                } catch (HttpStatusException e) {
-                    // Report html access failure, add to failed sources and continue
-                    reportHTTPAccessError(MessageBuilder.Type.COURSE, e);
-                    LOGGER.warn(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails("Skipping %s".formatted(source)));
-                    failedSources.add(source.toString());
-                } catch (IOException e) {
-                    // Internal server error, add to failed sources and continue
+                    courseDTOs.addAll(result.get());
+                } catch (ExecutionException | InterruptedException e) {
                     LOGGER.error(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails(e));
-                    failedSources.add(source.toString());
                 }
             }
+
             // Report Success and return results
+            int numSites = futures.size();
             LOGGER.info(new MessageBuilder(MessageBuilder.Type.COURSE)
                     .addDetails("Parsed %s site%s".formatted(numSites, numSites == 1 ? "" : "s"))
                     .setDuration(start));

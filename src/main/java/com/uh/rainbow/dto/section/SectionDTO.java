@@ -13,7 +13,7 @@ import java.util.List;
  * @author Derek Garcia
  */
 public record SectionDTO(String sid, int crn, String instructor, int curr_enrolled, int seats_available,
-                         int failed_meetings, List<String> additional_details, List<MeetingDTO> meetings) {
+                         Integer failed_meetings, List<String> additional_details, List<MeetingDTO> meetings) {
     /**
      * Create new Section DTO with no meetings
      *
@@ -26,6 +26,6 @@ public record SectionDTO(String sid, int crn, String instructor, int curr_enroll
      * @param additional_details additional details for the section
      */
     public SectionDTO(String sid, int crn, String instructor, int curr_enrolled, int seats_available, int failed_meetings, List<String> additional_details) {
-        this(sid, crn, instructor, curr_enrolled, seats_available, failed_meetings == 0 ? null : failed_meetings, additional_details, new ArrayList<>());
+        this(sid, crn, instructor, curr_enrolled, seats_available, failed_meetings == 0 ? null : 1, additional_details, new ArrayList<>());
     }
 }
