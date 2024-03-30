@@ -9,6 +9,12 @@ Launch API service available at http://localhost:8080/v1
 
 API endpoint documentation can be found at [API Endpoints](#api-endpoints)
 
+### Bootstrap Script
+```bash
+# Uses gradle wrapper to build and execute jar
+./bootstrap.sh
+```
+
 ### From Sources
 ```bash
 gradle bootRun    # via Gradle
