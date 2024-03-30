@@ -1,6 +1,7 @@
 package com.uh.rainbow.entities;
 
 import com.uh.rainbow.dto.section.SectionDTO;
+import com.uh.rainbow.util.SourceURL;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -73,8 +74,9 @@ public class Section {
      *
      * @return Section DTO
      */
-    public SectionDTO toDTO() {
+    public SectionDTO toDTO(SourceURL source) {
         SectionDTO sectionDTO = new SectionDTO(
+                source.getSectionURL(this.crn),
                 this.sid,
                 this.crn,
                 this.instructor,

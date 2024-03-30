@@ -197,7 +197,7 @@ public class HTMLParserService {
                         section.getCourse().cid(),
                         new CourseDTO(source, section.getCourse())
                 );
-                courses.get(section.getCourse().cid()).sections().add(section.toDTO());
+                courses.get(section.getCourse().cid()).sections().add(section.toDTO(source));
 
             } catch (SectionNotFoundException e) {
                 LOGGER.info(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails(instID, termID, subjectID).addDetails(e));

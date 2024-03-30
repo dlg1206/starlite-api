@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.uh'
-version = '0.0.0'
+version = '1.0.0'
 
 java {
     sourceCompatibility = '17'
@@ -27,6 +27,3 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
-}
