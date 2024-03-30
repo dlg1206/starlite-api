@@ -1,0 +1,50 @@
+{
+  "timestamp": "2024-03-30T05:46:34.366+00:00",
+  "source": "https://www.sis.hawaii.edu/uhdad/avail.classes",
+  "identifiers": [
+    {
+      "id": "HAW",
+      "name": "Hawaii Community College"
+    },
+    {
+      "id": "HON",
+      "name": "Honolulu Community College"
+    },
+    {
+      "id": "KAP",
+      "name": "Kapi'olani Community College"
+    },
+    {
+      "id": "KAU",
+      "name": "Kauai Community College"
+    },
+    {
+      "id": "LEE",
+      "name": "Leeward Community College"
+    },
+    {
+      "id": "MAU",
+      "name": "University of Hawaii Maui College"
+    },
+    {
+      "id": "WOA",
+      "name": "University of Hawaii West Oahu"
+    },
+    {
+      "id": "HIL",
+      "name": "University of Hawaii at Hilo"
+    },
+    {
+      "id": "MAN",
+      "name": "University of Hawaii at Manoa"
+    },
+    {
+      "id": "WIN",
+      "name": "Windward Community College"
+    },
+    {
+      "id": "SYS",
+      "name": "System-wide Distance Learning"
+    }
+  ]
+}

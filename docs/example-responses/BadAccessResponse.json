@@ -1,0 +1,7 @@
+{
+  "timestamp": "2024-03-30T05:47:45.476+00:00",
+  "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=FOO",
+  "response_code": 403,
+  "response_message": "HTTP error fetching URL. Status=403, URL=[https://www.sis.hawaii.edu/uhdad/avail.classes?i=FOO]",
+  "error_msg": "Failed to access resource at source url; Check to make sure the source url is valid"
+}
