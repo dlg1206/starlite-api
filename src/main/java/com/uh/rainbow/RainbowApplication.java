@@ -16,15 +16,4 @@ public class RainbowApplication {
         SpringApplication.run(RainbowApplication.class, args);
     }
 
-    @Bean
-    public Executor taskExecutor() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(2);
-        executor.setMaxPoolSize(2);
-        executor.setQueueCapacity(500);
-        executor.setThreadNamePrefix("Test-");
-        executor.initialize();
-        return executor;
-    }
-
 }
