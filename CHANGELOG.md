@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/dlg1206/rainbows-api/compare/v0.4.4...v1.0.0) (2024-03-30)
+
+
+### Features
+
+* add section url to response ([bc9bdf6](https://github.com/dlg1206/rainbows-api/commit/bc9bdf65f871a0112b8a574d060faab8ddf16cde))
+
 ### [0.4.4](https://github.com/dlg1206/rainbows-api/compare/v0.4.3...v0.4.4) (2024-03-30)
 
 ### [0.4.3](https://github.com/dlg1206/rainbows-api/compare/v0.4.2...v0.4.3) (2024-03-29)
