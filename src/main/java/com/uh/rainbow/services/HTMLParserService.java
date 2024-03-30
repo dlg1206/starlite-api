@@ -82,20 +82,6 @@ public class HTMLParserService {
         return identifiers;
     }
 
-    /**
-     * Query wrapper for logging
-     *
-     * @param type Type of logging message
-     * @param source Source URL
-     * @return HTML content of source URL
-     * @throws IOException Failed to get url
-     */
-    private Document query(MessageBuilder.Type type, SourceURL source) throws IOException {
-        Instant start = Instant.now();
-        Document doc = source.query();
-        LOGGER.info(new MessageBuilder(type).addDetails("Queried " + source).setDuration(start));
-        return doc;
-    }
 
     /**
      * Parse the list of UH institutions
@@ -107,11 +93,13 @@ public class HTMLParserService {
         List<IdentifierDTO> identifiers = new ArrayList<>();
         Instant start = Instant.now();
         // Get list
-        Document doc = query(MessageBuilder.Type.INST, new SourceURL());
+        SourceURL source = new SourceURL();
+        Document doc = source.query();
         doc.select("ul.institutions").select("li").forEach(
                 (item) -> identifiers.add(new IdentifierDTO(item.className(), item.text()))
         );
         LOGGER.info(new MessageBuilder(MessageBuilder.Type.INST)
+                .addDetails(source.toString())
                 .addDetails("Found %s campus%s".formatted(identifiers.size(), identifiers.size() == 1 ? "" : "es"))
                 .setDuration(start));
         return identifiers;
@@ -127,12 +115,13 @@ public class HTMLParserService {
     public List<IdentifierDTO> parseTerms(String instID) throws IOException {
         Instant start = Instant.now();
         // Get terms
-        Document doc = query(MessageBuilder.Type.TERM, new SourceURL(instID));
+        SourceURL source = new SourceURL(instID);
+        Document doc = source.query();
 
         Elements terms = doc.select("ul.terms").select("li");
         List<IdentifierDTO> identifiers = extractIdentifiers(terms, new URLParamExtractor("t=([0-9]*)"));
         LOGGER.info(new MessageBuilder(MessageBuilder.Type.TERM)
-                .addDetails(instID)
+                .addDetails(source)
                 .addDetails("Found %s term%s".formatted(identifiers.size(), identifiers.size() == 1 ? "" : "s"))
                 .setDuration(start));
         return identifiers;
@@ -150,7 +139,8 @@ public class HTMLParserService {
         List<IdentifierDTO> identifiers = new ArrayList<>();
         Instant start = Instant.now();
         // Get each subject col
-        Document doc = query(MessageBuilder.Type.SUBJECT, new SourceURL(instID, termID));
+        SourceURL source = new SourceURL(instID, termID);
+        Document doc = source.query();
 
         Elements leftSubjects = doc
                 .select("div.leftcolumn")
@@ -168,7 +158,7 @@ public class HTMLParserService {
         identifiers.addAll(extractIdentifiers(rightSubjects, upe));
 
         LOGGER.info(new MessageBuilder(MessageBuilder.Type.SUBJECT)
-                .addDetails(instID, termID)
+                .addDetails(source)
                 .addDetails("Found %s subject%s".formatted(identifiers.size(), identifiers.size() == 1 ? "" : "s"))
                 .setDuration(start));
 
@@ -188,7 +178,7 @@ public class HTMLParserService {
         Instant start = Instant.now();
         // Get each subject col
         SourceURL source = new SourceURL(instID, termID, subjectID);
-        Document doc = query(MessageBuilder.Type.COURSE, source);
+        Document doc = source.query();
 
         // Parse all courses
         Map<String, CourseDTO> courses = new HashMap<>();
@@ -207,7 +197,7 @@ public class HTMLParserService {
                         section.getCourse().cid(),
                         new CourseDTO(source, section.getCourse())
                 );
-                courses.get(section.getCourse().cid()).sections().add(section.toDTO());
+                courses.get(section.getCourse().cid()).sections().add(section.toDTO(source));
 
             } catch (SectionNotFoundException e) {
                 LOGGER.info(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails(instID, termID, subjectID).addDetails(e));
@@ -215,7 +205,7 @@ public class HTMLParserService {
         }
 
         LOGGER.info(new MessageBuilder(MessageBuilder.Type.COURSE)
-                .addDetails(instID, termID, subjectID)
+                .addDetails(source)
                 .addDetails("Found %s course%s".formatted(courses.size(), courses.size() == 1 ? "" : "s"))
                 .setDuration(start));
 

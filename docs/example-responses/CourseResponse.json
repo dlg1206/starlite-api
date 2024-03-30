@@ -1,0 +1,2464 @@
+{
+  "timestamp": "2024-03-30T06:59:20.591+00:00",
+  "courses": [
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 101",
+      "name": "Tools for the Info World",
+      "credits": "4",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75380",
+          "sid": "001",
+          "crn": 75380,
+          "instructor": "Michael-Brian C Ogawa",
+          "curr_enrolled": 0,
+          "seats_available": 34,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "TUESDAY",
+              "room": "Spalding Hall SPAL 155",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "FRIDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "12:00 PM",
+              "end_time": "01:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "TBA",
+              "room": "Online Online Asynchronous",
+              "start_time": "TBA",
+              "end_time": "TBA",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        },
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75381",
+          "sid": "002",
+          "crn": 75381,
+          "instructor": "Michael-Brian C Ogawa",
+          "curr_enrolled": 0,
+          "seats_available": 34,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "TUESDAY",
+              "room": "Spalding Hall SPAL 155",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "TUESDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "12:00 PM",
+              "end_time": "01:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "TBA",
+              "room": "Online Online Asynchronous",
+              "start_time": "TBA",
+              "end_time": "TBA",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        },
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75382",
+          "sid": "003",
+          "crn": 75382,
+          "instructor": "Michael-Brian C Ogawa",
+          "curr_enrolled": 0,
+          "seats_available": 34,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "TUESDAY",
+              "room": "Spalding Hall SPAL 155",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "TBA",
+              "room": "Online Online Asynchronous",
+              "start_time": "TBA",
+              "end_time": "TBA",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        },
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75383",
+          "sid": "004",
+          "crn": 75383,
+          "instructor": "Michael-Brian C Ogawa",
+          "curr_enrolled": 0,
+          "seats_available": 34,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "TUESDAY",
+              "room": "Spalding Hall SPAL 155",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "TBA",
+              "room": "Online Online Asynchronous",
+              "start_time": "TBA",
+              "end_time": "TBA",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        },
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75384",
+          "sid": "005",
+          "crn": 75384,
+          "instructor": "Michael-Brian C Ogawa",
+          "curr_enrolled": 0,
+          "seats_available": 34,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "TUESDAY",
+              "room": "Spalding Hall SPAL 155",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "FRIDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "03:00 PM",
+              "end_time": "04:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "TBA",
+              "room": "Online Online Asynchronous",
+              "start_time": "TBA",
+              "end_time": "TBA",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        },
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75385",
+          "sid": "006",
+          "crn": 75385,
+          "instructor": "Michael-Brian C Ogawa",
+          "curr_enrolled": 0,
+          "seats_available": 34,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "TUESDAY",
+              "room": "Spalding Hall SPAL 155",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "THURSDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "12:00 PM",
+              "end_time": "01:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "TBA",
+              "room": "Online Online Asynchronous",
+              "start_time": "TBA",
+              "end_time": "TBA",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        },
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75386",
+          "sid": "007",
+          "crn": 75386,
+          "instructor": "Michael-Brian C Ogawa",
+          "curr_enrolled": 0,
+          "seats_available": 34,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "TUESDAY",
+              "room": "Spalding Hall SPAL 155",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "FRIDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "TBA",
+              "room": "Online Online Asynchronous",
+              "start_time": "TBA",
+              "end_time": "TBA",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        },
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75387",
+          "sid": "008",
+          "crn": 75387,
+          "instructor": "Michael-Brian C Ogawa",
+          "curr_enrolled": 0,
+          "seats_available": 34,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "TUESDAY",
+              "room": "Spalding Hall SPAL 155",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "FRIDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "TBA",
+              "room": "Online Online Asynchronous",
+              "start_time": "TBA",
+              "end_time": "TBA",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 110P",
+      "name": "Programming: Python",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=74748",
+          "sid": "001",
+          "crn": 74748,
+          "instructor": "Kyungim Baek",
+          "curr_enrolled": 0,
+          "seats_available": 40,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "03:00 PM",
+              "end_time": "04:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "03:00 PM",
+              "end_time": "04:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 111",
+      "name": "Intro to Computer Science I",
+      "credits": "4",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=71968",
+          "sid": "001",
+          "crn": 71968,
+          "instructor": "Carleton A Moore",
+          "curr_enrolled": 0,
+          "seats_available": 37,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Art Building Art 132",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "TUESDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Art Building Art 132",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "THURSDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        },
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=71969",
+          "sid": "002",
+          "crn": 71969,
+          "instructor": "Carleton A Moore",
+          "curr_enrolled": 0,
+          "seats_available": 37,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Art Building Art 132",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "MONDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Art Building Art 132",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        },
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75388",
+          "sid": "003",
+          "crn": 75388,
+          "instructor": "Carleton A Moore",
+          "curr_enrolled": 0,
+          "seats_available": 37,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Art Building Art 132",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "TUESDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "04:30 PM",
+              "end_time": "05:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Art Building Art 132",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "THURSDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "04:30 PM",
+              "end_time": "05:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        },
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=72304",
+          "sid": "004",
+          "crn": 72304,
+          "instructor": "Carleton A Moore",
+          "curr_enrolled": 0,
+          "seats_available": 37,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Art Building Art 132",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "MONDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "04:30 PM",
+              "end_time": "05:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Art Building Art 132",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "04:30 PM",
+              "end_time": "05:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        },
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73141",
+          "sid": "005",
+          "crn": 73141,
+          "instructor": "Carleton A Moore",
+          "curr_enrolled": 0,
+          "seats_available": 37,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Art Building Art 132",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "TUESDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Art Building Art 132",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "THURSDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        },
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73142",
+          "sid": "006",
+          "crn": 73142,
+          "instructor": "Carleton A Moore",
+          "curr_enrolled": 0,
+          "seats_available": 37,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Art Building Art 132",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "TUESDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "03:00 PM",
+              "end_time": "04:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Art Building Art 132",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "THURSDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "03:00 PM",
+              "end_time": "04:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        },
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73579",
+          "sid": "007",
+          "crn": 73579,
+          "instructor": "Carleton A Moore",
+          "curr_enrolled": 0,
+          "seats_available": 37,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Art Building Art 132",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Art Building Art 132",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "FRIDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 141",
+      "name": "Discrete Math for CS I",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=72618",
+          "sid": "001",
+          "crn": 72618,
+          "instructor": "Depeng Li",
+          "curr_enrolled": 0,
+          "seats_available": 40,
+          "failed_meetings": 0,
+          "additional_details": [
+            "FQ"
+          ],
+          "meetings": [
+            {
+              "day": "TUESDAY",
+              "room": "Marine Science Building Room 114",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "THURSDAY",
+              "room": "Marine Science Building Room 114",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "FRIDAY",
+              "room": "Crawford Hall Room 115",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        },
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=72619",
+          "sid": "002",
+          "crn": 72619,
+          "instructor": "Depeng Li",
+          "curr_enrolled": 0,
+          "seats_available": 40,
+          "failed_meetings": 0,
+          "additional_details": [
+            "FQ"
+          ],
+          "meetings": [
+            {
+              "day": "TUESDAY",
+              "room": "Marine Science Building Room 114",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "THURSDAY",
+              "room": "Marine Science Building Room 114",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "FRIDAY",
+              "room": "Art Building ART 101",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 211",
+      "name": "Intro to Computer Science II",
+      "credits": "4",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=72171",
+          "sid": "001",
+          "crn": 72171,
+          "instructor": "Edoardo Biagioni",
+          "curr_enrolled": 0,
+          "seats_available": 32,
+          "failed_meetings": 0,
+          "additional_details": [
+            "NI"
+          ],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Bilger Hall Room 152",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "TUESDAY",
+              "room": "Pacific Ocean Science & Tech Room 319",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Bilger Hall Room 152",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "THURSDAY",
+              "room": "Pacific Ocean Science & Tech Room 319",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        },
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73788",
+          "sid": "002",
+          "crn": 73788,
+          "instructor": "Edoardo Biagioni",
+          "curr_enrolled": 0,
+          "seats_available": 32,
+          "failed_meetings": 0,
+          "additional_details": [
+            "NI"
+          ],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Bilger Hall Room 152",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "TUESDAY",
+              "room": "Pacific Ocean Science & Tech Room 319",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Bilger Hall Room 152",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "THURSDAY",
+              "room": "Pacific Ocean Science & Tech Room 319",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        },
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=76369",
+          "sid": "003",
+          "crn": 76369,
+          "instructor": "Edoardo Biagioni",
+          "curr_enrolled": 0,
+          "seats_available": 32,
+          "failed_meetings": 0,
+          "additional_details": [
+            "NI"
+          ],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Bilger Hall Room 152",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "TUESDAY",
+              "room": "Pacific Ocean Science & Tech Room 319",
+              "start_time": "03:00 PM",
+              "end_time": "04:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Bilger Hall Room 152",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "THURSDAY",
+              "room": "Pacific Ocean Science & Tech Room 319",
+              "start_time": "03:00 PM",
+              "end_time": "04:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        },
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=76370",
+          "sid": "004",
+          "crn": 76370,
+          "instructor": "Edoardo Biagioni",
+          "curr_enrolled": 0,
+          "seats_available": 32,
+          "failed_meetings": 0,
+          "additional_details": [
+            "NI"
+          ],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Bilger Hall Room 152",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "MONDAY",
+              "room": "Pacific Ocean Science & Tech Room 319",
+              "start_time": "04:30 PM",
+              "end_time": "05:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Bilger Hall Room 152",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Pacific Ocean Science & Tech Room 319",
+              "start_time": "04:30 PM",
+              "end_time": "05:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 212",
+      "name": "Program Structure",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=72851",
+          "sid": "001",
+          "crn": 72851,
+          "instructor": "Ravi Narayan",
+          "curr_enrolled": 0,
+          "seats_available": 40,
+          "failed_meetings": 0,
+          "additional_details": [
+            "NI"
+          ],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Pacific Ocean Science & Tech Room 127",
+              "start_time": "06:00 PM",
+              "end_time": "08:30 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Pacific Ocean Science & Tech Room 319",
+              "start_time": "06:00 PM",
+              "end_time": "07:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        },
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=74533",
+          "sid": "002",
+          "crn": 74533,
+          "instructor": "Ravi Narayan",
+          "curr_enrolled": 0,
+          "seats_available": 40,
+          "failed_meetings": 0,
+          "additional_details": [
+            "NI"
+          ],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Pacific Ocean Science & Tech Room 127",
+              "start_time": "06:00 PM",
+              "end_time": "08:30 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Pacific Ocean Science & Tech Room 319",
+              "start_time": "07:30 PM",
+              "end_time": "08:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        },
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=77980",
+          "sid": "003",
+          "crn": 77980,
+          "instructor": "To Be Announced",
+          "curr_enrolled": 0,
+          "seats_available": 40,
+          "failed_meetings": 0,
+          "additional_details": [
+            "NI"
+          ],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Kuykendall Hall Room 310",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "MONDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Kuykendall Hall Room 310",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 222",
+      "name": "Basic Concepts of Comp. Sci.",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73741",
+          "sid": "001",
+          "crn": 73741,
+          "instructor": "Peter-Michael Seidel",
+          "curr_enrolled": 0,
+          "seats_available": 30,
+          "failed_meetings": 0,
+          "additional_details": [
+            "NI"
+          ],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Keller Hall Room 403",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Keller Hall Room 403",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 235",
+      "name": "Machine Learning Methods",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=76004",
+          "sid": "001",
+          "crn": 76004,
+          "instructor": "Kyungim Baek",
+          "curr_enrolled": 0,
+          "seats_available": 30,
+          "failed_meetings": 0,
+          "additional_details": [
+            "NI"
+          ],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Kuykendall Hall Room 305",
+              "start_time": "12:00 PM",
+              "end_time": "01:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Kuykendall Hall Room 305",
+              "start_time": "12:00 PM",
+              "end_time": "01:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 241",
+      "name": "Discrete Mathematics II",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=70592",
+          "sid": "001",
+          "crn": 70592,
+          "instructor": "Depeng Li",
+          "curr_enrolled": 0,
+          "seats_available": 40,
+          "failed_meetings": 0,
+          "additional_details": [
+            "NI"
+          ],
+          "meetings": [
+            {
+              "day": "TUESDAY",
+              "room": "Spalding Hall SPAL 155",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "THURSDAY",
+              "room": "Spalding Hall SPAL 155",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "FRIDAY",
+              "room": "Agricultural Science Room 204",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        },
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=72172",
+          "sid": "002",
+          "crn": 72172,
+          "instructor": "Depeng Li",
+          "curr_enrolled": 0,
+          "seats_available": 40,
+          "failed_meetings": 0,
+          "additional_details": [
+            "NI"
+          ],
+          "meetings": [
+            {
+              "day": "TUESDAY",
+              "room": "Spalding Hall SPAL 155",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "THURSDAY",
+              "room": "Spalding Hall SPAL 155",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "FRIDAY",
+              "room": "Marine Science Building Room 114",
+              "start_time": "03:00 PM",
+              "end_time": "04:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 296",
+      "name": "Sophomore Project Restriction: Instructor Approval",
+      "credits": "1",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=77795",
+          "sid": "001",
+          "crn": 77795,
+          "instructor": "Guylaine Poisson",
+          "curr_enrolled": 0,
+          "seats_available": 10,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "TBA",
+              "room": "Online Online Synchronous",
+              "start_time": "TBA",
+              "end_time": "TBA",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 311",
+      "name": "Algorithms",
+      "credits": "4",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=78003",
+          "sid": "001",
+          "crn": 78003,
+          "instructor": "David B Conner",
+          "curr_enrolled": 0,
+          "seats_available": 60,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "TBA",
+              "room": "Online Online Asynchronous",
+              "start_time": "TBA",
+              "end_time": "TBA",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        },
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=78004",
+          "sid": "002",
+          "crn": 78004,
+          "instructor": "David B Conner",
+          "curr_enrolled": 0,
+          "seats_available": 57,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "TBA",
+              "room": "Online Online Asynchronous",
+              "start_time": "TBA",
+              "end_time": "TBA",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 312",
+      "name": "Machine-Lvl & Systems Programg Restriction: Major",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=77483",
+          "sid": "001",
+          "crn": 77483,
+          "instructor": "Peter-Michael Seidel",
+          "curr_enrolled": 0,
+          "seats_available": 60,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Bilger Hall Room 335",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Bilger Hall Room 335",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 313",
+      "name": "Programming Language Theory",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=74077",
+          "sid": "001",
+          "crn": 74077,
+          "instructor": "David B Conner",
+          "curr_enrolled": 0,
+          "seats_available": 55,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "TUESDAY",
+              "room": "Kuykendall Hall Room 306",
+              "start_time": "12:00 PM",
+              "end_time": "01:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "THURSDAY",
+              "room": "Kuykendall Hall Room 306",
+              "start_time": "12:00 PM",
+              "end_time": "01:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 314",
+      "name": "Software Engineering I",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73432",
+          "sid": "001",
+          "crn": 73432,
+          "instructor": "Carleton A Moore",
+          "curr_enrolled": 0,
+          "seats_available": 40,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "TUESDAY",
+              "room": "Pacific Ocean Science & Tech Room 319",
+              "start_time": "12:00 PM",
+              "end_time": "01:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "THURSDAY",
+              "room": "Pacific Ocean Science & Tech Room 319",
+              "start_time": "12:00 PM",
+              "end_time": "01:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        },
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73743",
+          "sid": "002",
+          "crn": 73743,
+          "instructor": "David B Conner",
+          "curr_enrolled": 0,
+          "seats_available": 40,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "TUESDAY",
+              "room": "Pacific Ocean Science & Tech Room 319",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "THURSDAY",
+              "room": "Pacific Ocean Science & Tech Room 319",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        },
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=78038",
+          "sid": "004",
+          "crn": 78038,
+          "instructor": "Daniel Port",
+          "curr_enrolled": 0,
+          "seats_available": 40,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Pacific Ocean Science & Tech Room 319",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Pacific Ocean Science & Tech Room 319",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        },
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=78228",
+          "sid": "005",
+          "crn": 78228,
+          "instructor": "Chad M Morita",
+          "curr_enrolled": 0,
+          "seats_available": 40,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "TUESDAY",
+              "room": "Pacific Ocean Science & Tech Room 319",
+              "start_time": "06:00 PM",
+              "end_time": "07:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "THURSDAY",
+              "room": "Pacific Ocean Science & Tech Room 319",
+              "start_time": "06:00 PM",
+              "end_time": "07:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 321",
+      "name": "Database Systems I",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=70593",
+          "sid": "001",
+          "crn": 70593,
+          "instructor": "Richard P Halverson",
+          "curr_enrolled": 0,
+          "seats_available": 60,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "TBA",
+              "room": "Online Online Asynchronous",
+              "start_time": "TBA",
+              "end_time": "TBA",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 332",
+      "name": "Operating Systems",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=72620",
+          "sid": "001",
+          "crn": 72620,
+          "instructor": "Chad M Morita",
+          "curr_enrolled": 0,
+          "seats_available": 60,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "TUESDAY",
+              "room": "Kuykendall Hall Room 209",
+              "start_time": "07:20 PM",
+              "end_time": "08:35 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "THURSDAY",
+              "room": "Kuykendall Hall Room 209",
+              "start_time": "07:20 PM",
+              "end_time": "08:35 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 355",
+      "name": "Security and Trust I",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=77484",
+          "sid": "001",
+          "crn": 77484,
+          "instructor": "Dusko Pavlovic",
+          "curr_enrolled": 0,
+          "seats_available": 30,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "FRIDAY",
+              "room": "Pacific Ocean Science & Tech Room 319",
+              "start_time": "01:30 PM",
+              "end_time": "04:00 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 361",
+      "name": "AI Programming",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=79217",
+          "sid": "001",
+          "crn": 79217,
+          "instructor": "Kimberly A Binsted",
+          "curr_enrolled": 0,
+          "seats_available": 40,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Kuykendall Hall Room 310",
+              "start_time": "12:00 PM",
+              "end_time": "01:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Kuykendall Hall Room 310",
+              "start_time": "12:00 PM",
+              "end_time": "01:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 390",
+      "name": "Computing Ethics for LAs Restriction: Instructor Approval",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=71456",
+          "sid": "001",
+          "crn": 71456,
+          "instructor": "Martha E Crosby",
+          "curr_enrolled": 0,
+          "seats_available": 26,
+          "failed_meetings": 0,
+          "additional_details": [
+            "ETH,OC,WI"
+          ],
+          "meetings": [
+            {
+              "day": "TUESDAY",
+              "room": "Pacific Ocean Science & Tech Room 302",
+              "start_time": "04:30 PM",
+              "end_time": "05:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "TBA",
+              "room": "Online Online Synchronous",
+              "start_time": "TBA",
+              "end_time": "TBA",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 396",
+      "name": "Junior Project Restriction: Instructor Approval",
+      "credits": "2",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=77796",
+          "sid": "001",
+          "crn": 77796,
+          "instructor": "Guylaine Poisson",
+          "curr_enrolled": 0,
+          "seats_available": 10,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Pacific Ocean Science & Tech Room 318A",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "TBA",
+              "room": "Online Online Synchronous",
+              "start_time": "TBA",
+              "end_time": "TBA",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 414",
+      "name": "Software Engineering II",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=72621",
+          "sid": "001",
+          "crn": 72621,
+          "instructor": "Carleton A Moore",
+          "curr_enrolled": 0,
+          "seats_available": 40,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Kuykendall Hall Room 305",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Kuykendall Hall Room 305",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 422",
+      "name": "Network Science Methodology",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=77485",
+          "sid": "001",
+          "crn": 77485,
+          "instructor": "Daniel D Suthers",
+          "curr_enrolled": 0,
+          "seats_available": 20,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "TUESDAY",
+              "room": "Online Online Synchronous",
+              "start_time": "03:00 PM",
+              "end_time": "04:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "THURSDAY",
+              "room": "Online Online Synchronous",
+              "start_time": "03:00 PM",
+              "end_time": "04:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 426",
+      "name": "Computer System Security",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=79454",
+          "sid": "001",
+          "crn": 79454,
+          "instructor": "David J Stevens",
+          "curr_enrolled": 0,
+          "seats_available": 30,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "TBA",
+              "room": "Online Online Asynchronous",
+              "start_time": "TBA",
+              "end_time": "TBA",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 432",
+      "name": "Concurrent Programming",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=79267",
+          "sid": "001",
+          "crn": 79267,
+          "instructor": "Henri Casanova",
+          "curr_enrolled": 0,
+          "seats_available": 30,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "TUESDAY",
+              "room": "Holmes Hall Room 243",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "THURSDAY",
+              "room": "Holmes Hall Room 243",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 438",
+      "name": "Big Data Analytics",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=76316",
+          "sid": "001",
+          "crn": 76316,
+          "instructor": "Mahdi Belcaid",
+          "curr_enrolled": 0,
+          "seats_available": 30,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "TUESDAY",
+              "room": "Holmes Hall Room 247",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "THURSDAY",
+              "room": "Holmes Hall Room 247",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 451",
+      "name": "Data Networks",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73742",
+          "sid": "001",
+          "crn": 73742,
+          "instructor": "Ravi Narayan",
+          "curr_enrolled": 0,
+          "seats_available": 54,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "THURSDAY",
+              "room": "Pacific Ocean Science & Tech Room 126",
+              "start_time": "06:00 PM",
+              "end_time": "08:30 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 466",
+      "name": "Design for Mobile Devices",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=77489",
+          "sid": "001",
+          "crn": 77489,
+          "instructor": "Kimberly A Binsted",
+          "curr_enrolled": 0,
+          "seats_available": 25,
+          "failed_meetings": 0,
+          "additional_details": [
+            "OC,WI"
+          ],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Holmes Hall Room 242",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Holmes Hall Room 242",
+              "start_time": "10:30 AM",
+              "end_time": "11:45 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 481",
+      "name": "Intro to Computer Graphics",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=79219",
+          "sid": "001",
+          "crn": 79219,
+          "instructor": "Kaveh Kardan",
+          "curr_enrolled": 0,
+          "seats_available": 30,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Keller Hall Keller 103",
+              "start_time": "12:00 PM",
+              "end_time": "01:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Keller Hall Keller 103",
+              "start_time": "12:00 PM",
+              "end_time": "01:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 484",
+      "name": "Data Visualization",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=76429",
+          "sid": "001",
+          "crn": 76429,
+          "instructor": "Nurit Kirshenbaum",
+          "curr_enrolled": 0,
+          "seats_available": 15,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "TUESDAY",
+              "room": "Keller Hall Keller 103",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "THURSDAY",
+              "room": "Keller Hall Keller 103",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 486",
+      "name": "Virtual & Augmntd Reality Prog",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=76306",
+          "sid": "001",
+          "crn": 76306,
+          "instructor": "Jason Leigh",
+          "curr_enrolled": 0,
+          "seats_available": 15,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "WEDNESDAY",
+              "room": "Keller Hall Keller 103",
+              "start_time": "03:00 PM",
+              "end_time": "05:30 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 491",
+      "name": "Special Topics (Software Techniques for Computer Visual Effects)",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=79220",
+          "sid": "001",
+          "crn": 79220,
+          "instructor": "Kaveh Kardan",
+          "curr_enrolled": 0,
+          "seats_available": 30,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Keller Hall Keller 103",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Keller Hall Keller 103",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 496",
+      "name": "Capstone Project Restriction: Major",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=76317",
+          "sid": "001",
+          "crn": 76317,
+          "instructor": "Anthony S Peruma",
+          "curr_enrolled": 0,
+          "seats_available": 30,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Pacific Ocean Science & Tech Room 319",
+              "start_time": "03:00 PM",
+              "end_time": "04:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Pacific Ocean Science & Tech Room 319",
+              "start_time": "03:00 PM",
+              "end_time": "04:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 621",
+      "name": "Analysis of Algorithms",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=79433",
+          "sid": "001",
+          "crn": 79433,
+          "instructor": "Nodar S Sitchinava",
+          "curr_enrolled": 0,
+          "seats_available": 20,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "FRIDAY",
+              "room": "Sakamaki Hall Sakamaki Hall Room A102",
+              "start_time": "01:30 PM",
+              "end_time": "04:00 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 622",
+      "name": "Network Science",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=77488",
+          "sid": "001",
+          "crn": 77488,
+          "instructor": "Daniel D Suthers",
+          "curr_enrolled": 0,
+          "seats_available": 15,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "TUESDAY",
+              "room": "Online Online Synchronous",
+              "start_time": "03:00 PM",
+              "end_time": "04:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "THURSDAY",
+              "room": "Online Online Synchronous",
+              "start_time": "03:00 PM",
+              "end_time": "04:15 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 637",
+      "name": "Deep Learning with Neural Nets",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=79449",
+          "sid": "001",
+          "crn": 79449,
+          "instructor": "Peter J Sadowski",
+          "curr_enrolled": 0,
+          "seats_available": 20,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "TUESDAY",
+              "room": "Holmes Hall Room 242",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "THURSDAY",
+              "room": "Holmes Hall Room 242",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 639",
+      "name": "Human-Centered AI",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=79223",
+          "sid": "001",
+          "crn": 79223,
+          "instructor": "Peter Y Washington",
+          "curr_enrolled": 0,
+          "seats_available": 20,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Pacific Ocean Science & Tech Room 319",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Pacific Ocean Science & Tech Room 319",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 651",
+      "name": "Computer Networks Restriction: Major",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=79434",
+          "sid": "001",
+          "crn": 79434,
+          "instructor": "Edoardo Biagioni",
+          "curr_enrolled": 0,
+          "seats_available": 20,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Pacific Ocean Science & Tech Room 319",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Pacific Ocean Science & Tech Room 319",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 660",
+      "name": "Computer Architecture I",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=79523",
+          "sid": "001",
+          "crn": 79523,
+          "instructor": "Liuwan Zhu",
+          "curr_enrolled": 0,
+          "seats_available": 15,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "MONDAY",
+              "room": "Holmes Hall Room 248",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "WEDNESDAY",
+              "room": "Holmes Hall Room 248",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 684",
+      "name": "Advanced Data Visualization",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=77900",
+          "sid": "001",
+          "crn": 77900,
+          "instructor": "Nurit Kirshenbaum",
+          "curr_enrolled": 0,
+          "seats_available": 7,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "TUESDAY",
+              "room": "Keller Hall Keller 103",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "THURSDAY",
+              "room": "Keller Hall Keller 103",
+              "start_time": "09:00 AM",
+              "end_time": "10:15 AM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 685",
+      "name": "Virtual and Augmented Reality Restriction: Instructor Approval",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=76730",
+          "sid": "001",
+          "crn": 76730,
+          "instructor": "Jason Leigh",
+          "curr_enrolled": 0,
+          "seats_available": 7,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "WEDNESDAY",
+              "room": "Keller Hall Keller 103",
+              "start_time": "03:00 PM",
+              "end_time": "05:30 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 690",
+      "name": "Seminar",
+      "credits": "1",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=70599",
+          "sid": "001",
+          "crn": 70599,
+          "instructor": "Peter J Sadowski",
+          "curr_enrolled": 0,
+          "seats_available": 30,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "THURSDAY",
+              "room": "Holmes Hall Room 243",
+              "start_time": "04:30 PM",
+              "end_time": "05:30 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 691G",
+      "name": "Topics in CS: General (Software Security)",
+      "credits": "3",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=79221",
+          "sid": "001",
+          "crn": 79221,
+          "instructor": "To Be Announced",
+          "curr_enrolled": 0,
+          "seats_available": 20,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "TUESDAY",
+              "room": "Holmes Hall Room 248",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            },
+            {
+              "day": "THURSDAY",
+              "room": "Holmes Hall Room 248",
+              "start_time": "01:30 PM",
+              "end_time": "02:45 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202510&s=ICS",
+      "cid": "ICS 692",
+      "name": "Topics Seminar (Artificial Intelligence)",
+      "credits": "2",
+      "sections": [
+        {
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=78151",
+          "sid": "001",
+          "crn": 78151,
+          "instructor": "Peter J Sadowski",
+          "curr_enrolled": 0,
+          "seats_available": 20,
+          "failed_meetings": 0,
+          "additional_details": [],
+          "meetings": [
+            {
+              "day": "FRIDAY",
+              "room": "Keller Hall Keller 103",
+              "start_time": "12:00 PM",
+              "end_time": "01:30 PM",
+              "start_date": "08/26",
+              "end_date": "12/20"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "failed_sources": null
+}

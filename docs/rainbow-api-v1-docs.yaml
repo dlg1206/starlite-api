@@ -1,0 +1,270 @@
+_type: export
+__export_format: 4
+__export_date: 2024-03-30T05:21:54.725Z
+__export_source: insomnia.desktop.app:v8.6.1
+resources:
+  - _id: req_3779424c0486424b9739c33887354e12
+    parentId: wrk_scratchpad
+    modified: 1711773104560
+    created: 1711773004440
+    url: localhost:8080/v1/campuses
+    name: Get Campuses
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1711773004440
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: wrk_scratchpad
+    parentId: null
+    modified: 1711773899729
+    created: 1704494307683
+    name: Scratch Pad
+    description: |-
+      # Rainbow API v1
+
+      API documentation for Rainbow API
+    scope: collection
+    _type: workspace
+  - _id: req_5cdb78f8f90b4e21a9b8b33ecc2f73d8
+    parentId: wrk_scratchpad
+    modified: 1711773356548
+    created: 1711773065059
+    url: localhost:8080/v1/campuses/:instID/terms
+    name: Get Terms
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1711773004390
+    isPrivate: false
+    pathParameters:
+      - name: instID
+        value: ""
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_17fb5a63f13c4910b58cffd2aaae0d93
+    parentId: wrk_scratchpad
+    modified: 1711773383283
+    created: 1711773298646
+    url: localhost:8080/v1/campuses/:instID/terms/:termID/subjects
+    name: Get Subjects
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1711773004340
+    isPrivate: false
+    pathParameters:
+      - name: instID
+        value: ""
+      - name: termID
+        value: ""
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_abc0044ca17446ae97c80b18d5e48507
+    parentId: wrk_scratchpad
+    modified: 1711773694346
+    created: 1711773445039
+    url: localhost:8080/v1/campuses/:instID/terms/:termID/subjects/:subjectID
+    name: Get Courses ( /subjects )
+    description: ""
+    method: GET
+    body: {}
+    parameters:
+      - id: pair_7134379a3309461cb75e1f159db5eecb
+        name: crn
+        value: ""
+        description: List of Course Reference Numbers to filter by
+        disabled: true
+        type: text
+        multiline: false
+      - id: pair_5d27e06407d64ba1b4586b6455c912b9
+        name: code
+        value: ""
+        description: List of course codes to filter by. '*' wild card can be used ie 1**
+          -> 101, 102, 110 etc
+        disabled: true
+      - id: pair_a804df06778140cdacf800f38f65f8a0
+        name: start_after
+        value: ""
+        description: Earliest time a class can start in 24hr format
+        disabled: true
+      - id: pair_885abd3cb1f34a4c962c02ae5b648d10
+        name: end_before
+        value: ""
+        description: Latest time a class can run in 24hr format
+        disabled: true
+      - id: pair_c74ac7ba8dab496399c5f41862121e34
+        name: online
+        value: ""
+        description: Only classes online sections
+        disabled: true
+      - id: pair_7e07d25891bb49328827b0f8fcf00559
+        name: sync
+        value: ""
+        description: Only synchronous sections
+        disabled: true
+      - id: pair_9e2b1f02e7d04b6dab120dd990334fe1
+        name: day
+        value: ""
+        description: UH day of week codes to filter by. Append with '!' to inverse
+          search ie !M -> get all sections not on Monday
+        disabled: true
+      - id: pair_6a2279c067ad47f8aeb76aa3b7ac351e
+        name: instructor
+        value: ""
+        description: Instructors to filter by. Append with '!' to inverse search ie !foo
+          -> get all sections that don't have instructor 'foo'
+        disabled: true
+      - id: pair_424303cc55cd4dcd81e784e0752f3a9f
+        name: keyword
+        value: ""
+        description: Keywords to filter course names by. Append with '!' to inverse
+          search ie !foo -> get all courses that don't have 'foo' in the name
+        disabled: true
+    headers: []
+    authentication: {}
+    metaSortKey: -1711773004290
+    isPrivate: false
+    pathParameters:
+      - name: instID
+        value: ""
+      - name: termID
+        value: ""
+      - name: subjectID
+        value: ""
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_3690673048d14c2b967c0371d1c4cbf0
+    parentId: wrk_scratchpad
+    modified: 1711776086499
+    created: 1711773711688
+    url: localhost:8080/v1/campuses/:instID/terms/:termID/courses
+    name: Get Courses ( /courses )
+    description: ""
+    method: GET
+    body: {}
+    parameters:
+      - id: pair_7134379a3309461cb75e1f159db5eecb
+        name: crn
+        value: ""
+        description: List of Course Reference Numbers to filter by
+        disabled: true
+        type: text
+        multiline: false
+      - id: pair_5d27e06407d64ba1b4586b6455c912b9
+        name: sub
+        value: ""
+        description: List of Subjects to filter by
+        disabled: true
+      - id: pair_a804df06778140cdacf800f38f65f8a0
+        name: code
+        value: ""
+        description: List of course codes to filter by. '*' wild card can be used ie 1**
+          -> 101, 102, 110 etc
+        disabled: true
+      - id: pair_885abd3cb1f34a4c962c02ae5b648d10
+        name: start_after
+        value: ""
+        description: Earliest time a class can start in 24hr format
+        disabled: true
+      - id: pair_c74ac7ba8dab496399c5f41862121e34
+        name: end_before
+        value: ""
+        description: Latest time a class can run in 24hr format
+        disabled: true
+      - id: pair_7e07d25891bb49328827b0f8fcf00559
+        name: online
+        value: ""
+        description: Only classes online sections
+        disabled: true
+      - id: pair_9e2b1f02e7d04b6dab120dd990334fe1
+        name: sync
+        value: ""
+        description: Only synchronous sections
+        disabled: true
+      - id: pair_6a2279c067ad47f8aeb76aa3b7ac351e
+        name: day
+        value: ""
+        description: UH day of week codes to filter by. Append with '!' to inverse
+          search ie !M -> get all sections not on Monday
+        disabled: true
+      - id: pair_424303cc55cd4dcd81e784e0752f3a9f
+        name: instructor
+        value: ""
+        description: Instructors to filter by. Append with '!' to inverse search ie !foo
+          -> get all sections that don't have instructor 'foo'
+        disabled: true
+      - id: pair_1825e378c8584d218892cc87aba2fb95
+        name: keyword
+        value: ""
+        description: Keywords to filter course names by. Append with '!' to inverse
+          search ie !foo -> get all courses that don't have 'foo' in the name
+        disabled: true
+    headers: []
+    authentication: {}
+    metaSortKey: -1711773004240
+    isPrivate: false
+    pathParameters:
+      - name: instID
+        value: ""
+      - name: termID
+        value: ""
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: env_99d30891da4bdcebc63947a8fc17f076de878684
+    parentId: wrk_scratchpad
+    modified: 1711500570979
+    created: 1704494396656
+    name: Base Environment
+    data:
+      rainbow_api: http://localhost:8080/v1
+    dataPropertyOrder:
+      "&":
+        - rainbow_api
+    color: null
+    isPrivate: false
+    metaSortKey: 1704494396657
+    _type: environment
+  - _id: jar_99d30891da4bdcebc63947a8fc17f076de878684
+    parentId: wrk_scratchpad
+    modified: 1704494396672
+    created: 1704494396672
+    name: Default Jar
+    cookies: []
+    _type: cookie_jar

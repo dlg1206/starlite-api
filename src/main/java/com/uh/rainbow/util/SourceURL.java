@@ -16,7 +16,8 @@ import java.util.List;
  * @author Derek Garcia
  */
 public class SourceURL {
-    private final static String UH_ROOT = "https://www.sis.hawaii.edu/uhdad/avail.classes";
+    private final static String UH_CLASSES_ROOT = "https://www.sis.hawaii.edu/uhdad/avail.classes";
+    private final static String UH_CLASS_ROOT = "https://www.sis.hawaii.edu/uhdad/avail.class";
     private String instID;
     private String termID;
     private String subjectID;
@@ -70,6 +71,16 @@ public class SourceURL {
         return Jsoup.connect(this.toString()).get();
     }
 
+    /**
+     * Create new section url
+     *
+     * @param crn Course Reference Number
+     * @return section url
+     */
+    public String getSectionURL(int crn){
+        return "%s?i=%s&t=%s&c=%s".formatted(UH_CLASS_ROOT, this.instID, this.termID, crn);
+    }
+
     @Override
     public String toString() {
         // Create params
@@ -84,7 +95,7 @@ public class SourceURL {
             params.add("s=%s".formatted(this.subjectID));
 
         // If any params, add them
-        StringBuilder sb = new StringBuilder().append(UH_ROOT);
+        StringBuilder sb = new StringBuilder().append(UH_CLASSES_ROOT);
         if (!params.isEmpty())
             sb.append("?").append(StringUtils.join(params, "&"));
 
