@@ -111,7 +111,7 @@ public class RainbowController {
      * @return List of subjects for a given campus and term
      */
     @GetMapping(value = "/campuses/{instID}/terms/{termID}/subjects")
-    public ResponseEntity<ResponseDTO> getCourses(@PathVariable String instID, @PathVariable String termID) {
+    public ResponseEntity<ResponseDTO> getSubjects(@PathVariable String instID, @PathVariable String termID) {
         try {
             // Get all subjects
             return new ResponseEntity<>(
