@@ -5,7 +5,7 @@ import com.uh.rainbow.dto.identifier.IdentifierDTO;
 import com.uh.rainbow.dto.response.*;
 import com.uh.rainbow.entities.Section;
 import com.uh.rainbow.services.DTOMapperService;
-import com.uh.rainbow.services.HTMLParserService;
+import com.uh.rainbow.service.HTMLParserService;
 import com.uh.rainbow.util.SourceURL;
 import com.uh.rainbow.util.filter.CourseFilter;
 import com.uh.rainbow.util.logging.Logger;
@@ -23,18 +23,18 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 /**
- * <b>File:</b> RainbowController.java
+ * <b>File:</b> ParserController.java
  * <p>
  * <b>Description:</b> Main controller for Rainbow API
  *
  * @author Derek Garcia
  */
 
-@RequestMapping("/v1")
-@RestController(value = "rainbowController")
-public class RainbowController {
+@RequestMapping("/v1/campuses")
+@RestController(value = "parserController")
+public class ParserController {
 
-    private final static Logger LOGGER = new Logger(RainbowController.class);
+    private final static Logger LOGGER = new Logger(ParserController.class);
     private final HTMLParserService htmlParserService = new HTMLParserService();
     private final DTOMapperService dtoMapperService = new DTOMapperService();
 
@@ -58,7 +58,7 @@ public class RainbowController {
      *
      * @return List of University of Hawaii Campuses and their ID's
      */
-    @GetMapping(value = "/campuses")
+    @GetMapping(value = "")
     public ResponseEntity<ResponseDTO> getAllCampuses() {
         try {
             // Get all campuses
@@ -85,7 +85,7 @@ public class RainbowController {
      * @param instID Inst ID to search for terms
      * @return List of term names and their ID's
      */
-    @GetMapping(value = "/campuses/{instID}/terms")
+    @GetMapping(value = "/{instID}/terms")
     public ResponseEntity<ResponseDTO> getAllTerms(@PathVariable String instID) {
         try {
             // Get all terms
@@ -113,7 +113,7 @@ public class RainbowController {
      * @param termID Term ID to search for subjects
      * @return List of subjects for a given campus and term
      */
-    @GetMapping(value = "/campuses/{instID}/terms/{termID}/subjects")
+    @GetMapping(value = "/{instID}/terms/{termID}/subjects")
     public ResponseEntity<ResponseDTO> getSubjects(@PathVariable String instID, @PathVariable String termID) {
         try {
             // Get all subjects
@@ -151,7 +151,7 @@ public class RainbowController {
      * @param keyword     Keywords to filter course names by. Append with '!' to inverse search ie !foo -> get all courses that don't have 'foo' in the name
      * @return List of courses for a given campus, term, and subject that pass filters
      */
-    @GetMapping(value = "/campuses/{instID}/terms/{termID}/subjects/{subjectID}")
+    @GetMapping(value = "/{instID}/terms/{termID}/subjects/{subjectID}")
     public ResponseEntity<ResponseDTO> getCourses(
             @PathVariable String instID,
             @PathVariable String termID,
@@ -215,7 +215,7 @@ public class RainbowController {
      * @param keyword     Keywords to filter course names by. Append with '!' to inverse search ie !foo -> get all courses that don't have 'foo' in the name
      * @return List of courses for a given campus and term that pass filters
      */
-    @GetMapping(value = "/campuses/{instID}/terms/{termID}/courses")
+    @GetMapping(value = "/{instID}/terms/{termID}/courses")
     public ResponseEntity<ResponseDTO> getCourses(
             @PathVariable String instID,
             @PathVariable String termID,

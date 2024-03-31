@@ -3,8 +3,8 @@ package com.uh.rainbow.util;
 import com.uh.rainbow.entities.Day;
 import com.uh.rainbow.entities.Meeting;
 import com.uh.rainbow.entities.Section;
-import com.uh.rainbow.exceptions.MeetingNotFoundException;
-import com.uh.rainbow.exceptions.SectionNotFoundException;
+import com.uh.rainbow.exception.MeetingNotFoundException;
+import com.uh.rainbow.exception.SectionNotFoundException;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 

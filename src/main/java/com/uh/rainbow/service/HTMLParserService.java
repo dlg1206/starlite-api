@@ -1,9 +1,9 @@
-package com.uh.rainbow.services;
+package com.uh.rainbow.service;
 
 import com.uh.rainbow.dto.course.CourseDTO;
 import com.uh.rainbow.dto.identifier.IdentifierDTO;
 import com.uh.rainbow.entities.Section;
-import com.uh.rainbow.exceptions.SectionNotFoundException;
+import com.uh.rainbow.exception.SectionNotFoundException;
 import com.uh.rainbow.util.RowCursor;
 import com.uh.rainbow.util.SourceURL;
 import com.uh.rainbow.util.filter.CourseFilter;
