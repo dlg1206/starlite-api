@@ -5,9 +5,6 @@
 I've done my best to parse all the information and report when failures occur, but some details may get lost.
 
 ## Quickstart Guide
-Launch API service available at http://localhost:8080/v1
-
-API endpoint documentation can be found at [API Endpoints](#api-endpoints)
 
 ### Bootstrap Script
 ```bash
@@ -15,13 +12,19 @@ API endpoint documentation can be found at [API Endpoints](#api-endpoints)
 ./bootstrap.sh
 ```
 
-### From Sources
+Launches API service available at http://localhost:8080/v1
+
+API endpoint documentation can be found at [API Endpoints](#api-endpoints)
+
+## Other Run Methods
+
+### Gradle
 ```bash
 gradle bootRun    # via Gradle
 ./gradlew bootRun # or via Gradle Wrapper
 ``` 
 
-### From Jar
+### Jar
 ```bash
 # Build Jar
 gradle bootJar    # via Gradle
@@ -29,6 +32,13 @@ gradle bootJar    # via Gradle
 
 # Run Jar
 java -jar .\build\libs\rainbow-1.0.0.jar
+```
+
+### Docker
+Admittedly overkill but could be useful
+```bash
+docker compose up
+docker compose up -d  # to run in the background, 'docker compose down' to stop 
 ```
 
 ## API Endpoints
