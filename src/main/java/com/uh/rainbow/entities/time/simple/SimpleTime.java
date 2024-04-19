@@ -15,7 +15,8 @@ import java.text.SimpleDateFormat;
  */
 public class SimpleTime extends Simple {
     private final static String TIME_INPUT_FORMAT = "HHmm";
-    private final static DateFormat OUTPUT_FORMATTER = new SimpleDateFormat("hh:mm a");
+    private final static String OUTPUT_FORMAT = "hh:mm a";
+    private final static DateFormat OUTPUT_FORMATTER = new SimpleDateFormat(OUTPUT_FORMAT);
 
     /**
      * Create new Simple Time
@@ -25,6 +26,18 @@ public class SimpleTime extends Simple {
      */
     public SimpleTime(String time) throws ParseException {
         super(TIME_INPUT_FORMAT, time);      // 1/1/70 HH:mm
+    }
+
+    /**
+     * Create a simple time from MeetingDTO
+     * TODO find better way to implement
+     *
+     * @param time      time in the format of 'hh:mm a' ( 09:00 am, 02:30 pm, etc )
+     * @param ignored   Ignored placeholder to prevent ambiguous constructor
+     * @throws ParseException Failed to parse time string
+     */
+    public SimpleTime(String time, String ignored) throws ParseException {
+        super(OUTPUT_FORMAT, time);
     }
 
     /**

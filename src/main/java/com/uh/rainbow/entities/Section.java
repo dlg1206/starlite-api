@@ -2,6 +2,7 @@ package com.uh.rainbow.entities;
 
 import com.uh.rainbow.util.SourceURL;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -23,9 +24,9 @@ public class Section {
     private final String instructor;
     private final int currEnrolled;
     private final int seatsAvailable;
-    private final List<String> additionalDetails = new ArrayList<>();
     private final List<Meeting> meetings = new ArrayList<>();
     private int failedMeetings = 0;     // Assume no failed meetings
+    private List<String> additionalDetails = new ArrayList<>();
 
     /**
      * Create new Section
@@ -51,6 +52,41 @@ public class Section {
         this.currEnrolled = currEnrolled;
         this.seatsAvailable = seatsAvailable;
     }
+
+    /**
+     * Create a new Section from a section DTO
+     *
+     * @param course     Course the section belongs to
+     * @param sectionDTO SectionDTO to convert
+     */
+    public Section(Course course, SectionDTO sectionDTO) {
+        this.crn = sectionDTO.crn();
+        this.course = course;
+        this.sid = sectionDTO.sid();
+        this.instructor = sectionDTO.instructor();
+        this.currEnrolled = sectionDTO.curr_enrolled();
+        this.seatsAvailable = sectionDTO.seats_available();
+        this.additionalDetails = sectionDTO.additional_details();
+        sectionDTO.meetings().forEach((m) -> {
+            try {
+                this.meetings.add(new Meeting(m));
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    /**
+     * Check to see if this section has any conflicts with another section
+     *
+     * @param other Other section to compare against
+     * @return True if conflicts, false otherwise
+     */
+    public boolean conflictsWith(Section other) {
+        // Check to see if any of this meetings conflicts with any other meeting
+        return this.meetings.stream().anyMatch((m) -> other.meetings.stream().anyMatch(m::conflictsWith));
+    }
+
 
     /**
      * Add meetings for this section

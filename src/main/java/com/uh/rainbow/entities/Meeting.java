@@ -17,8 +17,6 @@ import java.util.List;
  * @author Derek Garcia
  */
 public class Meeting {
-
-
     private final Day day;
     private final SimpleTime startTime;
     private final SimpleTime endTime;
@@ -40,6 +38,67 @@ public class Meeting {
         this.startDate = startDate;
         this.endDate = endDate;
         this.room = room;
+    }
+
+    /**
+     * Create new Meeting object from a meeting DTO
+     *
+     * @param meetingDTO Meeting DTO to create meeting from
+     * @throws ParseException Failed to parse date
+     */
+    public Meeting(MeetingDTO meetingDTO) throws ParseException {
+        this.day = Day.toDay(meetingDTO.day());
+        this.startTime = new SimpleTime(meetingDTO.start_time(), "");
+        this.endTime = new SimpleTime(meetingDTO.end_time(), "");
+        this.startDate = new SimpleDate(meetingDTO.start_date());
+        this.endDate = new SimpleDate(meetingDTO.end_date());
+        this.room = meetingDTO.room();
+    }
+
+    /**
+     * Create new meetings parsed from UH style input parameters
+     *
+     * @param dayString  Day string formatted D*
+     * @param timeString Time formatted HHmm-HHmm(?:a|p)
+     * @param roomString Room name
+     * @param dateString Date formatted DD/MM(?:|-DD/MM)
+     * @return List of parsed meetings
+     * @throws ParseException Fail to parse time or day block
+     */
+    public static List<Meeting> createMeetings(String dayString, String timeString, String roomString, String dateString) throws ParseException {
+        List<Meeting> meetings = new ArrayList<>();
+
+        List<Day> days = Day.toDays(dayString);
+
+        TimeBlock tb = new TimeBlock(timeString, dateString);
+        days.forEach((day) -> meetings.add(
+                new Meeting(day, tb.getStartTime(), tb.getEndTime(), tb.getStartDate(), tb.getEndDate(), roomString))
+        );
+
+        return meetings;
+    }
+
+    /**
+     * Determine if this meeting conflicts with another meeting
+     *
+     * @param other Other meeting to compare against
+     * @return True if conflict, false if otherwise
+     */
+    public boolean conflictsWith(Meeting other) {
+        // TBA days can't conflict
+        if (this.day == Day.TBA || other.day == Day.TBA)
+            return false;
+
+        // Can't conflict if on different days
+        if (this.day != other.day)
+            return false;
+
+        // todo handle single day meetings
+
+        // Conflict if times overlap
+        return this.startTime.beforeOrEqual(other.endTime) == 1 && this.endTime.afterOrEqual(other.startTime) == 1;
+
+        // No conflicts
     }
 
     /**
