@@ -45,7 +45,7 @@ public class RowCursor {
 
             // account for wait list rows
             // https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202440&s=THEA
-            if (row.select("td").size() == 15)
+            if (row.select("td").size() >= 14)
                 initial_offset = 2;
             int offset = initial_offset;
 
@@ -114,7 +114,7 @@ public class RowCursor {
 
         // account for wait list rows
         // https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=202440&s=THEA
-        if (row.select("td").size() == 15)
+        if (row.select("td").size() >= 14)
             initial_offset = 2;
 
         int offset = initial_offset;
