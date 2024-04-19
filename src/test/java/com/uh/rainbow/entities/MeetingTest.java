@@ -1,5 +1,6 @@
 package com.uh.rainbow.entities;
 
+import com.uh.rainbow.dto.meeting.MeetingDTO;
 import org.junit.jupiter.api.Test;
 
 import java.text.ParseException;
@@ -56,4 +57,126 @@ public class MeetingTest {
             fail(e);
         }
     }
+
+    @Test
+    public void a_start_before_and_end_before_b_start_and_end(){
+        /*
+        [ a ]
+              [ b ]
+         */
+        try{
+            // Given
+            Meeting a = new Meeting(new MeetingDTO("M", "foo", "09:00 am", "10:00 am", "10/1", "10/30"));
+            Meeting b = new Meeting(new MeetingDTO("M", "foo", "11:00 am", "12:00 pm", "10/1", "10/30"));
+
+            // When
+
+            // Then
+            assertFalse(a.conflictsWith(b));
+
+        } catch (ParseException e){
+            fail(e);
+        }
+
+    }
+    @Test
+    public void a_end_after_b_start(){
+        /*
+        [ a ]
+           [ b ]
+        */
+        try{
+            // Given
+            Meeting a = new Meeting(new MeetingDTO("M", "foo", "09:00 am", "10:00 am", "10/1", "10/30"));
+            Meeting b = new Meeting(new MeetingDTO("M", "foo", "9:30 am", "12:00 pm", "10/1", "10/30"));
+
+            // When
+
+            // Then
+            assertTrue(a.conflictsWith(b));
+
+        } catch (ParseException e){
+            fail(e);
+        }
+    }
+    @Test
+    public void a_start_before_b_start_and_end_after_b_end(){
+        /*
+        [   a   ]
+          [ b ]
+         */
+        try{
+            // Given
+            Meeting a = new Meeting(new MeetingDTO("M", "foo", "09:00 am", "01:00 pm", "10/1", "10/30"));
+            Meeting b = new Meeting(new MeetingDTO("M", "foo", "11:00 am", "12:00 pm", "10/1", "10/30"));
+
+            // When
+
+            // Then
+            assertTrue(a.conflictsWith(b));
+
+        } catch (ParseException e){
+            fail(e);
+        }
+
+    }
+    @Test
+    public void a_start_before_b_end(){
+        /*
+            [ a ]
+          [ b ]
+        */
+        try{
+            // Given
+            Meeting a = new Meeting(new MeetingDTO("M", "foo", "11:30 am", "01:00 pm", "10/1", "10/30"));
+            Meeting b = new Meeting(new MeetingDTO("M", "foo", "11:00 am", "12:00 pm", "10/1", "10/30"));
+
+            // When
+
+            // Then
+            assertTrue(a.conflictsWith(b));
+
+        } catch (ParseException e){
+            fail(e);
+        }
+    }
+    @Test
+    public void a_start_before_and_end_after_b_start(){
+        /*
+              [ a ]
+        [ b ]
+        */
+        try{
+            // Given
+            Meeting a = new Meeting(new MeetingDTO("M", "foo", "12:30 pm", "01:00 pm", "10/1", "10/30"));
+            Meeting b = new Meeting(new MeetingDTO("M", "foo", "11:00 am", "12:00 pm", "10/1", "10/30"));
+
+            // When
+
+            // Then
+            assertFalse(a.conflictsWith(b));
+
+        } catch (ParseException e){
+            fail(e);
+        }
+    }
+
+
+    @Test
+    public void a_overlap_with_b_on_different_days(){
+        try{
+            // Given
+            Meeting a = new Meeting(new MeetingDTO("M", "foo", "11:00 am", "12:00 pm", "10/1", "10/30"));
+            Meeting b = new Meeting(new MeetingDTO("T", "foo", "11:00 am", "12:00 pm", "10/1", "10/30"));
+
+            // When
+
+            // Then
+            assertFalse(a.conflictsWith(b));
+
+        } catch (ParseException e){
+            fail(e);
+        }
+    }
+
 }
