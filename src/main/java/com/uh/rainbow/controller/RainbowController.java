@@ -3,6 +3,8 @@ package com.uh.rainbow.controller;
 import com.uh.rainbow.dto.course.CourseDTO;
 import com.uh.rainbow.dto.identifier.IdentifierDTO;
 import com.uh.rainbow.dto.response.*;
+import com.uh.rainbow.entities.Section;
+import com.uh.rainbow.services.DTOMapperService;
 import com.uh.rainbow.services.HTMLParserService;
 import com.uh.rainbow.util.SourceURL;
 import com.uh.rainbow.util.filter.CourseFilter;
@@ -34,6 +36,7 @@ public class RainbowController {
 
     private final static Logger LOGGER = new Logger(RainbowController.class);
     private final HTMLParserService htmlParserService = new HTMLParserService();
+    private final DTOMapperService dtoMapperService = new DTOMapperService();
 
     /**
      * Util logging method for reporting HTTP failures
@@ -176,7 +179,8 @@ public class RainbowController {
                     .setKeywords(keyword)
                     .build();
             // Get all courses for subject
-            List<CourseDTO> courseDTOs = this.htmlParserService.parseCourses(cf, instID, termID, subjectID);
+            List<Section> sections = this.htmlParserService.parseSections(cf, instID, termID, subjectID);
+            List<CourseDTO> courseDTOs = this.dtoMapperService.toCourseDTOs(new SourceURL(instID, termID, subjectID), sections);
             return new ResponseEntity<>(
                     new CourseResponseDTO(courseDTOs),
                     HttpStatus.OK
@@ -259,7 +263,8 @@ public class RainbowController {
                         .supplyAsync(() -> {
                             try {
                                 // Attempt to parse
-                                return this.htmlParserService.parseCourses(cf, instID, termID, s.id());
+                                List<Section> sections = this.htmlParserService.parseSections(cf, instID, termID, s.id());
+                                return this.dtoMapperService.toCourseDTOs(new SourceURL(instID, termID, s.id()), sections);
                             } catch (HttpStatusException e) {
                                 // Report html access failure, add to failed sources and continue
                                 reportHTTPAccessError(MessageBuilder.Type.COURSE, e);

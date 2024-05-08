@@ -1,6 +1,5 @@
 package com.uh.rainbow.services;
 
-import com.uh.rainbow.dto.course.CourseDTO;
 import com.uh.rainbow.dto.identifier.IdentifierDTO;
 import com.uh.rainbow.entities.Section;
 import com.uh.rainbow.exceptions.SectionNotFoundException;
@@ -16,7 +15,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,37 +32,6 @@ import java.util.regex.Pattern;
 @Service
 public class HTMLParserService {
     public static final Logger LOGGER = new Logger(HTMLParserService.class);
-
-    /**
-     * Regex parser that extracts params from an url
-     */
-    private static class URLParamExtractor {
-
-        private final Pattern regex;
-
-        /**
-         * Create new extractor
-         *
-         * @param regex Regex to use to extract from url
-         */
-        public URLParamExtractor(String regex) {
-            this.regex = Pattern.compile(regex);
-        }
-
-        /**
-         * Use the regex to extract the param
-         *
-         * @param url URL to extract param from
-         * @return Value of param
-         */
-        public String extract(String url) {
-            Matcher matcher = this.regex.matcher(url);
-            if (matcher.find())
-                return matcher.group(1);
-            return "";
-        }
-
-    }
 
     /**
      * Process a list of li elements with href
@@ -81,7 +52,6 @@ public class HTMLParserService {
 
         return identifiers;
     }
-
 
     /**
      * Parse the list of UH institutions
@@ -166,7 +136,7 @@ public class HTMLParserService {
     }
 
     /**
-     * Parse the list of available courses for an institution, term, and subject
+     * Parse the list of available sections for an institution, term, and subject
      *
      * @param instID    Institution ID
      * @param termID    term ID
@@ -174,15 +144,15 @@ public class HTMLParserService {
      * @return List of courses available
      * @throws IOException Fail to get html
      */
-    public List<CourseDTO> parseCourses(CourseFilter cf, String instID, String termID, String subjectID) throws IOException {
+    public List<Section> parseSections(CourseFilter cf, String instID, String termID, String subjectID) throws IOException {
         Instant start = Instant.now();
         // Get each subject col
         SourceURL source = new SourceURL(instID, termID, subjectID);
         Document doc = source.query();
 
         // Parse all courses
-        Map<String, CourseDTO> courses = new HashMap<>();
-        RowCursor cur = new RowCursor(Objects.requireNonNull(doc.selectFirst("tbody")).select("tr"));
+        List<Section> sections = new LinkedList<>();
+        RowCursor cur = new RowCursor(source, Objects.requireNonNull(doc.selectFirst("tbody")).select("tr"));
         while (cur.findSection()) {
             try {
                 // Get section info
@@ -193,11 +163,7 @@ public class HTMLParserService {
                     continue;
 
                 // Add valid course
-                courses.putIfAbsent(
-                        section.getCourse().cid(),
-                        new CourseDTO(source, section.getCourse())
-                );
-                courses.get(section.getCourse().cid()).sections().add(section.toDTO(source));
+                sections.add(section);
 
             } catch (SectionNotFoundException e) {
                 LOGGER.info(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails(instID, termID, subjectID).addDetails(e));
@@ -206,11 +172,40 @@ public class HTMLParserService {
 
         LOGGER.info(new MessageBuilder(MessageBuilder.Type.COURSE)
                 .addDetails(source)
-                .addDetails("Found %s course%s".formatted(courses.size(), courses.size() == 1 ? "" : "s"))
+                .addDetails("Found %s section%s".formatted(sections.size(), sections.size() == 1 ? "" : "s"))
                 .setDuration(start));
 
-        return courses.values().stream()
-                .sorted(Comparator.comparing(CourseDTO::cid))   // sort by CID
-                .toList();
+        return sections;
+    }
+
+    /**
+     * Regex parser that extracts params from an url
+     */
+    private static class URLParamExtractor {
+
+        private final Pattern regex;
+
+        /**
+         * Create new extractor
+         *
+         * @param regex Regex to use to extract from url
+         */
+        public URLParamExtractor(String regex) {
+            this.regex = Pattern.compile(regex);
+        }
+
+        /**
+         * Use the regex to extract the param
+         *
+         * @param url URL to extract param from
+         * @return Value of param
+         */
+        public String extract(String url) {
+            Matcher matcher = this.regex.matcher(url);
+            if (matcher.find())
+                return matcher.group(1);
+            return "";
+        }
+
     }
 }

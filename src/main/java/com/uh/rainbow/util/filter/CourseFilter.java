@@ -22,6 +22,229 @@ import java.util.regex.Pattern;
  */
 public class CourseFilter {
     private final static Logger LOGGER = new Logger(CourseFilter.class);
+    private final Set<String> crns;
+    private final Pattern codes;
+    private final Set<String> subjects;
+    private final RegexFilter days;
+    private final SimpleTime startAfter;
+    private final SimpleTime endBefore;
+    private final int online;
+    private final int synchronous;
+    private final RegexFilter instructors;
+    private final RegexFilter keywords;
+    /**
+     * Create new course filter
+     *
+     * @param crns        Set of Course Reference Numbers
+     * @param codes       Set of Course codes
+     * @param subjects    Set of subjects
+     * @param days        Regex of days to filter by
+     * @param startAfter  Earliest time a class can start
+     * @param endBefore   Latest time a class can end at
+     * @param online      Boolean whether to include or exclude online classes ( default both )
+     * @param synchronous Boolean whether to include or exclude online sync classes ( default both )
+     * @param instructors Regex of instructors to search for
+     * @param keywords    Regex of keywords to search for
+     */
+    private CourseFilter(
+            Set<String> crns,
+            Pattern codes,
+            Set<String> subjects,
+            RegexFilter days,
+            SimpleTime startAfter,
+            SimpleTime endBefore,
+            int online,
+            int synchronous,
+            RegexFilter instructors,
+            RegexFilter keywords) {
+
+        this.crns = crns;
+        this.codes = codes;
+        this.subjects = subjects;
+        this.days = days;
+        this.startAfter = startAfter;
+        this.endBefore = endBefore;
+        this.online = online;
+        this.synchronous = synchronous;
+        this.instructors = instructors;
+        this.keywords = keywords;
+    }
+
+    /**
+     * Validate Section against filters
+     *
+     * @param section Section to test
+     * @return True if pass, false otherwise
+     */
+    public boolean validSection(Section section) {
+
+        // Validate section details
+        if (!(validCRN(section.getCRN()) && validCID(section.getCID()) && validInstructor(section.getInstructor()) && keywordsMatch(section.getTitle())))
+            return false;
+
+        // Validate meeting details
+        int numOnline = 0;
+        int numSync = 0;
+        for (Meeting m : section.getMeetings()) {
+            // Fail immediately if violate time
+            if (!(validDay(m.getDay().toCode()) && validStartTime(m.getStartTime()) && validEndTime(m.getEndTime())))
+                return false;
+
+            // update meeting type counts
+            String lowerRoom = m.getRoom().toLowerCase();
+            numOnline += lowerRoom.contains("online") ? 1 : 0;
+            numSync += !lowerRoom.contains("asynchronous") ? 1 : 0;     // +1 if in-person / online sync
+
+        }
+
+        // Fail if fail meeting validation
+        int totalMeetings = section.getMeetings().size();
+        return validMeetingType(this.online, numOnline, totalMeetings) && validMeetingType(this.synchronous, numSync, totalMeetings);
+    }
+
+    /**
+     * Check if CRN is valid
+     *
+     * @param crn Course reference number to validate
+     * @return true if found, false otherwise
+     */
+    private boolean validCRN(String crn) {
+        // Default accept
+        if (this.crns == null)
+            return true;
+        return this.crns.contains(crn);
+    }
+
+    /**
+     * Check if Course ID ( ie ICS 101 ) is valid
+     *
+     * @param cid Course ID to validate
+     * @return true if found, false otherwise
+     */
+    private boolean validCID(String cid) {
+        // default accept
+        if (this.subjects == null && this.codes == null)
+            return true;
+
+        if (this.subjects != null && !this.subjects.contains(cid.split(" ")[0]))
+            return false;
+
+        return this.codes == null || this.codes.matcher(cid.split(" ")[1]).find();
+    }
+
+    /**
+     * Check if day is valid
+     *
+     * @param day day to look for
+     * @return true if found, false otherwise
+     */
+    private boolean validDay(String day) {
+        // Default accept
+        if (this.days == null)
+            return true;
+        // Attempt to match day
+        return this.days.test(day);
+    }
+
+    /**
+     * Check if Start Time is valid.
+     *
+     * @param startTime Simple start time
+     * @return true if valid, false otherwise
+     */
+    private boolean validStartTime(SimpleTime startTime) {
+        // default accept
+        if (this.startAfter == null)
+            return true;
+
+        // fail if the start time is before the earliest start
+        return startTime.beforeOrEqual(this.startAfter) != 1;
+    }
+
+    /**
+     * Check if End Time is valid.
+     *
+     * @param endTime Simple end time
+     * @return true if valid, false otherwise
+     */
+    private boolean validEndTime(SimpleTime endTime) {
+        // default accept
+        if (this.endBefore == null)
+            return true;
+
+        // fail if the end time is after the latest end
+        return endTime.afterOrEqual(this.endBefore) != 1;
+    }
+
+    /**
+     * Check if all meetings meet the meeting type preference
+     * 0: exclude all
+     * 1: exclusively meeting type
+     * default: accept all
+     *
+     * @param preference    int preference for the meeting
+     * @param meetingCount  Number of meetings that match the preference
+     * @param totalMeetings Total number of meetings for section
+     * @return true if found, false otherwise
+     */
+    private boolean validMeetingType(int preference, int meetingCount, int totalMeetings) {
+        switch (preference) {
+            case 0 -> {
+                // No meetings of this type
+                return meetingCount == 0;
+            }
+            case 1 -> {
+                // all meetings online
+                return meetingCount == totalMeetings;
+            }
+            default -> {
+                // accept both
+                return true;
+            }
+        }
+    }
+
+    /**
+     * Check if instructor is valid
+     *
+     * @param instructor Instructor to look for
+     * @return true if found, false otherwise
+     */
+    private boolean validInstructor(String instructor) {
+        // Default accept
+        if (this.instructors == null)
+            return true;
+        // Attempt to match instructor
+        return this.instructors.test(instructor);
+    }
+
+    /**
+     * Check if string contains any keywords
+     *
+     * @param string String to search for keywords
+     * @return true if found, false otherwise
+     */
+    private boolean keywordsMatch(String string) {
+        // Default accept
+        if (this.keywords == null)
+            return true;
+
+        // Attempt to match keywords
+        return this.keywords.test(string);
+    }
+
+    /**
+     * Check if Subject ( ICS ) is valid
+     *
+     * @param subject Subject to validate
+     * @return true if found, false otherwise
+     */
+    public boolean validSubject(String subject) {
+        // default accept
+        if (this.subjects == null)
+            return true;
+        return this.subjects.contains(subject.toUpperCase());
+    }
 
     /**
      * Builder for Course Filter
@@ -201,232 +424,5 @@ public class CourseFilter {
         public CourseFilter build() {
             return new CourseFilter(crns, codes, subjects, days, startAfter, endAfter, online, synchronous, instructors, keywords);
         }
-    }
-
-    private final Set<String> crns;
-    private final Pattern codes;
-    private final Set<String> subjects;
-    private final RegexFilter days;
-    private final SimpleTime startAfter;
-    private final SimpleTime endBefore;
-    private final int online;
-    private final int synchronous;
-    private final RegexFilter instructors;
-    private final RegexFilter keywords;
-
-    /**
-     * Create new course filter
-     *
-     * @param crns        Set of Course Reference Numbers
-     * @param codes       Set of Course codes
-     * @param subjects    Set of subjects
-     * @param days        Regex of days to filter by
-     * @param startAfter  Earliest time a class can start
-     * @param endBefore   Latest time a class can end at
-     * @param online      Boolean whether to include or exclude online classes ( default both )
-     * @param synchronous Boolean whether to include or exclude online sync classes ( default both )
-     * @param instructors Regex of instructors to search for
-     * @param keywords    Regex of keywords to search for
-     */
-    private CourseFilter(
-            Set<String> crns,
-            Pattern codes,
-            Set<String> subjects,
-            RegexFilter days,
-            SimpleTime startAfter,
-            SimpleTime endBefore,
-            int online,
-            int synchronous,
-            RegexFilter instructors,
-            RegexFilter keywords) {
-
-        this.crns = crns;
-        this.codes = codes;
-        this.subjects = subjects;
-        this.days = days;
-        this.startAfter = startAfter;
-        this.endBefore = endBefore;
-        this.online = online;
-        this.synchronous = synchronous;
-        this.instructors = instructors;
-        this.keywords = keywords;
-    }
-
-    /**
-     * Validate Section against filters
-     *
-     * @param section Section to test
-     * @return True if pass, false otherwise
-     */
-    public boolean validSection(Section section) {
-
-        // Validate section details
-        if (!(validCRN(section.getCRN()) && validCID(section.getCourse().cid()) && validInstructor(section.getInstructor()) && keywordsMatch(section.getCourse().name())))
-            return false;
-
-        // Validate meeting details
-        int numOnline = 0;
-        int numSync = 0;
-        for (Meeting m : section.getMeetings()) {
-            // Fail immediately if violate time
-            if (!(validDay(m.getDay().toCode()) && validStartTime(m.getStartTime()) && validEndTime(m.getEndTime())))
-                return false;
-
-            // update meeting type counts
-            String lowerRoom = m.getRoom().toLowerCase();
-            numOnline += lowerRoom.contains("online") ? 1 : 0;
-            numSync += !lowerRoom.contains("asynchronous") ? 1 : 0;     // +1 if in-person / online sync
-
-        }
-
-        // Fail if fail meeting validation
-        int totalMeetings = section.getMeetings().size();
-        return validMeetingType(this.online, numOnline, totalMeetings) && validMeetingType(this.synchronous, numSync, totalMeetings);
-    }
-
-
-    /**
-     * Check if CRN is valid
-     *
-     * @param crn Course reference number to validate
-     * @return true if found, false otherwise
-     */
-    private boolean validCRN(String crn) {
-        // Default accept
-        if (this.crns == null)
-            return true;
-        return this.crns.contains(crn);
-    }
-
-    /**
-     * Check if Course ID ( ie ICS 101 ) is valid
-     *
-     * @param cid Course ID to validate
-     * @return true if found, false otherwise
-     */
-    private boolean validCID(String cid) {
-        // default accept
-        if (this.subjects == null && this.codes == null)
-            return true;
-
-        if (this.subjects != null && !this.subjects.contains(cid.split(" ")[0]))
-            return false;
-
-        return this.codes == null || this.codes.matcher(cid.split(" ")[1]).find();
-    }
-
-    /**
-     * Check if day is valid
-     *
-     * @param day day to look for
-     * @return true if found, false otherwise
-     */
-    private boolean validDay(String day) {
-        // Default accept
-        if (this.days == null)
-            return true;
-        // Attempt to match day
-        return this.days.test(day);
-    }
-
-    /**
-     * Check if Start Time is valid.
-     *
-     * @param startTime Simple start time
-     * @return true if valid, false otherwise
-     */
-    private boolean validStartTime(SimpleTime startTime) {
-        // default accept
-        if (this.startAfter == null)
-            return true;
-
-        // fail if the start time is before the earliest start
-        return startTime.beforeOrEqual(this.startAfter) != 1;
-    }
-
-
-    /**
-     * Check if End Time is valid.
-     *
-     * @param endTime Simple end time
-     * @return true if valid, false otherwise
-     */
-    private boolean validEndTime(SimpleTime endTime) {
-        // default accept
-        if (this.endBefore == null)
-            return true;
-
-        // fail if the end time is after the latest end
-        return endTime.afterOrEqual(this.endBefore) != 1;
-    }
-
-    /**
-     * Check if all meetings meet the meeting type preference
-     * 0: exclude all
-     * 1: exclusively meeting type
-     * default: accept all
-     *
-     * @param preference    int preference for the meeting
-     * @param meetingCount  Number of meetings that match the preference
-     * @param totalMeetings Total number of meetings for section
-     * @return true if found, false otherwise
-     */
-    private boolean validMeetingType(int preference, int meetingCount, int totalMeetings) {
-        switch (preference) {
-            case 0 -> {
-                // No meetings of this type
-                return meetingCount == 0;
-            }
-            case 1 -> {
-                // all meetings online
-                return meetingCount == totalMeetings;
-            }
-            default -> {
-                // accept both
-                return true;
-            }
-        }
-    }
-
-    /**
-     * Check if instructor is valid
-     *
-     * @param instructor Instructor to look for
-     * @return true if found, false otherwise
-     */
-    private boolean validInstructor(String instructor) {
-        // Default accept
-        if (this.instructors == null)
-            return true;
-        // Attempt to match instructor
-        return this.instructors.test(instructor);
-    }
-
-    /**
-     * Check if string contains any keywords
-     *
-     * @param string String to search for keywords
-     * @return true if found, false otherwise
-     */
-    private boolean keywordsMatch(String string) {
-        // Default accept
-        if (this.keywords == null)
-            return true;
-
-        // Attempt to match keywords
-        return this.keywords.test(string);
-    }
-
-    /**
-     * Check if Subject ( ICS ) is valid
-     *
-     * @param subject Subject to validate
-     * @return true if found, false otherwise
-     */
-    public boolean validSubject(String subject) {
-        // default accept
-        if (this.subjects == null)
-            return true;
-        return this.subjects.contains(subject.toUpperCase());
     }
 }

@@ -1,6 +1,5 @@
 package com.uh.rainbow.util;
 
-import com.uh.rainbow.entities.Course;
 import com.uh.rainbow.entities.Day;
 import com.uh.rainbow.entities.Meeting;
 import com.uh.rainbow.entities.Section;
@@ -20,14 +19,18 @@ import java.util.List;
  * @author Derek Garcia
  */
 public class RowCursor {
+
+    private final SourceURL source;
     private final Elements table;
 
     /**
      * Create new Row Cursor for a given table
      *
-     * @param table List of rows that compose a table
+     * @param source Source URL where the table origates
+     * @param table  List of rows that compose a table
      */
-    public RowCursor(Elements table) {
+    public RowCursor(SourceURL source, Elements table) {
+        this.source = source;
         this.table = table;
     }
 
@@ -211,17 +214,14 @@ public class RowCursor {
 
         Element row = this.table.get(0);     // peek
 
-        Course course = new Course(
-                row.select("td").get(2).text(),  // Course ID
-                row.select("td").get(4).text(),  // Full course name
-                row.select("td").get(5).text()   // Credits
-        );
-
         // todo add wait list support
         Section section = new Section(
+                this.source,
                 Integer.parseInt(row.select("td").get(1).text()),   // Course Ref Number
-                course,     // Course ID  ( ICS 101 )
+                row.select("td").get(2).text(),     // Course ID  ( ICS 101 )
                 row.select("td").get(3).text(),     // Section ID ( 001 )
+                row.select("td").get(4).text(),     // Title
+                row.select("td").get(5).text(),     // Credits
                 row.select("td").get(6).select("abbr").attr("title"),   // Instructor
                 Integer.parseInt(row.select("td").get(7).text()),   // Number Enrolled
                 Integer.parseInt(row.select("td").get(8).text())    // Seats Available
