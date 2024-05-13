@@ -1,7 +1,6 @@
 package com.uh.rainbow.entities;
 
 
-import com.uh.rainbow.dto.meeting.MeetingDTO;
 import com.uh.rainbow.entities.time.TimeBlock;
 import com.uh.rainbow.entities.time.simple.SimpleDate;
 import com.uh.rainbow.entities.time.simple.SimpleTime;
@@ -44,19 +43,26 @@ public class Meeting {
     }
 
     /**
-     * Convert meeting into DTO
+     * Create new meetings parsed from UH style input parameters
      *
-     * @return MeetingDTO
+     * @param dayString  Day string formatted D*
+     * @param timeString Time formatted HHmm-HHmm(?:a|p)
+     * @param roomString Room name
+     * @param dateString Date formatted DD/MM(?:|-DD/MM)
+     * @return List of parsed meetings
+     * @throws ParseException Fail to parse time or day block
      */
-    public MeetingDTO toDTO() {
-        return new MeetingDTO(
-                this.day.toString(),
-                this.room,
-                this.startTime.toString(),
-                this.endTime.toString(),
-                this.startDate.toString(),
-                this.endDate.toString()
+    public static List<Meeting> createMeetings(String dayString, String timeString, String roomString, String dateString) throws ParseException {
+        List<Meeting> meetings = new ArrayList<>();
+
+        List<Day> days = Day.toDays(dayString);
+
+        TimeBlock tb = new TimeBlock(timeString, dateString);
+        days.forEach((day) -> meetings.add(
+                new Meeting(day, tb.getStartTime(), tb.getEndTime(), tb.getStartDate(), tb.getEndDate(), roomString))
         );
+
+        return meetings;
     }
 
     /**
@@ -95,26 +101,17 @@ public class Meeting {
     }
 
     /**
-     * Create new meetings parsed from UH style input parameters
-     *
-     * @param dayString  Day string formatted D*
-     * @param timeString Time formatted HHmm-HHmm(?:a|p)
-     * @param roomString Room name
-     * @param dateString Date formatted DD/MM(?:|-DD/MM)
-     * @return List of parsed meetings
-     * @throws ParseException Fail to parse time or day block
+     * @return Start Date of recurring meeting
      */
-    public static List<Meeting> createMeetings(String dayString, String timeString, String roomString, String dateString) throws ParseException {
-        List<Meeting> meetings = new ArrayList<>();
+    public SimpleDate getStartDate() {
+        return this.startDate;
+    }
 
-        List<Day> days = Day.toDays(dayString);
-
-        TimeBlock tb = new TimeBlock(timeString, dateString);
-        days.forEach((day) -> meetings.add(
-                new Meeting(day, tb.getStartTime(), tb.getEndTime(), tb.getStartDate(), tb.getEndDate(), roomString))
-        );
-
-        return meetings;
+    /**
+     * @return End Date of recurring meeting
+     */
+    public SimpleDate getEndDate() {
+        return this.endDate;
     }
 
 }

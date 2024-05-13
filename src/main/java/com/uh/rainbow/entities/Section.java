@@ -1,6 +1,5 @@
 package com.uh.rainbow.entities;
 
-import com.uh.rainbow.dto.section.SectionDTO;
 import com.uh.rainbow.util.SourceURL;
 
 import java.util.ArrayList;
@@ -15,29 +14,39 @@ import java.util.List;
  * @author Derek Garcia
  */
 public class Section {
-    private int failedMeetings = 0;     // Assume no failed meetings
-    private final Course course;
-    private final String sid;            // section not always number
+    private final SourceURL sourceURL;
     private final int crn;
+    private final String cid;
+    private final String sectionNumber;            // section not always number
+    private final String title;
+    private final String credits;
     private final String instructor;
     private final int currEnrolled;
     private final int seatsAvailable;
     private final List<String> additionalDetails = new ArrayList<>();
     private final List<Meeting> meetings = new ArrayList<>();
+    private int failedMeetings = 0;     // Assume no failed meetings
 
     /**
      * Create new Section
      *
-     * @param sid            ID of section
+     * @param source         Source URL where the data was parsed from
      * @param crn            Course Reference Number
+     * @param cid            Course ID
+     * @param sectionNumber  Number of section for course
+     * @param title          Name of the course
+     * @param credits        Number of credits the course is worth
      * @param instructor     Name of section instructor
      * @param currEnrolled   Number of people enrolled
      * @param seatsAvailable Number of seats available
      */
-    public Section(int crn, Course course, String sid, String instructor, int currEnrolled, int seatsAvailable) {
+    public Section(SourceURL source, int crn, String cid, String sectionNumber, String title, String credits, String instructor, int currEnrolled, int seatsAvailable) {
+        this.sourceURL = source;
         this.crn = crn;
-        this.course = course;
-        this.sid = sid.strip();
+        this.cid = cid;
+        this.sectionNumber = sectionNumber.strip();
+        this.title = title;
+        this.credits = credits;
         this.instructor = instructor.strip();
         this.currEnrolled = currEnrolled;
         this.seatsAvailable = seatsAvailable;
@@ -70,23 +79,24 @@ public class Section {
     }
 
     /**
-     * Convert Section into DTO
-     *
-     * @return Section DTO
+     * @return Number of failed meetings
      */
-    public SectionDTO toDTO(SourceURL source) {
-        SectionDTO sectionDTO = new SectionDTO(
-                source.getSectionURL(this.crn),
-                this.sid,
-                this.crn,
-                this.instructor,
-                this.currEnrolled,
-                this.seatsAvailable,
-                this.failedMeetings,
-                this.additionalDetails
-        );
-        this.meetings.forEach((m) -> sectionDTO.meetings().add(m.toDTO()));
-        return sectionDTO;
+    public int getFailedMeetings() {
+        return this.failedMeetings;
+    }
+
+    /**
+     * @return Source URL data was parsed from
+     */
+    public SourceURL getSourceURL(){
+        return this.sourceURL;
+    }
+
+    /**
+     * @return URL with additional Details about the course
+     */
+    public String getDetailsURL() {
+        return this.sourceURL.getSectionURL(this.crn);
     }
 
     /**
@@ -97,10 +107,31 @@ public class Section {
     }
 
     /**
-     * @return Course Details
+     * @return Course ID
      */
-    public Course getCourse() {
-        return this.course;
+    public String getCID() {
+        return this.cid;
+    }
+
+    /**
+     * @return Section ID
+     */
+    public String getSectionNumber() {
+        return this.sectionNumber;
+    }
+
+    /**
+     * @return Course name
+     */
+    public String getTitle() {
+        return this.title;
+    }
+
+    /**
+     * @return Credits
+     */
+    public String getCredits() {
+        return this.credits;
     }
 
     /**
@@ -108,6 +139,27 @@ public class Section {
      */
     public String getInstructor() {
         return this.instructor;
+    }
+
+    /**
+     * @return Current number of students enrolled
+     */
+    public int getCurrEnrolled() {
+        return this.currEnrolled;
+    }
+
+    /**
+     * @return Number of seats available for the section
+     */
+    public int getSeatsAvailable() {
+        return this.seatsAvailable;
+    }
+
+    /**
+     * @return Any additional details about the section
+     */
+    public List<String> getAdditionalDetails() {
+        return this.additionalDetails;
     }
 
     /**

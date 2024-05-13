@@ -9,6 +9,7 @@ import com.uh.rainbow.util.SourceURL;
 import com.uh.rainbow.util.filter.CourseFilter;
 import com.uh.rainbow.util.logging.Logger;
 import com.uh.rainbow.util.logging.MessageBuilder;
+import org.jsoup.HttpStatusException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -16,7 +17,12 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,6 +68,7 @@ public class HTMLParserService {
 
     }
 
+
     /**
      * Process a list of li elements with href
      *
@@ -81,7 +88,6 @@ public class HTMLParserService {
 
         return identifiers;
     }
-
 
     /**
      * Parse the list of UH institutions
@@ -166,23 +172,25 @@ public class HTMLParserService {
     }
 
     /**
-     * Parse the list of available courses for an institution, term, and subject
+     * Parse the list of available sections for an institution, term, and subject
+     * Used for single subject
      *
+     * @param cf Filter to use to parse sections
      * @param instID    Institution ID
      * @param termID    term ID
      * @param subjectID subject ID
      * @return List of courses available
      * @throws IOException Fail to get html
      */
-    public List<CourseDTO> parseCourses(CourseFilter cf, String instID, String termID, String subjectID) throws IOException {
+    public List<Section> parseSections(CourseFilter cf, String instID, String termID, String subjectID) throws IOException {
         Instant start = Instant.now();
         // Get each subject col
         SourceURL source = new SourceURL(instID, termID, subjectID);
         Document doc = source.query();
 
         // Parse all courses
-        Map<String, CourseDTO> courses = new HashMap<>();
-        RowCursor cur = new RowCursor(Objects.requireNonNull(doc.selectFirst("tbody")).select("tr"));
+        List<Section> sections = new LinkedList<>();
+        RowCursor cur = new RowCursor(source, Objects.requireNonNull(doc.selectFirst("tbody")).select("tr"));
         while (cur.findSection()) {
             try {
                 // Get section info
@@ -193,11 +201,7 @@ public class HTMLParserService {
                     continue;
 
                 // Add valid course
-                courses.putIfAbsent(
-                        section.getCourse().cid(),
-                        new CourseDTO(source, section.getCourse())
-                );
-                courses.get(section.getCourse().cid()).sections().add(section.toDTO(source));
+                sections.add(section);
 
             } catch (SectionNotFoundException e) {
                 LOGGER.info(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails(instID, termID, subjectID).addDetails(e));
@@ -206,11 +210,72 @@ public class HTMLParserService {
 
         LOGGER.info(new MessageBuilder(MessageBuilder.Type.COURSE)
                 .addDetails(source)
-                .addDetails("Found %s course%s".formatted(courses.size(), courses.size() == 1 ? "" : "s"))
+                .addDetails("Found %s section%s".formatted(sections.size(), sections.size() == 1 ? "" : "s"))
                 .setDuration(start));
 
-        return courses.values().stream()
-                .sorted(Comparator.comparing(CourseDTO::cid))   // sort by CID
-                .toList();
+        return sections;
     }
+
+    /**
+     * Parse the list of available sections for an institution and term
+     * using the subjects permitted in the course filter
+     *
+     * @param cf Filter to use to parse sections
+     * @param instID    Institution ID
+     * @param termID    term ID
+     * @return List of courses available
+     * @throws IOException Fail to get html
+     */
+    public List<Section> parseSections(CourseFilter cf, String instID, String termID) throws IOException {
+        // Get all available subjects
+        Instant start = Instant.now();
+        List<IdentifierDTO> subjects = parseSubjects(instID, termID);
+
+        // Parse each subject for courses
+        List<CompletableFuture<List<Section>>> futures = new ArrayList<>();
+        for (IdentifierDTO s : subjects) {
+
+            // skip if not in filter
+            if (!cf.validSubject(s.id()))
+                continue;
+
+            // Add async job to queue
+            SourceURL source = new SourceURL(instID, termID, s.id());
+            futures.add(CompletableFuture
+                    .supplyAsync(() -> {
+                        try {
+                            // Attempt to parse
+                            return parseSections(cf, instID, termID, s.id());
+                        } catch (HttpStatusException e) {
+                            // Report html access failure, add to failed sources and continue
+                            LOGGER.warn(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails("Skipping %s".formatted(source)));
+                        } catch (IOException e) {
+                            // Internal server error, add to failed sources and continue
+                            LOGGER.error(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails(e));
+                        }
+                        return new ArrayList<>();   // empty results
+                    }));
+        }
+        // Join each thread / wait for each to finish
+        futures.forEach(CompletableFuture::join);
+
+        // Get all results
+        List<Section> sections = new ArrayList<>();
+        for (CompletableFuture<List<Section>> result : futures) {
+            try {
+                sections.addAll(result.get());
+            } catch (ExecutionException | InterruptedException e) {
+                LOGGER.error(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails(e));
+            }
+        }
+
+        // Report Success and return results
+        int numSites = futures.size();
+        LOGGER.info(new MessageBuilder(MessageBuilder.Type.COURSE)
+                .addDetails("Parsed %s site%s".formatted(numSites, numSites == 1 ? "" : "s"))
+                .setDuration(start));
+        return sections;
+    }
+
+
 }

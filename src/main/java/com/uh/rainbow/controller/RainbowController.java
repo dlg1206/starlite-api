@@ -3,6 +3,8 @@ package com.uh.rainbow.controller;
 import com.uh.rainbow.dto.course.CourseDTO;
 import com.uh.rainbow.dto.identifier.IdentifierDTO;
 import com.uh.rainbow.dto.response.*;
+import com.uh.rainbow.entities.Section;
+import com.uh.rainbow.services.DTOMapperService;
 import com.uh.rainbow.services.HTMLParserService;
 import com.uh.rainbow.util.SourceURL;
 import com.uh.rainbow.util.filter.CourseFilter;
@@ -34,6 +36,7 @@ public class RainbowController {
 
     private final static Logger LOGGER = new Logger(RainbowController.class);
     private final HTMLParserService htmlParserService = new HTMLParserService();
+    private final DTOMapperService dtoMapperService = new DTOMapperService();
 
     /**
      * Util logging method for reporting HTTP failures
@@ -176,7 +179,8 @@ public class RainbowController {
                     .setKeywords(keyword)
                     .build();
             // Get all courses for subject
-            List<CourseDTO> courseDTOs = this.htmlParserService.parseCourses(cf, instID, termID, subjectID);
+            List<Section> sections = this.htmlParserService.parseSections(cf, instID, termID, subjectID);
+            List<CourseDTO> courseDTOs = this.dtoMapperService.toCourseDTOs(sections);
             return new ResponseEntity<>(
                     new CourseResponseDTO(courseDTOs),
                     HttpStatus.OK
@@ -226,10 +230,6 @@ public class RainbowController {
             @RequestParam(required = false) List<String> instructor,
             @RequestParam(required = false) List<String> keyword) {
         try {
-            // Get all available subjects
-            Instant start = Instant.now();
-            List<IdentifierDTO> subjects = this.htmlParserService.parseSubjects(instID, termID);
-
             // Build filter
             CourseFilter cf = new CourseFilter.Builder()
                     .setCRNs(crn)
@@ -244,54 +244,11 @@ public class RainbowController {
                     .setKeywords(keyword)
                     .build();
 
-            // Parse each subject for courses
-            List<String> failedSources = new ArrayList<>();
-            List<CompletableFuture<List<CourseDTO>>> futures = new ArrayList<>();
-            for (IdentifierDTO s : subjects) {
+            // Parse Sections
+            List<Section> sections = this.htmlParserService.parseSections(cf, instID, termID);
+            List<CourseDTO> courseDTOs = this.dtoMapperService.toCourseDTOs(sections);
 
-                // skip if not in filter
-                if (!cf.validSubject(s.id()))
-                    continue;
-
-                // Add async job to queue
-                SourceURL source = new SourceURL(instID, termID, s.id());
-                futures.add(CompletableFuture
-                        .supplyAsync(() -> {
-                            try {
-                                // Attempt to parse
-                                return this.htmlParserService.parseCourses(cf, instID, termID, s.id());
-                            } catch (HttpStatusException e) {
-                                // Report html access failure, add to failed sources and continue
-                                reportHTTPAccessError(MessageBuilder.Type.COURSE, e);
-                                LOGGER.warn(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails("Skipping %s".formatted(source)));
-                                failedSources.add(source.toString());
-                            } catch (IOException e) {
-                                // Internal server error, add to failed sources and continue
-                                LOGGER.error(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails(e));
-                                failedSources.add(source.toString());
-                            }
-                            return new ArrayList<>();   // empty results
-                        }));
-            }
-            // Join each thread / wait for each to finish
-            futures.forEach(CompletableFuture::join);
-
-            // Get all results
-            List<CourseDTO> courseDTOs = new ArrayList<>();
-            for (CompletableFuture<List<CourseDTO>> result : futures) {
-                try {
-                    courseDTOs.addAll(result.get());
-                } catch (ExecutionException | InterruptedException e) {
-                    LOGGER.error(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails(e));
-                }
-            }
-
-            // Report Success and return results
-            int numSites = futures.size();
-            LOGGER.info(new MessageBuilder(MessageBuilder.Type.COURSE)
-                    .addDetails("Parsed %s site%s".formatted(numSites, numSites == 1 ? "" : "s"))
-                    .setDuration(start));
-            return new ResponseEntity<>(new CourseResponseDTO(courseDTOs, failedSources), HttpStatus.OK);
+            return new ResponseEntity<>(new CourseResponseDTO(courseDTOs), HttpStatus.OK);
         } catch (HttpStatusException e) {
             // Report and return html access failure
             reportHTTPAccessError(MessageBuilder.Type.COURSE, e);
