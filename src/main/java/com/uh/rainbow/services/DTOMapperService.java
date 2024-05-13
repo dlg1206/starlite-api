@@ -68,12 +68,12 @@ public class DTOMapperService {
      * @param sections List of sections to group
      * @return List of CourseDTOs
      */
-    public List<CourseDTO> toCourseDTOs(SourceURL source, List<Section> sections){
-        // Group Sectioons
+    public List<CourseDTO> toCourseDTOs(List<Section> sections){
+        // Group Sections
         Map<String, CourseDTO> courses = new HashMap<>();
         for(Section section : sections){
             String cid = section.getCID();
-            courses.putIfAbsent( cid, new CourseDTO(source, cid, section.getTitle(), section.getCredits()));
+            courses.putIfAbsent( cid, new CourseDTO(section.getSourceURL(), cid, section.getTitle(), section.getCredits()));
             courses.get(section.getCID()).sections().add(toSectionDTO(section));
         }
 

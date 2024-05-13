@@ -88,8 +88,8 @@ public class Section {
     /**
      * @return Source URL data was parsed from
      */
-    public String getSourceURL(){
-        return this.sourceURL.toString();
+    public SourceURL getSourceURL(){
+        return this.sourceURL;
     }
 
     /**

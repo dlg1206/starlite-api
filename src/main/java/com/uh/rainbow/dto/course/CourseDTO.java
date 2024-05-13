@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author Derek Garcia
  */
-public record CourseDTO(SourceURL source, String cid, String name, String credits, List<SectionDTO> sections) {
+public record CourseDTO(String cid, String name, String source, String credits, List<SectionDTO> sections) {
 
     /**
      * Create new course without any sections
@@ -21,6 +21,6 @@ public record CourseDTO(SourceURL source, String cid, String name, String credit
      * @param source Source URL of course data
      */
     public CourseDTO(SourceURL source, String cid, String name, String credits) {
-        this(source, cid, name, credits, new ArrayList<>());
+        this(cid, name, source.toString(), credits, new ArrayList<>());
     }
 }

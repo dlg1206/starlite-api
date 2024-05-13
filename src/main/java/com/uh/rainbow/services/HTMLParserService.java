@@ -1,5 +1,6 @@
 package com.uh.rainbow.services;
 
+import com.uh.rainbow.dto.course.CourseDTO;
 import com.uh.rainbow.dto.identifier.IdentifierDTO;
 import com.uh.rainbow.entities.Section;
 import com.uh.rainbow.exceptions.SectionNotFoundException;
@@ -8,6 +9,7 @@ import com.uh.rainbow.util.SourceURL;
 import com.uh.rainbow.util.filter.CourseFilter;
 import com.uh.rainbow.util.logging.Logger;
 import com.uh.rainbow.util.logging.MessageBuilder;
+import org.jsoup.HttpStatusException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -19,6 +21,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,6 +36,38 @@ import java.util.regex.Pattern;
 @Service
 public class HTMLParserService {
     public static final Logger LOGGER = new Logger(HTMLParserService.class);
+
+    /**
+     * Regex parser that extracts params from an url
+     */
+    private static class URLParamExtractor {
+
+        private final Pattern regex;
+
+        /**
+         * Create new extractor
+         *
+         * @param regex Regex to use to extract from url
+         */
+        public URLParamExtractor(String regex) {
+            this.regex = Pattern.compile(regex);
+        }
+
+        /**
+         * Use the regex to extract the param
+         *
+         * @param url URL to extract param from
+         * @return Value of param
+         */
+        public String extract(String url) {
+            Matcher matcher = this.regex.matcher(url);
+            if (matcher.find())
+                return matcher.group(1);
+            return "";
+        }
+
+    }
+
 
     /**
      * Process a list of li elements with href
@@ -137,7 +173,9 @@ public class HTMLParserService {
 
     /**
      * Parse the list of available sections for an institution, term, and subject
+     * Used for single subject
      *
+     * @param cf Filter to use to parse sections
      * @param instID    Institution ID
      * @param termID    term ID
      * @param subjectID subject ID
@@ -179,33 +217,65 @@ public class HTMLParserService {
     }
 
     /**
-     * Regex parser that extracts params from an url
+     * Parse the list of available sections for an institution and term
+     * using the subjects permitted in the course filter
+     *
+     * @param cf Filter to use to parse sections
+     * @param instID    Institution ID
+     * @param termID    term ID
+     * @return List of courses available
+     * @throws IOException Fail to get html
      */
-    private static class URLParamExtractor {
+    public List<Section> parseSections(CourseFilter cf, String instID, String termID) throws IOException {
+        // Get all available subjects
+        Instant start = Instant.now();
+        List<IdentifierDTO> subjects = parseSubjects(instID, termID);
 
-        private final Pattern regex;
+        // Parse each subject for courses
+        List<CompletableFuture<List<Section>>> futures = new ArrayList<>();
+        for (IdentifierDTO s : subjects) {
 
-        /**
-         * Create new extractor
-         *
-         * @param regex Regex to use to extract from url
-         */
-        public URLParamExtractor(String regex) {
-            this.regex = Pattern.compile(regex);
+            // skip if not in filter
+            if (!cf.validSubject(s.id()))
+                continue;
+
+            // Add async job to queue
+            SourceURL source = new SourceURL(instID, termID, s.id());
+            futures.add(CompletableFuture
+                    .supplyAsync(() -> {
+                        try {
+                            // Attempt to parse
+                            return parseSections(cf, instID, termID, s.id());
+                        } catch (HttpStatusException e) {
+                            // Report html access failure, add to failed sources and continue
+                            LOGGER.warn(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails("Skipping %s".formatted(source)));
+                        } catch (IOException e) {
+                            // Internal server error, add to failed sources and continue
+                            LOGGER.error(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails(e));
+                        }
+                        return new ArrayList<>();   // empty results
+                    }));
+        }
+        // Join each thread / wait for each to finish
+        futures.forEach(CompletableFuture::join);
+
+        // Get all results
+        List<Section> sections = new ArrayList<>();
+        for (CompletableFuture<List<Section>> result : futures) {
+            try {
+                sections.addAll(result.get());
+            } catch (ExecutionException | InterruptedException e) {
+                LOGGER.error(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails(e));
+            }
         }
 
-        /**
-         * Use the regex to extract the param
-         *
-         * @param url URL to extract param from
-         * @return Value of param
-         */
-        public String extract(String url) {
-            Matcher matcher = this.regex.matcher(url);
-            if (matcher.find())
-                return matcher.group(1);
-            return "";
-        }
-
+        // Report Success and return results
+        int numSites = futures.size();
+        LOGGER.info(new MessageBuilder(MessageBuilder.Type.COURSE)
+                .addDetails("Parsed %s site%s".formatted(numSites, numSites == 1 ? "" : "s"))
+                .setDuration(start));
+        return sections;
     }
+
+
 }
