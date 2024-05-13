@@ -14,7 +14,7 @@ import java.util.List;
  * @author Derek Garcia
  */
 public class Section {
-    private final String detailsURL;
+    private final SourceURL sourceURL;
     private final int crn;
     private final String cid;
     private final String sectionNumber;            // section not always number
@@ -41,7 +41,7 @@ public class Section {
      * @param seatsAvailable Number of seats available
      */
     public Section(SourceURL source, int crn, String cid, String sectionNumber, String title, String credits, String instructor, int currEnrolled, int seatsAvailable) {
-        this.detailsURL = source.getSectionURL(crn);
+        this.sourceURL = source;
         this.crn = crn;
         this.cid = cid;
         this.sectionNumber = sectionNumber.strip();
@@ -86,10 +86,17 @@ public class Section {
     }
 
     /**
+     * @return Source URL data was parsed from
+     */
+    public String getSourceURL(){
+        return this.sourceURL.toString();
+    }
+
+    /**
      * @return URL with additional Details about the course
      */
     public String getDetailsURL() {
-        return this.detailsURL;
+        return this.sourceURL.getSectionURL(this.crn);
     }
 
     /**
