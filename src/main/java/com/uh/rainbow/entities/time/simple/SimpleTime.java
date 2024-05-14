@@ -29,18 +29,6 @@ public class SimpleTime extends Simple {
     }
 
     /**
-     * Create a simple time from MeetingDTO
-     * TODO find better way to implement
-     *
-     * @param time      time in the format of 'hh:mm a' ( 09:00 am, 02:30 pm, etc )
-     * @param ignored   Ignored placeholder to prevent ambiguous constructor
-     * @throws ParseException Failed to parse time string
-     */
-    public SimpleTime(String time, String ignored) throws ParseException {
-        super(OUTPUT_FORMAT, time);
-    }
-
-    /**
      * Add hours to this Simple Time
      *
      * @param numHours Number of hours to add

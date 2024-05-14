@@ -22,7 +22,8 @@ public class MessageBuilder {
         INST,
         TERM,
         SUBJECT,
-        COURSE
+        COURSE,
+        SCHEDULE
     }
 
     private static final String DELIMITER = " | ";

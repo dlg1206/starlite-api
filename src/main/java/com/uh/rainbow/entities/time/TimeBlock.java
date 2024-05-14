@@ -55,7 +55,7 @@ public class TimeBlock {
                 this.startTime.addHours(12);
 
             // Mark end in afternoon if 'p'
-            if (this.endTime.beforeOrEqual(new SimpleTime("1200")) == 1)
+            if (this.endTime.beforeOrEqual(new SimpleTime("1159")) == 1)
                 this.endTime.addHours(12);
 
             // If the class is longer than 5 hours, start is probably in am

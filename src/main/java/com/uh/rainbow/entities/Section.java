@@ -2,10 +2,10 @@ package com.uh.rainbow.entities;
 
 import com.uh.rainbow.util.SourceURL;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <b>File:</b> Section.java
@@ -26,7 +26,7 @@ public class Section {
     private final int seatsAvailable;
     private final List<Meeting> meetings = new ArrayList<>();
     private int failedMeetings = 0;     // Assume no failed meetings
-    private List<String> additionalDetails = new ArrayList<>();
+    private final List<String> additionalDetails = new ArrayList<>();
 
     /**
      * Create new Section
@@ -51,29 +51,6 @@ public class Section {
         this.instructor = instructor.strip();
         this.currEnrolled = currEnrolled;
         this.seatsAvailable = seatsAvailable;
-    }
-
-    /**
-     * Create a new Section from a section DTO
-     *
-     * @param course     Course the section belongs to
-     * @param sectionDTO SectionDTO to convert
-     */
-    public Section(Course course, SectionDTO sectionDTO) {
-        this.crn = sectionDTO.crn();
-        this.course = course;
-        this.sid = sectionDTO.sid();
-        this.instructor = sectionDTO.instructor();
-        this.currEnrolled = sectionDTO.curr_enrolled();
-        this.seatsAvailable = sectionDTO.seats_available();
-        this.additionalDetails = sectionDTO.additional_details();
-        sectionDTO.meetings().forEach((m) -> {
-            try {
-                this.meetings.add(new Meeting(m));
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
-        });
     }
 
     /**
@@ -124,7 +101,7 @@ public class Section {
     /**
      * @return Source URL data was parsed from
      */
-    public SourceURL getSourceURL(){
+    public SourceURL getSourceURL() {
         return this.sourceURL;
     }
 
@@ -203,5 +180,24 @@ public class Section {
      */
     public List<Meeting> getMeetings() {
         return this.meetings;
+    }
+
+
+    @Override
+    public String toString() {
+        return "%s:%s".formatted(this.cid, this.sectionNumber);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Section section = (Section) o;
+        return Objects.equals(cid, section.cid) && Objects.equals(sectionNumber, section.sectionNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cid, sectionNumber);
     }
 }
