@@ -201,6 +201,7 @@ public class CampusController {
      * @param sub         List of Subjects to filter by
      * @param crn         List of Course Reference Numbers to filter by
      * @param code        List of course codes to filter by. '*' wild card can be used ie 1** -> 101, 102, 110 etc
+     * @param cid         List of full courses ie ICS 101.  '*' wild card can be used ie ICS 1** -> 101, 102, 110 etc
      * @param start_after Earliest time a class can start in 24hr format
      * @param end_before  Latest time a class can run in 24hr format
      * @param online      Only classes online sections
@@ -217,6 +218,7 @@ public class CampusController {
             @RequestParam(required = false) List<String> crn,
             @RequestParam(required = false) List<String> sub,
             @RequestParam(required = false) List<String> code,
+            @RequestParam(required = false) List<String> cid,
             @RequestParam(required = false) String start_after,
             @RequestParam(required = false) String end_before,
             @RequestParam(required = false) String online,
@@ -230,6 +232,7 @@ public class CampusController {
                     .setCRNs(crn)
                     .setSubjects(sub)
                     .setCourseNumbers(code)
+                    .setFullCourses(cid)
                     .setStartAfter(start_after)
                     .setEndBefore(end_before)
                     .setOnline(online)
