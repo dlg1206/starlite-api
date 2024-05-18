@@ -1,5 +1,6 @@
 package com.uh.rainbow.util.logging;
 
+import org.jsoup.HttpStatusException;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -20,6 +21,21 @@ public class Logger {
      */
     public Logger(Class reference) {
         this.log = LoggerFactory.getLogger(reference);
+    }
+
+
+    /**
+     * Util logging method for reporting HTTP failures
+     *
+     * @param type Log type
+     * @param e    HttpStatusException
+     */
+    public void reportHTTPAccessError(MessageBuilder.Type type, HttpStatusException e) {
+        MessageBuilder mb = new MessageBuilder(type)
+                .addDetails("Failed to fetch HTML")
+                .addDetails(e.getStatusCode());
+        warn(mb);
+        debug(mb.addDetails(e));
     }
 
     /**

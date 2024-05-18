@@ -2,10 +2,12 @@ package com.uh.rainbow.services;
 
 import com.uh.rainbow.dto.course.CourseDTO;
 import com.uh.rainbow.dto.meeting.MeetingDTO;
+import com.uh.rainbow.dto.schedule.ScheduleDTO;
+import com.uh.rainbow.dto.schedule.ScheduleMeetingDTO;
 import com.uh.rainbow.dto.section.SectionDTO;
 import com.uh.rainbow.entities.Meeting;
+import com.uh.rainbow.entities.PotentialSchedule;
 import com.uh.rainbow.entities.Section;
-import com.uh.rainbow.util.SourceURL;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -26,9 +28,9 @@ public class DTOMapperService {
      * @param meetings List of Meetings to map
      * @return List of Meeting DTOs
      */
-    private List<MeetingDTO> toMeetingDTOs(List<Meeting> meetings){
+    private List<MeetingDTO> toMeetingDTOs(List<Meeting> meetings) {
         List<MeetingDTO> meetingDTOs = new LinkedList<>();
-        for(Meeting meeting : meetings){
+        for (Meeting meeting : meetings) {
             meetingDTOs.add(new MeetingDTO(
                     meeting.getDay().toString(),
                     meeting.getRoom(),
@@ -47,7 +49,7 @@ public class DTOMapperService {
      * @param section Section to map
      * @return SectionDTO
      */
-    private SectionDTO toSectionDTO(Section section){
+    private SectionDTO toSectionDTO(Section section) {
         return new SectionDTO(
                 section.getDetailsURL(),
                 section.getSectionNumber(),
@@ -62,18 +64,38 @@ public class DTOMapperService {
     }
 
     /**
+     * Create new ScheduleMeeting DTO
+     *
+     * @param section Section meeting belongs to
+     * @param meeting Meeting to convert
+     * @return ScheduleMeeting DTO
+     */
+    private ScheduleMeetingDTO toScheduleMeetingDTO(Section section, Meeting meeting) {
+        return new ScheduleMeetingDTO(
+                section.getTitle(),
+                section.getCID(),
+                section.getSectionNumber(),
+                Integer.parseInt(section.getCRN()),
+                section.getInstructor(),
+                meeting.getRoom(),
+                meeting.getStartTime().toString(),
+                meeting.getEndTime().toString(),
+                section.getSourceURL().getSectionURL(Integer.parseInt(section.getCRN()))
+        );
+    }
+
+    /**
      * Convert a list of sections into groupings of courses
      *
-     * @param source Source of data
      * @param sections List of sections to group
      * @return List of CourseDTOs
      */
-    public List<CourseDTO> toCourseDTOs(List<Section> sections){
+    public List<CourseDTO> toCourseDTOs(List<Section> sections) {
         // Group Sections
         Map<String, CourseDTO> courses = new HashMap<>();
-        for(Section section : sections){
+        for (Section section : sections) {
             String cid = section.getCID();
-            courses.putIfAbsent( cid, new CourseDTO(section.getSourceURL(), cid, section.getTitle(), section.getCredits()));
+            courses.putIfAbsent(cid, new CourseDTO(section.getSourceURL(), cid, section.getTitle(), section.getCredits()));
             courses.get(section.getCID()).sections().add(toSectionDTO(section));
         }
 
@@ -82,5 +104,27 @@ public class DTOMapperService {
                 .sorted(Comparator.comparing(CourseDTO::cid))   // sort by CID
                 .toList();
 
+    }
+
+    /**
+     * Convert list of Potential Schedules into DTOs
+     *
+     * @param schedules List of schedules to convert
+     * @return List of Schedule DTOs
+     */
+    public List<ScheduleDTO> toScheduleDTOs(List<PotentialSchedule> schedules) {
+        List<ScheduleDTO> scheduleDTOs = new ArrayList<>();
+
+        for (PotentialSchedule schedule : schedules) {
+            // Convert each schedule to DTO
+            ScheduleDTO.ScheduleDTOBuilder builder = new ScheduleDTO.ScheduleDTOBuilder();
+            for (Section section : schedule.getSections()) {
+                section.getMeetings().forEach(
+                        (m) -> builder.addScheduleMeetingDTO(m.getDay(), toScheduleMeetingDTO(section, m))
+                );
+            }
+            scheduleDTOs.add(builder.build());
+        }
+        return scheduleDTOs;
     }
 }

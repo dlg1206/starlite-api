@@ -34,20 +34,6 @@ public class CampusController {
     private final DTOMapperService dtoMapperService = new DTOMapperService();
 
     /**
-     * Util logging method for reporting HTTP failures
-     *
-     * @param type Log type
-     * @param e    HttpStatusException
-     */
-    private void reportHTTPAccessError(MessageBuilder.Type type, HttpStatusException e) {
-        MessageBuilder mb = new MessageBuilder(type)
-                .addDetails("Failed to fetch HTML")
-                .addDetails(e.getStatusCode());
-        LOGGER.warn(mb);
-        LOGGER.debug(mb.addDetails(e));
-    }
-
-    /**
      * GET Endpoint: /campuses
      * Get list of University of Hawaii Campuses
      *
@@ -63,7 +49,7 @@ public class CampusController {
             );
         } catch (HttpStatusException e) {
             // Report and return html access failure
-            reportHTTPAccessError(MessageBuilder.Type.INST, e);
+            LOGGER.reportHTTPAccessError(MessageBuilder.Type.INST, e);
             return new ResponseEntity<>(new BadAccessResponseDTO(e), HttpStatus.BAD_REQUEST);
         } catch (IOException e) {
             // Internal server error
@@ -90,7 +76,7 @@ public class CampusController {
             );
         } catch (HttpStatusException e) {
             // Report and return html access failure
-            reportHTTPAccessError(MessageBuilder.Type.TERM, e);
+            LOGGER.reportHTTPAccessError(MessageBuilder.Type.TERM, e);
             return new ResponseEntity<>(new BadAccessResponseDTO(e), HttpStatus.BAD_REQUEST);
         } catch (IOException e) {
             // Internal server error
@@ -118,7 +104,7 @@ public class CampusController {
             );
         } catch (HttpStatusException e) {
             // Report and return html access failure
-            reportHTTPAccessError(MessageBuilder.Type.SUBJECT, e);
+            LOGGER.reportHTTPAccessError(MessageBuilder.Type.SUBJECT, e);
             return new ResponseEntity<>(new BadAccessResponseDTO(e), HttpStatus.BAD_REQUEST);
         } catch (IOException e) {
             // Internal server error
@@ -182,7 +168,7 @@ public class CampusController {
             );
         } catch (HttpStatusException e) {
             // Report and return html access failure
-            reportHTTPAccessError(MessageBuilder.Type.SUBJECT, e);
+            LOGGER.reportHTTPAccessError(MessageBuilder.Type.SUBJECT, e);
             return new ResponseEntity<>(new BadAccessResponseDTO(e), HttpStatus.BAD_REQUEST);
         } catch (IOException e) {
             // Internal Server Error
@@ -249,7 +235,7 @@ public class CampusController {
             return new ResponseEntity<>(new CourseResponseDTO(courseDTOs), HttpStatus.OK);
         } catch (HttpStatusException e) {
             // Report and return html access failure
-            reportHTTPAccessError(MessageBuilder.Type.COURSE, e);
+            LOGGER.reportHTTPAccessError(MessageBuilder.Type.COURSE, e);
             return new ResponseEntity<>(new BadAccessResponseDTO(e), HttpStatus.BAD_REQUEST);
         } catch (IOException e) {
             // Internal Server error
