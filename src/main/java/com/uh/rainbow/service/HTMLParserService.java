@@ -1,6 +1,5 @@
 package com.uh.rainbow.service;
 
-import com.uh.rainbow.dto.course.CourseDTO;
 import com.uh.rainbow.dto.identifier.IdentifierDTO;
 import com.uh.rainbow.entities.Section;
 import com.uh.rainbow.exception.SectionNotFoundException;
@@ -23,6 +22,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,6 +35,8 @@ import java.util.regex.Pattern;
  */
 @Service
 public class HTMLParserService {
+    private static final int MAX_THREADS = 50;
+    private static final ForkJoinPool THREAD_POOL = new ForkJoinPool(MAX_THREADS);
     public static final Logger LOGGER = new Logger(HTMLParserService.class);
 
     /**
@@ -254,7 +256,7 @@ public class HTMLParserService {
                             LOGGER.error(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails(e));
                         }
                         return new ArrayList<>();   // empty results
-                    }));
+                    }, THREAD_POOL));
         }
         // Join each thread / wait for each to finish
         futures.forEach(CompletableFuture::join);
