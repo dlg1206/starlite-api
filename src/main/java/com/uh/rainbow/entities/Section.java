@@ -5,6 +5,7 @@ import com.uh.rainbow.util.SourceURL;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <b>File:</b> Section.java
@@ -23,9 +24,9 @@ public class Section {
     private final String instructor;
     private final int currEnrolled;
     private final int seatsAvailable;
-    private final List<String> additionalDetails = new ArrayList<>();
     private final List<Meeting> meetings = new ArrayList<>();
     private int failedMeetings = 0;     // Assume no failed meetings
+    private final List<String> additionalDetails = new ArrayList<>();
 
     /**
      * Create new Section
@@ -51,6 +52,18 @@ public class Section {
         this.currEnrolled = currEnrolled;
         this.seatsAvailable = seatsAvailable;
     }
+
+    /**
+     * Check to see if this section has any conflicts with another section
+     *
+     * @param other Other section to compare against
+     * @return True if conflicts, false otherwise
+     */
+    public boolean conflictsWith(Section other) {
+        // Check to see if any of this meetings conflicts with any other meeting
+        return this.meetings.stream().anyMatch((m) -> other.meetings.stream().anyMatch(m::conflictsWith));
+    }
+
 
     /**
      * Add meetings for this section
@@ -88,7 +101,7 @@ public class Section {
     /**
      * @return Source URL data was parsed from
      */
-    public SourceURL getSourceURL(){
+    public SourceURL getSourceURL() {
         return this.sourceURL;
     }
 
@@ -167,5 +180,24 @@ public class Section {
      */
     public List<Meeting> getMeetings() {
         return this.meetings;
+    }
+
+
+    @Override
+    public String toString() {
+        return "%s:%s".formatted(this.cid, this.sectionNumber);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Section section = (Section) o;
+        return Objects.equals(cid, section.cid) && Objects.equals(sectionNumber, section.sectionNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cid, sectionNumber);
     }
 }

@@ -31,7 +31,7 @@ gradle bootJar    # via Gradle
 ./gradlew bootJar # or via Gradle Wrapper
 
 # Run Jar
-java -jar .\build\libs\rainbow-1.0.0.jar
+java -jar ./build/libs/rainbow-1.0.0.jar
 ```
 
 ### Docker
@@ -47,8 +47,9 @@ docker compose up -d  # to run in the background, 'docker compose down' to stop
 - [Get all Campuses](#get-all-campuses)
 - [Get all Terms](#get-all-terms)
 - [Get all Subjects](#get-all-courses-subjects)
-- [Get all Courses (/subjects)](#get-all-courses-subjects)
-- [Get all Courses (/courses)](#get-all-courses-courses)
+- [Get all Sections (/subjects)](#get-all-sections-subjects)
+- [Get all Sections (/courses)](#get-all-sections-courses)
+- [Generate Potential Schedules](#section-scheduler)
 
 ### Get all Campuses
 > Get list of University of Hawaii Campuses
@@ -94,7 +95,7 @@ curl http://localhost:8080/v1/campuses
 
 **Example**
 ```bash
-# Get all terms for the University of Hawaii at Manona
+# Get all terms for the University of Hawaii at Manoa
 curl http://localhost:8080/v1/campuses/man/terms
 ```
 
@@ -123,14 +124,14 @@ curl http://localhost:8080/v1/campuses/man/terms
 
 **Example**
 ```bash
-# Get all subjects offered at the University of Hawaii at Manona for Fall 2024
+# Get all subjects offered at the University of Hawaii at Manoa for Fall 2024
 curl http://localhost:8080/v1/campuses/man/terms/202510/subjects
 ```
 
-### Get all Courses (/subjects)
-> Get all courses for a University of Hawaii campus, term, and specific subject
+### Get all Sections (/subjects)
+> Get all sections for a University of Hawaii campus, term, and specific subject
 > 
-> Best used for finding courses for a single subject
+> Best used for finding sections for a single subject
 
 **Endpoint:** `http://localhost:8080/v1/campuses/{instID}/terms/{termID}/subjects/{subjectID}`
 
@@ -140,9 +141,9 @@ curl http://localhost:8080/v1/campuses/man/terms/202510/subjects
 
 | Variable  |  Type  |             Description             |
 |:---------:|:------:|:-----------------------------------:|
-|  instID   | String | UH Campus ID to get the courses for |
-|  termID   | String |   Term ID to get the courses for    |
-| subjectID | String |  Subject ID to get the courses for  |
+|  instID   | String | UH Campus ID to get the sections for |
+|  termID   | String |   Term ID to get the sections for    |
+| subjectID | String |  Subject ID to get the sections for  |
 
 **Query Params**
 > Optional filters
@@ -157,7 +158,7 @@ curl http://localhost:8080/v1/campuses/man/terms/202510/subjects
 |    sync     |   bool   |                                                                  Only synchronous sections                                                                  | true, false  |
 |     day     | String[] |          Comma seperated list of UH day of week codes to filter by.<br/>Append with '!' to inverse search ie !M -> get all sections not on Monday           |    M, !T     |
 | instructor  | String[] |    Comma seperated list of instructors to filter by.<br/>Append with '!' to inverse search ie !foo -> get all sections that don't have instructor 'foo'     |  foo, !foo   |
-|   keyword   | String[] | Comma seperated list keywords to filter course names by.<br/>Append with '!' to inverse search ie !foo -> get all courses that don't have 'foo' in the name |  foo, !foo   |
+|   keyword   | String[] | Comma seperated list keywords to filter course names by.<br/>Append with '!' to inverse search ie !foo -> get all sections that don't have 'foo' in the name |  foo, !foo   |
 
 
 **Responses**
@@ -170,20 +171,20 @@ curl http://localhost:8080/v1/campuses/man/terms/202510/subjects
 
 **Examples**
 ```bash
-# Get all courses for ICS offered at the University of Hawaii at Manona for Fall 2024
+# Get all sections for ICS offered at the University of Hawaii at Manoa for Fall 2024
 curl http://localhost:8080/v1/campuses/man/terms/202510/subjects/ics
 
-# Get ICS 101, 211, and any 300 level course offered at the University of Hawaii at Manona for Fall 2024
+# Get ICS 101, 211, and any 300 level course offered at the University of Hawaii at Manoa for Fall 2024
 curl http://localhost:8080/v1/campuses/man/terms/202510/subjects/ics?code=101,211,3**
 
-# Get all courses for ICS offered at the University of Hawaii at Manona for Fall 2024 that aren't on Monday and starts after 10:00 am
+# Get all sections for ICS offered at the University of Hawaii at Manoa for Fall 2024 that aren't on Monday and starts after 10:00 am
 curl http://localhost:8080/v1/campuses/man/terms/202510/subjects/ics?day=!m&start_after=1000
 ```
 
-### Get all Courses (/courses)
-> Get all courses for a University of Hawaii campus and term
+### Get all Sections (/courses)
+> Get all sections for a University of Hawaii campus and term
 >
-> Best used for finding courses for multiple subjects
+> Best used for finding sections for multiple subjects
 
 **Endpoint:** `http://localhost:8080/v1/campuses/{instID}/terms/{termID}/courses`
 
@@ -193,24 +194,25 @@ curl http://localhost:8080/v1/campuses/man/terms/202510/subjects/ics?day=!m&star
 
 | Variable  |  Type  |             Description             |
 |:---------:|:------:|:-----------------------------------:|
-|  instID   | String | UH Campus ID to get the courses for |
-|  termID   | String |   Term ID to get the courses for    |
+|  instID   | String | UH Campus ID to get the sections for |
+|  termID   | String |   Term ID to get the sections for    |
 
 **Query Params**
 > Optional filters
 
-|  Variable   |   Type   |                                                                         Description                                                                         |    Examples     |
-|:-----------:|:--------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------:|:---------------:|
-|     crn     | String[] |                                                Comma seperated list of Course Reference Numbers to filter by                                                |  75380, 75381   |
-|     sub     | Strimg[] |                                                        Comma seperated list of subjects to filter by                                                        | ICS, HIST, ECON |
-|    code     | String[] |                        Comma seperated list of course codes to filter by. '*' wild card can be used<br/>ie 1** -> 101, 102, 110 etc                         |    101, 1**     |
-| start_after |  String  |                                                    Earliest time a class can start in 24hr, HHmm format                                                     |   0900, 1300    |
-| end_before  |  String  |                                                      Latest time a class can run in 24hr, HHmm format                                                       |   1500, 1700    |
-|   online    |   bool   |                                                                Only classes online sections                                                                 |   true, false   |
-|    sync     |   bool   |                                                                  Only synchronous sections                                                                  |   true, false   |
-|     day     | String[] |          Comma seperated list of UH day of week codes to filter by.<br/>Append with '!' to inverse search ie !M -> get all sections not on Monday           |      M, !T      |
-| instructor  | String[] |    Comma seperated list of instructors to filter by.<br/>Append with '!' to inverse search ie !foo -> get all sections that don't have instructor 'foo'     |    foo, !foo    |
-|   keyword   | String[] | Comma seperated list keywords to filter course names by.<br/>Append with '!' to inverse search ie !foo -> get all courses that don't have 'foo' in the name |    foo, !foo    |
+|  Variable   |   Type   |                                                                         Description                                                                          |    Examples     |
+|:-----------:|:--------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------:|:---------------:|
+|     crn     | String[] |                                                Comma seperated list of Course Reference Numbers to filter by                                                 |  75380, 75381   |
+|     sub     | String[] |                                                        Comma seperated list of subjects to filter by                                                         | ICS, HIST, ECON |
+|    code     | String[] |                         Comma seperated list of course codes to filter by. '*' wild card can be used<br/>ie 1** -> 101, 102, 110 etc                         |    101, 1**     |
+|     cid     | String[] |                       Comma seperated list of full course ids to filter by. '*' wild card can be used<br/>ie 1** -> 101, 102, 110 etc                        | ICS101, ICS1**  |
+| start_after |  String  |                                                     Earliest time a class can start in 24hr, HHmm format                                                     |   0900, 1300    |
+| end_before  |  String  |                                                       Latest time a class can run in 24hr, HHmm format                                                       |   1500, 1700    |
+|   online    |   bool   |                                                                 Only classes online sections                                                                 |   true, false   |
+|    sync     |   bool   |                                                                  Only synchronous sections                                                                   |   true, false   |
+|     day     | String[] |           Comma seperated list of UH day of week codes to filter by.<br/>Append with '!' to inverse search ie !M -> get all sections not on Monday           |      M, !T      |
+| instructor  | String[] |     Comma seperated list of instructors to filter by.<br/>Append with '!' to inverse search ie !foo -> get all sections that don't have instructor 'foo'     |    foo, !foo    |
+|   keyword   | String[] | Comma seperated list keywords to filter course names by.<br/>Append with '!' to inverse search ie !foo -> get all sections that don't have 'foo' in the name |    foo, !foo    |
 
 
 **Responses**
@@ -221,16 +223,57 @@ curl http://localhost:8080/v1/campuses/man/terms/202510/subjects/ics?day=!m&star
 |      400      | BadAccessResponse | Failed to access resource at requested URL |
 |      500      | APIErrorResponse  |    Internal server error during parsing    |
 
+
+### Section Scheduler
+> Filter sections and generate all possible schedules
+>
+> Warning: Increasing the number of sections increases the calculation time exponentially.
+> 
+> Benchmarking
+> - 2 Classes (42 combinations) ~= 0.01s
+> - 4 Classes (336 combinations) ~= 0.067s 
+> - 6 Classes (2,688 combinations) ~= 15.308s.
+
+**Endpoint:** `http://localhost:8080/v1/{instID}/terms/{termID}/scheduler`
+
+**Request Method:** `GET`
+
+**Path Variables**
+
+| Variable |  Type  |             Description              |
+|:--------:|:------:|:------------------------------------:|
+|  instID  | String | UH Campus ID to get the sections for |
+|  termID  | String |   Term ID to get the sections for    |
+
+**Query Params**
+> Optional filters. To use the additional filters, use the get sections endpoint and provide the crn
+
+|  Variable   |   Type   |                                                                         Description                                                                          |    Examples     |
+|:-----------:|:--------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------:|:---------------:|
+|     crn     | String[] |                                                Comma seperated list of Course Reference Numbers to filter by                                                 |  75380, 75381   |
+|     cid     | String[] |                       Comma seperated list of full course ids to filter by. '*' wild card can be used<br/>ie 1** -> 101, 102, 110 etc                        | ICS101, ICS1**  |
+| start_after |  String  |                                                     Earliest time a class can start in 24hr, HHmm format                                                     |   0900, 1300    |
+| end_before  |  String  |                                                       Latest time a class can run in 24hr, HHmm format                                                       |   1500, 1700    |
+|   online    |   bool   |                                                                 Only classes online sections                                                                 |   true, false   |
+|    sync     |   bool   |                                                                  Only synchronous sections                                                                   |   true, false   |
+|     day     | String[] |           Comma seperated list of UH day of week codes to filter by.<br/>Append with '!' to inverse search ie !M -> get all sections not on Monday           |      M, !T      |
+
+
+**Responses**
+
+| Response Code |       Type        |                   Description                   |
+|:-------------:|:-----------------:|:-----------------------------------------------:|
+|      200      | ScheduleResponse  | List of schedules that match the given criteria |
+|      400      | BadAccessResponse |   Failed to access resource at requested URL    |
+|      500      | APIErrorResponse  |      Internal server error during parsing       |
+
 **Examples**
 ```bash
-# Get all courses for ICS and SPAN offered at the University of Hawaii at Manona for Fall 2024
-curl http://localhost:8080/v1/campuses/man/terms/202510/courses?sub=ics,span
+# Generate all schedules for ICS 101, ICS 111, and ICS 141 offered at the University of Hawaii at Manoa for Fall 2024
+curl http://localhost:8080/v1/scheduler/MAN/terms/202510?cid=ICS101,ICS111,ICS141
 
-# Get all courses offered at the University of Hawaii at Manona for Fall 2024 that contain 'intro' and not 'data'
-curl http://localhost:8080/v1/campuses/man/terms/202510/courses?keyword=intro,!data
-
-# Get all courses for ICS, SPAN, HIST offered at the University of Hawaii at Manona for Fall 2024 that are online and synchronous
-curl http://localhost:8080/v1/campuses/man/terms/202510/subjects/ics?sub=ics,span,hist&online=true&sync=true
+# Generate all schedules for ICS 101 and ICS 111 that start after 12:00 pm offered at the University of Hawaii at Manoa for Fall 2024
+curl http://localhost:8080/v1/scheduler/MAN/terms/202510?cid=ICS101,ICS111,ICS141&start_after=1200
 ```
 
 ## Response JSONs
@@ -263,7 +306,7 @@ JSON response of identifiers
       "sections": [
         {
           "url": "URL with additional info about the section",
-          "sid": "Section ID",
+          "sid": "Section number",
           "crn": "Course Reference Number",
           "instructor": "Instructor name",
           "curr_enrolled": "Number of students enrolled",
@@ -284,6 +327,40 @@ JSON response of identifiers
           ]
         }
       ]
+    }
+  ]
+}
+```
+
+### [ScheduleResponse](docs/example-responses/ScheduleResponse.json)
+> `tba` is a special "day". Since no date / time has been supplied, it is reported by skipped when generating schedules.
+> 
+> Each day contains simplified course info
+```json
+{
+  "timestamp": "timestamp",
+  "schedules": [
+    {
+      "tba": [],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Name of course",
+          "cid": "Course ID ( ICS 101 )",
+          "sid": "Section number",
+          "crn": "Course Reference Number",
+          "instructor": "Instructor name",
+          "room": "Name of room",
+          "start_time": "Start time",
+          "end_time": "End time",
+          "url": "URL with additional info about the section"
+        }
+      ],
+      "tuesday": [],
+      "wednesday": [],
+      "thursday": [],
+      "friday": [],
+      "saturday": []
     }
   ]
 }

@@ -1,4 +1,4 @@
-package com.uh.rainbow.exceptions;
+package com.uh.rainbow.exception;
 
 /**
  * <b>File:</b> MeetingNotFoundException.java

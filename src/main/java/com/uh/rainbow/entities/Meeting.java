@@ -17,8 +17,6 @@ import java.util.List;
  * @author Derek Garcia
  */
 public class Meeting {
-
-
     private final Day day;
     private final SimpleTime startTime;
     private final SimpleTime endTime;
@@ -40,6 +38,29 @@ public class Meeting {
         this.startDate = startDate;
         this.endDate = endDate;
         this.room = room;
+    }
+
+    /**
+     * Determine if this meeting conflicts with another meeting
+     *
+     * @param other Other meeting to compare against
+     * @return True if conflict, false if otherwise
+     */
+    public boolean conflictsWith(Meeting other) {
+        // TBA days can't conflict
+        if (this.day == Day.TBA || other.day == Day.TBA)
+            return false;
+
+        // Can't conflict if on different days
+        if (this.day != other.day)
+            return false;
+
+        // todo handle single day meetings
+
+        // Conflict if times overlap
+        return this.startTime.beforeOrEqual(other.endTime) == 1 && this.endTime.afterOrEqual(other.startTime) == 1;
+
+        // No conflicts
     }
 
     /**

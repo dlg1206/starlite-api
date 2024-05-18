@@ -15,17 +15,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class RegexFilterTest {
 
     @Test
-    public void accept_one(){
+    public void accept_one() {
         // Given
         RegexFilter regexFilter = new RegexFilter.Builder().addString("a").build();
-        
+
         // When / Then
         assertTrue(regexFilter.test("a"));
         assertFalse(regexFilter.test("c"));     // reject those not accepted
     }
 
     @Test
-    public void accept_two(){
+    public void accept_two() {
         // Given
         RegexFilter regexFilter = new RegexFilter.Builder().addString("a").addString("b").build();
 
@@ -35,7 +35,7 @@ public class RegexFilterTest {
     }
 
     @Test
-    public void accept_all(){
+    public void accept_all() {
         // Given
         RegexFilter regexFilter = new RegexFilter.Builder().build();
 
@@ -44,9 +44,8 @@ public class RegexFilterTest {
     }
 
 
-
     @Test
-    public void reject_one(){
+    public void reject_one() {
         // Given
         RegexFilter regexFilter = new RegexFilter.Builder().addString("!a").build();
 
@@ -56,7 +55,7 @@ public class RegexFilterTest {
     }
 
     @Test
-    public void reject_two(){
+    public void reject_two() {
         // Given
         RegexFilter regexFilter = new RegexFilter.Builder().addString("!a").addString("!b").build();
 
@@ -67,7 +66,7 @@ public class RegexFilterTest {
     }
 
     @Test
-    public void reject_one_accept_one(){
+    public void reject_one_accept_one() {
         // Given
         RegexFilter regexFilter = new RegexFilter.Builder().addString("a").addString("!b").build();
 

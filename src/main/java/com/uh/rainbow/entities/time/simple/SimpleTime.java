@@ -15,7 +15,8 @@ import java.text.SimpleDateFormat;
  */
 public class SimpleTime extends Simple {
     private final static String TIME_INPUT_FORMAT = "HHmm";
-    private final static DateFormat OUTPUT_FORMATTER = new SimpleDateFormat("hh:mm a");
+    private final static String OUTPUT_FORMAT = "hh:mm a";
+    private final static DateFormat OUTPUT_FORMATTER = new SimpleDateFormat(OUTPUT_FORMAT);
 
     /**
      * Create new Simple Time

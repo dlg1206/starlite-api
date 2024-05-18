@@ -77,7 +77,7 @@ public class SourceURL {
      * @param crn Course Reference Number
      * @return section url
      */
-    public String getSectionURL(int crn){
+    public String getSectionURL(int crn) {
         return "%s?i=%s&t=%s&c=%s".formatted(UH_CLASS_ROOT, this.instID, this.termID, crn);
     }
 

@@ -1,9 +1,8 @@
-package com.uh.rainbow.services;
+package com.uh.rainbow.service;
 
-import com.uh.rainbow.dto.course.CourseDTO;
 import com.uh.rainbow.dto.identifier.IdentifierDTO;
 import com.uh.rainbow.entities.Section;
-import com.uh.rainbow.exceptions.SectionNotFoundException;
+import com.uh.rainbow.exception.SectionNotFoundException;
 import com.uh.rainbow.util.RowCursor;
 import com.uh.rainbow.util.SourceURL;
 import com.uh.rainbow.util.filter.CourseFilter;
@@ -23,6 +22,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,6 +35,8 @@ import java.util.regex.Pattern;
  */
 @Service
 public class HTMLParserService {
+    private static final int MAX_THREADS = 50;
+    private final ForkJoinPool THREAD_POOL = new ForkJoinPool(MAX_THREADS);
     public static final Logger LOGGER = new Logger(HTMLParserService.class);
 
     /**
@@ -175,7 +177,7 @@ public class HTMLParserService {
      * Parse the list of available sections for an institution, term, and subject
      * Used for single subject
      *
-     * @param cf Filter to use to parse sections
+     * @param cf        Filter to use to parse sections
      * @param instID    Institution ID
      * @param termID    term ID
      * @param subjectID subject ID
@@ -220,9 +222,9 @@ public class HTMLParserService {
      * Parse the list of available sections for an institution and term
      * using the subjects permitted in the course filter
      *
-     * @param cf Filter to use to parse sections
-     * @param instID    Institution ID
-     * @param termID    term ID
+     * @param cf     Filter to use to parse sections
+     * @param instID Institution ID
+     * @param termID term ID
      * @return List of courses available
      * @throws IOException Fail to get html
      */
@@ -254,7 +256,7 @@ public class HTMLParserService {
                             LOGGER.error(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails(e));
                         }
                         return new ArrayList<>();   // empty results
-                    }));
+                    }, THREAD_POOL));
         }
         // Join each thread / wait for each to finish
         futures.forEach(CompletableFuture::join);

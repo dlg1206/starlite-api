@@ -32,6 +32,48 @@ public enum Day {
     }
 
     /**
+     * Convert UH Day code to Day enum
+     *
+     * @param code string code ID
+     * @return Day Enum, null if not
+     */
+    public static Day toDay(String code) {
+        return switch (code.toLowerCase()) {
+            case "sunday", "u" -> SUNDAY;
+            case "monday", "m" -> MONDAY;
+            case "tuesday", "t" -> TUESDAY;
+            case "wednesday", "w" -> WEDNESDAY;
+            case "thursday", "r" -> THURSDAY;
+            case "friday", "f" -> FRIDAY;
+            case "saturday", "s" -> SATURDAY;
+            case "tba" -> TBA;
+            default -> null;
+        };
+    }
+
+    /**
+     * Convert a string of UH day codes to Day enums
+     * <p>
+     * ie MW -> Monday, Wednesday
+     *
+     * @param code Day code string
+     * @return List of Days
+     */
+    public static List<Day> toDays(String code) {
+        List<Day> days = new ArrayList<>();
+        Day day = toDay(code);
+        // Single day or 'tba'
+        if (day != null) {
+            days.add(day);
+            return days;
+        }
+        for (int i = 0; i < code.length(); i++)
+            days.add(Day.toDay(code.substring(i, i + 1)));
+        while (days.remove(null)) ;    // remove nulls
+        return days;
+    }
+
+    /**
      * @return Day of week
      */
     public int getDow() {
@@ -70,65 +112,5 @@ public enum Day {
                 return "TBA";
             }
         }
-    }
-
-    /**
-     * Convert UH Day code to Day enum
-     *
-     * @param code string code ID
-     * @return Day Enum, null if not
-     */
-    private static Day toDay(String code) {
-        switch (code.toLowerCase()) {
-            case "u" -> {
-                return SUNDAY;
-            }
-            case "m" -> {
-                return MONDAY;
-            }
-            case "t" -> {
-                return TUESDAY;
-            }
-            case "w" -> {
-                return WEDNESDAY;
-            }
-            case "r" -> {
-                return THURSDAY;
-            }
-            case "f" -> {
-                return FRIDAY;
-            }
-            case "s" -> {
-                return SATURDAY;
-            }
-            case "tba" -> {
-                return TBA;
-            }
-            default -> {
-                return null;
-            }
-        }
-    }
-
-    /**
-     * Convert a string of UH day codes to Day enums
-     * <p>
-     * ie MW -> Monday, Wednesday
-     *
-     * @param code Day code string
-     * @return List of Days
-     */
-    public static List<Day> toDays(String code) {
-        List<Day> days = new ArrayList<>();
-        Day day = toDay(code);
-        // Single day or 'tba'
-        if (day != null) {
-            days.add(day);
-            return days;
-        }
-        for (int i = 0; i < code.length(); i++)
-            days.add(Day.toDay(code.substring(i, i + 1)));
-        while (days.remove(null)) ;    // remove nulls
-        return days;
     }
 }
