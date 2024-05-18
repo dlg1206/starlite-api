@@ -8,11 +8,9 @@ import com.uh.rainbow.util.logging.MessageBuilder;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -29,12 +27,10 @@ public class CourseFilter {
      * Builder for Course Filter
      */
     public static class Builder {
-        // Utility record for matching full courses
-        private record FullCoursePattern(Set<String> subjects, Pattern regex){}
         private Set<String> crns;
         private Pattern codes;
         private Set<String> subjects;
-        private FullCoursePattern fullCourses;     // will override codes and subjects
+        private Pattern fullCourses;
         private RegexFilter days;
         private SimpleTime startAfter;
         private SimpleTime endAfter;
@@ -101,19 +97,9 @@ public class CourseFilter {
             if (fullCourses != null) {
                 // Create new patter matching exact cases
                 String regex = StringUtils.join(fullCourses, "|")
-                        .replace(" ", "")
                         .replace("**", "[0-9]{2}")
                         .replace("*", "[0-9]");
-                this.fullCourses = new FullCoursePattern(new HashSet<>(), Pattern.compile(regex, Pattern.CASE_INSENSITIVE));
-
-                // Save all subjects to filter
-                Pattern subject = Pattern.compile("([a-z]*)", Pattern.CASE_INSENSITIVE);
-                for(String course : fullCourses){
-                    Matcher m = subject.matcher(course);
-                    if(!m.find())
-                        continue;
-                    this.fullCourses.subjects.add(m.group(1));
-                }
+                this.fullCourses = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
             }
             return this;
         }
@@ -234,12 +220,7 @@ public class CourseFilter {
          * @return Course Filter
          */
         public CourseFilter build() {
-            // Filter using generic subjects and codes
-            if(this.fullCourses == null)
-                return new CourseFilter(crns, codes, subjects, null, days, startAfter, endAfter, online, synchronous, instructors, keywords);
-
-            // Filter by specific courses
-            return new CourseFilter(crns, null, fullCourses.subjects, fullCourses.regex, days, startAfter, endAfter, online, synchronous, instructors, keywords);
+            return new CourseFilter(crns, codes, subjects, fullCourses, days, startAfter, endAfter, online, synchronous, instructors, keywords);
         }
     }
 
@@ -305,8 +286,7 @@ public class CourseFilter {
 
         // Validate section details
         if (!(
-                validCRN(section.getCRN()) &&
-                validCID(section.getCID()) &&
+                validCourse(section.getCRN(), section.getCID()) &&
                 validInstructor(section.getInstructor()) &&
                 keywordsMatch(section.getTitle())))
             return false;
@@ -332,42 +312,46 @@ public class CourseFilter {
     }
 
     /**
-     * Check if CRN is valid
+     * Validate sections broad to narrow
+     * 1. Valid if subjects (ICS), codes (101), full courses (ICS 101), or crns (75380) are not set
+     * 2. Accept if subject match
+     * 3. Accept if code match
+     * 4. Accept if full course match
+     * 5. Accept if crn match
+     * 6. Else reject
      *
-     * @param crn Course reference number to validate
-     * @return true if found, false otherwise
-     */
-    private boolean validCRN(String crn) {
-        // Default accept
-        if (this.crns == null)
-            return true;
-        return this.crns.contains(crn);
-    }
-
-    /**
-     * Check if Course ID ( ie ICS 101 ) is valid
-     *
+     * @param crn Course Reference Numbers to validate
      * @param cid Course ID to validate
      * @return true if found, false otherwise
      */
-    private boolean validCID(String cid) {
+    private boolean validCourse(String crn, String cid) {
+        String[] details = cid.split(" ");
+
+        if(details[0].equals("ICS") || details[0].equals("THAI")){
+            int i = 0;
+        }
+
         // default accept
-        if (this.subjects == null && this.codes == null && this.fullCourses == null)
+        if (this.subjects == null && this.codes == null && this.fullCourses == null && this.crns == null)
             return true;
 
-        // reject if doesn't match specific course
-        if(this.fullCourses != null && !this.fullCourses.matcher(cid.replace(" ", "")).find())
-            return false;
+        // accept if matching subject
+        if (this.subjects != null && this.subjects.contains(details[0]))
+            return true;
 
-        // reject if missing from subjects
-        if (this.subjects != null && !this.subjects.contains(cid.split(" ")[0]))
-            return false;
+        // accept if matching code
+        if(this.codes != null && this.codes.matcher(details[1]).find())
+            return true;
 
-        // reject if missing from codes
-        if(this.codes != null && !this.codes.matcher(cid.split(" ")[1]).find())
-            return false;
+        // accept if full section match
+        if(this.fullCourses != null && this.fullCourses.matcher(cid).find())
+            return true;
 
-        return true;
+        // accept if crn match
+        if(this.crns != null && this.crns.contains(crn))
+            return true;
+
+        return false;
     }
 
     /**
@@ -473,21 +457,15 @@ public class CourseFilter {
 
     /**
      * Check if Subject ( ICS ) is valid
+     * If CRNs are set, then all subjects are valid
      *
      * @param subject Subject to validate
      * @return true if found, false otherwise
      */
     public boolean validSubject(String subject) {
         // default accept
-        if (this.subjects == null)
+        if (this.subjects == null || this.crns != null)
             return true;
         return this.subjects.contains(subject.toUpperCase());
-    }
-
-    /**
-     * @return Set of valid subjects
-     */
-    public Set<String> getSubjects(){
-        return this.subjects;
     }
 }
