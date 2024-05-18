@@ -7,6 +7,7 @@ package com.uh.rainbow.dto.schedule;
  *
  * @author Derek Garcia
  */
-public record ScheduleMeetingDTO(String course, String cid, String sid, int crn, String instructor, String room, String start_time, String end_time, String url) {
+public record ScheduleMeetingDTO(String course, String cid, String sid, int crn, String instructor, String room,
+                                 String start_time, String end_time, String url) {
 
 }

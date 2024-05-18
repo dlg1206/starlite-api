@@ -18,7 +18,7 @@ public class ScheduleResponseDTO extends ResponseDTO {
     /**
      * Create empty Schedule response
      */
-    public ScheduleResponseDTO(){
+    public ScheduleResponseDTO() {
         this.schedules = new ArrayList<>();
     }
 

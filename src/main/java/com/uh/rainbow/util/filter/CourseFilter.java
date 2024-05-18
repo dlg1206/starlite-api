@@ -93,7 +93,7 @@ public class CourseFilter {
          * @param fullCourses List of specific courses to filter
          * @return CourseFilterBuilder
          */
-        public Builder setFullCourses(List<String> fullCourses){
+        public Builder setFullCourses(List<String> fullCourses) {
             if (fullCourses != null) {
                 // Create new patter matching exact cases
                 String regex = StringUtils.join(fullCourses, "|")
@@ -235,6 +235,7 @@ public class CourseFilter {
     private final int synchronous;
     private final RegexFilter instructors;
     private final RegexFilter keywords;
+
     /**
      * Create new course filter
      *
@@ -287,8 +288,8 @@ public class CourseFilter {
         // Validate section details
         if (!(
                 validCourse(section.getCRN(), section.getCID()) &&
-                validInstructor(section.getInstructor()) &&
-                keywordsMatch(section.getTitle())))
+                        validInstructor(section.getInstructor()) &&
+                        keywordsMatch(section.getTitle())))
             return false;
 
         // Validate meeting details
@@ -325,33 +326,27 @@ public class CourseFilter {
      * @return true if found, false otherwise
      */
     private boolean validCourse(String crn, String cid) {
-        String[] details = cid.split(" ");
-
-        if(details[0].equals("ICS") || details[0].equals("THAI")){
-            int i = 0;
-        }
 
         // default accept
         if (this.subjects == null && this.codes == null && this.fullCourses == null && this.crns == null)
             return true;
+
+        String[] details = cid.split(" ");
 
         // accept if matching subject
         if (this.subjects != null && this.subjects.contains(details[0]))
             return true;
 
         // accept if matching code
-        if(this.codes != null && this.codes.matcher(details[1]).find())
+        if (this.codes != null && this.codes.matcher(details[1]).find())
             return true;
 
         // accept if full section match
-        if(this.fullCourses != null && this.fullCourses.matcher(cid).find())
+        if (this.fullCourses != null && this.fullCourses.matcher(String.join("", details)).find())
             return true;
 
         // accept if crn match
-        if(this.crns != null && this.crns.contains(crn))
-            return true;
-
-        return false;
+        return this.crns != null && this.crns.contains(crn);
     }
 
     /**

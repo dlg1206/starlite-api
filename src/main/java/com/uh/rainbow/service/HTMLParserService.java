@@ -36,7 +36,7 @@ import java.util.regex.Pattern;
 @Service
 public class HTMLParserService {
     private static final int MAX_THREADS = 50;
-    private static final ForkJoinPool THREAD_POOL = new ForkJoinPool(MAX_THREADS);
+    private final ForkJoinPool THREAD_POOL = new ForkJoinPool(MAX_THREADS);
     public static final Logger LOGGER = new Logger(HTMLParserService.class);
 
     /**
@@ -177,7 +177,7 @@ public class HTMLParserService {
      * Parse the list of available sections for an institution, term, and subject
      * Used for single subject
      *
-     * @param cf Filter to use to parse sections
+     * @param cf        Filter to use to parse sections
      * @param instID    Institution ID
      * @param termID    term ID
      * @param subjectID subject ID
@@ -222,9 +222,9 @@ public class HTMLParserService {
      * Parse the list of available sections for an institution and term
      * using the subjects permitted in the course filter
      *
-     * @param cf Filter to use to parse sections
-     * @param instID    Institution ID
-     * @param termID    term ID
+     * @param cf     Filter to use to parse sections
+     * @param instID Institution ID
+     * @param termID term ID
      * @return List of courses available
      * @throws IOException Fail to get html
      */

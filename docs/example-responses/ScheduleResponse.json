@@ -1,0 +1,2677 @@
+{
+  "timestamp": "2024-05-18T03:28:02.730+00:00",
+  "schedules": [
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "001",
+          "crn": 75380,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75380"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "002",
+          "crn": 71969,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=71969"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "002",
+          "crn": 71969,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "10:30 AM",
+          "end_time": "11:45 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=71969"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "001",
+          "crn": 75380,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75380"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "002",
+          "crn": 71969,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=71969"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "002",
+          "crn": 71969,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "10:30 AM",
+          "end_time": "11:45 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=71969"
+        }
+      ],
+      "thursday": [],
+      "friday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "001",
+          "crn": 75380,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "12:00 PM",
+          "end_time": "01:15 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75380"
+        }
+      ],
+      "saturday": []
+    },
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "001",
+          "crn": 75380,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75380"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "003",
+          "crn": 75388,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75388"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "001",
+          "crn": 75380,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75380"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "003",
+          "crn": 75388,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "04:30 PM",
+          "end_time": "05:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75388"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "003",
+          "crn": 75388,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75388"
+        }
+      ],
+      "thursday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "003",
+          "crn": 75388,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "04:30 PM",
+          "end_time": "05:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75388"
+        }
+      ],
+      "friday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "001",
+          "crn": 75380,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "12:00 PM",
+          "end_time": "01:15 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75380"
+        }
+      ],
+      "saturday": []
+    },
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "001",
+          "crn": 75380,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75380"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "004",
+          "crn": 72304,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=72304"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "004",
+          "crn": 72304,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "04:30 PM",
+          "end_time": "05:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=72304"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "001",
+          "crn": 75380,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75380"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "004",
+          "crn": 72304,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=72304"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "004",
+          "crn": 72304,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "04:30 PM",
+          "end_time": "05:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=72304"
+        }
+      ],
+      "thursday": [],
+      "friday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "001",
+          "crn": 75380,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "12:00 PM",
+          "end_time": "01:15 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75380"
+        }
+      ],
+      "saturday": []
+    },
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "001",
+          "crn": 75380,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75380"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "005",
+          "crn": 73141,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73141"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "001",
+          "crn": 75380,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75380"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "005",
+          "crn": 73141,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73141"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "005",
+          "crn": 73141,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73141"
+        }
+      ],
+      "thursday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "005",
+          "crn": 73141,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73141"
+        }
+      ],
+      "friday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "001",
+          "crn": 75380,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "12:00 PM",
+          "end_time": "01:15 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75380"
+        }
+      ],
+      "saturday": []
+    },
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "001",
+          "crn": 75380,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75380"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "006",
+          "crn": 73142,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73142"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "001",
+          "crn": 75380,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75380"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "006",
+          "crn": 73142,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "03:00 PM",
+          "end_time": "04:15 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73142"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "006",
+          "crn": 73142,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73142"
+        }
+      ],
+      "thursday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "006",
+          "crn": 73142,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "03:00 PM",
+          "end_time": "04:15 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73142"
+        }
+      ],
+      "friday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "001",
+          "crn": 75380,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "12:00 PM",
+          "end_time": "01:15 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75380"
+        }
+      ],
+      "saturday": []
+    },
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "001",
+          "crn": 75380,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75380"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "007",
+          "crn": 73579,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73579"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "001",
+          "crn": 75380,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75380"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "007",
+          "crn": 73579,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73579"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "007",
+          "crn": 73579,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73579"
+        }
+      ],
+      "thursday": [],
+      "friday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "001",
+          "crn": 75380,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "12:00 PM",
+          "end_time": "01:15 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75380"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "007",
+          "crn": 73579,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73579"
+        }
+      ],
+      "saturday": []
+    },
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "002",
+          "crn": 75381,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75381"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "002",
+          "crn": 71969,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=71969"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "002",
+          "crn": 71969,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "10:30 AM",
+          "end_time": "11:45 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=71969"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "002",
+          "crn": 75381,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75381"
+        },
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "002",
+          "crn": 75381,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "12:00 PM",
+          "end_time": "01:15 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75381"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "002",
+          "crn": 71969,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=71969"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "002",
+          "crn": 71969,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "10:30 AM",
+          "end_time": "11:45 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=71969"
+        }
+      ],
+      "thursday": [],
+      "friday": [],
+      "saturday": []
+    },
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "002",
+          "crn": 75381,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75381"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "003",
+          "crn": 75388,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75388"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "002",
+          "crn": 75381,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75381"
+        },
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "002",
+          "crn": 75381,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "12:00 PM",
+          "end_time": "01:15 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75381"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "003",
+          "crn": 75388,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "04:30 PM",
+          "end_time": "05:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75388"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "003",
+          "crn": 75388,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75388"
+        }
+      ],
+      "thursday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "003",
+          "crn": 75388,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "04:30 PM",
+          "end_time": "05:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75388"
+        }
+      ],
+      "friday": [],
+      "saturday": []
+    },
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "002",
+          "crn": 75381,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75381"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "004",
+          "crn": 72304,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=72304"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "004",
+          "crn": 72304,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "04:30 PM",
+          "end_time": "05:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=72304"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "002",
+          "crn": 75381,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75381"
+        },
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "002",
+          "crn": 75381,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "12:00 PM",
+          "end_time": "01:15 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75381"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "004",
+          "crn": 72304,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=72304"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "004",
+          "crn": 72304,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "04:30 PM",
+          "end_time": "05:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=72304"
+        }
+      ],
+      "thursday": [],
+      "friday": [],
+      "saturday": []
+    },
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "002",
+          "crn": 75381,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75381"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "005",
+          "crn": 73141,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73141"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "005",
+          "crn": 73141,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73141"
+        },
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "002",
+          "crn": 75381,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75381"
+        },
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "002",
+          "crn": 75381,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "12:00 PM",
+          "end_time": "01:15 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75381"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "005",
+          "crn": 73141,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73141"
+        }
+      ],
+      "thursday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "005",
+          "crn": 73141,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73141"
+        }
+      ],
+      "friday": [],
+      "saturday": []
+    },
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "002",
+          "crn": 75381,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75381"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "006",
+          "crn": 73142,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73142"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "006",
+          "crn": 73142,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "03:00 PM",
+          "end_time": "04:15 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73142"
+        },
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "002",
+          "crn": 75381,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75381"
+        },
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "002",
+          "crn": 75381,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "12:00 PM",
+          "end_time": "01:15 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75381"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "006",
+          "crn": 73142,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73142"
+        }
+      ],
+      "thursday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "006",
+          "crn": 73142,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "03:00 PM",
+          "end_time": "04:15 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73142"
+        }
+      ],
+      "friday": [],
+      "saturday": []
+    },
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "002",
+          "crn": 75381,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75381"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "007",
+          "crn": 73579,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73579"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "002",
+          "crn": 75381,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75381"
+        },
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "002",
+          "crn": 75381,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "12:00 PM",
+          "end_time": "01:15 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75381"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "007",
+          "crn": 73579,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73579"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "007",
+          "crn": 73579,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73579"
+        }
+      ],
+      "thursday": [],
+      "friday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "007",
+          "crn": 73579,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73579"
+        }
+      ],
+      "saturday": []
+    },
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "003",
+          "crn": 75382,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75382"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "003",
+          "crn": 75388,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75388"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "003",
+          "crn": 75382,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75382"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "003",
+          "crn": 75388,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "04:30 PM",
+          "end_time": "05:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75388"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "003",
+          "crn": 75382,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "10:30 AM",
+          "end_time": "11:45 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75382"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "003",
+          "crn": 75388,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75388"
+        }
+      ],
+      "thursday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "003",
+          "crn": 75388,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "04:30 PM",
+          "end_time": "05:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75388"
+        }
+      ],
+      "friday": [],
+      "saturday": []
+    },
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "003",
+          "crn": 75382,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75382"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "004",
+          "crn": 72304,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=72304"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "004",
+          "crn": 72304,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "04:30 PM",
+          "end_time": "05:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=72304"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "003",
+          "crn": 75382,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75382"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "003",
+          "crn": 75382,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "10:30 AM",
+          "end_time": "11:45 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75382"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "004",
+          "crn": 72304,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=72304"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "004",
+          "crn": 72304,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "04:30 PM",
+          "end_time": "05:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=72304"
+        }
+      ],
+      "thursday": [],
+      "friday": [],
+      "saturday": []
+    },
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "003",
+          "crn": 75382,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75382"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "005",
+          "crn": 73141,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73141"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "005",
+          "crn": 73141,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73141"
+        },
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "003",
+          "crn": 75382,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75382"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "005",
+          "crn": 73141,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73141"
+        },
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "003",
+          "crn": 75382,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "10:30 AM",
+          "end_time": "11:45 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75382"
+        }
+      ],
+      "thursday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "005",
+          "crn": 73141,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73141"
+        }
+      ],
+      "friday": [],
+      "saturday": []
+    },
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "003",
+          "crn": 75382,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75382"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "006",
+          "crn": 73142,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73142"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "006",
+          "crn": 73142,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "03:00 PM",
+          "end_time": "04:15 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73142"
+        },
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "003",
+          "crn": 75382,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75382"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "006",
+          "crn": 73142,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73142"
+        },
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "003",
+          "crn": 75382,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "10:30 AM",
+          "end_time": "11:45 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75382"
+        }
+      ],
+      "thursday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "006",
+          "crn": 73142,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "03:00 PM",
+          "end_time": "04:15 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73142"
+        }
+      ],
+      "friday": [],
+      "saturday": []
+    },
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "003",
+          "crn": 75382,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75382"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "007",
+          "crn": 73579,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73579"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "003",
+          "crn": 75382,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75382"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "007",
+          "crn": 73579,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73579"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "007",
+          "crn": 73579,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73579"
+        },
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "003",
+          "crn": 75382,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "10:30 AM",
+          "end_time": "11:45 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75382"
+        }
+      ],
+      "thursday": [],
+      "friday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "007",
+          "crn": 73579,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73579"
+        }
+      ],
+      "saturday": []
+    },
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "006",
+          "crn": 75385,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75385"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "002",
+          "crn": 71969,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=71969"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "002",
+          "crn": 71969,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "10:30 AM",
+          "end_time": "11:45 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=71969"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "006",
+          "crn": 75385,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75385"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "002",
+          "crn": 71969,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=71969"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "002",
+          "crn": 71969,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "10:30 AM",
+          "end_time": "11:45 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=71969"
+        }
+      ],
+      "thursday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "006",
+          "crn": 75385,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "12:00 PM",
+          "end_time": "01:15 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75385"
+        }
+      ],
+      "friday": [],
+      "saturday": []
+    },
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "006",
+          "crn": 75385,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75385"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "003",
+          "crn": 75388,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75388"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "006",
+          "crn": 75385,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75385"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "003",
+          "crn": 75388,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "04:30 PM",
+          "end_time": "05:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75388"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "003",
+          "crn": 75388,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75388"
+        }
+      ],
+      "thursday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "006",
+          "crn": 75385,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "12:00 PM",
+          "end_time": "01:15 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75385"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "003",
+          "crn": 75388,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "04:30 PM",
+          "end_time": "05:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75388"
+        }
+      ],
+      "friday": [],
+      "saturday": []
+    },
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "006",
+          "crn": 75385,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75385"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "004",
+          "crn": 72304,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=72304"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "004",
+          "crn": 72304,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "04:30 PM",
+          "end_time": "05:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=72304"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "006",
+          "crn": 75385,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75385"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "004",
+          "crn": 72304,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=72304"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "004",
+          "crn": 72304,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "04:30 PM",
+          "end_time": "05:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=72304"
+        }
+      ],
+      "thursday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "006",
+          "crn": 75385,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "12:00 PM",
+          "end_time": "01:15 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75385"
+        }
+      ],
+      "friday": [],
+      "saturday": []
+    },
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "006",
+          "crn": 75385,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75385"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "005",
+          "crn": 73141,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73141"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "006",
+          "crn": 75385,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75385"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "005",
+          "crn": 73141,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73141"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "005",
+          "crn": 73141,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73141"
+        }
+      ],
+      "thursday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "006",
+          "crn": 75385,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "12:00 PM",
+          "end_time": "01:15 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75385"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "005",
+          "crn": 73141,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73141"
+        }
+      ],
+      "friday": [],
+      "saturday": []
+    },
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "006",
+          "crn": 75385,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75385"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "006",
+          "crn": 73142,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73142"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "006",
+          "crn": 75385,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75385"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "006",
+          "crn": 73142,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "03:00 PM",
+          "end_time": "04:15 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73142"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "006",
+          "crn": 73142,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73142"
+        }
+      ],
+      "thursday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "006",
+          "crn": 75385,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "12:00 PM",
+          "end_time": "01:15 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75385"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "006",
+          "crn": 73142,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "03:00 PM",
+          "end_time": "04:15 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73142"
+        }
+      ],
+      "friday": [],
+      "saturday": []
+    },
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "006",
+          "crn": 75385,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75385"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "007",
+          "crn": 73579,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73579"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "006",
+          "crn": 75385,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75385"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "007",
+          "crn": 73579,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73579"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "007",
+          "crn": 73579,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73579"
+        }
+      ],
+      "thursday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "006",
+          "crn": 75385,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "12:00 PM",
+          "end_time": "01:15 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75385"
+        }
+      ],
+      "friday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "007",
+          "crn": 73579,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73579"
+        }
+      ],
+      "saturday": []
+    },
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "008",
+          "crn": 75387,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75387"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "002",
+          "crn": 71969,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=71969"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "002",
+          "crn": 71969,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "10:30 AM",
+          "end_time": "11:45 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=71969"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "008",
+          "crn": 75387,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75387"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "002",
+          "crn": 71969,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=71969"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "002",
+          "crn": 71969,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "10:30 AM",
+          "end_time": "11:45 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=71969"
+        }
+      ],
+      "thursday": [],
+      "friday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "008",
+          "crn": 75387,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75387"
+        }
+      ],
+      "saturday": []
+    },
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "008",
+          "crn": 75387,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75387"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "003",
+          "crn": 75388,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75388"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "008",
+          "crn": 75387,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75387"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "003",
+          "crn": 75388,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "04:30 PM",
+          "end_time": "05:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75388"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "003",
+          "crn": 75388,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75388"
+        }
+      ],
+      "thursday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "003",
+          "crn": 75388,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "04:30 PM",
+          "end_time": "05:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75388"
+        }
+      ],
+      "friday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "008",
+          "crn": 75387,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75387"
+        }
+      ],
+      "saturday": []
+    },
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "008",
+          "crn": 75387,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75387"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "004",
+          "crn": 72304,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=72304"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "004",
+          "crn": 72304,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "04:30 PM",
+          "end_time": "05:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=72304"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "008",
+          "crn": 75387,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75387"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "004",
+          "crn": 72304,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=72304"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "004",
+          "crn": 72304,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "04:30 PM",
+          "end_time": "05:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=72304"
+        }
+      ],
+      "thursday": [],
+      "friday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "008",
+          "crn": 75387,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75387"
+        }
+      ],
+      "saturday": []
+    },
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "008",
+          "crn": 75387,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75387"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "005",
+          "crn": 73141,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73141"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "005",
+          "crn": 73141,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73141"
+        },
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "008",
+          "crn": 75387,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75387"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "005",
+          "crn": 73141,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73141"
+        }
+      ],
+      "thursday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "005",
+          "crn": 73141,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73141"
+        }
+      ],
+      "friday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "008",
+          "crn": 75387,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75387"
+        }
+      ],
+      "saturday": []
+    },
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "008",
+          "crn": 75387,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75387"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "006",
+          "crn": 73142,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73142"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "006",
+          "crn": 73142,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "03:00 PM",
+          "end_time": "04:15 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73142"
+        },
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "008",
+          "crn": 75387,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75387"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "006",
+          "crn": 73142,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73142"
+        }
+      ],
+      "thursday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "006",
+          "crn": 73142,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "03:00 PM",
+          "end_time": "04:15 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73142"
+        }
+      ],
+      "friday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "008",
+          "crn": 75387,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75387"
+        }
+      ],
+      "saturday": []
+    },
+    {
+      "tba": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "008",
+          "crn": 75387,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Online Online Asynchronous",
+          "start_time": "TBA",
+          "end_time": "TBA",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75387"
+        }
+      ],
+      "sunday": [],
+      "monday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "007",
+          "crn": 73579,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73579"
+        }
+      ],
+      "tuesday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "008",
+          "crn": 75387,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Spalding Hall SPAL 155",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75387"
+        }
+      ],
+      "wednesday": [
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "007",
+          "crn": 73579,
+          "instructor": "Carleton A Moore",
+          "room": "Art Building Art 132",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73579"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "007",
+          "crn": 73579,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73579"
+        }
+      ],
+      "thursday": [],
+      "friday": [
+        {
+          "course": "Tools for the Info World",
+          "cid": "ICS 101",
+          "sid": "008",
+          "crn": 75387,
+          "instructor": "Michael-Brian C Ogawa",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "01:30 PM",
+          "end_time": "02:45 PM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=75387"
+        },
+        {
+          "course": "Intro to Computer Science I",
+          "cid": "ICS 111",
+          "sid": "007",
+          "crn": 73579,
+          "instructor": "Carleton A Moore",
+          "room": "Pacific Ocean Science & Tech Room 318A",
+          "start_time": "09:00 AM",
+          "end_time": "10:15 AM",
+          "url": "https://www.sis.hawaii.edu/uhdad/avail.class?i=MAN&t=202510&c=73579"
+        }
+      ],
+      "saturday": []
+    }
+  ]
+}

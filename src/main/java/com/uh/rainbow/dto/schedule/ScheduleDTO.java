@@ -13,22 +13,22 @@ import java.util.List;
  * @author Derek Garcia
  */
 public record ScheduleDTO(
-        List<ScheduleMeetingDTO> tba, 
-        List<ScheduleMeetingDTO> sunday, 
-        List<ScheduleMeetingDTO> monday, 
-        List<ScheduleMeetingDTO> tuesday, 
-        List<ScheduleMeetingDTO> wednesday, 
-        List<ScheduleMeetingDTO> thursday, 
+        List<ScheduleMeetingDTO> tba,
+        List<ScheduleMeetingDTO> sunday,
+        List<ScheduleMeetingDTO> monday,
+        List<ScheduleMeetingDTO> tuesday,
+        List<ScheduleMeetingDTO> wednesday,
+        List<ScheduleMeetingDTO> thursday,
         List<ScheduleMeetingDTO> friday,
         List<ScheduleMeetingDTO> saturday
 ) {
 
-    public static class ScheduleDTOBuilder{
+    public static class ScheduleDTOBuilder {
 
         private final ScheduleDTO scheduleDTO = new ScheduleDTO(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
-        public ScheduleDTOBuilder addScheduleMeetingDTO(Day dow, ScheduleMeetingDTO scheduleMeetingDTO){
-            switch (dow){
+        public ScheduleDTOBuilder addScheduleMeetingDTO(Day dow, ScheduleMeetingDTO scheduleMeetingDTO) {
+            switch (dow) {
                 case TBA -> this.scheduleDTO.tba.add(scheduleMeetingDTO);
                 case SUNDAY -> this.scheduleDTO.sunday.add(scheduleMeetingDTO);
                 case MONDAY -> this.scheduleDTO.monday.add(scheduleMeetingDTO);
@@ -41,7 +41,7 @@ public record ScheduleDTO(
             return this;
         }
 
-        public ScheduleDTO build(){
+        public ScheduleDTO build() {
             return this.scheduleDTO;
         }
     }

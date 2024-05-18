@@ -57,12 +57,12 @@ public class SchedulerService {
             }
 
             // Solve each successor potentialSchedule
-            if(!potentialSchedule.getSections().isEmpty())
+            if (!potentialSchedule.getSections().isEmpty())
                 LOGGER.info(new MessageBuilder(MessageBuilder.Type.SCHEDULE).addDetails("Attempting to solve " + potentialSchedule));
             potentialSchedule.getSuccessors().forEach(this::solve);
 
             // When reach here, all potential solutions have been found
-            if(!potentialSchedule.getSections().isEmpty())
+            if (!potentialSchedule.getSections().isEmpty())
                 LOGGER.info(new MessageBuilder(MessageBuilder.Type.SCHEDULE).addDetails("All schedules exhausted for " + potentialSchedule));
         }
 

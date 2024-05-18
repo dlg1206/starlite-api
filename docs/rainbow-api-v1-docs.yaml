@@ -1,7 +1,7 @@
 _type: export
 __export_format: 4
-__export_date: 2024-03-30T05:21:54.725Z
-__export_source: insomnia.desktop.app:v8.6.1
+__export_date: 2024-05-18T03:38:34.294Z
+__export_source: insomnia.desktop.app:v9.1.1
 resources:
   - _id: req_3779424c0486424b9739c33887354e12
     parentId: wrk_scratchpad
@@ -12,6 +12,7 @@ resources:
     description: ""
     method: GET
     body: {}
+    preRequestScript: ""
     parameters: []
     headers: []
     authentication: {}
@@ -38,13 +39,14 @@ resources:
     _type: workspace
   - _id: req_5cdb78f8f90b4e21a9b8b33ecc2f73d8
     parentId: wrk_scratchpad
-    modified: 1711773356548
+    modified: 1716000710908
     created: 1711773065059
     url: localhost:8080/v1/campuses/:instID/terms
     name: Get Terms
     description: ""
     method: GET
     body: {}
+    preRequestScript: ""
     parameters: []
     headers: []
     authentication: {}
@@ -62,13 +64,14 @@ resources:
     _type: request
   - _id: req_17fb5a63f13c4910b58cffd2aaae0d93
     parentId: wrk_scratchpad
-    modified: 1711773383283
+    modified: 1716000714310
     created: 1711773298646
     url: localhost:8080/v1/campuses/:instID/terms/:termID/subjects
     name: Get Subjects
     description: ""
     method: GET
     body: {}
+    preRequestScript: ""
     parameters: []
     headers: []
     authentication: {}
@@ -88,13 +91,14 @@ resources:
     _type: request
   - _id: req_abc0044ca17446ae97c80b18d5e48507
     parentId: wrk_scratchpad
-    modified: 1711773694346
+    modified: 1716000740040
     created: 1711773445039
     url: localhost:8080/v1/campuses/:instID/terms/:termID/subjects/:subjectID
     name: Get Courses ( /subjects )
     description: ""
     method: GET
     body: {}
+    preRequestScript: ""
     parameters:
       - id: pair_7134379a3309461cb75e1f159db5eecb
         name: crn
@@ -167,13 +171,14 @@ resources:
     _type: request
   - _id: req_3690673048d14c2b967c0371d1c4cbf0
     parentId: wrk_scratchpad
-    modified: 1711776086499
+    modified: 1716000734858
     created: 1711773711688
     url: localhost:8080/v1/campuses/:instID/terms/:termID/courses
     name: Get Courses ( /courses )
     description: ""
     method: GET
     body: {}
+    preRequestScript: ""
     parameters:
       - id: pair_7134379a3309461cb75e1f159db5eecb
         name: crn
@@ -231,9 +236,80 @@ resources:
         description: Keywords to filter course names by. Append with '!' to inverse
           search ie !foo -> get all courses that don't have 'foo' in the name
         disabled: true
+      - id: pair_c5a8fcf2a523492c95d7d6e4d1506022
+        name: cid
+        value: ""
+        description: List of full courses ie ICS 101.  '*' wild card can be used ie ICS
+          1** -> 101, 102, 110 etc
+        disabled: true
     headers: []
     authentication: {}
     metaSortKey: -1711773004240
+    isPrivate: false
+    pathParameters:
+      - name: instID
+        value: ""
+      - name: termID
+        value: ""
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_4124c54ce3d44eb38434ee46f6acd1ec
+    parentId: wrk_scratchpad
+    modified: 1716003413488
+    created: 1715746341414
+    url: localhost:8080/v1/scheduler/:instID/terms/:termID
+    name: Get Schedules
+    description: ""
+    method: GET
+    body: {}
+    preRequestScript: ""
+    parameters:
+      - id: pair_7134379a3309461cb75e1f159db5eecb
+        name: crn
+        value: ""
+        description: List of Course Reference Numbers to filter by
+        disabled: true
+        type: text
+        multiline: false
+      - id: pair_885abd3cb1f34a4c962c02ae5b648d10
+        name: start_after
+        value: "1200"
+        description: Earliest time a class can start in 24hr format
+        disabled: true
+      - id: pair_c74ac7ba8dab496399c5f41862121e34
+        name: end_before
+        value: ""
+        description: Latest time a class can run in 24hr format
+        disabled: true
+      - id: pair_7e07d25891bb49328827b0f8fcf00559
+        name: online
+        value: ""
+        description: Only classes online sections
+        disabled: true
+      - id: pair_9e2b1f02e7d04b6dab120dd990334fe1
+        name: sync
+        value: ""
+        description: Only synchronous sections
+        disabled: true
+      - id: pair_6a2279c067ad47f8aeb76aa3b7ac351e
+        name: day
+        value: ""
+        description: UH day of week codes to filter by. Append with '!' to inverse
+          search ie !M -> get all sections not on Monday
+        disabled: true
+      - id: pair_a6dfd524c4834660b83f00a6549b02a4
+        name: cid
+        value: ""
+        description: ""
+        disabled: true
+    headers: []
+    authentication: {}
+    metaSortKey: -1711773004190
     isPrivate: false
     pathParameters:
       - name: instID

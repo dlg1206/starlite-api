@@ -1,6 +1,9 @@
 package com.uh.rainbow.controller;
 
-import com.uh.rainbow.dto.response.*;
+import com.uh.rainbow.dto.response.APIErrorResponseDTO;
+import com.uh.rainbow.dto.response.BadAccessResponseDTO;
+import com.uh.rainbow.dto.response.ResponseDTO;
+import com.uh.rainbow.dto.response.ScheduleResponseDTO;
 import com.uh.rainbow.dto.schedule.ScheduleDTO;
 import com.uh.rainbow.entities.PotentialSchedule;
 import com.uh.rainbow.entities.Section;
@@ -40,15 +43,15 @@ public class SchedulerController {
      * course and section. Can use one or both
      * TODO Add advance buffer blocks and rules
      *
-     * @param instID Inst ID to search for courses
-     * @param termID Term ID to search for courses
-     * @param crn List of Course Reference Numbers to add to schedule
-     * @param cid List of full courses ie ICS 101.
+     * @param instID      Inst ID to search for courses
+     * @param termID      Term ID to search for courses
+     * @param crn         List of Course Reference Numbers to add to schedule
+     * @param cid         List of full courses ie ICS 101.
      * @param start_after Earliest time a class can start in 24hr format
-     * @param end_before Latest time a class can run in 24hr format
-     * @param online Only classes online sections
-     * @param sync Only synchronous sections
-     * @param day UH day of week codes to filter by. Append with '!' to inverse search ie !M -> get all sections not on Monday
+     * @param end_before  Latest time a class can run in 24hr format
+     * @param online      Only classes online sections
+     * @param sync        Only synchronous sections
+     * @param day         UH day of week codes to filter by. Append with '!' to inverse search ie !M -> get all sections not on Monday
      * @return List of valid schedules
      */
     @GetMapping(value = "/{instID}/terms/{termID}")
@@ -60,7 +63,7 @@ public class SchedulerController {
                                                     @RequestParam(required = false) String online,
                                                     @RequestParam(required = false) String sync,
                                                     @RequestParam(required = false) List<String> day) {
-        try{
+        try {
             CourseFilter cf = new CourseFilter.Builder()
                     .setFullCourses(cid)
                     .setCRNs(crn)
@@ -76,17 +79,17 @@ public class SchedulerController {
             List<Section> sections = this.htmlParserService.parseSections(cf, instID, termID);
 
             // Warn if no sections found
-            if(sections.isEmpty()){
+            if (sections.isEmpty()) {
                 MessageBuilder mb = new MessageBuilder(MessageBuilder.Type.SCHEDULE)
                         .addDetails("Found no Sections to Schedule");
                 // Add crn details
-                if(crn != null && !crn.isEmpty())
+                if (crn != null && !crn.isEmpty())
                     mb.addDetails("crns: " + String.join(", ", crn));
                 // Add cid details
-                if(cid != null && !cid.isEmpty())
+                if (cid != null && !cid.isEmpty())
                     mb.addDetails("cids: " + String.join(", ", cid));
                 LOGGER.warn(mb);
-                return new ResponseEntity<>(new ScheduleResponseDTO(), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(new ScheduleResponseDTO(), HttpStatus.OK);
             }
 
             // Find valid schedules
