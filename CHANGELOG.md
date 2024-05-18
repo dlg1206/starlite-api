@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/dlg1206/rainbows-api/compare/v1.0.0...v1.1.0) (2024-05-18)
+
+
+### Features
+
+* add /scheduler endpoint ([6ccb8ad](https://github.com/dlg1206/rainbows-api/commit/6ccb8ad778eb5505a77956ad0844627b3bbf09d4))
+* add docker scripts ([5defdcc](https://github.com/dlg1206/rainbows-api/commit/5defdcc7ee8eaac0d7a3cdeffc34c11ba7208007))
+* course filter can filter for specific courses ([01b9433](https://github.com/dlg1206/rainbows-api/commit/01b943364cb046b235f9d069e557257c70dd9803))
+* implement scheduling service ([69e2aae](https://github.com/dlg1206/rainbows-api/commit/69e2aae931446c6ae702ff111e75c1d3d91c0a7c))
+* search by full cids ([5d119e4](https://github.com/dlg1206/rainbows-api/commit/5d119e40e987bc5babb173b865f8df0a482e9254))
+* Section stores source url ([f6059e2](https://github.com/dlg1206/rainbows-api/commit/f6059e2589836418090a5c7e746d3905990277a9))
+* validate all required sections / courses were found before generating a schedule ([9353413](https://github.com/dlg1206/rainbows-api/commit/93534132efc2b73d101374d7d106e14537665312))
+* warn if no sections to schedule ([1356b7b](https://github.com/dlg1206/rainbows-api/commit/1356b7b7b7334039eaba8b1a757114e7117afd45))
+
+
+### Bug Fixes
+
+* correct skipped meetings ([1a0b63d](https://github.com/dlg1206/rainbows-api/commit/1a0b63d52129c510b724aeabf8222f9d6f8755fd))
+* correct unsatisfiable filter conditions ([169862e](https://github.com/dlg1206/rainbows-api/commit/169862e13a62b8b82f24390f368fd7442066a23a))
+* rename get subject endpoint to correct get subject method ([e437a6f](https://github.com/dlg1206/rainbows-api/commit/e437a6fab3ccaf7c48ed6d278f2f822dedf98b1e))
+
 ## [1.0.0](https://github.com/dlg1206/rainbows-api/compare/v0.4.4...v1.0.0) (2024-03-30)
 
 
