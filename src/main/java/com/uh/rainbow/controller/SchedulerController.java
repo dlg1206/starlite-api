@@ -18,12 +18,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <b>File:</b> SchedulerController
  * <p>
- * <b>Description:</b>
+ * <b>Description:</b> Controller for scheduler results
+ * TODO make endpoint that returns ICAL format
  *
  * @author Derek Garcia
  */
@@ -46,7 +50,7 @@ public class SchedulerController {
      * @param instID      Inst ID to search for courses
      * @param termID      Term ID to search for courses
      * @param crn         List of Course Reference Numbers to add to schedule
-     * @param cid         List of full courses ie ICS 101.
+     * @param cid         List of full courses ie ICS 101 to add to schedule
      * @param start_after Earliest time a class can start in 24hr format
      * @param end_before  Latest time a class can run in 24hr format
      * @param online      Only classes online sections
@@ -75,26 +79,35 @@ public class SchedulerController {
                     .build();
 
             // Get sections
-            // TODO Verify all sections have been found
-            List<Section> sections = this.htmlParserService.parseSections(cf, instID, termID);
+            List<Section> allSections = this.htmlParserService.parseSections(cf, instID, termID);
 
             // Warn if no sections found
-            if (sections.isEmpty()) {
-                MessageBuilder mb = new MessageBuilder(MessageBuilder.Type.SCHEDULE)
-                        .addDetails("Found no Sections to Schedule");
-                // Add crn details
-                if (crn != null && !crn.isEmpty())
-                    mb.addDetails("crns: " + String.join(", ", crn));
-                // Add cid details
-                if (cid != null && !cid.isEmpty())
-                    mb.addDetails("cids: " + String.join(", ", cid));
-                LOGGER.warn(mb);
-                return new ResponseEntity<>(new ScheduleResponseDTO(), HttpStatus.OK);
+            if (allSections.isEmpty()) {
+                return new ResponseEntity<>(new APIErrorResponseDTO(
+                        new Exception(LOGGER.reportMissingSchedulingSections(crn, cid))),
+                        HttpStatus.OK);
+            }
+
+            // Verify at least one section from each class
+            Set<String> requiredCRNs = crn == null ? new HashSet<>() : new HashSet<>(crn);
+            Set<String> requiredCIDs = cid == null ? new HashSet<>() : new HashSet<>(cid);
+            for(Section section : allSections){
+                requiredCRNs.remove(section.getCRN());
+                requiredCIDs.remove(section.getCID().replace(" ", ""));
+            }
+
+            // Warn if not all sections were found
+            if (!(requiredCIDs.isEmpty() && requiredCRNs.isEmpty())){
+                return new ResponseEntity<>(new APIErrorResponseDTO(
+                        new Exception(LOGGER.reportMissingSchedulingSections(requiredCRNs, requiredCIDs))),
+                        HttpStatus.OK);
             }
 
             // Find valid schedules
-            List<PotentialSchedule> schedules = this.schedulerService.schedule(sections);
+            List<PotentialSchedule> schedules = this.schedulerService.schedule(allSections);
             List<ScheduleDTO> scheduleDTOs = this.dtoMapperService.toScheduleDTOs(schedules);
+
+            // Return findings
             return new ResponseEntity<>(new ScheduleResponseDTO(scheduleDTOs), HttpStatus.OK);
         } catch (HttpStatusException e) {
             // Report and return html access failure
