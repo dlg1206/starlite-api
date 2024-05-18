@@ -38,6 +38,7 @@ public class SchedulerController {
      * Simple scheduler endpoint for list of classes
      * Proved full cid's ( ICS 101, ICS 102 etc ) for any section or crn's ( 784102 ) for specific
      * course and section. Can use one or both
+     * TODO Add advance buffer blocks and rules
      *
      * @param instID Inst ID to search for courses
      * @param termID Term ID to search for courses
@@ -71,7 +72,23 @@ public class SchedulerController {
                     .build();
 
             // Get sections
+            // TODO Verify all sections have been found
             List<Section> sections = this.htmlParserService.parseSections(cf, instID, termID);
+
+            // Warn if no sections found
+            if(sections.isEmpty()){
+                MessageBuilder mb = new MessageBuilder(MessageBuilder.Type.SCHEDULE)
+                        .addDetails("Found no Sections to Schedule");
+                // Add crn details
+                if(crn != null && !crn.isEmpty())
+                    mb.addDetails("crns: " + String.join(", ", crn));
+                // Add cid details
+                if(cid != null && !cid.isEmpty())
+                    mb.addDetails("cids: " + String.join(", ", cid));
+                LOGGER.warn(mb);
+                return new ResponseEntity<>(new ScheduleResponseDTO(), HttpStatus.BAD_REQUEST);
+            }
+
             // Find valid schedules
             List<PotentialSchedule> schedules = this.schedulerService.schedule(sections);
             List<ScheduleDTO> scheduleDTOs = this.dtoMapperService.toScheduleDTOs(schedules);
