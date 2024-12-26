@@ -1,8 +1,0 @@
-services:
-  # Rainbow API service
-  api:
-    container_name: rainbow-api
-    image: rainbow-api:1.0.0
-    build: .
-    ports:
-      - "8080:8080"

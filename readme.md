@@ -31,7 +31,7 @@ gradle bootJar    # via Gradle
 ./gradlew bootJar # or via Gradle Wrapper
 
 # Run Jar
-java -jar ./build/libs/rainbow-1.0.0.jar
+java -jar ./build/libs/rainbow-1.1.0.jar
 ```
 
 ### Docker
