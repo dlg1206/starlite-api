@@ -35,10 +35,9 @@ java -jar ./build/libs/rainbow-1.1.0.jar
 ```
 
 ### Docker
-Admittedly overkill but could be useful
 ```bash
-docker compose up
-docker compose up -d  # to run in the background, 'docker compose down' to stop 
+docker build -t rainbow-api:1.1.0 .
+docker run --rm -p 8080:8080 rainbow-api:1.1.0
 ```
 
 ## API Endpoints
