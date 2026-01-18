@@ -1,5 +1,10 @@
+> [!WARNING]
+> **As of 1/17/26, this project is depreciated** 
+> 
+> With the end of University of Hawai'i support for Banner8, UH courses are no longer publically available or available for this API to use
+
 # Rainbow API v1
-> API that parses course details for the University of Hawaii
+> API that parses course details for the University of Hawai'i
 
 **DISCLAIMER:** Front end development is hard, but there are some 'questionable' decisions in the layout of the UH tables.
 I've done my best to parse all the information and report when failures occur, but some details may get lost.
