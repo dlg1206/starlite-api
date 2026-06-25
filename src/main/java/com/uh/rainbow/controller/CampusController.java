@@ -3,6 +3,7 @@ package com.uh.rainbow.controller;
 import com.uh.rainbow.dto.course.CourseDTO;
 import com.uh.rainbow.dto.response.*;
 import com.uh.rainbow.entities.Section;
+import com.uh.rainbow.service.BannerService;
 import com.uh.rainbow.service.CampusService;
 import com.uh.rainbow.service.HTMLParserService;
 import com.uh.rainbow.services.DTOMapperService;
@@ -15,6 +16,7 @@ import org.jsoup.HttpStatusException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpStatusCodeException;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,7 +29,7 @@ import java.util.List;
  * @author Derek Garcia
  */
 
-@RequestMapping("/v1/campuses")
+@RequestMapping("/v2")
 @RestController(value = "campusController")
 @RequiredArgsConstructor
 public class CampusController {
@@ -35,6 +37,7 @@ public class CampusController {
     private final static Logger LOGGER = new Logger(CampusController.class);
 
     private final CampusService campusService;
+    private final BannerService bannerService;
     private final HTMLParserService htmlParserService;
     private final DTOMapperService dtoMapperService;
 
@@ -44,39 +47,44 @@ public class CampusController {
      *
      * @return List of University of Hawaii Campuses and their ID's
      */
-    @GetMapping(value = "")
-    public ResponseEntity<IdentifierResponseDTO> getAllCampuses() {
-        IdentifierResponseDTO response = new IdentifierResponseDTO(
-                new SourceURL(),    // TODO - fix source or remove
-                campusService.getCampuses()
-        );
-        return ResponseEntity.ok(response);
+    @GetMapping(value = "/campuses")
+    public ResponseEntity<ResponseDTO> getAllCampuses() {
+        try {
+            IdentifierResponseDTO response = new IdentifierResponseDTO(
+                    new SourceURL(),    // TODO - fix source or remove
+                    campusService.getCampuses()
+            );
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            // Internal server error
+            LOGGER.error(new MessageBuilder(MessageBuilder.Type.INST).addDetails(e));
+            return ResponseEntity.internalServerError().body(new APIErrorResponseDTO(e));
+        }
     }
 
 
     /**
-     * GET Endpoint: /campuses/{instID}/terms
-     * Get list of terms for a campus
+     * GET Endpoint: /terms
+     * Get list of terms
      *
-     * @param instID Inst ID to search for terms
      * @return List of term names and their ID's
      */
-    @GetMapping(value = "/{instID}/terms")
-    public ResponseEntity<ResponseDTO> getAllTerms(@PathVariable String instID) {
+    @GetMapping(value = "/terms")
+    public ResponseEntity<ResponseDTO> getAllTerms() {
         try {
-            // Get all terms
-            return new ResponseEntity<>(
-                    new IdentifierResponseDTO(new SourceURL(instID), this.htmlParserService.parseTerms(instID)),
-                    HttpStatus.OK
+            IdentifierResponseDTO response = new IdentifierResponseDTO(
+                    new SourceURL(),    // TODO - fix source or remove
+                    bannerService.fetchTerms()
             );
-        } catch (HttpStatusException e) {
+            return ResponseEntity.ok(response);
+        } catch (HttpStatusCodeException e) {
             // Report and return html access failure
             LOGGER.reportHTTPAccessError(MessageBuilder.Type.TERM, e);
-            return new ResponseEntity<>(new BadAccessResponseDTO(e), HttpStatus.BAD_REQUEST);
-        } catch (IOException e) {
+            return ResponseEntity.badRequest().body(new BadAccessResponseDTO(bannerService.getSubjectUrl(), e));
+        } catch (Exception e) {
             // Internal server error
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.TERM).addDetails(e));
-            return new ResponseEntity<>(new APIErrorResponseDTO(e), HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.internalServerError().body(new APIErrorResponseDTO(e));
         }
     }
 

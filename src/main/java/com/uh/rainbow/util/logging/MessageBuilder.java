@@ -19,6 +19,7 @@ public class MessageBuilder {
      * Logging enum type
      */
     public enum Type {
+        BANNER,
         INST,
         TERM,
         SUBJECT,
