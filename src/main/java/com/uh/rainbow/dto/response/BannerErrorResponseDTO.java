@@ -6,17 +6,17 @@ import org.springframework.web.client.HttpStatusCodeException;
 /**
  * <b>File:</b> BadAccessResponseDTO.java
  * <p>
- * <b>Description:</b> Report failure to access API
+ * <b>Description:</b> Report failure to access Banner9 API
  *
  * @author Derek Garcia
  */
-public class BadAccessResponseDTO extends ResponseDTO {
+public class BannerErrorResponseDTO extends ResponseDTO {
     public final String source;
     public final int response_code;
     public final String response_message;
 
     @Deprecated
-    public BadAccessResponseDTO(HttpStatusException e) {
+    public BannerErrorResponseDTO(HttpStatusException e) {
         this.source = e.getUrl();
         this.response_code = e.getStatusCode();
         this.response_message = e.getMessage();
@@ -26,9 +26,9 @@ public class BadAccessResponseDTO extends ResponseDTO {
      * Create new failure
      *
      * @param url URL of API
-     * @param e Error message
+     * @param e   Error message
      */
-    public BadAccessResponseDTO(String url, HttpStatusCodeException e) {
+    public BannerErrorResponseDTO(String url, HttpStatusCodeException e) {
         this.source = url;
         this.response_code = e.getStatusCode().value();
         this.response_message = e.getMessage();

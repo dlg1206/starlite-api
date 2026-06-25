@@ -48,9 +48,9 @@ public class Logger {
      * @param type Log type
      * @param e    HttpStatusCodeException
      */
-    public void reportHTTPAccessError(MessageBuilder.Type type, HttpStatusCodeException e) {
+    public void reportBannerAccessError(MessageBuilder.Type type, HttpStatusCodeException e) {
         MessageBuilder mb = new MessageBuilder(type)
-                .addDetails("Failed to fetch HTML")
+                .addDetails("Failed to access Banner9 API")
                 .addDetails(e.getStatusCode());
         warn(mb);
         debug(mb.addDetails(e));

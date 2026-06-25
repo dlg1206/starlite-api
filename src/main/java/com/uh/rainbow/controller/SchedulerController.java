@@ -1,7 +1,7 @@
 package com.uh.rainbow.controller;
 
-import com.uh.rainbow.dto.response.APIErrorResponseDTO;
-import com.uh.rainbow.dto.response.BadAccessResponseDTO;
+import com.uh.rainbow.dto.response.BannerErrorResponseDTO;
+import com.uh.rainbow.dto.response.RainbowErrorResponseDTO;
 import com.uh.rainbow.dto.response.ResponseDTO;
 import com.uh.rainbow.dto.response.ScheduleResponseDTO;
 import com.uh.rainbow.dto.schedule.ScheduleDTO;
@@ -86,7 +86,7 @@ public class SchedulerController {
 
             // Warn if no sections found
             if (allSections.isEmpty()) {
-                return new ResponseEntity<>(new APIErrorResponseDTO(
+                return new ResponseEntity<>(new RainbowErrorResponseDTO(
                         new Exception(LOGGER.reportMissingSchedulingSections(crn, cid))),
                         HttpStatus.OK);
             }
@@ -101,7 +101,7 @@ public class SchedulerController {
 
             // Warn if not all sections were found
             if (!(requiredCIDs.isEmpty() && requiredCRNs.isEmpty())) {
-                return new ResponseEntity<>(new APIErrorResponseDTO(
+                return new ResponseEntity<>(new RainbowErrorResponseDTO(
                         new Exception(LOGGER.reportMissingSchedulingSections(requiredCRNs, requiredCIDs))),
                         HttpStatus.OK);
             }
@@ -115,11 +115,11 @@ public class SchedulerController {
         } catch (HttpStatusException e) {
             // Report and return html access failure
             LOGGER.reportHTTPAccessError(MessageBuilder.Type.SCHEDULE, e);
-            return new ResponseEntity<>(new BadAccessResponseDTO(e), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new BannerErrorResponseDTO(e), HttpStatus.BAD_REQUEST);
         } catch (IOException e) {
             // Internal Server error
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.SCHEDULE).addDetails(e));
-            return new ResponseEntity<>(new APIErrorResponseDTO(e), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new RainbowErrorResponseDTO(e), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

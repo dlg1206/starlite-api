@@ -11,6 +11,8 @@ import tools.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * <b>File:</b> CampusService.java
@@ -25,6 +27,7 @@ import java.util.List;
 public class CampusService {
 
     private final List<IdentifierDTO> campuses;
+    private final Map<String, String> campusLookup;
 
     /**
      * Create new campus service
@@ -34,9 +37,10 @@ public class CampusService {
      * @throws IOException if fail to find campus json file
      */
     public CampusService(ObjectMapper objectMapper, @Value("${rainbow.data.campuses-file}") Resource campusesFile) throws IOException {
-        // load into list
         try (InputStream is = campusesFile.getInputStream()) {
-            this.campuses = objectMapper.readValue(is, new TypeReference<>() {});
+            this.campuses = objectMapper.readValue(is, new TypeReference<>() {
+            });
         }
+        this.campusLookup = campuses.stream().collect(Collectors.toMap(IdentifierDTO::id, IdentifierDTO::value));
     }
 }

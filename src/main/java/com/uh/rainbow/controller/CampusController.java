@@ -3,6 +3,8 @@ package com.uh.rainbow.controller;
 import com.uh.rainbow.dto.course.CourseDTO;
 import com.uh.rainbow.dto.response.*;
 import com.uh.rainbow.entities.Section;
+import com.uh.rainbow.exception.InvalidCampusCodeException;
+import com.uh.rainbow.exception.InvalidTermCodeException;
 import com.uh.rainbow.service.BannerService;
 import com.uh.rainbow.service.CampusService;
 import com.uh.rainbow.service.HTMLParserService;
@@ -58,7 +60,7 @@ public class CampusController {
         } catch (Exception e) {
             // Internal server error
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.INST).addDetails(e));
-            return ResponseEntity.internalServerError().body(new APIErrorResponseDTO(e));
+            return ResponseEntity.internalServerError().body(new RainbowErrorResponseDTO(e));
         }
     }
 
@@ -79,12 +81,12 @@ public class CampusController {
             return ResponseEntity.ok(response);
         } catch (HttpStatusCodeException e) {
             // Report and return html access failure
-            LOGGER.reportHTTPAccessError(MessageBuilder.Type.TERM, e);
-            return ResponseEntity.badRequest().body(new BadAccessResponseDTO(bannerService.getSubjectUrl(), e));
+            LOGGER.reportBannerAccessError(MessageBuilder.Type.TERM, e);
+            return ResponseEntity.badRequest().body(new BannerErrorResponseDTO(bannerService.getSubjectUrl(), e));
         } catch (Exception e) {
             // Internal server error
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.TERM).addDetails(e));
-            return ResponseEntity.internalServerError().body(new APIErrorResponseDTO(e));
+            return ResponseEntity.internalServerError().body(new RainbowErrorResponseDTO(e));
         }
     }
 
@@ -97,22 +99,26 @@ public class CampusController {
      * @param termID Term ID to search for subjects
      * @return List of subjects for a given campus and term
      */
-    @GetMapping(value = "/{instID}/terms/{termID}/subjects")
+    @GetMapping(value = "/campuses/{instID}/terms/{termID}/subjects")
     public ResponseEntity<ResponseDTO> getSubjects(@PathVariable String instID, @PathVariable String termID) {
         try {
-            // Get all subjects
-            return new ResponseEntity<>(
-                    new IdentifierResponseDTO(new SourceURL(instID, termID), this.htmlParserService.parseSubjects(instID, termID)),
-                    HttpStatus.OK
+            IdentifierResponseDTO response = new IdentifierResponseDTO(
+                    new SourceURL(),    // TODO - fix source or remove
+                    bannerService.fetchSubjects(instID, termID)
             );
-        } catch (HttpStatusException e) {
+            return ResponseEntity.ok(response);
+        } catch (HttpStatusCodeException e) {
             // Report and return html access failure
-            LOGGER.reportHTTPAccessError(MessageBuilder.Type.SUBJECT, e);
-            return new ResponseEntity<>(new BadAccessResponseDTO(e), HttpStatus.BAD_REQUEST);
-        } catch (IOException e) {
+            LOGGER.reportBannerAccessError(MessageBuilder.Type.SUBJECT, e);
+            return ResponseEntity.badRequest().body(new BannerErrorResponseDTO(bannerService.getSubjectUrl(), e));
+        } catch (InvalidCampusCodeException | InvalidTermCodeException e) {
+            // Bad code campuse or term code
+            LOGGER.error(new MessageBuilder(MessageBuilder.Type.SUBJECT).addDetails(e));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RainbowErrorResponseDTO(e));
+        } catch (Exception e) {
             // Internal server error
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.SUBJECT).addDetails(e));
-            return new ResponseEntity<>(new APIErrorResponseDTO(e), HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.internalServerError().body(new RainbowErrorResponseDTO(e));
         }
     }
 
@@ -172,11 +178,11 @@ public class CampusController {
         } catch (HttpStatusException e) {
             // Report and return html access failure
             LOGGER.reportHTTPAccessError(MessageBuilder.Type.SUBJECT, e);
-            return new ResponseEntity<>(new BadAccessResponseDTO(e), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new BannerErrorResponseDTO(e), HttpStatus.BAD_REQUEST);
         } catch (IOException e) {
             // Internal Server Error
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.SUBJECT).addDetails(e));
-            return new ResponseEntity<>(new APIErrorResponseDTO(e), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new RainbowErrorResponseDTO(e), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -239,11 +245,11 @@ public class CampusController {
         } catch (HttpStatusException e) {
             // Report and return html access failure
             LOGGER.reportHTTPAccessError(MessageBuilder.Type.COURSE, e);
-            return new ResponseEntity<>(new BadAccessResponseDTO(e), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new BannerErrorResponseDTO(e), HttpStatus.BAD_REQUEST);
         } catch (IOException e) {
             // Internal Server error
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails(e));
-            return new ResponseEntity<>(new APIErrorResponseDTO(e), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new RainbowErrorResponseDTO(e), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
