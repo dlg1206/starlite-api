@@ -32,7 +32,7 @@ import java.util.Set;
  *
  * @author Derek Garcia
  */
-@RequestMapping("/v1/scheduler")
+@RequestMapping("/scheduler")
 @RestController(value = "SchedulerController")
 @RequiredArgsConstructor
 public class SchedulerController {

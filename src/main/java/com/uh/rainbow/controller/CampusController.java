@@ -31,7 +31,6 @@ import java.util.List;
  * @author Derek Garcia
  */
 
-@RequestMapping("/v2")
 @RestController(value = "campusController")
 @RequiredArgsConstructor
 public class CampusController {
