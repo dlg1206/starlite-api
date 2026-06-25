@@ -3,6 +3,7 @@ package com.uh.rainbow.controller;
 import com.uh.rainbow.dto.course.CourseDTO;
 import com.uh.rainbow.dto.response.*;
 import com.uh.rainbow.entities.Section;
+import com.uh.rainbow.service.CampusService;
 import com.uh.rainbow.service.HTMLParserService;
 import com.uh.rainbow.services.DTOMapperService;
 import com.uh.rainbow.util.SourceURL;
@@ -32,6 +33,8 @@ import java.util.List;
 public class CampusController {
 
     private final static Logger LOGGER = new Logger(CampusController.class);
+
+    private final CampusService campusService;
     private final HTMLParserService htmlParserService;
     private final DTOMapperService dtoMapperService;
 
@@ -42,22 +45,12 @@ public class CampusController {
      * @return List of University of Hawaii Campuses and their ID's
      */
     @GetMapping(value = "")
-    public ResponseEntity<ResponseDTO> getAllCampuses() {
-        try {
-            // Get all campuses
-            return new ResponseEntity<>(
-                    new IdentifierResponseDTO(new SourceURL(), this.htmlParserService.parseInstitutions()),
-                    HttpStatus.OK
-            );
-        } catch (HttpStatusException e) {
-            // Report and return html access failure
-            LOGGER.reportHTTPAccessError(MessageBuilder.Type.INST, e);
-            return new ResponseEntity<>(new BadAccessResponseDTO(e), HttpStatus.BAD_REQUEST);
-        } catch (IOException e) {
-            // Internal server error
-            LOGGER.error(new MessageBuilder(MessageBuilder.Type.INST).addDetails(e));
-            return new ResponseEntity<>(new APIErrorResponseDTO(e), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<IdentifierResponseDTO> getAllCampuses() {
+        IdentifierResponseDTO response = new IdentifierResponseDTO(
+                new SourceURL(),    // TODO - fix source or remove
+                campusService.getCampuses()
+        );
+        return ResponseEntity.ok(response);
     }
 
 
