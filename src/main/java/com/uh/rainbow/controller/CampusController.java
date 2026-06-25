@@ -9,6 +9,7 @@ import com.uh.rainbow.util.SourceURL;
 import com.uh.rainbow.util.filter.CourseFilter;
 import com.uh.rainbow.util.logging.Logger;
 import com.uh.rainbow.util.logging.MessageBuilder;
+import lombok.RequiredArgsConstructor;
 import org.jsoup.HttpStatusException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,11 +28,12 @@ import java.util.List;
 
 @RequestMapping("/v1/campuses")
 @RestController(value = "campusController")
+@RequiredArgsConstructor
 public class CampusController {
 
     private final static Logger LOGGER = new Logger(CampusController.class);
-    private final HTMLParserService htmlParserService = new HTMLParserService();
-    private final DTOMapperService dtoMapperService = new DTOMapperService();
+    private final HTMLParserService htmlParserService;
+    private final DTOMapperService dtoMapperService;
 
     /**
      * GET Endpoint: /campuses

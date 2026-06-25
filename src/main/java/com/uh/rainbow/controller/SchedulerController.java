@@ -9,16 +9,17 @@ import com.uh.rainbow.entities.PotentialSchedule;
 import com.uh.rainbow.entities.Section;
 import com.uh.rainbow.service.HTMLParserService;
 import com.uh.rainbow.service.SchedulerService;
+import com.uh.rainbow.services.DTOMapperService;
 import com.uh.rainbow.util.filter.CourseFilter;
 import com.uh.rainbow.util.logging.Logger;
 import com.uh.rainbow.util.logging.MessageBuilder;
+import lombok.RequiredArgsConstructor;
 import org.jsoup.HttpStatusException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,12 +34,14 @@ import java.util.Set;
  */
 @RequestMapping("/v1/scheduler")
 @RestController(value = "SchedulerController")
+@RequiredArgsConstructor
 public class SchedulerController {
 
     private final static Logger LOGGER = new Logger(SchedulerController.class);
-    private final HTMLParserService htmlParserService = new HTMLParserService();
-    private final SchedulerService schedulerService = new SchedulerService();
-    private final com.uh.rainbow.services.DTOMapperService dtoMapperService = new com.uh.rainbow.services.DTOMapperService();
+
+    private final HTMLParserService htmlParserService;
+    private final SchedulerService schedulerService;
+    private final DTOMapperService dtoMapperService;
 
     /**
      * GET Endpoint: /{instID}/terms/{termID}/scheduler
@@ -91,13 +94,13 @@ public class SchedulerController {
             // Verify at least one section from each class
             Set<String> requiredCRNs = crn == null ? new HashSet<>() : new HashSet<>(crn);
             Set<String> requiredCIDs = cid == null ? new HashSet<>() : new HashSet<>(cid);
-            for(Section section : allSections){
+            for (Section section : allSections) {
                 requiredCRNs.remove(section.getCRN());
                 requiredCIDs.remove(section.getCID().replace(" ", ""));
             }
 
             // Warn if not all sections were found
-            if (!(requiredCIDs.isEmpty() && requiredCRNs.isEmpty())){
+            if (!(requiredCIDs.isEmpty() && requiredCRNs.isEmpty())) {
                 return new ResponseEntity<>(new APIErrorResponseDTO(
                         new Exception(LOGGER.reportMissingSchedulingSections(requiredCRNs, requiredCIDs))),
                         HttpStatus.OK);
