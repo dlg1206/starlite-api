@@ -13,6 +13,8 @@ package com.uh.rainbow.banner;
  * @param spridenLastName     Instructor last name
  * @param goremalEmailAddress Instructor email address
  */
-public record BaseSectionResponse(String ssbsectCrn, String ssbsectSeqNumb, String spridenFirstName, String spridenMi,
-                                  String spridenLastName, String goremalEmailAddress) {
+public record BaseSectionResponse(String ssbsectCrn, String ssbsectSeqNumb,
+                                  String spridenFirstName, String spridenMi,
+                                  String spridenLastName, String goremalEmailAddress)  implements BannerResponse {
+    to
 }

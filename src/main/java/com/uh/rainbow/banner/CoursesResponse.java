@@ -1,6 +1,7 @@
 package com.uh.rainbow.banner;
 
-import com.uh.rainbow.dto.course.Course;
+import com.uh.rainbow.dto.course.CourseDTO;
+import com.uh.rainbow.entities.Course;
 
 import java.util.ArrayList;
 
@@ -15,16 +16,14 @@ import java.util.ArrayList;
  * @param crseNumb Course number
  * @param billHrLow Credits
  */
-public record CoursesResponse(String ssbsectCrn1, String title, String subjCode, String crseNumb, int billHrLow) {
+public record CoursesResponse(String ssbsectCrn1, String title, String subjCode, String crseNumb, int billHrLow) implements BannerResponse{
 
     /**
      * Create new course without any sections
      *
-     * @return CourseDTO
+     * @return Course
      */
-    public Course toCourseDTO() {
-        String cid = "%s %s".formatted(subjCode, crseNumb);
-        cid = cid.substring(0, cid.length() - 1);   // remove trailing '0'
-        return new Course(cid, title, "", Integer.toString(billHrLow), new ArrayList<>());
+    public Course toCourse() {
+        return new Course(subjCode, crseNumb, title, billHrLow);
     }
 }

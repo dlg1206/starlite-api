@@ -23,5 +23,5 @@ package com.uh.rainbow.banner;
  */
 public record MeetingsResponse(String ssbsectCrn, String bldgCode, String roomCode, String startDate, String endDate,
                                String beginTime, String endTime, int hrsWeek, String sunDay, String monDay,
-                               String tueDay, String wedDay, String thuDay, String friDay, String satDay) {
+                               String tueDay, String wedDay, String thuDay, String friDay, String satDay)  implements BannerResponse {
 }

@@ -8,5 +8,5 @@ package com.uh.rainbow.banner;
  * @param crn Course reference number
  * @param text Additional description of section
  */
-public record SectionDescResponse(String crn, String text) {
+public record SectionDescResponse(String crn, String text)  implements BannerResponse {
 }

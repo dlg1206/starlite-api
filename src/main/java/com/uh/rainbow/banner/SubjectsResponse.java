@@ -15,7 +15,7 @@ import com.uh.rainbow.dto.identifier.IdentifierDTO;
 public record SubjectsResponse(String ssbsectCampCode,
                                String stvtermCode, String stvtermDesc,
                                String stvsubjCode, String stvsubjDesc,
-                               int countStvtermCode) {
+                               int countStvtermCode) implements BannerResponse {
     /**
      * Extracts the term details from this subject object
      *
