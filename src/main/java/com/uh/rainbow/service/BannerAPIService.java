@@ -1,11 +1,13 @@
 package com.uh.rainbow.service;
 
-import com.uh.rainbow.banner.SubjectDTO;
+import com.uh.rainbow.banner.*;
 import com.uh.rainbow.config.BannerClientConfig;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.util.UriBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 /**
@@ -36,9 +38,11 @@ public class BannerAPIService {
 
 
     /**
-     * Make a request to the /subjects endpoint and cache the response
+     * Fetch all subject details
+     *
+     * @return List of subjects
      */
-    public List<SubjectDTO> fetchSubjects() {
+    public List<SubjectsResponse> fetchSubjects() {
         return bannerClient.get()
                 .uri(config.getSubjectsEndpoint())
                 .header("X-Recaptcha-Token", "")
@@ -47,13 +51,181 @@ public class BannerAPIService {
                 });
     }
 
+    /**
+     * Fetch all course IDs and names
+     *
+     * @param instID Campus code
+     * @param termID Term code
+     * @param subjectID Subject code
+     * @return List of courses offered for given campus, term, and subject
+     */
+    public List<CoursesResponse> fetchCourses(String instID, String termID, String subjectID){
+        return bannerClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path(config.getCoursesEndpoint())
+                        .queryParam("campusCode", instID)
+                        .queryParam("termCode", termID)
+                        .queryParam("subjectCode", subjectID)
+                        .build())
+                .header("X-Recaptcha-Token", "")
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {
+                });
+    }
 
     /**
-     * Get the /subjects API url
+     * Fetch all course descriptions
      *
-     * @return /subjects API url
+     * @param instID Campus code
+     * @param termID Term code
+     * @param subjectID Subject code
+     * @return List of crns and descriptions for given campus, term, and subject
      */
-    public String getSubjectUrl() {
-        return "%s%s".formatted(config.getBaseUrl(), config.getSubjectsEndpoint());
+    public List<CourseDescResponse> fetchCourseDescriptions(String instID, String termID, String subjectID){
+        return bannerClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path(config.getCourseDescEndpoint())
+                        .queryParam("campusCode", instID)
+                        .queryParam("termCode", termID)
+                        .queryParam("subjectCode", subjectID)
+                        .build())
+                .header("X-Recaptcha-Token", "")
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {
+                });
+    }
+
+
+    /**
+     * Fetch all section descriptions
+     *
+     * @param instID Campus code
+     * @param termID Term code
+     * @param subjectID Subject code
+     * @return List of crns and descriptions for given campus, term, and subject
+     */
+    public List<SectionDescResponse> fetchSectionDescriptions(String instID, String termID, String subjectID){
+        return bannerClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path(config.getSectionDescEndpoint())
+                        .queryParam("campusCode", instID)
+                        .queryParam("termCode", termID)
+                        .queryParam("subjectCode", subjectID)
+                        .build())
+                .header("X-Recaptcha-Token", "")
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {
+                });
+    }
+
+    /**
+     * Fetch all section notes
+     *
+     * @param instID Campus code
+     * @param termID Term code
+     * @param subjectID Subject code
+     * @return List of crns and notes for given campus, term, and subject
+     */
+    public List<SectionNotesResponse> fetchSectionNotes(String instID, String termID, String subjectID){
+        return bannerClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path(config.getSectionNotesEndpoint())
+                        .queryParam("campusCode", instID)
+                        .queryParam("termCode", termID)
+                        .queryParam("subjectCode", subjectID)
+                        .build())
+                .header("X-Recaptcha-Token", "")
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {
+                });
+    }
+
+    /**
+     * Fetch all section attributes
+     *
+     * @param instID Campus code
+     * @param termID Term code
+     * @param subjectID Subject code
+     * @return List of crns and attributes for given campus, term, and subject
+     */
+    public List<SectionAttribResponse> fetchSectionAttributes(String instID, String termID, String subjectID){
+        return bannerClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path(config.getSectionAttribEndpoint())
+                        .queryParam("campusCode", instID)
+                        .queryParam("termCode", termID)
+                        .queryParam("subjectCode", subjectID)
+                        .build())
+                .header("X-Recaptcha-Token", "")
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {
+                });
+    }
+
+
+    /**
+     * Fetch all section capacity details
+     *
+     * @param instID Campus code
+     * @param termID Term code
+     * @param subjectID Subject code
+     * @return List of crns and enrolled / waitlist status for given campus, term, and subject
+     */
+    public List<SectionCountsResponse> fetchSectionCounts(String instID, String termID, String subjectID){
+        return bannerClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path(config.getSectionCountsEndpoint())
+                        .queryParam("campusCode", instID)
+                        .queryParam("termCode", termID)
+                        .queryParam("subjectCode", subjectID)
+                        .build())
+                .header("X-Recaptcha-Token", "")
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {
+                });
+    }
+
+    /**
+     * Fetch all section instructor details
+     *
+     * @param instID Campus code
+     * @param termID Term code
+     * @param subjectID Subject code
+     * @return List of crns and section number and instructor for given campus, term, and subject
+     */
+    public List<BaseSectionResponse> fetchSectionInstructors(String instID, String termID, String subjectID){
+        return bannerClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path(config.getBaseSectionEndpoint())
+                        .queryParam("campusCode", instID)
+                        .queryParam("termCode", termID)
+                        .queryParam("subjectCode", subjectID)
+                        .build())
+                .header("X-Recaptcha-Token", "")
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {
+                });
+    }
+
+    /**
+     * Fetch all meeting details
+     *
+     * @param instID Campus code
+     * @param termID Term code
+     * @param subjectID Subject code
+     * @return List of crns and meeting details for given campus, term, and subject
+     */
+    public List<MeetingsResponse> fetchMeetings(String instID, String termID, String subjectID){
+        return bannerClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path(config.getMeetingsEndpoint())
+                        .queryParam("campusCode", instID)
+                        .queryParam("termCode", termID)
+                        .queryParam("subjectCode", subjectID)
+                        .build())
+                .header("X-Recaptcha-Token", "")
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {
+                });
     }
 }
