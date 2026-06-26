@@ -24,6 +24,16 @@ public class SchedulerService {
     public static final Logger LOGGER = new Logger(SchedulerService.class);
 
     /**
+     * Generate list of valid schedules
+     *
+     * @return List of valid schedules
+     */
+    public List<PotentialSchedule> schedule(List<Section> sections) {
+        // Generate all possible schedules
+        return new Scheduler(sections).solve();
+    }
+
+    /**
      * Scheduler that generates valid schedules
      */
     private static class Scheduler {
@@ -86,16 +96,6 @@ public class SchedulerService {
             return this.results;
         }
 
-    }
-
-    /**
-     * Generate list of valid schedules
-     *
-     * @return List of valid schedules
-     */
-    public List<PotentialSchedule> schedule(List<Section> sections) {
-        // Generate all possible schedules
-        return new Scheduler(sections).solve();
     }
 
 }

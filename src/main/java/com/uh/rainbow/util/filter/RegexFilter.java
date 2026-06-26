@@ -15,6 +15,29 @@ import java.util.regex.Pattern;
  */
 public class RegexFilter {
 
+    private final Pattern accept;
+    private final Pattern reject;
+    /**
+     * Create new Regex Filter
+     *
+     * @param accept Regex of patterns to accept
+     * @param reject Regex of patterns to reject
+     */
+    private RegexFilter(Pattern accept, Pattern reject) {
+        this.accept = accept;
+        this.reject = reject;
+    }
+
+    /**
+     * Test that the string is valid
+     *
+     * @param string String to test
+     * @return True if accepted and not rejected, false otherwise
+     */
+    public boolean test(String string) {
+        return this.accept.matcher(string).find() && !this.reject.matcher(string).find();
+    }
+
     /**
      * Build for Regex Filter
      */
@@ -54,29 +77,5 @@ public class RegexFilter {
                     Pattern.compile(acceptRegex, Pattern.CASE_INSENSITIVE),
                     Pattern.compile(rejectRegex, Pattern.CASE_INSENSITIVE));
         }
-    }
-
-    private final Pattern accept;
-    private final Pattern reject;
-
-    /**
-     * Create new Regex Filter
-     *
-     * @param accept Regex of patterns to accept
-     * @param reject Regex of patterns to reject
-     */
-    private RegexFilter(Pattern accept, Pattern reject) {
-        this.accept = accept;
-        this.reject = reject;
-    }
-
-    /**
-     * Test that the string is valid
-     *
-     * @param string String to test
-     * @return True if accepted and not rejected, false otherwise
-     */
-    public boolean test(String string) {
-        return this.accept.matcher(string).find() && !this.reject.matcher(string).find();
     }
 }

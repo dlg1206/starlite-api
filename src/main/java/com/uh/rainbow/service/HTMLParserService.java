@@ -35,41 +35,9 @@ import java.util.regex.Pattern;
  */
 @Service
 public class HTMLParserService {
+    public static final Logger LOGGER = new Logger(HTMLParserService.class);
     private static final int MAX_THREADS = 50;
     private final ForkJoinPool THREAD_POOL = new ForkJoinPool(MAX_THREADS);
-    public static final Logger LOGGER = new Logger(HTMLParserService.class);
-
-    /**
-     * Regex parser that extracts params from an url
-     */
-    private static class URLParamExtractor {
-
-        private final Pattern regex;
-
-        /**
-         * Create new extractor
-         *
-         * @param regex Regex to use to extract from url
-         */
-        public URLParamExtractor(String regex) {
-            this.regex = Pattern.compile(regex);
-        }
-
-        /**
-         * Use the regex to extract the param
-         *
-         * @param url URL to extract param from
-         * @return Value of param
-         */
-        public String extract(String url) {
-            Matcher matcher = this.regex.matcher(url);
-            if (matcher.find())
-                return matcher.group(1);
-            return "";
-        }
-
-    }
-
 
     /**
      * Process a list of li elements with href
@@ -278,6 +246,35 @@ public class HTMLParserService {
                 .setDuration(start));
         return sections;
     }
+
+    /**
+         * Regex parser that extracts params from an url
+         */
+        private record URLParamExtractor(Pattern regex) {
+
+            /**
+             * Create new extractor
+             *
+             * @param regex Regex to use to extract from url
+             */
+            private URLParamExtractor(String regex) {
+                this.regex = Pattern.compile(regex);
+            }
+
+            /**
+             * Use the regex to extract the param
+             *
+             * @param url URL to extract param from
+             * @return Value of param
+             */
+            public String extract(String url) {
+                Matcher matcher = this.regex.matcher(url);
+                if (matcher.find())
+                    return matcher.group(1);
+                return "";
+            }
+
+        }
 
 
 }

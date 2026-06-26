@@ -15,23 +15,10 @@ import java.util.List;
  * @author Derek Garcia
  */
 public class MessageBuilder {
-    /**
-     * Logging enum type
-     */
-    public enum Type {
-        BANNER,
-        INST,
-        TERM,
-        SUBJECT,
-        COURSE,
-        SCHEDULE
-    }
-
     private static final String DELIMITER = " | ";
     private final Type messageType;
     private final List<Object[]> details = new ArrayList<>();
     private String duration = null;
-
     /**
      * Create new builder
      *
@@ -86,6 +73,18 @@ public class MessageBuilder {
             sb.append(DELIMITER).append("Completed in ").append(this.duration);
 
         return sb.toString();
+    }
+
+    /**
+     * Logging enum type
+     */
+    public enum Type {
+        BANNER,
+        INST,
+        TERM,
+        SUBJECT,
+        COURSE,
+        SCHEDULE
     }
 
 }

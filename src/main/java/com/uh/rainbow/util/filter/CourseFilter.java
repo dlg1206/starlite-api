@@ -22,208 +22,6 @@ import java.util.regex.Pattern;
  */
 public class CourseFilter {
     private final static Logger LOGGER = new Logger(CourseFilter.class);
-
-    /**
-     * Builder for Course Filter
-     */
-    public static class Builder {
-        private Set<String> crns;
-        private Pattern codes;
-        private Set<String> subjects;
-        private Pattern fullCourses;
-        private RegexFilter days;
-        private SimpleTime startAfter;
-        private SimpleTime endAfter;
-        private int online = -1;
-        private int synchronous = -1;
-        private RegexFilter instructors;
-        private RegexFilter keywords;
-
-        /**
-         * Set Course Reference numbers
-         *
-         * @param crns Course Reference numbers
-         * @return CourseFilterBuilder
-         */
-        public Builder setCRNs(List<String> crns) {
-            if (crns != null)
-                this.crns = new HashSet<>(crns);
-            return this;
-        }
-
-        /**
-         * Set subjects ( ICS, FIRE, etc )
-         *
-         * @param subjects Subjects
-         * @return CourseFilterBuilder
-         */
-        public Builder setSubjects(List<String> subjects) {
-            if (subjects != null) {
-                subjects.replaceAll(String::toUpperCase);
-                this.subjects = new HashSet<>(subjects);
-            }
-            return this;
-        }
-
-        /**
-         * Set course numbers ( 101, 301, etc )
-         * Wild cards can also be used ie 1** will return and 100 level course
-         *
-         * @param codes Course numbers
-         * @return CourseFilterBuilder
-         */
-        public Builder setCourseNumbers(List<String> codes) {
-            if (codes != null) {
-                // replace * with regex numbers
-                String regex = StringUtils.join(codes, "|")
-                        .replace("**", "[0-9]{2}")
-                        .replace("*", "[0-9]");
-
-                this.codes = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-            }
-            return this;
-        }
-
-
-        /**
-         * Set specific courses ( ICS 101, ZOOL 420, etc )
-         * Will override any previous values set in subject or codes
-         * Wild cards can also be used ie ICS 1** will return and ISC 100 level courses
-         *
-         * @param fullCourses List of specific courses to filter
-         * @return CourseFilterBuilder
-         */
-        public Builder setFullCourses(List<String> fullCourses) {
-            if (fullCourses != null) {
-                // Create new patter matching exact cases
-                String regex = StringUtils.join(fullCourses, "|")
-                        .replace("**", "[0-9]{2}")
-                        .replace("*", "[0-9]");
-                this.fullCourses = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-            }
-            return this;
-        }
-
-        /**
-         * Set list of days for meetings using UH day codes.
-         * Prepending with '!' to inverse the search
-         * ie "!M" -> sections not on monday
-         *
-         * @param days list of days to filter by
-         * @return CourseFilterBuilder
-         */
-        public Builder setDays(List<String> days) {
-            if (days != null) {
-                RegexFilter.Builder builder = new RegexFilter.Builder();
-                // + "{1}$" ensures only one occurrence of string
-                days.forEach((d) -> {
-                    d = d + "{1}$";
-                    builder.addString(d);
-                });
-                this.days = builder.build();
-            }
-            return this;
-        }
-
-        /**
-         * Set start after time
-         *
-         * @param startAfter Earliest a class can start / time class must start after
-         * @return CourseFilterBuilder
-         */
-        public Builder setStartAfter(String startAfter) {
-            try {
-                if (startAfter != null)
-                    this.startAfter = new SimpleTime(startAfter);
-            } catch (ParseException ignored) {
-                LOGGER.error(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails("Failed to Parse time string '%s'".formatted(startAfter)));
-            }
-            return this;
-        }
-
-        /**
-         * Set end before time
-         *
-         * @param endBefore Latest a class can end / time class must end before
-         * @return CourseFilterBuilder
-         */
-        public Builder setEndBefore(String endBefore) {
-            try {
-                if (endBefore != null)
-                    this.endAfter = new SimpleTime(endBefore);
-            } catch (ParseException ignored) {
-                LOGGER.error(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails("Failed to Parse time string '%s'".formatted(startAfter)));
-            }
-            return this;
-        }
-
-        /**
-         * Set online preference
-         *
-         * @param online Boolean string to include online classes
-         * @return CourseFilterBuilder
-         */
-        public Builder setOnline(String online) {
-            if (online != null)
-                this.online = Boolean.parseBoolean(online) ? 1 : 0;
-
-            return this;
-        }
-
-        /**
-         * Set synchronous preference
-         *
-         * @param sync Boolean string to indicate synchronous preference. 1 syn, 0 sync, default both
-         * @return CourseFilterBuilder
-         */
-        public Builder setSynchronous(String sync) {
-            if (sync != null)
-                this.synchronous = Boolean.parseBoolean(sync) ? 1 : 0;
-
-            return this;
-        }
-
-
-        /**
-         * Set list of instructors to search for
-         *
-         * @param instructors list of instructors to search for
-         * @return CourseFilterBuilder
-         */
-        public Builder setInstructors(List<String> instructors) {
-            if (instructors != null) {
-                RegexFilter.Builder builder = new RegexFilter.Builder();
-                instructors.forEach(builder::addString);
-                this.instructors = builder.build();
-            }
-            return this;
-        }
-
-        /**
-         * Set list of keywords to search for in the Course titles
-         *
-         * @param keywords list of keywords to search for
-         * @return CourseFilterBuilder
-         */
-        public Builder setKeywords(List<String> keywords) {
-            if (keywords != null) {
-                RegexFilter.Builder builder = new RegexFilter.Builder();
-                keywords.forEach(builder::addString);
-                this.keywords = builder.build();
-            }
-            return this;
-        }
-
-        /**
-         * Build Course filter
-         *
-         * @return Course Filter
-         */
-        public CourseFilter build() {
-            return new CourseFilter(crns, codes, subjects, fullCourses, days, startAfter, endAfter, online, synchronous, instructors, keywords);
-        }
-    }
-
     private final Set<String> crns;
     private final Pattern codes;
     private final Set<String> subjects;
@@ -235,7 +33,6 @@ public class CourseFilter {
     private final int synchronous;
     private final RegexFilter instructors;
     private final RegexFilter keywords;
-
     /**
      * Create new course filter
      *
@@ -462,5 +259,206 @@ public class CourseFilter {
         if (this.subjects == null || this.crns != null)
             return true;
         return this.subjects.contains(subject.toUpperCase());
+    }
+
+    /**
+     * Builder for Course Filter
+     */
+    public static class Builder {
+        private Set<String> crns;
+        private Pattern codes;
+        private Set<String> subjects;
+        private Pattern fullCourses;
+        private RegexFilter days;
+        private SimpleTime startAfter;
+        private SimpleTime endAfter;
+        private int online = -1;
+        private int synchronous = -1;
+        private RegexFilter instructors;
+        private RegexFilter keywords;
+
+        /**
+         * Set Course Reference numbers
+         *
+         * @param crns Course Reference numbers
+         * @return CourseFilterBuilder
+         */
+        public Builder setCRNs(List<String> crns) {
+            if (crns != null)
+                this.crns = new HashSet<>(crns);
+            return this;
+        }
+
+        /**
+         * Set subjects ( ICS, FIRE, etc )
+         *
+         * @param subjects Subjects
+         * @return CourseFilterBuilder
+         */
+        public Builder setSubjects(List<String> subjects) {
+            if (subjects != null) {
+                subjects.replaceAll(String::toUpperCase);
+                this.subjects = new HashSet<>(subjects);
+            }
+            return this;
+        }
+
+        /**
+         * Set course numbers ( 101, 301, etc )
+         * Wild cards can also be used ie 1** will return and 100 level course
+         *
+         * @param codes Course numbers
+         * @return CourseFilterBuilder
+         */
+        public Builder setCourseNumbers(List<String> codes) {
+            if (codes != null) {
+                // replace * with regex numbers
+                String regex = StringUtils.join(codes, "|")
+                        .replace("**", "[0-9]{2}")
+                        .replace("*", "[0-9]");
+
+                this.codes = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+            }
+            return this;
+        }
+
+
+        /**
+         * Set specific courses ( ICS 101, ZOOL 420, etc )
+         * Will override any previous values set in subject or codes
+         * Wild cards can also be used ie ICS 1** will return and ISC 100 level courses
+         *
+         * @param fullCourses List of specific courses to filter
+         * @return CourseFilterBuilder
+         */
+        public Builder setFullCourses(List<String> fullCourses) {
+            if (fullCourses != null) {
+                // Create new patter matching exact cases
+                String regex = StringUtils.join(fullCourses, "|")
+                        .replace("**", "[0-9]{2}")
+                        .replace("*", "[0-9]");
+                this.fullCourses = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+            }
+            return this;
+        }
+
+        /**
+         * Set list of days for meetings using UH day codes.
+         * Prepending with '!' to inverse the search
+         * ie "!M" -> sections not on monday
+         *
+         * @param days list of days to filter by
+         * @return CourseFilterBuilder
+         */
+        public Builder setDays(List<String> days) {
+            if (days != null) {
+                RegexFilter.Builder builder = new RegexFilter.Builder();
+                // + "{1}$" ensures only one occurrence of string
+                days.forEach((d) -> {
+                    d = d + "{1}$";
+                    builder.addString(d);
+                });
+                this.days = builder.build();
+            }
+            return this;
+        }
+
+        /**
+         * Set start after time
+         *
+         * @param startAfter Earliest a class can start / time class must start after
+         * @return CourseFilterBuilder
+         */
+        public Builder setStartAfter(String startAfter) {
+            try {
+                if (startAfter != null)
+                    this.startAfter = new SimpleTime(startAfter);
+            } catch (ParseException ignored) {
+                LOGGER.error(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails("Failed to Parse time string '%s'".formatted(startAfter)));
+            }
+            return this;
+        }
+
+        /**
+         * Set end before time
+         *
+         * @param endBefore Latest a class can end / time class must end before
+         * @return CourseFilterBuilder
+         */
+        public Builder setEndBefore(String endBefore) {
+            try {
+                if (endBefore != null)
+                    this.endAfter = new SimpleTime(endBefore);
+            } catch (ParseException ignored) {
+                LOGGER.error(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails("Failed to Parse time string '%s'".formatted(startAfter)));
+            }
+            return this;
+        }
+
+        /**
+         * Set online preference
+         *
+         * @param online Boolean string to include online classes
+         * @return CourseFilterBuilder
+         */
+        public Builder setOnline(String online) {
+            if (online != null)
+                this.online = Boolean.parseBoolean(online) ? 1 : 0;
+
+            return this;
+        }
+
+        /**
+         * Set synchronous preference
+         *
+         * @param sync Boolean string to indicate synchronous preference. 1 syn, 0 sync, default both
+         * @return CourseFilterBuilder
+         */
+        public Builder setSynchronous(String sync) {
+            if (sync != null)
+                this.synchronous = Boolean.parseBoolean(sync) ? 1 : 0;
+
+            return this;
+        }
+
+
+        /**
+         * Set list of instructors to search for
+         *
+         * @param instructors list of instructors to search for
+         * @return CourseFilterBuilder
+         */
+        public Builder setInstructors(List<String> instructors) {
+            if (instructors != null) {
+                RegexFilter.Builder builder = new RegexFilter.Builder();
+                instructors.forEach(builder::addString);
+                this.instructors = builder.build();
+            }
+            return this;
+        }
+
+        /**
+         * Set list of keywords to search for in the Course titles
+         *
+         * @param keywords list of keywords to search for
+         * @return CourseFilterBuilder
+         */
+        public Builder setKeywords(List<String> keywords) {
+            if (keywords != null) {
+                RegexFilter.Builder builder = new RegexFilter.Builder();
+                keywords.forEach(builder::addString);
+                this.keywords = builder.build();
+            }
+            return this;
+        }
+
+        /**
+         * Build Course filter
+         *
+         * @return Course Filter
+         */
+        public CourseFilter build() {
+            return new CourseFilter(crns, codes, subjects, fullCourses, days, startAfter, endAfter, online, synchronous, instructors, keywords);
+        }
     }
 }

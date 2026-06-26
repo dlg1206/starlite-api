@@ -14,9 +14,9 @@ import java.util.Set;
  * @author Derek Garcia
  */
 public class PotentialSchedule {
+    private final List<Section> remainingSections;
     private Set<String> courses = new HashSet<>();
     private Set<Section> sections = new HashSet<>();
-    private final List<Section> remainingSections;
 
     /**
      * Create a new potential schedule

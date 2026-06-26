@@ -41,29 +41,6 @@ public class Meeting {
     }
 
     /**
-     * Determine if this meeting conflicts with another meeting
-     *
-     * @param other Other meeting to compare against
-     * @return True if conflict, false if otherwise
-     */
-    public boolean conflictsWith(Meeting other) {
-        // TBA days can't conflict
-        if (this.day == Day.TBA || other.day == Day.TBA)
-            return false;
-
-        // Can't conflict if on different days
-        if (this.day != other.day)
-            return false;
-
-        // todo handle single day meetings
-
-        // Conflict if times overlap
-        return this.startTime.beforeOrEqual(other.endTime) == 1 && this.endTime.afterOrEqual(other.startTime) == 1;
-
-        // No conflicts
-    }
-
-    /**
      * Create new meetings parsed from UH style input parameters
      *
      * @param dayString  Day string formatted D*
@@ -84,6 +61,29 @@ public class Meeting {
         );
 
         return meetings;
+    }
+
+    /**
+     * Determine if this meeting conflicts with another meeting
+     *
+     * @param other Other meeting to compare against
+     * @return True if conflict, false if otherwise
+     */
+    public boolean conflictsWith(Meeting other) {
+        // TBA days can't conflict
+        if (this.day == Day.TBA || other.day == Day.TBA)
+            return false;
+
+        // Can't conflict if on different days
+        if (this.day != other.day)
+            return false;
+
+        // todo handle single day meetings
+
+        // Conflict if times overlap
+        return this.startTime.beforeOrEqual(other.endTime) == 1 && this.endTime.afterOrEqual(other.startTime) == 1;
+
+        // No conflicts
     }
 
     /**

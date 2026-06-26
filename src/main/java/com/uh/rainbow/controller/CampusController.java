@@ -5,7 +5,6 @@ import com.uh.rainbow.dto.response.*;
 import com.uh.rainbow.entities.Section;
 import com.uh.rainbow.exception.InvalidCampusCodeException;
 import com.uh.rainbow.exception.InvalidTermCodeException;
-import com.uh.rainbow.service.BannerService;
 import com.uh.rainbow.service.CampusService;
 import com.uh.rainbow.service.HTMLParserService;
 import com.uh.rainbow.services.DTOMapperService;
@@ -38,7 +37,6 @@ public class CampusController {
     private final static Logger LOGGER = new Logger(CampusController.class);
 
     private final CampusService campusService;
-    private final BannerService bannerService;
     private final HTMLParserService htmlParserService;
     private final DTOMapperService dtoMapperService;
 
@@ -77,13 +75,14 @@ public class CampusController {
         try {
             IdentifierResponseDTO response = new IdentifierResponseDTO(
                     new SourceURL(),    // TODO - fix source or remove
-                    bannerService.fetchSubjects(instID, termID)
+                    campusService.fetchSubjects(instID, termID)
             );
             return ResponseEntity.ok(response);
         } catch (HttpStatusCodeException e) {
             // Report and return html access failure
             LOGGER.reportBannerAccessError(MessageBuilder.Type.SUBJECT, e);
-            return ResponseEntity.badRequest().body(new BannerErrorResponseDTO(bannerService.getSubjectUrl(), e));
+            // todo - fix
+            return ResponseEntity.badRequest().body(new BannerErrorResponseDTO("", e));
         } catch (InvalidCampusCodeException | InvalidTermCodeException e) {
             // Bad code campuse or term code
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.SUBJECT).addDetails(e));

@@ -25,8 +25,8 @@ public class Section {
     private final int currEnrolled;
     private final int seatsAvailable;
     private final List<Meeting> meetings = new ArrayList<>();
-    private int failedMeetings = 0;     // Assume no failed meetings
     private final List<String> additionalDetails = new ArrayList<>();
+    private int failedMeetings = 0;     // Assume no failed meetings
 
     /**
      * Create new Section

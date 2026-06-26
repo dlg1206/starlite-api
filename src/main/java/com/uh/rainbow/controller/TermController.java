@@ -4,7 +4,7 @@ import com.uh.rainbow.dto.response.BannerErrorResponseDTO;
 import com.uh.rainbow.dto.response.IdentifierResponseDTO;
 import com.uh.rainbow.dto.response.RainbowErrorResponseDTO;
 import com.uh.rainbow.dto.response.ResponseDTO;
-import com.uh.rainbow.service.BannerService;
+import com.uh.rainbow.service.CampusService;
 import com.uh.rainbow.util.SourceURL;
 import com.uh.rainbow.util.logging.Logger;
 import com.uh.rainbow.util.logging.MessageBuilder;
@@ -29,7 +29,7 @@ public class TermController {
 
     private final static Logger LOGGER = new Logger(TermController.class);
 
-    private final BannerService bannerService;
+    private final CampusService campusService;
 
     /**
      * GET Endpoint: /terms
@@ -42,13 +42,14 @@ public class TermController {
         try {
             IdentifierResponseDTO response = new IdentifierResponseDTO(
                     new SourceURL(),    // TODO - fix source or remove
-                    bannerService.fetchTerms()
+                    campusService.fetchTerms()
             );
             return ResponseEntity.ok(response);
         } catch (HttpStatusCodeException e) {
             // Report and return html access failure
             LOGGER.reportBannerAccessError(MessageBuilder.Type.TERM, e);
-            return ResponseEntity.badRequest().body(new BannerErrorResponseDTO(bannerService.getSubjectUrl(), e));
+            // todo - fix
+            return ResponseEntity.badRequest().body(new BannerErrorResponseDTO("", e));
         } catch (Exception e) {
             // Internal server error
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.TERM).addDetails(e));
