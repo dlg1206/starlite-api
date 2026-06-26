@@ -1,9 +1,9 @@
 package com.uh.rainbow.controller;
 
-import com.uh.rainbow.dto.response.BannerErrorResponseDTO;
-import com.uh.rainbow.dto.response.IdentifierResponseDTO;
-import com.uh.rainbow.dto.response.RainbowErrorResponseDTO;
-import com.uh.rainbow.dto.response.ResponseDTO;
+import com.uh.rainbow.response.BannerErrorResponse;
+import com.uh.rainbow.response.IdentifierResponse;
+import com.uh.rainbow.response.RainbowErrorResponse;
+import com.uh.rainbow.response.Response;
 import com.uh.rainbow.service.CampusService;
 import com.uh.rainbow.util.SourceURL;
 import com.uh.rainbow.util.logging.Logger;
@@ -38,9 +38,9 @@ public class TermController {
      * @return List of term names and their ID's
      */
     @GetMapping(value = "")
-    public ResponseEntity<ResponseDTO> getAllTerms() {
+    public ResponseEntity<Response> getAllTerms() {
         try {
-            IdentifierResponseDTO response = new IdentifierResponseDTO(
+            IdentifierResponse response = new IdentifierResponse(
                     new SourceURL(),    // TODO - fix source or remove
                     campusService.fetchTerms()
             );
@@ -49,11 +49,11 @@ public class TermController {
             // Report and return html access failure
             LOGGER.reportBannerAccessError(MessageBuilder.Type.TERM, e);
             // todo - fix
-            return ResponseEntity.badRequest().body(new BannerErrorResponseDTO("", e));
+            return ResponseEntity.badRequest().body(new BannerErrorResponse("", e));
         } catch (Exception e) {
             // Internal server error
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.TERM).addDetails(e));
-            return ResponseEntity.internalServerError().body(new RainbowErrorResponseDTO(e));
+            return ResponseEntity.internalServerError().body(new RainbowErrorResponse(e));
         }
     }
 }

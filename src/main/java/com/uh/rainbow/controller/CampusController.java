@@ -1,10 +1,10 @@
 package com.uh.rainbow.controller;
 
 import com.uh.rainbow.dto.course.CourseDTO;
-import com.uh.rainbow.dto.response.*;
 import com.uh.rainbow.entities.Section;
 import com.uh.rainbow.exception.InvalidCampusCodeException;
 import com.uh.rainbow.exception.InvalidTermCodeException;
+import com.uh.rainbow.response.*;
 import com.uh.rainbow.service.CampusService;
 import com.uh.rainbow.service.HTMLParserService;
 import com.uh.rainbow.services.DTOMapperService;
@@ -47,9 +47,9 @@ public class CampusController {
      * @return List of University of Hawai'i campuses and their ID's
      */
     @GetMapping(value = "")
-    public ResponseEntity<ResponseDTO> getAllCampuses() {
+    public ResponseEntity<Response> getAllCampuses() {
         try {
-            IdentifierResponseDTO response = new IdentifierResponseDTO(
+            IdentifierResponse response = new IdentifierResponse(
                     new SourceURL(),    // TODO - fix source or remove
                     campusService.getCampuses()
             );
@@ -57,7 +57,7 @@ public class CampusController {
         } catch (Exception e) {
             // Internal server error
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.INST).addDetails(e));
-            return ResponseEntity.internalServerError().body(new RainbowErrorResponseDTO(e));
+            return ResponseEntity.internalServerError().body(new RainbowErrorResponse(e));
         }
     }
 
@@ -71,9 +71,9 @@ public class CampusController {
      * @return List of subjects for a given campus and term
      */
     @GetMapping(value = "/{instID}/terms/{termID}/subjects")
-    public ResponseEntity<ResponseDTO> getSubjects(@PathVariable String instID, @PathVariable String termID) {
+    public ResponseEntity<Response> getSubjects(@PathVariable String instID, @PathVariable String termID) {
         try {
-            IdentifierResponseDTO response = new IdentifierResponseDTO(
+            IdentifierResponse response = new IdentifierResponse(
                     new SourceURL(),    // TODO - fix source or remove
                     campusService.fetchSubjects(instID, termID)
             );
@@ -82,15 +82,15 @@ public class CampusController {
             // Report and return html access failure
             LOGGER.reportBannerAccessError(MessageBuilder.Type.SUBJECT, e);
             // todo - fix
-            return ResponseEntity.badRequest().body(new BannerErrorResponseDTO("", e));
+            return ResponseEntity.badRequest().body(new BannerErrorResponse("", e));
         } catch (InvalidCampusCodeException | InvalidTermCodeException e) {
             // Bad code campuse or term code
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.SUBJECT).addDetails(e));
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RainbowErrorResponseDTO(e));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RainbowErrorResponse(e));
         } catch (Exception e) {
             // Internal server error
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.SUBJECT).addDetails(e));
-            return ResponseEntity.internalServerError().body(new RainbowErrorResponseDTO(e));
+            return ResponseEntity.internalServerError().body(new RainbowErrorResponse(e));
         }
     }
 
@@ -114,7 +114,7 @@ public class CampusController {
      * @return List of courses for a given campus, term, and subject that pass filters
      */
     @GetMapping(value = "/{instID}/terms/{termID}/subjects/{subjectID}")
-    public ResponseEntity<ResponseDTO> getCourses(
+    public ResponseEntity<Response> getCourses(
             @PathVariable String instID,
             @PathVariable String termID,
             @PathVariable String subjectID,
@@ -144,17 +144,17 @@ public class CampusController {
             List<Section> sections = this.htmlParserService.parseSections(cf, instID, termID, subjectID);
             List<CourseDTO> courseDTOs = this.dtoMapperService.toCourseDTOs(sections);
             return new ResponseEntity<>(
-                    new CourseResponseDTO(courseDTOs),
+                    new CourseResponse(courseDTOs),
                     HttpStatus.OK
             );
         } catch (HttpStatusException e) {
             // Report and return html access failure
             LOGGER.reportHTTPAccessError(MessageBuilder.Type.SUBJECT, e);
-            return new ResponseEntity<>(new BannerErrorResponseDTO(e), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new BannerErrorResponse(e), HttpStatus.BAD_REQUEST);
         } catch (IOException e) {
             // Internal Server Error
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.SUBJECT).addDetails(e));
-            return new ResponseEntity<>(new RainbowErrorResponseDTO(e), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new RainbowErrorResponse(e), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -179,7 +179,7 @@ public class CampusController {
      * @return List of courses for a given campus and term that pass filters
      */
     @GetMapping(value = "/{instID}/terms/{termID}/courses")
-    public ResponseEntity<ResponseDTO> getCourses(
+    public ResponseEntity<Response> getCourses(
             @PathVariable String instID,
             @PathVariable String termID,
             @RequestParam(required = false) List<String> crn,
@@ -213,15 +213,15 @@ public class CampusController {
             List<Section> sections = this.htmlParserService.parseSections(cf, instID, termID);
             List<CourseDTO> courseDTOs = this.dtoMapperService.toCourseDTOs(sections);
 
-            return new ResponseEntity<>(new CourseResponseDTO(courseDTOs), HttpStatus.OK);
+            return new ResponseEntity<>(new CourseResponse(courseDTOs), HttpStatus.OK);
         } catch (HttpStatusException e) {
             // Report and return html access failure
             LOGGER.reportHTTPAccessError(MessageBuilder.Type.COURSE, e);
-            return new ResponseEntity<>(new BannerErrorResponseDTO(e), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new BannerErrorResponse(e), HttpStatus.BAD_REQUEST);
         } catch (IOException e) {
             // Internal Server error
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails(e));
-            return new ResponseEntity<>(new RainbowErrorResponseDTO(e), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new RainbowErrorResponse(e), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

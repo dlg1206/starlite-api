@@ -1,4 +1,4 @@
-package com.uh.rainbow.dto.response;
+package com.uh.rainbow.response;
 
 import com.uh.rainbow.dto.course.CourseDTO;
 
@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author Derek Garcia
  */
-public class CourseResponseDTO extends ResponseDTO {
+public class CourseResponse extends Response {
     public final List<CourseDTO> courses;
 
     /**
@@ -19,7 +19,7 @@ public class CourseResponseDTO extends ResponseDTO {
      *
      * @param courseDTOS list of course DTOs
      */
-    public CourseResponseDTO(List<CourseDTO> courseDTOS) {
+    public CourseResponse(List<CourseDTO> courseDTOS) {
         this.courses = courseDTOS;
     }
 

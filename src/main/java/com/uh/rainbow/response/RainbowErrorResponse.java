@@ -1,4 +1,4 @@
-package com.uh.rainbow.dto.response;
+package com.uh.rainbow.response;
 
 /**
  * <b>File:</b> APIErrorResponseDTO.java
@@ -7,12 +7,12 @@ package com.uh.rainbow.dto.response;
  *
  * @author Derek Garcia
  */
-public class RainbowErrorResponseDTO extends ResponseDTO {
+public class RainbowErrorResponse extends Response {
     // DO NOT REMOVE - included when returned
     public final String error_message = "Something failed when processing request";
     public final String error;
 
-    public RainbowErrorResponseDTO(Exception e) {
+    public RainbowErrorResponse(Exception e) {
         this.error = e.getMessage();
     }
 }

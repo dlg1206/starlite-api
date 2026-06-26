@@ -1,4 +1,4 @@
-package com.uh.rainbow.dto.response;
+package com.uh.rainbow.response;
 
 import com.uh.rainbow.dto.identifier.IdentifierDTO;
 import com.uh.rainbow.util.SourceURL;
@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author Derek Garcia
  */
-public class IdentifierResponseDTO extends ResponseDTO {
+public class IdentifierResponse extends Response {
 
     public final String source;
     public final List<IdentifierDTO> identifiers;
@@ -23,7 +23,7 @@ public class IdentifierResponseDTO extends ResponseDTO {
      * @param source      URL source of the identifiers
      * @param identifiers List of identifiers
      */
-    public IdentifierResponseDTO(SourceURL source, List<IdentifierDTO> identifiers) {
+    public IdentifierResponse(SourceURL source, List<IdentifierDTO> identifiers) {
         this.source = source.toString();
         this.identifiers = identifiers;
     }

@@ -1,4 +1,4 @@
-package com.uh.rainbow.dto.response;
+package com.uh.rainbow.response;
 
 import java.util.Date;
 
@@ -9,7 +9,7 @@ import java.util.Date;
  *
  * @author Derek Garcia
  */
-public abstract class ResponseDTO {
+public abstract class Response {
     // DO NOT REMOVE - included when returned
     public Date timestamp = new Date();
 }

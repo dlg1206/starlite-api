@@ -1,4 +1,4 @@
-package com.uh.rainbow.dto.response;
+package com.uh.rainbow.response;
 
 import com.uh.rainbow.dto.schedule.ScheduleDTO;
 
@@ -12,20 +12,20 @@ import java.util.List;
  *
  * @author Derek Garcia
  */
-public class ScheduleResponseDTO extends ResponseDTO {
+public class ScheduleResponse extends Response {
     public final List<ScheduleDTO> schedules;
 
     /**
      * Create empty Schedule response
      */
-    public ScheduleResponseDTO() {
+    public ScheduleResponse() {
         this.schedules = new ArrayList<>();
     }
 
     /**
      * Create new Schedule response with list of valid schedules
      */
-    public ScheduleResponseDTO(List<ScheduleDTO> schedules) {
+    public ScheduleResponse(List<ScheduleDTO> schedules) {
         this.schedules = schedules;
     }
 }

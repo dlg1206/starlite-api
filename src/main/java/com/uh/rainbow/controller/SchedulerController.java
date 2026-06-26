@@ -1,9 +1,9 @@
 package com.uh.rainbow.controller;
 
-import com.uh.rainbow.dto.response.BannerErrorResponseDTO;
-import com.uh.rainbow.dto.response.RainbowErrorResponseDTO;
-import com.uh.rainbow.dto.response.ResponseDTO;
-import com.uh.rainbow.dto.response.ScheduleResponseDTO;
+import com.uh.rainbow.response.BannerErrorResponse;
+import com.uh.rainbow.response.RainbowErrorResponse;
+import com.uh.rainbow.response.Response;
+import com.uh.rainbow.response.ScheduleResponse;
 import com.uh.rainbow.dto.schedule.ScheduleDTO;
 import com.uh.rainbow.entities.PotentialSchedule;
 import com.uh.rainbow.entities.Section;
@@ -62,14 +62,14 @@ public class SchedulerController {
      * @return List of valid schedules
      */
     @GetMapping(value = "/{instID}/terms/{termID}")
-    public ResponseEntity<ResponseDTO> getSchedules(@PathVariable String instID, @PathVariable String termID,
-                                                    @RequestParam(required = false) List<String> crn,
-                                                    @RequestParam(required = false) List<String> cid,
-                                                    @RequestParam(required = false) String start_after,
-                                                    @RequestParam(required = false) String end_before,
-                                                    @RequestParam(required = false) String online,
-                                                    @RequestParam(required = false) String sync,
-                                                    @RequestParam(required = false) List<String> day) {
+    public ResponseEntity<Response> getSchedules(@PathVariable String instID, @PathVariable String termID,
+                                                 @RequestParam(required = false) List<String> crn,
+                                                 @RequestParam(required = false) List<String> cid,
+                                                 @RequestParam(required = false) String start_after,
+                                                 @RequestParam(required = false) String end_before,
+                                                 @RequestParam(required = false) String online,
+                                                 @RequestParam(required = false) String sync,
+                                                 @RequestParam(required = false) List<String> day) {
         try {
             CourseFilter cf = new CourseFilter.Builder()
                     .setFullCourses(cid)
@@ -86,7 +86,7 @@ public class SchedulerController {
 
             // Warn if no sections found
             if (allSections.isEmpty()) {
-                return new ResponseEntity<>(new RainbowErrorResponseDTO(
+                return new ResponseEntity<>(new RainbowErrorResponse(
                         new Exception(LOGGER.reportMissingSchedulingSections(crn, cid))),
                         HttpStatus.OK);
             }
@@ -101,7 +101,7 @@ public class SchedulerController {
 
             // Warn if not all sections were found
             if (!(requiredCIDs.isEmpty() && requiredCRNs.isEmpty())) {
-                return new ResponseEntity<>(new RainbowErrorResponseDTO(
+                return new ResponseEntity<>(new RainbowErrorResponse(
                         new Exception(LOGGER.reportMissingSchedulingSections(requiredCRNs, requiredCIDs))),
                         HttpStatus.OK);
             }
@@ -111,15 +111,15 @@ public class SchedulerController {
             List<ScheduleDTO> scheduleDTOs = this.dtoMapperService.toScheduleDTOs(schedules);
 
             // Return findings
-            return new ResponseEntity<>(new ScheduleResponseDTO(scheduleDTOs), HttpStatus.OK);
+            return new ResponseEntity<>(new ScheduleResponse(scheduleDTOs), HttpStatus.OK);
         } catch (HttpStatusException e) {
             // Report and return html access failure
             LOGGER.reportHTTPAccessError(MessageBuilder.Type.SCHEDULE, e);
-            return new ResponseEntity<>(new BannerErrorResponseDTO(e), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new BannerErrorResponse(e), HttpStatus.BAD_REQUEST);
         } catch (IOException e) {
             // Internal Server error
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.SCHEDULE).addDetails(e));
-            return new ResponseEntity<>(new RainbowErrorResponseDTO(e), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new RainbowErrorResponse(e), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
