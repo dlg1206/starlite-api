@@ -30,8 +30,8 @@ import java.util.List;
  *
  * @author Derek Garcia
  */
-
-@RestController(value = "campusController")
+@RequestMapping("/campuses")
+@RestController
 @RequiredArgsConstructor
 public class CampusController {
 
@@ -44,11 +44,11 @@ public class CampusController {
 
     /**
      * GET Endpoint: /campuses
-     * Get list of University of Hawaii Campuses
+     * Get list of University of Hawai'i campuses
      *
-     * @return List of University of Hawaii Campuses and their ID's
+     * @return List of University of Hawai'i campuses and their ID's
      */
-    @GetMapping(value = "/campuses")
+    @GetMapping(value = "")
     public ResponseEntity<ResponseDTO> getAllCampuses() {
         try {
             IdentifierResponseDTO response = new IdentifierResponseDTO(
@@ -65,32 +65,6 @@ public class CampusController {
 
 
     /**
-     * GET Endpoint: /terms
-     * Get list of terms
-     *
-     * @return List of term names and their ID's
-     */
-    @GetMapping(value = "/terms")
-    public ResponseEntity<ResponseDTO> getAllTerms() {
-        try {
-            IdentifierResponseDTO response = new IdentifierResponseDTO(
-                    new SourceURL(),    // TODO - fix source or remove
-                    bannerService.fetchTerms()
-            );
-            return ResponseEntity.ok(response);
-        } catch (HttpStatusCodeException e) {
-            // Report and return html access failure
-            LOGGER.reportBannerAccessError(MessageBuilder.Type.TERM, e);
-            return ResponseEntity.badRequest().body(new BannerErrorResponseDTO(bannerService.getSubjectUrl(), e));
-        } catch (Exception e) {
-            // Internal server error
-            LOGGER.error(new MessageBuilder(MessageBuilder.Type.TERM).addDetails(e));
-            return ResponseEntity.internalServerError().body(new RainbowErrorResponseDTO(e));
-        }
-    }
-
-
-    /**
      * GET Endpoint: /campuses/{instID}/terms/{termID}/subjects
      * Get list of subjects for a given campus and term
      *
@@ -98,7 +72,7 @@ public class CampusController {
      * @param termID Term ID to search for subjects
      * @return List of subjects for a given campus and term
      */
-    @GetMapping(value = "/campuses/{instID}/terms/{termID}/subjects")
+    @GetMapping(value = "/{instID}/terms/{termID}/subjects")
     public ResponseEntity<ResponseDTO> getSubjects(@PathVariable String instID, @PathVariable String termID) {
         try {
             IdentifierResponseDTO response = new IdentifierResponseDTO(
