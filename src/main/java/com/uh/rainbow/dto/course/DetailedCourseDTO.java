@@ -24,6 +24,14 @@ public record DetailedCourseDTO(String subjectCode, String courseNumber, String 
                                 List<SectionDTO> sections) implements CourseDTO {
 
     /**
+     * @return Course subject code
+     */
+    @Override
+    public String getSubjectCode() {
+        return subjectCode;
+    }
+
+    /**
      * @return Get course number
      */
     @Override

@@ -23,6 +23,14 @@ public record SimpleCourseDTO(String subjectCode, String courseNumber, String na
                               String startDate, String endDate,
                               int numSections) implements CourseDTO {
     /**
+     * @return Course subject code
+     */
+    @Override
+    public String getSubjectCode() {
+        return subjectCode;
+    }
+
+    /**
      * @return Get course number
      */
     @Override

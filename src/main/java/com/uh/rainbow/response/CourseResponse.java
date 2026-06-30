@@ -16,14 +16,16 @@ import java.util.List;
 @JsonPropertyOrder({"timestamp", "courses"})
 public class CourseResponse extends Response {
     // custom comparator that extracts number from course number since can include letters
-    private static final Comparator<CourseDTO> BY_COURSE_NUMBER = Comparator.comparing(
-            (CourseDTO c) -> {
+    private static final Comparator<CourseDTO> BY_COURSE_NUMBER = Comparator
+            .comparing(CourseDTO::getSubjectCode)
+            .thenComparing((CourseDTO c) -> {
                 String num = c.getCourseNumber();
                 int i = 0;
                 while (i < num.length() && Character.isDigit(num.charAt(i))) i++;
                 return Integer.parseInt(num.substring(0, i));
-            }
-    ).thenComparing(CourseDTO::getCourseNumber);
+            })
+            .thenComparing(CourseDTO::getCourseNumber);
+
     public final List<? extends CourseDTO> courses;
 
     /**
