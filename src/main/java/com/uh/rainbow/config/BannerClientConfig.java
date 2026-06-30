@@ -11,6 +11,9 @@ import org.springframework.web.client.RestClient;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.net.http.HttpClient;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
 
 /**
  * <b>File:</b> BannerClientConfig.java
@@ -23,35 +26,37 @@ import java.net.http.HttpClient;
 @Configuration
 public class BannerClientConfig {
 
-    @Value("${rainbow.source.api}")
+    private static final int BATCH_SIZE = 8;    // min size per batch so at least 1 subject
+
+    @Value("${rainbow.banner.api}")
     private String baseUrl;
 
-    @Value("${rainbow.source.api.endpoint.subjects}")
+    @Value("${rainbow.banner.api.endpoint.subjects}")
     private String subjectsEndpoint;
 
-    @Value("${rainbow.source.api.endpoint.courses}")
+    @Value("${rainbow.banner.api.endpoint.courses}")
     private String coursesEndpoint;
 
-    @Value("${rainbow.source.api.endpoint.course-desc}")
+    @Value("${rainbow.banner.api.endpoint.course-desc}")
     private String courseDescEndpoint;
 
-    @Value("${rainbow.source.api.endpoint.section-desc}")
+    @Value("${rainbow.banner.api.endpoint.section-desc}")
     private String sectionDescEndpoint;
 
-    @Value("${rainbow.source.api.endpoint.section-notes}")
+    @Value("${rainbow.banner.api.endpoint.section-notes}")
     private String sectionNotesEndpoint;
 
-    @Value("${rainbow.source.api.endpoint.section-attrib}")
+    @Value("${rainbow.banner.api.endpoint.section-attrib}")
     private String sectionAttribEndpoint;
 
-    @Value("${rainbow.source.api.endpoint.section-counts}")
+    @Value("${rainbow.banner.api.endpoint.section-counts}")
     private String sectionCountsEndpoint;
 
-    @Value("${rainbow.source.api.endpoint.meetings}")
+    @Value("${rainbow.banner.api.endpoint.meetings}")
     private String meetingsEndpoint;
 
     // instructor details
-    @Value("${rainbow.source.api.endpoint.base-section}")
+    @Value("${rainbow.banner.api.endpoint.base-section}")
     private String baseSectionEndpoint;
 
     /**
@@ -75,5 +80,26 @@ public class BannerClientConfig {
                 .baseUrl(baseUrl)
                 .requestFactory(requestFactory)
                 .build();
+    }
+
+    /**
+     * Create a virtual thread pool for async operations
+     *
+     * @return Virtual thread pool
+     */
+    @Bean(name = "bannerTaskExecutor")
+    public Executor bannerTaskExecutor() {
+        return Executors.newVirtualThreadPerTaskExecutor();
+    }
+
+    /**
+     * Create a semaphore to limit number of concurrent banner requests
+     *
+     * @param maxConcurrentBatches Max number of concurrent batches
+     * @return Semaphore
+     */
+    @Bean(name = "bannerSemaphore")
+    public Semaphore bannerConcurrencyLimiter(@Value("${rainbow.banner.api.max-concurrent-batches}") int maxConcurrentBatches) {
+        return new Semaphore(BATCH_SIZE * maxConcurrentBatches);
     }
 }

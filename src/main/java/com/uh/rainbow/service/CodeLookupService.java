@@ -33,7 +33,6 @@ public class CodeLookupService {
 
     @Getter
     private final List<IdentifierDTO> campuses;
-    private final Map<String, String> campusLookup;
     private final Map<String, String> subjectLookup;
     private final Map<String, Map<String, Set<String>>> campusSubjectsByTerm;
     private final BannerAPIService bannerAPIService;
@@ -56,7 +55,6 @@ public class CodeLookupService {
             });
         }
 
-        this.campusLookup = campuses.stream().collect(Collectors.toMap(IdentifierDTO::id, IdentifierDTO::value));
         this.subjectLookup = new HashMap<>();
         this.campusSubjectsByTerm = new HashMap<>();
 
