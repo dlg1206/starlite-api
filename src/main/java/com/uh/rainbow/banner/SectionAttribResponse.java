@@ -8,5 +8,5 @@ package com.uh.rainbow.banner;
  * @param ssbsectCrn Course reference number
  * @param desc       General Ed/Focus/Special Designation
  */
-public record SectionAttribResponse(String ssbsectCrn, String desc)  implements BannerResponse {
+public record SectionAttribResponse(String ssbsectCrn, String desc) implements BannerResponse {
 }

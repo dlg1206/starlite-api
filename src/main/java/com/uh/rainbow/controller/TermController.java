@@ -1,13 +1,12 @@
 package com.uh.rainbow.controller;
 
+import com.uh.rainbow.log.Logger;
+import com.uh.rainbow.log.MessageBuilder;
 import com.uh.rainbow.response.BannerErrorResponse;
 import com.uh.rainbow.response.IdentifierResponse;
 import com.uh.rainbow.response.RainbowErrorResponse;
 import com.uh.rainbow.response.Response;
 import com.uh.rainbow.service.CampusService;
-import com.uh.rainbow.util.SourceURL;
-import com.uh.rainbow.util.logging.Logger;
-import com.uh.rainbow.util.logging.MessageBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,11 +39,7 @@ public class TermController {
     @GetMapping(value = "")
     public ResponseEntity<Response> getAllTerms() {
         try {
-            IdentifierResponse response = new IdentifierResponse(
-                    new SourceURL(),    // TODO - fix source or remove
-                    campusService.fetchTerms()
-            );
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(new IdentifierResponse(campusService.fetchTerms()));
         } catch (HttpStatusCodeException e) {
             // Report and return html access failure
             LOGGER.reportBannerAccessError(MessageBuilder.Type.TERM, e);

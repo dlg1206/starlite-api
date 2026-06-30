@@ -1,6 +1,5 @@
 package com.uh.rainbow.response;
 
-import org.jsoup.HttpStatusException;
 import org.springframework.web.client.HttpStatusCodeException;
 
 /**
@@ -14,13 +13,6 @@ public class BannerErrorResponse extends Response {
     public final String source;
     public final int response_code;
     public final String response_message;
-
-    @Deprecated
-    public BannerErrorResponse(HttpStatusException e) {
-        this.source = e.getUrl();
-        this.response_code = e.getStatusCode();
-        this.response_message = e.getMessage();
-    }
 
     /**
      * Create new failure

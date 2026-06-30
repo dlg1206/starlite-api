@@ -1,66 +1,44 @@
 package com.uh.rainbow.entities;
 
 
-import com.uh.rainbow.entities.time.TimeBlock;
-import com.uh.rainbow.entities.time.simple.SimpleDate;
-import com.uh.rainbow.entities.time.simple.SimpleTime;
+import com.uh.rainbow.dto.course.MeetingDTO;
+import com.uh.rainbow.enums.Day;
+import lombok.Getter;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * <b>File:</b> Meeting.java
  * <p>
- * <b>Description:</b> Representation of a meeting period
+ * <b>Description:</b> Representation of a meeting block
  *
  * @author Derek Garcia
  */
 public class Meeting {
+    @Getter
     private final Day day;
-    private final SimpleTime startTime;
-    private final SimpleTime endTime;
-    private final SimpleDate startDate;
-    private final SimpleDate endDate;
+    @Getter
+    private final LocalTime startTime;
+    @Getter
+    private final LocalTime endTime;
 
-    private final String room;
+    private final String buildingCode;
+    private final String roomCode;
+
 
     /**
      * Create new meeting
      *
-     * @param day  Day of Week
-     * @param room Room
+     * @param day      Day of Week
+     * @param roomCode Room
      */
-    private Meeting(Day day, SimpleTime startTime, SimpleTime endTime, SimpleDate startDate, SimpleDate endDate, String room) {
+    public Meeting(Day day, LocalTime startTime, LocalTime endTime, String buildingCode, String roomCode) {
         this.day = day;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.room = room;
-    }
-
-    /**
-     * Create new meetings parsed from UH style input parameters
-     *
-     * @param dayString  Day string formatted D*
-     * @param timeString Time formatted HHmm-HHmm(?:a|p)
-     * @param roomString Room name
-     * @param dateString Date formatted DD/MM(?:|-DD/MM)
-     * @return List of parsed meetings
-     * @throws ParseException Fail to parse time or day block
-     */
-    public static List<Meeting> createMeetings(String dayString, String timeString, String roomString, String dateString) throws ParseException {
-        List<Meeting> meetings = new ArrayList<>();
-
-        List<Day> days = Day.toDays(dayString);
-
-        TimeBlock tb = new TimeBlock(timeString, dateString);
-        days.forEach((day) -> meetings.add(
-                new Meeting(day, tb.getStartTime(), tb.getEndTime(), tb.getStartDate(), tb.getEndDate(), roomString))
-        );
-
-        return meetings;
+        this.buildingCode = buildingCode;
+        this.roomCode = roomCode;
     }
 
     /**
@@ -70,69 +48,50 @@ public class Meeting {
      * @return True if conflict, false if otherwise
      */
     public boolean conflictsWith(Meeting other) {
+        // todo
+        return true;
         // TBA days can't conflict
-        if (this.day == Day.TBA || other.day == Day.TBA)
-            return false;
-
-        // Can't conflict if on different days
-        if (this.day != other.day)
-            return false;
-
-        // todo handle single day meetings
-
-        // Conflict if times overlap
-        return this.startTime.beforeOrEqual(other.endTime) == 1 && this.endTime.afterOrEqual(other.startTime) == 1;
+//        if (this.day == Day.TBA || other.day == Day.TBA)
+//            return false;
+//
+//        // Can't conflict if on different days
+//        if (this.day != other.day)
+//            return false;
+//
+//        // todo handle single day meetings
+//
+//        // Conflict if times overlap
+//        return this.startTime.beforeOrEqual(other.endTime) == 1 && this.endTime.afterOrEqual(other.startTime) == 1;
 
         // No conflicts
     }
 
     /**
-     * @return Day of week meeting occurs on
+     * @return If this meeting is online
      */
-    public int getDow() {
-        return this.day.getDow();
+    public boolean isOnline() {
+        return buildingCode.equals("ONLINE");
     }
 
     /**
-     * @return Day of Week
+     * @return If this meeting is async
      */
-    public Day getDay() {
-        return this.day;
+    public boolean isAsync() {
+        return roomCode.equals("ASYNC");
     }
 
-    /**
-     * @return Start Time
-     */
-    public SimpleTime getStartTime() {
-        return this.startTime;
-    }
 
     /**
-     * @return End Time
+     * Convert this meeting to a DTO
+     *
+     * @return {@link MeetingDTO}
      */
-    public SimpleTime getEndTime() {
-        return this.endTime;
-    }
-
-    /**
-     * @return Meeting Room
-     */
-    public String getRoom() {
-        return this.room;
-    }
-
-    /**
-     * @return Start Date of recurring meeting
-     */
-    public SimpleDate getStartDate() {
-        return this.startDate;
-    }
-
-    /**
-     * @return End Date of recurring meeting
-     */
-    public SimpleDate getEndDate() {
-        return this.endDate;
+    public MeetingDTO toMeetingDTO() {
+        return new MeetingDTO(day.name(),
+                startTime == null ? null : startTime.format(DateTimeFormatter.ofPattern("HHmm")),
+                endTime == null ? null : endTime.format(DateTimeFormatter.ofPattern("HHmm")),
+                buildingCode, roomCode
+        );
     }
 
 }

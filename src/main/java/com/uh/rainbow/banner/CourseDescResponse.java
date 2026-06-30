@@ -5,8 +5,9 @@ package com.uh.rainbow.banner;
  * <p>
  * Retrieve course description
  *
+ *
  * @param ssbsectCrn1 Course reference number
  * @param textNarrative Description of the course
  */
-public record CourseDescResponse(String ssbsectCrn1, String textNarrative)  implements BannerResponse{
+public record CourseDescResponse(String ssbsectCrn1, String textNarrative) implements BannerResponse {
 }

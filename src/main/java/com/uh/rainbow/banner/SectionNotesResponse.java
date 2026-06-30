@@ -8,5 +8,5 @@ package com.uh.rainbow.banner;
  * @param crn Course reference number
  * @param textNarrative Additional notes for the course
  */
-public record SectionNotesResponse(String crn, String textNarrative)  implements BannerResponse {
+public record SectionNotesResponse(String crn, String textNarrative) implements BannerResponse {
 }

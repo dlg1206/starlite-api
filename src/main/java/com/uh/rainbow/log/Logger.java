@@ -1,4 +1,4 @@
-package com.uh.rainbow.util.logging;
+package com.uh.rainbow.log;
 
 import org.jsoup.HttpStatusException;
 import org.slf4j.LoggerFactory;

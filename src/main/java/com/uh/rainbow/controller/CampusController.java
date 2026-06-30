@@ -1,25 +1,18 @@
 package com.uh.rainbow.controller;
 
-import com.uh.rainbow.dto.course.CourseDTO;
-import com.uh.rainbow.entities.Section;
 import com.uh.rainbow.exception.InvalidCampusCodeException;
 import com.uh.rainbow.exception.InvalidTermCodeException;
+import com.uh.rainbow.log.Logger;
+import com.uh.rainbow.log.MessageBuilder;
+import com.uh.rainbow.request.CourseFilterRequest;
 import com.uh.rainbow.response.*;
 import com.uh.rainbow.service.CampusService;
-import com.uh.rainbow.service.HTMLParserService;
-import com.uh.rainbow.services.DTOMapperService;
-import com.uh.rainbow.util.SourceURL;
-import com.uh.rainbow.util.filter.CourseFilter;
-import com.uh.rainbow.util.logging.Logger;
-import com.uh.rainbow.util.logging.MessageBuilder;
 import lombok.RequiredArgsConstructor;
-import org.jsoup.HttpStatusException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpStatusCodeException;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -37,8 +30,6 @@ public class CampusController {
     private final static Logger LOGGER = new Logger(CampusController.class);
 
     private final CampusService campusService;
-    private final HTMLParserService htmlParserService;
-    private final DTOMapperService dtoMapperService;
 
     /**
      * GET Endpoint: /campuses
@@ -49,11 +40,7 @@ public class CampusController {
     @GetMapping(value = "")
     public ResponseEntity<Response> getAllCampuses() {
         try {
-            IdentifierResponse response = new IdentifierResponse(
-                    new SourceURL(),    // TODO - fix source or remove
-                    campusService.getCampuses()
-            );
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(new IdentifierResponse(campusService.getCampuses()));
         } catch (Exception e) {
             // Internal server error
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.INST).addDetails(e));
@@ -73,11 +60,7 @@ public class CampusController {
     @GetMapping(value = "/{instID}/terms/{termID}/subjects")
     public ResponseEntity<Response> getSubjects(@PathVariable String instID, @PathVariable String termID) {
         try {
-            IdentifierResponse response = new IdentifierResponse(
-                    new SourceURL(),    // TODO - fix source or remove
-                    campusService.fetchSubjects(instID, termID)
-            );
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(new IdentifierResponse(campusService.fetchSubjects(instID, termID)));
         } catch (HttpStatusCodeException e) {
             // Report and return html access failure
             LOGGER.reportBannerAccessError(MessageBuilder.Type.SUBJECT, e);
@@ -95,132 +78,28 @@ public class CampusController {
     }
 
     /**
-     * GET Endpoint: /campuses/{instID}/terms/{termID}/subjects/{subjectID}
-     * Get all courses for a given campus, term, and subject
-     * Best used for finding courses for a single subject
+     * POST Endpoint: /campuses/{instID}/terms/{termID}/search
+     * Search for courses for a given campus and term
      *
-     * @param instID      Inst ID to search for courses
-     * @param termID      Term ID to search for courses
-     * @param subjectID   Subject ID to search for courses
-     * @param crn         List of Course Reference Numbers to filter by
-     * @param code        List of course codes to filter by. '*' wild card can be used ie 1** -> 101, 102, 110 etc
-     * @param start_after Earliest time a class can start in 24hr format
-     * @param end_before  Latest time a class can run in 24hr format
-     * @param online      Only classes online sections
-     * @param sync        Only synchronous sections
-     * @param day         UH day of week codes to filter by. Append with '!' to inverse search ie !M -> get all sections not on Monday
-     * @param instructor  Instructors to filter by. Append with '!' to inverse search ie !foo -> get all sections that don't have instructor 'foo'
-     * @param keyword     Keywords to filter course names by. Append with '!' to inverse search ie !foo -> get all courses that don't have 'foo' in the name
-     * @return List of courses for a given campus, term, and subject that pass filters
-     */
-    @GetMapping(value = "/{instID}/terms/{termID}/subjects/{subjectID}")
-    public ResponseEntity<Response> getCourses(
-            @PathVariable String instID,
-            @PathVariable String termID,
-            @PathVariable String subjectID,
-            @RequestParam(required = false) List<String> crn,
-            @RequestParam(required = false) List<String> code,
-            @RequestParam(required = false) String start_after,
-            @RequestParam(required = false) String end_before,
-            @RequestParam(required = false) String online,
-            @RequestParam(required = false) String sync,
-            @RequestParam(required = false) List<String> day,
-            @RequestParam(required = false) List<String> instructor,
-            @RequestParam(required = false) List<String> keyword) {
-        try {
-            // Build filter
-            CourseFilter cf = new CourseFilter.Builder()
-                    .setCRNs(crn)
-                    .setCourseNumbers(code)
-                    .setStartAfter(start_after)
-                    .setEndBefore(end_before)
-                    .setOnline(online)
-                    .setSynchronous(sync)
-                    .setDays(day)
-                    .setInstructors(instructor)
-                    .setKeywords(keyword)
-                    .build();
-            // Get all courses for subject
-            List<Section> sections = this.htmlParserService.parseSections(cf, instID, termID, subjectID);
-            List<CourseDTO> courseDTOs = this.dtoMapperService.toCourseDTOs(sections);
-            return new ResponseEntity<>(
-                    new CourseResponse(courseDTOs),
-                    HttpStatus.OK
-            );
-        } catch (HttpStatusException e) {
-            // Report and return html access failure
-            LOGGER.reportHTTPAccessError(MessageBuilder.Type.SUBJECT, e);
-            return new ResponseEntity<>(new BannerErrorResponse(e), HttpStatus.BAD_REQUEST);
-        } catch (IOException e) {
-            // Internal Server Error
-            LOGGER.error(new MessageBuilder(MessageBuilder.Type.SUBJECT).addDetails(e));
-            return new ResponseEntity<>(new RainbowErrorResponse(e), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    /**
-     * GET Endpoint: /campuses/{instID}/terms/{termID}/courses
-     * Get all courses for a given campus and term
-     * Best used for finding courses for multiple subjects
-     *
-     * @param instID      Inst ID to search for courses
-     * @param termID      Term ID to search for courses
-     * @param sub         List of Subjects to filter by
-     * @param crn         List of Course Reference Numbers to filter by
-     * @param code        List of course codes to filter by. '*' wild card can be used ie 1** -> 101, 102, 110 etc
-     * @param cid         List of full courses ie ICS 101.  '*' wild card can be used ie ICS 1** -> 101, 102, 110 etc
-     * @param start_after Earliest time a class can start in 24hr format
-     * @param end_before  Latest time a class can run in 24hr format
-     * @param online      Only classes online sections
-     * @param sync        Only synchronous sections
-     * @param day         UH day of week codes to filter by. Append with '!' to inverse search ie !M -> get all sections not on Monday
-     * @param instructor  Instructors to filter by. Append with '!' to inverse search ie !foo -> get all sections that don't have instructor 'foo'
-     * @param keyword     Keywords to filter course names by. Append with '!' to inverse search ie !foo -> get all courses that don't have 'foo' in the name
+     * @param instID   Campus code to search for subjects
+     * @param termID   Term code to search for subjects
+     * @param subjects Optional list of subject codes to filter for (Default: All)
+     * @param detailed Include section and meeting details in response (Default: false)
+     * @param request  Additional details to filter search
      * @return List of courses for a given campus and term that pass filters
      */
-    @GetMapping(value = "/{instID}/terms/{termID}/courses")
+    @PostMapping(value = "/{instID}/terms/{termID}/search")
     public ResponseEntity<Response> getCourses(
             @PathVariable String instID,
             @PathVariable String termID,
-            @RequestParam(required = false) List<String> crn,
-            @RequestParam(required = false) List<String> sub,
-            @RequestParam(required = false) List<String> code,
-            @RequestParam(required = false) List<String> cid,
-            @RequestParam(required = false) String start_after,
-            @RequestParam(required = false) String end_before,
-            @RequestParam(required = false) String online,
-            @RequestParam(required = false) String sync,
-            @RequestParam(required = false) List<String> day,
-            @RequestParam(required = false) List<String> instructor,
-            @RequestParam(required = false) List<String> keyword) {
+            @RequestParam(required = false) List<String> subjects,
+            @RequestParam(defaultValue = "false") boolean detailed,
+            @RequestBody(required = false) CourseFilterRequest request) {
         try {
-            // Build filter
-            CourseFilter cf = new CourseFilter.Builder()
-                    .setCRNs(crn)
-                    .setSubjects(sub)
-                    .setCourseNumbers(code)
-                    .setFullCourses(cid)
-                    .setStartAfter(start_after)
-                    .setEndBefore(end_before)
-                    .setOnline(online)
-                    .setSynchronous(sync)
-                    .setDays(day)
-                    .setInstructors(instructor)
-                    .setKeywords(keyword)
-                    .build();
-
-            // Parse Sections
-            List<Section> sections = this.htmlParserService.parseSections(cf, instID, termID);
-            List<CourseDTO> courseDTOs = this.dtoMapperService.toCourseDTOs(sections);
-
-            return new ResponseEntity<>(new CourseResponse(courseDTOs), HttpStatus.OK);
-        } catch (HttpStatusException e) {
-            // Report and return html access failure
-            LOGGER.reportHTTPAccessError(MessageBuilder.Type.COURSE, e);
-            return new ResponseEntity<>(new BannerErrorResponse(e), HttpStatus.BAD_REQUEST);
-        } catch (IOException e) {
-            // Internal Server error
-            LOGGER.error(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails(e));
+            return ResponseEntity.ok(new CourseResponse(campusService.fetchCourses(instID, termID, subjects, detailed, request)));
+        } catch (Exception e) {
+            // Internal Server Error
+            LOGGER.error(new MessageBuilder(MessageBuilder.Type.SUBJECT).addDetails(e));
             return new ResponseEntity<>(new RainbowErrorResponse(e), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

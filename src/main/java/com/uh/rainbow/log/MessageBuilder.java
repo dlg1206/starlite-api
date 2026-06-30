@@ -1,4 +1,4 @@
-package com.uh.rainbow.util.logging;
+package com.uh.rainbow.log;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -19,6 +19,7 @@ public class MessageBuilder {
     private final Type messageType;
     private final List<Object[]> details = new ArrayList<>();
     private String duration = null;
+
     /**
      * Create new builder
      *

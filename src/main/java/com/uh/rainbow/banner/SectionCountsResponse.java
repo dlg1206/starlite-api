@@ -11,5 +11,7 @@ package com.uh.rainbow.banner;
  * @param waitCount    Number of students waitlisted for the section
  * @param waitCapacity Max number of students that can waitlist for the section
  */
-public record SectionCountsResponse(String crn, int enrl, int maxEnrl, int waitCount, int waitCapacity)  implements BannerResponse {
+public record SectionCountsResponse(String crn,
+                                    int enrl, int maxEnrl,
+                                    int waitCount, int waitCapacity) implements BannerResponse {
 }

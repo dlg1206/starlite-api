@@ -33,10 +33,12 @@ public class PotentialSchedule {
      * @param other Other schedule to copy
      * @param next  Next section to add to new copy
      */
+    @Deprecated
     private PotentialSchedule(PotentialSchedule other, Section next) {
+        // todo fix
         // Copy current section and add next section
         this.courses = new HashSet<>(other.courses);
-        this.courses.add(next.getCID());
+//        this.courses.add(next.getCID());
 
         // Copy current section and add next section
         this.sections = new HashSet<>(other.sections);
@@ -45,7 +47,7 @@ public class PotentialSchedule {
         // Copy remaining sections of missing courses
         this.remainingSections = new ArrayList<>(
                 other.remainingSections.stream()
-                        .filter((s) -> !this.courses.contains(s.getCID()))
+                        .filter((s) -> !this.courses.contains(null))
                         .toList());
     }
 
