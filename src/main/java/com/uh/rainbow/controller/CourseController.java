@@ -62,8 +62,34 @@ public class CourseController {
     }
 
     /**
+     * GET Endpoint: /term/{termID}/campus/{instID}/courses
+     * Search for courses for a given campus and term without a filter
+     *
+     * @param termID   Term code to search for subjects
+     * @param instID   Campus code to search for subjects
+     * @param subjects Optional list of subject codes to filter for (Default: All)
+     * @param detailed Include section and meeting details in response (Default: false)
+     * @return List of courses for a given campus and term that pass filters
+     */
+    @GetMapping(value = "/{termID}/campus/{instID}/courses")
+    public ResponseEntity<Response> getCourses(
+            @PathVariable String termID,
+            @PathVariable String instID,
+            @RequestParam(required = false) List<String> subjects,
+            @RequestParam(defaultValue = "false") boolean detailed
+    ) {
+        try {
+            return ResponseEntity.ok(new CourseResponse(courseService.fetchCourses(instID, termID, subjects, detailed, null)));
+        } catch (Exception e) {
+            // Internal Server Error
+            LOGGER.error(new MessageBuilder(MessageBuilder.Type.SUBJECT).addDetails(e));
+            return new ResponseEntity<>(new RainbowErrorResponse(e), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
      * POST Endpoint: /term/{termID}/campus/{instID}/courses
-     * Search for courses for a given campus and term
+     * Search for courses for a given campus and term with a filter
      *
      * @param termID   Term code to search for subjects
      * @param instID   Campus code to search for subjects
@@ -78,7 +104,7 @@ public class CourseController {
             @PathVariable String instID,
             @RequestParam(required = false) List<String> subjects,
             @RequestParam(defaultValue = "false") boolean detailed,
-            @RequestBody(required = false) CourseFilterRequest request) {
+            @RequestBody CourseFilterRequest request) {
         try {
             return ResponseEntity.ok(new CourseResponse(courseService.fetchCourses(instID, termID, subjects, detailed, request)));
         } catch (Exception e) {
