@@ -3,6 +3,7 @@ package com.uh.rainbow.response;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.uh.rainbow.dto.course.CourseDTO;
 
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -14,6 +15,15 @@ import java.util.List;
  */
 @JsonPropertyOrder({"timestamp", "courses"})
 public class CourseResponse extends Response {
+    // custom comparator that extracts number from course number since can include letters
+    private static final Comparator<CourseDTO> BY_COURSE_NUMBER = Comparator.comparing(
+            (CourseDTO c) -> {
+                String num = c.getCourseNumber();
+                int i = 0;
+                while (i < num.length() && Character.isDigit(num.charAt(i))) i++;
+                return Integer.parseInt(num.substring(0, i));
+            }
+    ).thenComparing(CourseDTO::getCourseNumber);
     public final List<? extends CourseDTO> courses;
 
     /**
@@ -22,7 +32,9 @@ public class CourseResponse extends Response {
      * @param courses list of course DTOs
      */
     public CourseResponse(List<? extends CourseDTO> courses) {
-        this.courses = courses;
+        this.courses = courses.stream()
+                .sorted(BY_COURSE_NUMBER)
+                .toList();
     }
 
 }

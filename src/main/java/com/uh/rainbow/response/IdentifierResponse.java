@@ -1,7 +1,9 @@
 package com.uh.rainbow.response;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.uh.rainbow.dto.identifier.IdentifierDTO;
 
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -11,17 +13,20 @@ import java.util.List;
  *
  * @author Derek Garcia
  */
+@JsonPropertyOrder({"timestamp", "identifiers"})
 public class IdentifierResponse extends Response {
 
     public final List<IdentifierDTO> identifiers;
 
     /**
-     * Create new Identifier Response using root UH url
+     * Create new Identifier Response
      *
      * @param identifiers List of identifiers
      */
     public IdentifierResponse(List<IdentifierDTO> identifiers) {
-        this.identifiers = identifiers;
+        this.identifiers = identifiers.stream()
+                .sorted(Comparator.comparing(IdentifierDTO::id))
+                .toList();
     }
 
 }

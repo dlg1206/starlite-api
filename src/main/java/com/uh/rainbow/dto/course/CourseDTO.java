@@ -8,4 +8,8 @@ package com.uh.rainbow.dto.course;
  * @author Derek Garcia
  */
 public interface CourseDTO {
+    /**
+     * @return Get course number
+     */
+    String getCourseNumber();
 }

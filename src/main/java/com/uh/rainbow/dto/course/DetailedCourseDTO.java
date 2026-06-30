@@ -1,7 +1,5 @@
 package com.uh.rainbow.dto.course;
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import java.util.List;
 
 /**
@@ -19,10 +17,17 @@ import java.util.List;
  * @param endDate      End date of course
  * @param sections     List of sections of the course
  */
-@JsonPropertyOrder({"subjectCode", "courseNumber"})
 public record DetailedCourseDTO(String subjectCode, String courseNumber, String name,
                                 String description, int credits,
                                 List<String> attributes, List<String> descriptions, List<String> notes,
                                 String startDate, String endDate,
                                 List<SectionDTO> sections) implements CourseDTO {
+
+    /**
+     * @return Get course number
+     */
+    @Override
+    public String getCourseNumber() {
+        return courseNumber;
+    }
 }
