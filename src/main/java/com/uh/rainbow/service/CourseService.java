@@ -109,9 +109,6 @@ public class CourseService {
 
         // add course details
         result.cdrl.forEach((cdr -> crnCourseLookup.get(cdr.ssbsectCrn1()).setDescription(cdr.textNarrative())));
-        result.sdrl.forEach((cdr -> crnCourseLookup.get(cdr.crn()).addDescription(cdr.text())));
-        result.snrl.forEach((cdr -> crnCourseLookup.get(cdr.crn()).addNote(cdr.textNarrative())));
-        result.sarl.forEach((cdr -> crnCourseLookup.get(cdr.ssbsectCrn()).addAttribute(cdr.desc())));
 
         // map sections
         Map<String, Section> sectionLookup = result.bsrl.stream()
@@ -120,7 +117,11 @@ public class CourseService {
                         BaseSectionResponse::toSection,     // value
                         (existing, duplicate) -> existing  // keep first on collision
                 ));
+
         // add section details
+        result.sdrl.forEach((cdr -> sectionLookup.get(cdr.crn()).addDescription(cdr.text())));
+        result.snrl.forEach((cdr -> sectionLookup.get(cdr.crn()).addNote(cdr.textNarrative())));
+        result.sarl.forEach((cdr -> sectionLookup.get(cdr.ssbsectCrn()).addAttribute(cdr.desc())));
         result.scrl.forEach((scr -> sectionLookup.get(scr.crn()).setEnrollmentCounts(scr.enrl(), scr.maxEnrl(), scr.waitCount(), scr.waitCapacity())));
         result.mrl.forEach((m) -> {
             sectionLookup.get(m.ssbsectCrn()).addMeetings(m.toMeetings());
@@ -132,7 +133,8 @@ public class CourseService {
         // Add sections to courses
         sectionLookup.forEach((crn, s) -> crnCourseLookup.get(crn).addSection(s));
 
-        return crnCourseLookup.values().stream().toList();
+        // return courses
+        return courseLookup.values().stream().toList();
     }
 
     /**
@@ -215,6 +217,7 @@ public class CourseService {
                 ? allCourses.stream().map(Course::toDetailedCourseDTO).toList()
                 : allCourses.stream().map(Course::toSimpleCourseDTO).toList();
     }
+
 
     /**
      * Holds the 8 Banner9 API results for a single subject.

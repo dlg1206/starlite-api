@@ -5,7 +5,9 @@ import com.uh.rainbow.dto.course.SectionDTO;
 import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <b>File:</b> Section.java
@@ -20,6 +22,9 @@ public class Section {
     private final String sectionNumber;            // section not always number
     @Getter
     private final Instructor instructor;
+    private final Set<String> attributes;
+    private final Set<String> descriptions;
+    private final Set<String> notes;
     @Getter
     private final List<Meeting> meetings;
     private int curEnrolled;
@@ -38,6 +43,9 @@ public class Section {
         this.crn = crn;
         this.sectionNumber = sectionNumber.strip();
         this.instructor = instructor;
+        this.attributes = new HashSet<>();
+        this.descriptions = new HashSet<>();
+        this.notes = new HashSet<>();
         this.meetings = new ArrayList<>();
     }
 
@@ -77,13 +85,44 @@ public class Section {
     }
 
     /**
+     * Add attributes of the course
+     *
+     * @param attribute Attribute
+     */
+    public void addAttribute(String attribute) {
+        attributes.add(attribute.strip());
+    }
+
+    /**
+     * Add an additional section description
+     *
+     * @param description Description
+     */
+    public void addDescription(String description) {
+        descriptions.add(description.strip());
+    }
+
+    /**
+     * Add a note about the course
+     *
+     * @param note Note
+     */
+    public void addNote(String note) {
+        notes.add(note.strip());
+    }
+
+    /**
      * Convert this section to a DTO
      *
      * @return {@link SectionDTO}
      */
     public SectionDTO toSectionDTO() {
-        return new SectionDTO(crn, sectionNumber, instructor, curEnrolled, maxEnrolled, curWaitlist, maxWaitlist,
-                meetings.stream().map(Meeting::toMeetingDTO).toList());
+        return new SectionDTO(crn, sectionNumber, instructor,
+                curEnrolled, maxEnrolled,
+                curWaitlist, maxWaitlist,
+                new ArrayList<>(attributes), new ArrayList<>(descriptions), new ArrayList<>(notes),
+                meetings.stream().map(Meeting::toMeetingDTO).toList()
+        );
     }
 
 }

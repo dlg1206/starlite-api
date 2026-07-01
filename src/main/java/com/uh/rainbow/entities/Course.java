@@ -6,7 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <b>File:</b> Course.java
@@ -25,9 +26,6 @@ public class Course {
     @Getter
     private final String name;
     private final int credits;
-    private final Set<String> attributes;
-    private final Set<String> descriptions;
-    private final Set<String> notes;
     @Getter
     private final Map<Integer, Section> sections;
     @Getter
@@ -50,9 +48,6 @@ public class Course {
         this.number = number;
         this.name = name;
         this.credits = credits;
-        this.attributes = new HashSet<>();
-        this.descriptions = new HashSet<>();
-        this.notes = new HashSet<>();
         this.sections = new HashMap<>();
     }
 
@@ -63,33 +58,6 @@ public class Course {
      */
     public void setDescription(String description) {
         this.description = description.strip();
-    }
-
-    /**
-     * Add attributes of the course
-     *
-     * @param attribute Attribute
-     */
-    public void addAttribute(String attribute) {
-        attributes.add(attribute.strip());
-    }
-
-    /**
-     * Add an additional section description
-     *
-     * @param description Description
-     */
-    public void addDescription(String description) {
-        descriptions.add(description.strip());
-    }
-
-    /**
-     * Add a note about the course
-     *
-     * @param note Note
-     */
-    public void addNote(String note) {
-        notes.add(note.strip());
     }
 
     /**
@@ -119,7 +87,6 @@ public class Course {
      */
     public SimpleCourseDTO toSimpleCourseDTO() {
         return new SimpleCourseDTO(subjectCode, number, name, description, credits,
-                new ArrayList<>(attributes), new ArrayList<>(descriptions), new ArrayList<>(notes),
                 startDate.toString(), endDate.toString(),
                 sections.size());
     }
@@ -131,8 +98,12 @@ public class Course {
      */
     public DetailedCourseDTO toDetailedCourseDTO() {
         return new DetailedCourseDTO(subjectCode, number, name, description, credits,
-                new ArrayList<>(attributes), new ArrayList<>(descriptions), new ArrayList<>(notes),
                 startDate.toString(), endDate.toString(),
                 sections.values().stream().map(Section::toSectionDTO).toList());
+    }
+
+    @Override
+    public String toString() {
+        return getCourseID();
     }
 }
