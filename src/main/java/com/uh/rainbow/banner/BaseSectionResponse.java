@@ -28,9 +28,12 @@ public record BaseSectionResponse(String ssbsectCrn, String ssbsectSeqNumb,
      * @return {@link Section}
      */
     public Section toSection() {
-        return new Section(
-                Integer.parseInt(ssbsectCrn),
-                ssbsectSeqNumb,
-                new Instructor(spridenFirstName, spridenMi, spridenLastName, goremalEmailAddress == null ? null : goremalEmailAddress.toLowerCase()));
+        // set instructor to null if one hasn't been assigned
+        Instructor instructor = (spridenFirstName == null && spridenMi == null && spridenLastName == null && goremalEmailAddress == null)
+                ? null
+                : new Instructor(spridenFirstName, spridenMi, spridenLastName,
+                goremalEmailAddress == null ? null : goremalEmailAddress.split("@")[0].toLowerCase());
+
+        return new Section(Integer.parseInt(ssbsectCrn), ssbsectSeqNumb, instructor);
     }
 }

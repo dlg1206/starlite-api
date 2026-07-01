@@ -175,10 +175,10 @@ public class CourseFilter {
             return true;
 
         // reject if not a requested instructor
-        if (acceptInstructors != null && !acceptInstructors.contains(section.getInstructor().getUHID()))
+        if (acceptInstructors != null && !acceptInstructors.contains(section.getInstructor().username()))
             return true;
 
-        if (rejectInstructors != null && rejectInstructors.contains(section.getInstructor().getUHID()))
+        if (rejectInstructors != null && rejectInstructors.contains(section.getInstructor().username()))
             return true;
 
         // validate meetings if not skipping

@@ -37,7 +37,7 @@ public class Section {
      *
      * @param crn           Course Reference Number
      * @param sectionNumber Number of section for course
-     * @param instructor    Instructor teaching section
+     * @param instructor    Instructor teaching section, null if an instructor hasn't been
      */
     public Section(int crn, String sectionNumber, Instructor instructor) {
         this.crn = crn;
