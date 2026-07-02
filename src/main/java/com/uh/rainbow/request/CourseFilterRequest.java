@@ -23,6 +23,7 @@ import java.util.Set;
  * @param onlyAsync           Whether to include or exclude exclusively online sync classes
  * @param hasMajorRestriction Whether to include or exclude exclusively classes with major restrictions
  * @param hasPrereq           Whether to include or exclude exclusively classes with prerequisites
+ * @param canAudit            Whether to include or exclude exclusively classes with an audit option
  * @param acceptInstructors   Instructors to exclusively allow
  * @param rejectInstructors   Instructors to reject
  * @param acceptTitleKeywords Keywords in course name to exclusively accept
@@ -45,6 +46,7 @@ public record CourseFilterRequest(
         Boolean onlyAsync,
         Boolean hasMajorRestriction,
         Boolean hasPrereq,
+        Boolean canAudit,
         Set<String> acceptInstructors,
         Set<String> rejectInstructors,
         Set<String> acceptTitleKeywords,

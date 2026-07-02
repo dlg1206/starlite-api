@@ -113,6 +113,13 @@ public class Course {
         return prereqDescription == null || prereqDescription.isEmpty();
     }
 
+    /**
+     * @return True if can audit this course, false otherise
+     */
+    public boolean canAudit() {
+        return gradingOptions.contains(new GradingOption("A", ""));
+    }
+
 
     /**
      * Convert this course to DTO without section details

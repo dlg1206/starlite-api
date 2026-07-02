@@ -90,6 +90,7 @@ public class CourseFilterMapper {
                 cfr.onlyAsync(),
                 cfr.hasMajorRestriction(),
                 cfr.hasPrereq(),
+                cfr.canAudit(),
                 cfr.acceptInstructors() == null ? null : cfr.acceptInstructors().stream().map(String::toLowerCase).collect(Collectors.toSet()),
                 cfr.rejectInstructors() == null ? null : cfr.rejectInstructors().stream().map(String::toLowerCase).collect(Collectors.toSet()),
                 createRegexFilter(cfr.acceptTitleKeywords(), cfr.rejectTitleKeywords()),

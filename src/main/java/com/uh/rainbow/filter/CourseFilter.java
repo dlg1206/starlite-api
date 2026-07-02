@@ -28,6 +28,7 @@ public class CourseFilter {
     private final Boolean onlyAsync;
     private final Boolean hasMajorRestriction;
     private final Boolean hasPrerequisites;
+    private final Boolean canAudit;
     private final Set<String> acceptInstructors;
     private final Set<String> rejectInstructors;
     private final RegexFilter titleKeywordFilter;
@@ -53,6 +54,7 @@ public class CourseFilter {
      * @param onlyAsync           Whether to include or exclude exclusively online sync classes
      * @param hasMajorRestriction Whether to include or exclude exclusively classes with major restrictions
      * @param hasPrerequisite     Whether to include or exclude exclusively classes with prereqs
+     * @param canAudit            Whether to include or exclude exclusively classes with an audit option
      * @param acceptInstructors   Instructors to exclusively allow
      * @param rejectInstructors   Instructors to exclusively reject
      * @param titleKeywordFilter  Filter for accept and reject keywords in the course title
@@ -71,6 +73,7 @@ public class CourseFilter {
             Boolean onlyAsync,
             Boolean hasMajorRestriction,
             Boolean hasPrerequisite,
+            Boolean canAudit,
             Set<String> acceptInstructors,
             Set<String> rejectInstructors,
             RegexFilter titleKeywordFilter,
@@ -89,13 +92,14 @@ public class CourseFilter {
         this.onlyAsync = onlyAsync;
         this.hasMajorRestriction = hasMajorRestriction;
         this.hasPrerequisites = hasPrerequisite;
+        this.canAudit = canAudit;
         this.acceptInstructors = acceptInstructors;
         this.rejectInstructors = rejectInstructors;
         this.titleKeywordFilter = titleKeywordFilter;
         this.descKeywordFilter = descKeywordFilter;
 
         // precompute skips
-        this.skipCourseValidation = (courseNumberFilter == null && courseIDFilter == null && titleKeywordFilter == null && descKeywordFilter == null && hasPrerequisite == null);
+        this.skipCourseValidation = (courseNumberFilter == null && courseIDFilter == null && titleKeywordFilter == null && descKeywordFilter == null && hasPrerequisite == null && canAudit == null);
         this.skipSectionValidation = (acceptCRNs == null && rejectCRNs == null && acceptInstructors == null && rejectInstructors == null && hasMajorRestriction == null);
         this.skipMeetingValidation = (acceptDays == null && rejectDays == null && startAfter == null && endBefore == null && onlyOnline == null && onlyAsync == null);
     }
@@ -185,9 +189,14 @@ public class CourseFilter {
         if (skipCourseValidation)
             return false;
 
-        // hasPrerequisites == true: reject sections without a prereq
-        // hasPrerequisites == false: reject sections with a prereq
-        if (hasPrerequisites != null && course.hasPrerequisite() == hasPrerequisites)
+        // hasPrerequisites == true: reject courses without a prereq
+        // hasPrerequisites == false: reject courses with a prereq
+        if (hasPrerequisites != null && course.hasPrerequisite() != hasPrerequisites)
+            return true;
+
+        // canAudit == true: reject courses without an option to audit
+        // canAudit == false: reject courses with an option to audit
+        if (canAudit != null && course.canAudit() != canAudit)
             return true;
 
         if (courseNumberFilter != null && courseNumberFilter.reject(course.getNumber()))
