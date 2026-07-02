@@ -17,8 +17,7 @@ import java.util.List;
 public class CourseResponse extends Response {
     // custom comparator that extracts number from course number since can include letters
     private static final Comparator<CourseDTO> BY_COURSE_NUMBER = Comparator
-            .comparing(CourseDTO::getSubjectCode)
-            .thenComparing((CourseDTO c) -> {
+            .comparingInt((CourseDTO c) -> {
                 String num = c.getCourseNumber();
                 int i = 0;
                 while (i < num.length() && Character.isDigit(num.charAt(i))) i++;
