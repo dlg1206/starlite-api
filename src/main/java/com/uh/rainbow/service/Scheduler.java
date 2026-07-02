@@ -8,6 +8,9 @@ import com.uh.rainbow.log.MessageBuilder;
 
 import java.time.Instant;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -41,7 +44,7 @@ class Scheduler {
                         .reduce(1, (a, b) -> a * b));
         this.sectionByCRN = sectionByCRN;
         this.crnsByCourseID = crnsByCourseID;
-        this.schedules = new HashMap<>();
+        this.schedules = new ConcurrentHashMap<>();
     }
 
     /**
@@ -72,8 +75,8 @@ class Scheduler {
      */
     private void solve(PotentialSchedule potentialSchedule) {
         // Add schedule if complete and no equivalent schedule found
-        if (potentialSchedule.isComplete() && !schedules.containsKey(potentialSchedule.hashCode())) {
-            schedules.put(potentialSchedule.hashCode(), potentialSchedule.getCurrentCRNs());
+        if (potentialSchedule.isComplete()) {
+            schedules.putIfAbsent(potentialSchedule.hashCode(), potentialSchedule.getCurrentCRNs());
             return;
         }
 
@@ -91,9 +94,17 @@ class Scheduler {
                 .addDetails("Generating schedules")
                 .addDetails("%s potential schedules".formatted(remainingPotentialScheduleCount)));
         Instant start = Instant.now();
-        // solve each starting seed
-        // todo - threadpool 1 thread per seed
-        generateSeeds().forEach(s -> solve(new PotentialSchedule(sectionByCRN, s.remainingCourses, s.startCRN)));
+
+        // build minimal threadpool
+        List<Seed> seeds = generateSeeds();
+        int poolSize = Math.min(seeds.size(), Runtime.getRuntime().availableProcessors());
+
+        // solve each starting seed - 1 thread per seed
+        try (ExecutorService executor = Executors.newFixedThreadPool(poolSize)) {
+            seeds.forEach(s ->
+                    executor.submit(() -> solve(new PotentialSchedule(sectionByCRN, s.remainingCourses, s.startCRN))));
+        }
+
         // report status
         MessageBuilder mb = new MessageBuilder(MessageBuilder.Type.SCHEDULE).setDuration(start);
         if (schedules.isEmpty()) {
