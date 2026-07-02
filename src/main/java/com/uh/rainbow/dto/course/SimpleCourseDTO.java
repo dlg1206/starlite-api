@@ -13,7 +13,7 @@ package com.uh.rainbow.dto.course;
  * @param numSections  Total sections for course
  */
 public record SimpleCourseDTO(String subjectCode, String courseNumber, String name,
-                              String description, int credits,
+                              String description, String prereqDescription, int credits,
                               String startDate, String endDate,
                               int numSections) implements CourseDTO {
     /**

@@ -16,7 +16,7 @@ import java.util.List;
  * @param sections     List of sections of the course
  */
 public record DetailedCourseDTO(String subjectCode, String courseNumber, String name,
-                                String description, int credits,
+                                String description, String prereqDescription, int credits,
                                 String startDate, String endDate,
                                 List<SectionDTO> sections) implements CourseDTO {
 

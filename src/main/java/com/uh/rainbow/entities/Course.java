@@ -8,6 +8,8 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * <b>File:</b> Course.java
@@ -20,6 +22,8 @@ import java.util.Map;
  */
 public class Course {
 
+    private static final Pattern prereqRegex = Pattern.compile(" Pre: (?!consent)(.*?)\\.");
+
     private final String subjectCode;
     @Getter
     private final String number;
@@ -30,6 +34,8 @@ public class Course {
     private final Map<Integer, Section> sections;
     @Getter
     private String description;
+    @Getter
+    private String prereqDescription;
     @Setter
     private LocalDate startDate;
     @Setter
@@ -52,12 +58,19 @@ public class Course {
     }
 
     /**
-     * Set overall course description
+     * Set overall course description. Will extract prereq if detected
      *
      * @param description Course description
      */
     public void setDescription(String description) {
-        this.description = description.strip();
+        description = description.strip();
+        Matcher m = prereqRegex.matcher(description);
+        // if find match, extract and remove from destining
+        if (m.find()) {
+            this.prereqDescription = m.group(1).strip();
+            description = description.replace(m.group(), "");
+        }
+        this.description = description;
     }
 
     /**
@@ -86,7 +99,8 @@ public class Course {
      * @return {@link SimpleCourseDTO}
      */
     public SimpleCourseDTO toSimpleCourseDTO() {
-        return new SimpleCourseDTO(subjectCode, number, name, description, credits,
+        return new SimpleCourseDTO(subjectCode, number, name,
+                description, prereqDescription, credits,
                 startDate.toString(), endDate.toString(),
                 sections.size());
     }
@@ -97,7 +111,8 @@ public class Course {
      * @return {@link DetailedCourseDTO}
      */
     public DetailedCourseDTO toDetailedCourseDTO() {
-        return new DetailedCourseDTO(subjectCode, number, name, description, credits,
+        return new DetailedCourseDTO(subjectCode, number, name,
+                description, prereqDescription, credits,
                 startDate.toString(), endDate.toString(),
                 sections.values().stream().map(Section::toSectionDTO).toList());
     }
