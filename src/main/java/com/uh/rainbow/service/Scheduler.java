@@ -5,6 +5,7 @@ import com.uh.rainbow.entities.CourseID;
 import com.uh.rainbow.entities.Section;
 import com.uh.rainbow.log.Logger;
 import com.uh.rainbow.log.MessageBuilder;
+import lombok.Getter;
 
 import java.time.Instant;
 import java.util.*;
@@ -21,10 +22,14 @@ import java.util.stream.Collectors;
  * @author Derek Garcia
  */
 class Scheduler {
-
+    // custom minimum remaining values comparator
+    private static final Comparator<Map.Entry<CourseID, Set<Integer>>> MRV_COMPARATOR =
+            Comparator.comparingInt(e -> e.getValue().size());
     private static final Logger LOGGER = new Logger(Scheduler.class);
-    private final Map<Integer, Section> sectionByCRN;
+
+    private static Map<Integer, Section> sectionByCRN;
     private final Map<CourseID, Set<Integer>> crnsByCourseID;
+
     // shared solution data structure
     private final ConcurrentHashMap<Integer, Set<Integer>> schedules;
 
@@ -35,7 +40,7 @@ class Scheduler {
      * @param crnsByCourseID Map of the course reference numbers that belong to a course index by a course ID
      */
     public Scheduler(Map<Integer, Section> sectionByCRN, Map<CourseID, Set<Integer>> crnsByCourseID) {
-        this.sectionByCRN = sectionByCRN;
+        Scheduler.sectionByCRN = sectionByCRN;
         this.crnsByCourseID = crnsByCourseID;
         this.schedules = new ConcurrentHashMap<>();
     }
@@ -98,7 +103,7 @@ class Scheduler {
         // solve each starting seed - 1 thread per seed
         try (ExecutorService executor = Executors.newFixedThreadPool(poolSize)) {
             seeds.forEach(s ->
-                    executor.submit(() -> solve(new PotentialSchedule(sectionByCRN, s.remainingCourses, s.startCRN))));
+                    executor.submit(() -> solve(new PotentialSchedule(s.remainingCourses, s.startCRN))));
         }
 
         // report status
@@ -120,5 +125,133 @@ class Scheduler {
      * @param startCRN         Course reference number of next course not in remaining courses
      */
     private record Seed(HashMap<CourseID, Set<Integer>> remainingCourses, int startCRN) {
+    }
+
+    /**
+     * Internal schedule object used for solving schedules
+     */
+    private static class PotentialSchedule {
+
+        private final Map<CourseID, Set<Integer>> remainingCourses;
+        @Getter
+        private final TreeSet<Integer> currentCRNs;     // Tree set orders ints in same way - can use as ID since order !matter
+
+        /**
+         * Create a new starting potential schedule
+         *
+         * @param remainingCourses Remaining courses to that can potentially be included in this schedule
+         * @param startCRN         Section to start with
+         */
+        public PotentialSchedule(Map<CourseID, Set<Integer>> remainingCourses, int startCRN) {
+            this.remainingCourses = remainingCourses;
+            this.currentCRNs = new TreeSet<>();
+            this.currentCRNs.add(startCRN);
+        }
+
+        /**
+         * Private constructor that creates a copy of another schedule that includes an additional section
+         *
+         * @param other   Other schedule to copy
+         * @param nextCRN Next course reference number / section to add
+         */
+        private PotentialSchedule(PotentialSchedule other, Map<CourseID, Set<Integer>> remainingCourses, int nextCRN) {
+            this.remainingCourses = remainingCourses;   // generated with trySuccessors
+            this.currentCRNs = new TreeSet<>(other.currentCRNs);
+            this.currentCRNs.add(nextCRN);
+        }
+
+
+        /**
+         * Attempt to create a successor schedule to this one
+         *
+         * @param nextCourseID Course ID the nextCRN belongs to
+         * @param nextCRN      Course reference number of section to attempt to create successor with
+         * @return Optional of PotentialSchedule if valid successor
+         */
+        private Optional<PotentialSchedule> trySuccessor(CourseID nextCourseID, int nextCRN) {
+            Section nextSection = sectionByCRN.get(nextCRN);
+
+            // check for conflicts in current schedule - reject if conflict
+            boolean nextConflictsWithExisting = currentCRNs.stream()
+                    .map(sectionByCRN::get)
+                    .anyMatch(nextSection::conflictsWith);
+            if (nextConflictsWithExisting)
+                return Optional.empty();
+
+            // create a copy of remaining courses without the next course
+            Map<CourseID, Set<Integer>> nextCourses = remainingCourses.entrySet().stream()
+                    .filter(e -> !e.getKey().equals(nextCourseID))
+                    .collect(Collectors.toMap(Map.Entry::getKey, e -> new HashSet<>(e.getValue())));
+            // next section doesn't conflict existing, generate valid successors
+            for (CourseID otherCourseID : nextCourses.keySet()) {
+                Set<Integer> crns = nextCourses.get(otherCourseID);
+                // remove all sections that conflict with the target section
+                Set<Integer> conflicting = crns.stream()
+                        .filter(c -> nextSection.conflictsWith(sectionByCRN.get(c)))
+                        .collect(Collectors.toSet());
+                crns.removeAll(conflicting);
+                // exit early if all sections conflict - this means will be missing a course
+                if (crns.isEmpty()) return Optional.empty();
+            }
+
+            // Each course has at least one non-conflicting section
+            return Optional.of(new PotentialSchedule(this, nextCourses, nextCRN));
+        }
+
+        /**
+         * Pick the course ID with the fewest section
+         * Using the course with the minimum remaining values heuristic tends to
+         * hit conflicts and prune dead branches earlier than a fixed/arbitrary order.
+         *
+         * @return Course ID with the fewest sections in the remaining courses
+         */
+        private CourseID pickFewestSections() {
+            return remainingCourses.entrySet().stream()
+                    .min(MRV_COMPARATOR)
+                    .map(Map.Entry::getKey)
+                    .orElseThrow(); // safe: caller already checked remainingCourses is non-empty
+        }
+
+
+        /**
+         * Get all the successors ( current courses + 1 new course ) for this current schedule
+         *
+         * @return List of valid potential successor schedules
+         */
+        public List<PotentialSchedule> getSuccessors() {
+            List<PotentialSchedule> successors = new ArrayList<>();
+            // exit early - schedule is complete
+            if (remainingCourses.isEmpty())
+                return successors;
+
+            // pick a single course with the fewest sections - other branches will handle other courses
+            CourseID nextCourseID = pickFewestSections();
+            for (int nextCRN : remainingCourses.get(nextCourseID))
+                trySuccessor(nextCourseID, nextCRN).ifPresent(successors::add);
+
+            return successors;
+        }
+
+        /**
+         * Test to see if this schedule is complete
+         *
+         * @return True if complete, false otherwise
+         */
+        public boolean isComplete() {
+            // no courses left means all courses have been used
+            return remainingCourses.isEmpty();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (o == null || getClass() != o.getClass()) return false;
+            PotentialSchedule that = (PotentialSchedule) o;
+            return Objects.equals(currentCRNs, that.currentCRNs);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(currentCRNs);
+        }
     }
 }
