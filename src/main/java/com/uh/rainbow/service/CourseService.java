@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 /**
  * <b>File:</b> CampusService.java
@@ -113,12 +112,14 @@ public class CourseService {
         result.cgrl.forEach((cdr -> courseBuilderLookupByCRN.get(cdr.ssbsectCrn1()).addGradingOption(cdr.toGradingOption())));
 
         // init all section builders
-        Map<String, Section.Builder> sectionBuilderLookup = result.bsrl.stream()
-                .collect(Collectors.toMap(
-                        BaseSectionResponse::ssbsectCrn,        // key
-                        BaseSectionResponse::toSectionBuilder,  // value
-                        (existing, duplicate) -> existing   // keep existing builder
-                ));
+        Map<String, Section.Builder> sectionBuilderLookup = new HashMap<>();
+        for (BaseSectionResponse bsr : result.bsrl) {
+            sectionBuilderLookup.computeIfAbsent(bsr.ssbsectCrn(), k -> bsr.toSectionBuilder());
+            // add restriction details to course
+            Course.Builder cb = courseBuilderLookupByCRN.get(bsr.ssbsectCrn());
+            cb.setApprovalAuthority(bsr.formatApprovalAuthority());
+            cb.setMajorRestriction(bsr.hasMajorRestriction());
+        }
 
         // add section details
         result.sdrl.forEach((cdr -> sectionBuilderLookup.get(cdr.crn()).addDescription(cdr.text())));

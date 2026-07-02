@@ -99,8 +99,8 @@ public class CourseFilter {
         this.descKeywordFilter = descKeywordFilter;
 
         // precompute skips
-        this.skipCourseValidation = (courseNumberFilter == null && courseIDFilter == null && titleKeywordFilter == null && descKeywordFilter == null && hasPrerequisite == null && canAudit == null);
-        this.skipSectionValidation = (acceptCRNs == null && rejectCRNs == null && acceptInstructors == null && rejectInstructors == null && hasMajorRestriction == null);
+        this.skipCourseValidation = (courseNumberFilter == null && courseIDFilter == null && titleKeywordFilter == null && descKeywordFilter == null && hasPrerequisite == null && canAudit == null && hasMajorRestriction == null);
+        this.skipSectionValidation = (acceptCRNs == null && rejectCRNs == null && acceptInstructors == null && rejectInstructors == null);
         this.skipMeetingValidation = (acceptDays == null && rejectDays == null && startAfter == null && endBefore == null && onlyOnline == null && onlyAsync == null);
     }
 
@@ -155,11 +155,6 @@ public class CourseFilter {
         if (skipSectionValidation && skipMeetingValidation)
             return false;
 
-        // hasMajorRestriction == true: reject sections without a restriction
-        // hasMajorRestriction == false: reject sections with a restriction
-        if (hasMajorRestriction != null && section.isMajorRestriction() != hasMajorRestriction)
-            return true;
-
         // reject if not a requested crn
         if (acceptCRNs != null && !acceptCRNs.contains(section.getCrn()))
             return true;
@@ -188,6 +183,11 @@ public class CourseFilter {
     public boolean rejectCourse(Course course) {
         if (skipCourseValidation)
             return false;
+
+        // hasMajorRestriction == true: reject sections without a restriction
+        // hasMajorRestriction == false: reject sections with a restriction
+        if (hasMajorRestriction != null && course.isMajorRestriction() != hasMajorRestriction)
+            return true;
 
         // hasPrerequisites == true: reject courses without a prereq
         // hasPrerequisites == false: reject courses with a prereq

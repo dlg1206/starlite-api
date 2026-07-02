@@ -12,6 +12,9 @@ import java.util.List;
  * @param description       Description of course
  * @param prereqDescription Prereqs for the course
  * @param credits           Total credits
+ * @param gradingOptions    List of grading options available for this course
+ * @param majorRestriction  If the selection is restricted to the major of the parent course
+ * @param approvalAuthority Authority approval required to take the course
  * @param startDate         Start date of course
  * @param endDate           End date of course
  * @param sections          List of sections of the course
@@ -19,6 +22,7 @@ import java.util.List;
 public record DetailedCourseDTO(String subjectCode, String courseNumber, String name,
                                 String description, String prereqDescription,
                                 int credits, List<String> gradingOptions,
+                                boolean majorRestriction, String approvalAuthority,
                                 String startDate, String endDate,
                                 List<SectionDTO> sections) implements CourseDTO {
 

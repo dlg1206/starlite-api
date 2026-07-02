@@ -11,26 +11,23 @@ import java.util.List;
 /**
  * Section DTO with section details
  *
- * @param crn               Course reference number
- * @param sectionNumber     Section number of course
- * @param instructor        Instructor of section
- * @param curEnrolled       Number of students enrolled
- * @param maxEnrolled       Section capacity
- * @param curWaitlist       Number of students waitlist
- * @param maxWaitlist       Waitlist capacity
- * @param attributes        Course attributes
- * @param majorRestriction  If the selection is restricted to the major of the parent course
- * @param approvalAuthority Authority approval required to take the course
- * @param descriptions      Additional course descriptions
- * @param notes             Additional notes
- * @param meetings          List of meetings for this section
+ * @param crn           Course reference number
+ * @param sectionNumber Section number of course
+ * @param instructor    Instructor of section
+ * @param curEnrolled   Number of students enrolled
+ * @param maxEnrolled   Section capacity
+ * @param curWaitlist   Number of students waitlist
+ * @param maxWaitlist   Waitlist capacity
+ * @param attributes    Course attributes
+ * @param descriptions  Additional course descriptions
+ * @param notes         Additional notes
+ * @param meetings      List of meetings for this section
  */
 public record SectionDTO(int crn, String sectionNumber,
                          Instructor instructor,
                          SectionFormat format,
                          int curEnrolled, int maxEnrolled,
                          int curWaitlist, int maxWaitlist,
-                         boolean majorRestriction, String approvalAuthority,
                          Collection<String> attributes, Collection<String> descriptions, Collection<String> notes,
                          List<MeetingDTO> meetings) {
 

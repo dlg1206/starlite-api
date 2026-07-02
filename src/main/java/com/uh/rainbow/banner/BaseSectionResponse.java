@@ -37,13 +37,24 @@ public record BaseSectionResponse(String ssbsectCrn, String ssbsectSeqNumb,
                 : new Instructor(spridenFirstName, spridenMi, spridenLastName,
                 goremalEmailAddress == null ? null : goremalEmailAddress.split("@")[0].toLowerCase());
 
-        // format approval authority if present
-        String approvalAuthority = stvsaprDesc == null
+        return new Section.Builder(Integer.parseInt(ssbsectCrn), ssbsectSeqNumb, instructor);
+    }
+
+    /**
+     * Format approval authority if present
+     *
+     * @return Formated approval authority
+     */
+    public String formatApprovalAuthority() {
+        return stvsaprDesc == null
                 ? null
                 : stvsaprDesc.replace(" Approval", "");
+    }
 
-        return new Section.Builder(Integer.parseInt(ssbsectCrn),
-                ssbsectSeqNumb, ssrrmajCrn != null,
-                approvalAuthority, instructor);
+    /**
+     * @return True if this section has a major restriction, false otherwise
+     */
+    public boolean hasMajorRestriction() {
+        return ssrrmajCrn != null;
     }
 }

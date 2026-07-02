@@ -34,6 +34,9 @@ public class Course {
     private final String prereqDescription;
     private final int credits;
     private final Set<GradingOption> gradingOptions;
+    @Getter
+    private final boolean majorRestriction;
+    private final String approvalAuthority;
     private final LocalDate startDate;
     private final LocalDate endDate;
     @Getter
@@ -49,7 +52,9 @@ public class Course {
      * @param prereqDescription Description of course prerequirements
      * @param startDate         Start date of course
      * @param credits           Number of credits the course is worth
-     * @param gradingOptions    Set of grading options available for this corse
+     * @param gradingOptions    Set of grading options available for this course
+     * @param majorRestriction  If the selection is restricted to the major of the parent course
+     * @param approvalAuthority Authority approval required to take the course
      * @param endDate           End date of course
      * @param sections          Map of sections and their course reference numbers belonging to this course
      */
@@ -60,6 +65,8 @@ public class Course {
                    String prereqDescription,
                    int credits,
                    Set<GradingOption> gradingOptions,
+                   boolean majorRestriction,
+                   String approvalAuthority,
                    LocalDate startDate,
                    LocalDate endDate,
                    Map<Integer, Section> sections) {
@@ -70,6 +77,8 @@ public class Course {
         this.prereqDescription = prereqDescription;
         this.credits = credits;
         this.gradingOptions = gradingOptions;
+        this.majorRestriction = majorRestriction;
+        this.approvalAuthority = approvalAuthority;
         this.startDate = startDate;
         this.endDate = endDate;
         this.sections = sections;
@@ -107,6 +116,7 @@ public class Course {
         return new SimpleCourseDTO(subjectCode, number, name,
                 description, prereqDescription,
                 credits, gradingOptions.stream().map(GradingOption::description).sorted().toList(),
+                majorRestriction, approvalAuthority,
                 startDate.toString(), endDate.toString(),
                 sections.size());
     }
@@ -120,6 +130,7 @@ public class Course {
         return new DetailedCourseDTO(subjectCode, number, name,
                 description, prereqDescription,
                 credits, gradingOptions.stream().map(GradingOption::description).sorted().toList(),
+                majorRestriction, approvalAuthority,
                 startDate.toString(), endDate.toString(),
                 sections.values().stream().map(Section::toSectionDTO).toList());
     }
@@ -140,6 +151,10 @@ public class Course {
         private final Map<Integer, Section> sections;
         private String description;
         private String prereqDescription;
+        @Setter
+        private boolean majorRestriction;
+        @Setter
+        private String approvalAuthority;
         @Setter
         private LocalDate startDate;
         @Setter
@@ -210,6 +225,8 @@ public class Course {
                     prereqDescription,
                     credits,
                     gradingOptions,
+                    majorRestriction,
+                    approvalAuthority,
                     startDate,
                     endDate,
                     sections);

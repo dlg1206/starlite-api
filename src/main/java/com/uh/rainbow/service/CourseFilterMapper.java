@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 /**
  * <b>File:</b> CourseFilterMapper.java
  * <p>
- * <b>Description:</b>
+ * <b>Description:</b> Map requests to course filters
  *
  * @author Derek Garcia
  */

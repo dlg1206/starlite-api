@@ -26,9 +26,6 @@ public class Section {
     @Getter
     private final SectionFormat sectionFormat;
     @Getter
-    private final boolean majorRestriction;
-    private final String approvalAuthority;
-    @Getter
     private final Instructor instructor;
     private final int curEnrolled;
     private final int maxEnrolled;
@@ -43,26 +40,22 @@ public class Section {
     /**
      * Create new immutable section
      *
-     * @param crn               Course Reference Number
-     * @param sectionNumber     Number of section for course
-     * @param sectionFormat     {@link SectionFormat} if the class is in person, online, or hybrid
-     * @param majorRestriction  If the selection is restricted to the major of the parent course
-     * @param approvalAuthority Authority approval required to take the course
-     * @param instructor        Instructor teaching section, null if an instructor hasn't been assigned
-     * @param curEnrolled       Number of students enrolled
-     * @param maxEnrolled       Section capacity
-     * @param curWaitlist       Number of students waitlist
-     * @param maxWaitlist       Waitlist capacity
-     * @param attributes        List of attributes for this section
-     * @param descriptions      List of descriptions for this section
-     * @param notes             List of notes for this section
-     * @param meetings          List of meetings for this section
+     * @param crn           Course Reference Number
+     * @param sectionNumber Number of section for course
+     * @param sectionFormat {@link SectionFormat} if the class is in person, online, or hybrid
+     * @param instructor    Instructor teaching section, null if an instructor hasn't been assigned
+     * @param curEnrolled   Number of students enrolled
+     * @param maxEnrolled   Section capacity
+     * @param curWaitlist   Number of students waitlist
+     * @param maxWaitlist   Waitlist capacity
+     * @param attributes    List of attributes for this section
+     * @param descriptions  List of descriptions for this section
+     * @param notes         List of notes for this section
+     * @param meetings      List of meetings for this section
      */
     private Section(int crn,
                     String sectionNumber,
                     SectionFormat sectionFormat,
-                    boolean majorRestriction,
-                    String approvalAuthority,
                     Instructor instructor,
                     int curEnrolled,
                     int maxEnrolled,
@@ -75,8 +68,6 @@ public class Section {
         this.crn = crn;
         this.sectionNumber = sectionNumber;
         this.sectionFormat = sectionFormat;
-        this.majorRestriction = majorRestriction;
-        this.approvalAuthority = approvalAuthority;
         this.instructor = instructor;
         this.curEnrolled = curEnrolled;
         this.maxEnrolled = maxEnrolled;
@@ -108,7 +99,6 @@ public class Section {
         return new SectionDTO(crn, sectionNumber, instructor, sectionFormat,
                 curEnrolled, maxEnrolled,
                 curWaitlist, maxWaitlist,
-                majorRestriction, approvalAuthority,
                 attributes, descriptions, notes,
                 meetings.stream().map(Meeting::toMeetingDTO).toList()
         );
@@ -118,8 +108,6 @@ public class Section {
 
         private final int crn;
         private final String sectionNumber;            // section not always number
-        private final boolean majorRestriction;
-        private final String approvalAuthority;
 
         private final Set<String> attributes;
         private final Set<String> descriptions;
@@ -135,21 +123,15 @@ public class Section {
         /**
          * Create new {@link Section} builder
          *
-         * @param crn               Course Reference Number
-         * @param sectionNumber     Number of section for course
-         * @param majorRestriction  If the selection is restricted to the major of the parent course
-         * @param approvalAuthority Authority approval required to take the course
-         * @param instructor        Instructor teaching section, null if an instructor hasn't been assigned
+         * @param crn           Course Reference Number
+         * @param sectionNumber Number of section for course
+         * @param instructor    Instructor teaching section, null if an instructor hasn't been assigned
          */
         public Builder(int crn,
                        String sectionNumber,
-                       boolean majorRestriction,
-                       String approvalAuthority,
                        Instructor instructor) {
             this.crn = crn;
             this.sectionNumber = sectionNumber;
-            this.majorRestriction = majorRestriction;
-            this.approvalAuthority = approvalAuthority;
             this.instructor = instructor;
             this.attributes = new HashSet<>();
             this.descriptions = new HashSet<>();
@@ -245,8 +227,6 @@ public class Section {
                     crn,
                     sectionNumber,
                     getSectionFormat(),
-                    majorRestriction,
-                    approvalAuthority,
                     instructor,
                     curEnrolled,
                     maxEnrolled,
