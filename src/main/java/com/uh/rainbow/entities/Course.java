@@ -92,6 +92,13 @@ public class Course {
         return "%s_%s".formatted(subjectCode, number);
     }
 
+    /**
+     * @return True if the course has a prereq, false otherise
+     */
+    public boolean hasPrerequisite() {
+        return prereqDescription == null || prereqDescription.isEmpty();
+    }
+
 
     /**
      * Convert this course to DTO without section details

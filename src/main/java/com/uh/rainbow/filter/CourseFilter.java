@@ -27,6 +27,7 @@ public class CourseFilter {
     private final Boolean onlyOnline;
     private final Boolean onlyAsync;
     private final Boolean hasMajorRestriction;
+    private final Boolean hasPrerequisites;
     private final Set<String> acceptInstructors;
     private final Set<String> rejectInstructors;
     private final RegexFilter titleKeywordFilter;
@@ -40,21 +41,22 @@ public class CourseFilter {
     /**
      * Create new course filter
      *
-     * @param acceptCRNs         Set of Course reference numbers to exclusively include
-     * @param rejectCRNs         Set of Course reference numbers to exclusively exclude
-     * @param courseNumberFilter Filter for accept and reject course levels
-     * @param courseIDFilter     Filter for accept and reject specific course IDs
-     * @param acceptDays         Days a section must occur on
-     * @param rejectDays         Days a section can't occur on
-     * @param startAfter         Earliest time a class can start
-     * @param endBefore          Latest time a class can end at
-     * @param onlyOnline         Whether to include or exclude exclusively online classes
-     * @param onlyAsync          Whether to include or exclude exclusively online sync classes
-     * @param hasMajorRestriction   Whether to include or exclude exclusively classes with major restrictions
-     * @param acceptInstructors  Instructors to exclusively allow
-     * @param rejectInstructors  Instructors to exclusively reject
-     * @param titleKeywordFilter Filter for accept and reject keywords in the course title
-     * @param descKeywordFilter  Filter for accept and reject keywords in the course description
+     * @param acceptCRNs          Set of Course reference numbers to exclusively include
+     * @param rejectCRNs          Set of Course reference numbers to exclusively exclude
+     * @param courseNumberFilter  Filter for accept and reject course levels
+     * @param courseIDFilter      Filter for accept and reject specific course IDs
+     * @param acceptDays          Days a section must occur on
+     * @param rejectDays          Days a section can't occur on
+     * @param startAfter          Earliest time a class can start
+     * @param endBefore           Latest time a class can end at
+     * @param onlyOnline          Whether to include or exclude exclusively online classes
+     * @param onlyAsync           Whether to include or exclude exclusively online sync classes
+     * @param hasMajorRestriction Whether to include or exclude exclusively classes with major restrictions
+     * @param hasPrerequisite     Whether to include or exclude exclusively classes with prereqs
+     * @param acceptInstructors   Instructors to exclusively allow
+     * @param rejectInstructors   Instructors to exclusively reject
+     * @param titleKeywordFilter  Filter for accept and reject keywords in the course title
+     * @param descKeywordFilter   Filter for accept and reject keywords in the course description
      */
     public CourseFilter(
             Set<Integer> acceptCRNs,
@@ -68,6 +70,7 @@ public class CourseFilter {
             Boolean onlyOnline,
             Boolean onlyAsync,
             Boolean hasMajorRestriction,
+            Boolean hasPrerequisite,
             Set<String> acceptInstructors,
             Set<String> rejectInstructors,
             RegexFilter titleKeywordFilter,
@@ -85,13 +88,14 @@ public class CourseFilter {
         this.onlyOnline = onlyOnline;
         this.onlyAsync = onlyAsync;
         this.hasMajorRestriction = hasMajorRestriction;
+        this.hasPrerequisites = hasPrerequisite;
         this.acceptInstructors = acceptInstructors;
         this.rejectInstructors = rejectInstructors;
         this.titleKeywordFilter = titleKeywordFilter;
         this.descKeywordFilter = descKeywordFilter;
 
         // precompute skips
-        this.skipCourseValidation = (courseNumberFilter == null && courseIDFilter == null && titleKeywordFilter == null && descKeywordFilter == null);
+        this.skipCourseValidation = (courseNumberFilter == null && courseIDFilter == null && titleKeywordFilter == null && descKeywordFilter == null && hasPrerequisite == null);
         this.skipSectionValidation = (acceptCRNs == null && rejectCRNs == null && acceptInstructors == null && rejectInstructors == null && hasMajorRestriction == null);
         this.skipMeetingValidation = (acceptDays == null && rejectDays == null && startAfter == null && endBefore == null && onlyOnline == null && onlyAsync == null);
     }
@@ -133,30 +137,6 @@ public class CourseFilter {
         return endBefore != null && meeting.getEndTime() != null && meeting.getEndTime().isAfter(endBefore);
     }
 
-    /**
-     * Check if the course should be rejected
-     * If no course filters are used, will default to false
-     *
-     * @param course Course to validate
-     * @return true if reject, false otherwise
-     */
-    public boolean rejectCourse(Course course) {
-        if (skipCourseValidation)
-            return false;
-
-        if (courseNumberFilter != null && courseNumberFilter.reject(course.getNumber()))
-            return true;
-
-        if (courseIDFilter != null && courseIDFilter.reject(course.getCourseID()))
-            return true;
-
-        if (titleKeywordFilter != null && titleKeywordFilter.reject(course.getName()))
-            return true;
-
-        return descKeywordFilter != null && descKeywordFilter.reject(course.getDescription());
-
-        // accept course
-    }
 
     /**
      * Check if the section should be rejected
@@ -192,5 +172,35 @@ public class CourseFilter {
 
         // validate meetings if not skipping
         return !skipMeetingValidation && section.getMeetings().stream().anyMatch(this::rejectMeeting);
+    }
+
+    /**
+     * Check if the course should be rejected
+     * If no course filters are used, will default to false
+     *
+     * @param course Course to validate
+     * @return true if reject, false otherwise
+     */
+    public boolean rejectCourse(Course course) {
+        if (skipCourseValidation)
+            return false;
+
+        // hasPrerequisites == true: reject sections without a prereq
+        // hasPrerequisites == false: reject sections with a prereq
+        if (hasPrerequisites != null && course.hasPrerequisite() == hasPrerequisites)
+            return true;
+
+        if (courseNumberFilter != null && courseNumberFilter.reject(course.getNumber()))
+            return true;
+
+        if (courseIDFilter != null && courseIDFilter.reject(course.getCourseID()))
+            return true;
+
+        if (titleKeywordFilter != null && titleKeywordFilter.reject(course.getName()))
+            return true;
+
+        return descKeywordFilter != null && descKeywordFilter.reject(course.getDescription());
+
+        // accept course
     }
 }
