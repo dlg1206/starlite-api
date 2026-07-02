@@ -15,6 +15,10 @@ import java.util.stream.Collectors;
  * @author Derek Garcia
  */
 class PotentialSchedule {
+    // custom minimum remaining values comparator
+    private static final Comparator<Map.Entry<CourseID, Set<Integer>>> MRV_COMPARATOR =
+            Comparator.comparingInt(e -> e.getValue().size());
+
     private final Map<Integer, Section> sectionByCRN;
     private final Map<CourseID, Set<Integer>> remainingCourses;
     @Getter
@@ -85,6 +89,20 @@ class PotentialSchedule {
         return Optional.of(new PotentialSchedule(this, nextCourses, nextCRN));
     }
 
+    /**
+     * Pick the course ID with the fewest section
+     * Using the course with the minimum remaining values heuristic tends to
+     * hit conflicts and prune dead branches earlier than a fixed/arbitrary order.
+     *
+     * @return Course ID with the fewest sections in the remaining courses
+     */
+    private CourseID pickFewestSections() {
+        return remainingCourses.entrySet().stream()
+                .min(MRV_COMPARATOR)
+                .map(Map.Entry::getKey)
+                .orElseThrow(); // safe: caller already checked remainingCourses is non-empty
+    }
+
 
     /**
      * Get all the successors ( current courses + 1 new course ) for this current schedule
@@ -93,11 +111,15 @@ class PotentialSchedule {
      */
     public List<PotentialSchedule> getSuccessors() {
         List<PotentialSchedule> successors = new ArrayList<>();
-        for (CourseID nextCourseID : remainingCourses.keySet()) {
-            // get all valid successors of each section in the current next course
-            for (int nextCRN : remainingCourses.get(nextCourseID))
-                trySuccessor(nextCourseID, nextCRN).ifPresent(successors::add);
-        }
+        // exit early - schedule is complete
+        if (remainingCourses.isEmpty())
+            return successors;
+
+        // pick a single course with the fewest sections - other branches will handle other courses
+        CourseID nextCourseID = pickFewestSections();
+        for (int nextCRN : remainingCourses.get(nextCourseID))
+            trySuccessor(nextCourseID, nextCRN).ifPresent(successors::add);
+
         return successors;
     }
 

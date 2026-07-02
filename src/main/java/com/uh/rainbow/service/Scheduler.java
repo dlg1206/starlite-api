@@ -11,7 +11,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -27,9 +26,7 @@ class Scheduler {
     private final Map<Integer, Section> sectionByCRN;
     private final Map<CourseID, Set<Integer>> crnsByCourseID;
     // shared solution data structure
-    private final Map<Integer, Set<Integer>> schedules;
-    // todo track remaining potential schedules
-    private final AtomicInteger remainingPotentialScheduleCount;
+    private final ConcurrentHashMap<Integer, Set<Integer>> schedules;
 
     /**
      * Create new scheduler
@@ -38,10 +35,6 @@ class Scheduler {
      * @param crnsByCourseID Map of the course reference numbers that belong to a course index by a course ID
      */
     public Scheduler(Map<Integer, Section> sectionByCRN, Map<CourseID, Set<Integer>> crnsByCourseID) {
-        this.remainingPotentialScheduleCount = new AtomicInteger(
-                crnsByCourseID.values().stream()
-                        .mapToInt(Set::size)
-                        .reduce(1, (a, b) -> a * b));
         this.sectionByCRN = sectionByCRN;
         this.crnsByCourseID = crnsByCourseID;
         this.schedules = new ConcurrentHashMap<>();
@@ -90,9 +83,12 @@ class Scheduler {
      * @return List of valid potential schedules found
      */
     public List<List<Integer>> generateSchedules() {
+        int potentialPaths = crnsByCourseID.values().stream()
+                .mapToInt(Set::size)
+                .reduce(1, (a, b) -> a * b);
         LOGGER.info(new MessageBuilder(MessageBuilder.Type.SCHEDULE)
                 .addDetails("Generating schedules")
-                .addDetails("%s potential schedules".formatted(remainingPotentialScheduleCount)));
+                .addDetails("%s potential schedules".formatted(potentialPaths)));
         Instant start = Instant.now();
 
         // build minimal threadpool
@@ -112,6 +108,7 @@ class Scheduler {
             return new ArrayList<>();
         }
         LOGGER.info(mb.addDetails("Found %d valid schedule%s".formatted(schedules.size(), schedules.size() == 1 ? "" : "s")));
+
         // convert each schedule's section set to an immutable list
         return schedules.values().stream().map(List::copyOf).toList();
     }
