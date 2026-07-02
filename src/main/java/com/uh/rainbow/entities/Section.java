@@ -21,36 +21,46 @@ public class Section {
     private final int crn;
     private final String sectionNumber;            // section not always number
     @Getter
-    private final Instructor instructor;
+    private final SectionFormat sectionFormat;
+    private final boolean majorRestriction;
+    private final String approvalAuthority;
     private final Set<String> attributes;
     private final Set<String> descriptions;
     private final Set<String> notes;
     @Getter
-    private final List<Meeting> meetings;
+    private final Instructor instructor;
     @Getter
-    private final SectionFormat sectionFormat;
+    private final List<Meeting> meetings;
     private int curEnrolled;
     private int maxEnrolled;
     private int curWaitlist;
     private int maxWaitlist;
 
+
     /**
      * Create new Section
      *
-     * @param crn           Course Reference Number
-     * @param sectionNumber Number of section for course
-     * @param instructor    Instructor teaching section, null if an instructor hasn't been
-     * @param meetings      List of meetings for this section
+     * @param crn               Course Reference Number
+     * @param sectionNumber     Number of section for course
+     * @param majorRestriction  If the selection is restricted to the major of the parent course
+     * @param approvalAuthority Authority approval required to take the course
+     * @param instructor        Instructor teaching section, null if an instructor hasn't been assigned
+     * @param meetings          List of meetings for this section
      */
-    public Section(int crn, String sectionNumber, Instructor instructor, List<Meeting> meetings) {
+    public Section(int crn, String sectionNumber, boolean majorRestriction, String approvalAuthority, Instructor instructor, List<Meeting> meetings) {
         this.crn = crn;
         this.sectionNumber = sectionNumber.strip();
+        this.majorRestriction = majorRestriction;
+        this.approvalAuthority = approvalAuthority;
+
         this.instructor = instructor;
+
+        this.meetings = meetings;
+        this.sectionFormat = getSectionFormat();
+
         this.attributes = new HashSet<>();
         this.descriptions = new HashSet<>();
         this.notes = new HashSet<>();
-        this.meetings = meetings;
-        this.sectionFormat = getSectionFormat();
     }
 
 
@@ -90,15 +100,6 @@ public class Section {
     public boolean conflictsWith(Section other) {
         // Check to see if any of this meetings conflicts with any other meeting
         return this.meetings.stream().anyMatch((m) -> other.meetings.stream().anyMatch(m::conflictsWith));
-    }
-
-    /**
-     * Add meetings for this section
-     *
-     * @param meetings List of meetings to add
-     */
-    public void addMeetings(List<Meeting> meetings) {
-        this.meetings.addAll(meetings);
     }
 
     /**
@@ -152,6 +153,7 @@ public class Section {
         return new SectionDTO(crn, sectionNumber, instructor, sectionFormat,
                 curEnrolled, maxEnrolled,
                 curWaitlist, maxWaitlist,
+                majorRestriction, approvalAuthority,
                 attributes, descriptions, notes,
                 meetings.stream().map(Meeting::toMeetingDTO).toList()
         );

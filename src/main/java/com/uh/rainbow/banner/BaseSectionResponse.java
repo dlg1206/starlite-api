@@ -12,16 +12,19 @@ import java.util.List;
  * <p>
  * Retrieve who is teaching a section
  * <p>
- *  todo - stvsaprDesc - intructor approval
  *
  * @param ssbsectCrn          Course reference number
  * @param ssbsectSeqNumb      Section number
+ * @param ssrrmajCrn          Major restriction
+ * @param stvsaprDesc         Approval authority description
  * @param spridenFirstName    Instructor first name
  * @param spridenMi           Instructor middle intentional
  * @param spridenLastName     Instructor last name
  * @param goremalEmailAddress Instructor email address
  */
 public record BaseSectionResponse(String ssbsectCrn, String ssbsectSeqNumb,
+                                  // todo - more restrictions may exist
+                                  String ssrrmajCrn, String stvsaprDesc,
                                   String spridenFirstName, String spridenMi,
                                   String spridenLastName, String goremalEmailAddress) implements BannerResponse {
 
@@ -38,6 +41,13 @@ public record BaseSectionResponse(String ssbsectCrn, String ssbsectSeqNumb,
                 : new Instructor(spridenFirstName, spridenMi, spridenLastName,
                 goremalEmailAddress == null ? null : goremalEmailAddress.split("@")[0].toLowerCase());
 
-        return new Section(Integer.parseInt(ssbsectCrn), ssbsectSeqNumb, instructor, meetings);
+        // format approval authority if present
+        String approvalAuthority = stvsaprDesc == null
+                ? null
+                : stvsaprDesc.replace(" Approval", "");
+
+        return new Section(Integer.parseInt(ssbsectCrn), ssbsectSeqNumb,
+                ssrrmajCrn != null, approvalAuthority, instructor,
+                meetings);
     }
 }
