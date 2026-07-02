@@ -3,6 +3,7 @@ package com.uh.rainbow.service;
 import com.uh.rainbow.banner.*;
 import com.uh.rainbow.dto.course.CourseDTO;
 import com.uh.rainbow.entities.Course;
+import com.uh.rainbow.entities.Meeting;
 import com.uh.rainbow.entities.Section;
 import com.uh.rainbow.filter.CourseFilter;
 import com.uh.rainbow.log.Logger;
@@ -110,12 +111,29 @@ public class CourseService {
         // add course details
         result.cdrl.forEach((cdr -> crnCourseLookup.get(cdr.ssbsectCrn1()).setDescription(cdr.textNarrative())));
 
+        // fetch meetings - needed for sections
+        Map<String, List<Meeting>> meetingsMap = new HashMap<>();
+        result.mrl.forEach((m) -> {
+            Course c = crnCourseLookup.get(m.ssbsectCrn());
+            c.setStartDate(m.formatStartDate());
+            c.setEndDate(m.formatEndDate());
+            // update meetings for a section
+            meetingsMap.merge(
+                    m.ssbsectCrn(), // key
+                    new ArrayList<>(m.toMeetings()), // value
+                    (existing, added) -> {
+                        existing.addAll(added);
+                        return existing;
+                    }
+            );
+        });
+
         // map sections
         Map<String, Section> sectionLookup = result.bsrl.stream()
                 .collect(Collectors.toMap(
                         BaseSectionResponse::ssbsectCrn,    // key
-                        BaseSectionResponse::toSection,     // value
-                        (existing, duplicate) -> existing  // keep first on collision
+                        bsr -> bsr.toSection(meetingsMap.get(bsr.ssbsectCrn())), // value - fetch meetings
+                        (existing, duplicate) -> existing
                 ));
 
         // add section details
@@ -123,12 +141,6 @@ public class CourseService {
         result.snrl.forEach((cdr -> sectionLookup.get(cdr.crn()).addNote(cdr.textNarrative())));
         result.sarl.forEach((cdr -> sectionLookup.get(cdr.ssbsectCrn()).addAttribute(cdr.desc())));
         result.scrl.forEach((scr -> sectionLookup.get(scr.crn()).setEnrollmentCounts(scr.enrl(), scr.maxEnrl(), scr.waitCount(), scr.waitCapacity())));
-        result.mrl.forEach((m) -> {
-            sectionLookup.get(m.ssbsectCrn()).addMeetings(m.toMeetings());
-            Course c = crnCourseLookup.get(m.ssbsectCrn());
-            c.setStartDate(m.formatStartDate());
-            c.setEndDate(m.formatEndDate());
-        });
 
         // Add sections to courses
         sectionLookup.forEach((crn, s) -> crnCourseLookup.get(crn).addSection(s));

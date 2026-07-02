@@ -1,9 +1,10 @@
 package com.uh.rainbow.dto.course;
 
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.uh.rainbow.entities.Instructor;
+import com.uh.rainbow.enums.SectionFormat;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -21,11 +22,11 @@ import java.util.List;
  * @param notes         Additional notes
  * @param meetings      List of meetings for this section
  */
-@JsonPropertyOrder({"sectionNumber"})
 public record SectionDTO(int crn, String sectionNumber,
                          Instructor instructor,
+                         SectionFormat format,
                          int curEnrolled, int maxEnrolled,
                          int curWaitlist, int maxWaitlist,
-                         List<String> attributes, List<String> descriptions, List<String> notes,
+                         Collection<String> attributes, Collection<String> descriptions, Collection<String> notes,
                          List<MeetingDTO> meetings) {
 }

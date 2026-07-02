@@ -2,9 +2,9 @@ package com.uh.rainbow.entities;
 
 
 import com.uh.rainbow.dto.course.SectionDTO;
+import com.uh.rainbow.enums.SectionFormat;
 import lombok.Getter;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,6 +27,8 @@ public class Section {
     private final Set<String> notes;
     @Getter
     private final List<Meeting> meetings;
+    @Getter
+    private final SectionFormat sectionFormat;
     private int curEnrolled;
     private int maxEnrolled;
     private int curWaitlist;
@@ -38,15 +40,45 @@ public class Section {
      * @param crn           Course Reference Number
      * @param sectionNumber Number of section for course
      * @param instructor    Instructor teaching section, null if an instructor hasn't been
+     * @param meetings      List of meetings for this section
      */
-    public Section(int crn, String sectionNumber, Instructor instructor) {
+    public Section(int crn, String sectionNumber, Instructor instructor, List<Meeting> meetings) {
         this.crn = crn;
         this.sectionNumber = sectionNumber.strip();
         this.instructor = instructor;
         this.attributes = new HashSet<>();
         this.descriptions = new HashSet<>();
         this.notes = new HashSet<>();
-        this.meetings = new ArrayList<>();
+        this.meetings = meetings;
+        this.sectionFormat = getSectionFormat();
+    }
+
+
+    /**
+     * Check if this section is in person, online, or hybrid
+     *
+     * @return {@link SectionFormat} or null if no meetings to determine
+     */
+    private SectionFormat getSectionFormat() {
+        // if no meetings, can't determine type
+        if (meetings.isEmpty())
+            return null;
+
+        // determine type
+        boolean hasOnline = false;
+        boolean hasInPerson = false;
+        for (Meeting meeting : meetings) {
+            if (meeting.isOnline()) {
+                hasOnline = true;
+            } else {
+                hasInPerson = true;
+            }
+            // exit early if both are true
+            if (hasOnline && hasInPerson)
+                return SectionFormat.HYBRID;
+        }
+        // either fully in person or online
+        return hasOnline ? SectionFormat.ONLINE : SectionFormat.ONSITE;
     }
 
     /**
@@ -117,10 +149,10 @@ public class Section {
      * @return {@link SectionDTO}
      */
     public SectionDTO toSectionDTO() {
-        return new SectionDTO(crn, sectionNumber, instructor,
+        return new SectionDTO(crn, sectionNumber, instructor, sectionFormat,
                 curEnrolled, maxEnrolled,
                 curWaitlist, maxWaitlist,
-                new ArrayList<>(attributes), new ArrayList<>(descriptions), new ArrayList<>(notes),
+                attributes, descriptions, notes,
                 meetings.stream().map(Meeting::toMeetingDTO).toList()
         );
     }
