@@ -21,6 +21,7 @@ import java.util.Set;
  * @param rejectDays          Days of the week exclusively exclude
  * @param onlyOnline          Whether to include or exclude exclusively online classes
  * @param onlyAsync           Whether to include or exclude exclusively online sync classes
+ * @param hasMajorRestriction    Whether to include or exclude exclusively classes with major restrictions
  * @param acceptInstructors   Instructors to exclusively allow
  * @param rejectInstructors   Instructors to reject
  * @param acceptTitleKeywords Keywords in course name to exclusively accept
@@ -41,6 +42,7 @@ public record CourseFilterRequest(
         @JsonFormat(pattern = "HH:mm") LocalTime endBefore,
         Boolean onlyOnline,
         Boolean onlyAsync,
+        Boolean hasMajorRestriction,
         Set<String> acceptInstructors,
         Set<String> rejectInstructors,
         Set<String> acceptTitleKeywords,

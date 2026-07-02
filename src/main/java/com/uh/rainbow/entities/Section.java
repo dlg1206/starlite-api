@@ -22,6 +22,7 @@ public class Section {
     private final String sectionNumber;            // section not always number
     @Getter
     private final SectionFormat sectionFormat;
+    @Getter
     private final boolean majorRestriction;
     private final String approvalAuthority;
     private final Set<String> attributes;

@@ -26,6 +26,7 @@ public class CourseFilter {
     private final LocalTime endBefore;
     private final Boolean onlyOnline;
     private final Boolean onlyAsync;
+    private final Boolean hasMajorRestriction;
     private final Set<String> acceptInstructors;
     private final Set<String> rejectInstructors;
     private final RegexFilter titleKeywordFilter;
@@ -49,6 +50,7 @@ public class CourseFilter {
      * @param endBefore          Latest time a class can end at
      * @param onlyOnline         Whether to include or exclude exclusively online classes
      * @param onlyAsync          Whether to include or exclude exclusively online sync classes
+     * @param hasMajorRestriction   Whether to include or exclude exclusively classes with major restrictions
      * @param acceptInstructors  Instructors to exclusively allow
      * @param rejectInstructors  Instructors to exclusively reject
      * @param titleKeywordFilter Filter for accept and reject keywords in the course title
@@ -65,6 +67,7 @@ public class CourseFilter {
             LocalTime endBefore,
             Boolean onlyOnline,
             Boolean onlyAsync,
+            Boolean hasMajorRestriction,
             Set<String> acceptInstructors,
             Set<String> rejectInstructors,
             RegexFilter titleKeywordFilter,
@@ -81,6 +84,7 @@ public class CourseFilter {
         this.endBefore = endBefore;
         this.onlyOnline = onlyOnline;
         this.onlyAsync = onlyAsync;
+        this.hasMajorRestriction = hasMajorRestriction;
         this.acceptInstructors = acceptInstructors;
         this.rejectInstructors = rejectInstructors;
         this.titleKeywordFilter = titleKeywordFilter;
@@ -88,7 +92,7 @@ public class CourseFilter {
 
         // precompute skips
         this.skipCourseValidation = (courseNumberFilter == null && courseIDFilter == null && titleKeywordFilter == null && descKeywordFilter == null);
-        this.skipSectionValidation = (acceptCRNs == null && rejectCRNs == null && acceptInstructors == null && rejectInstructors == null);
+        this.skipSectionValidation = (acceptCRNs == null && rejectCRNs == null && acceptInstructors == null && rejectInstructors == null && hasMajorRestriction == null);
         this.skipMeetingValidation = (acceptDays == null && rejectDays == null && startAfter == null && endBefore == null && onlyOnline == null && onlyAsync == null);
     }
 
@@ -166,6 +170,11 @@ public class CourseFilter {
         // short circuit if no section or meeting checks
         if (skipSectionValidation && skipMeetingValidation)
             return false;
+
+        // hasMajorRestriction == true: reject sections without a restriction
+        // hasMajorRestriction == false: reject sections with a restriction
+        if (hasMajorRestriction != null && section.isMajorRestriction() != hasMajorRestriction)
+            return true;
 
         // reject if not a requested crn
         if (acceptCRNs != null && !acceptCRNs.contains(section.getCrn()))

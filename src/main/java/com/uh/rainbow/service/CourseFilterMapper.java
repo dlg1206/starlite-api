@@ -6,8 +6,8 @@ import com.uh.rainbow.filter.RegexFilter;
 import com.uh.rainbow.request.CourseFilterRequest;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -20,17 +20,27 @@ import java.util.stream.Collectors;
 @Component
 public class CourseFilterMapper {
 
-    private Day formatDay(String day) {
-        return Day.fromDayString(day);
-    }
 
+    /**
+     * Format Course ID request into regex
+     *
+     * @param pattern Course ID to format
+     * @return Regex of course id
+     */
     private String formatCourseIDRegex(String pattern) {
         return pattern.strip()
                 .replace("**", "\\d{2}")
                 .replace("*", "\\d");
     }
 
-    private RegexFilter createCourseFilter(Set<String> accept, Set<String> reject) {
+    /**
+     * Create a regex filter for course IDs
+     *
+     * @param accept Collection of accept course IDs
+     * @param reject Collection of reject course IDs
+     * @return {@link RegexFilter} for course IDs, null of both accept and reject are nell
+     */
+    private RegexFilter createCourseFilter(Collection<String> accept, Collection<String> reject) {
         // early reject of both null
         if (accept == null && reject == null)
             return null;
@@ -41,7 +51,14 @@ public class CourseFilterMapper {
         );
     }
 
-    private RegexFilter createRegexFilter(Set<String> accept, Set<String> reject) {
+    /**
+     * Create a regex filter
+     *
+     * @param accept Collection of accept strings
+     * @param reject Collection of reject strings
+     * @return {@link RegexFilter}, null of both accept and reject are nell
+     */
+    private RegexFilter createRegexFilter(Collection<String> accept, Collection<String> reject) {
         // early reject of both null
         if (accept == null && reject == null)
             return null;
@@ -71,6 +88,7 @@ public class CourseFilterMapper {
                 cfr.endBefore(),
                 cfr.onlyOnline(),
                 cfr.onlyAsync(),
+                cfr.hasMajorRestriction(),
                 cfr.acceptInstructors() == null ? null : cfr.acceptInstructors().stream().map(String::toLowerCase).collect(Collectors.toSet()),
                 cfr.rejectInstructors() == null ? null : cfr.rejectInstructors().stream().map(String::toLowerCase).collect(Collectors.toSet()),
                 createRegexFilter(cfr.acceptTitleKeywords(), cfr.rejectTitleKeywords()),
