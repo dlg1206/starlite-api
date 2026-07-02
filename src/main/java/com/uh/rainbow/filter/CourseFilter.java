@@ -29,6 +29,8 @@ public class CourseFilter {
     private final Boolean hasMajorRestriction;
     private final Boolean hasPrerequisites;
     private final Boolean canAudit;
+    private final Boolean excludeFull;
+    private final Boolean excludeWaitlist;
     private final Set<String> acceptInstructors;
     private final Set<String> rejectInstructors;
     private final RegexFilter titleKeywordFilter;
@@ -55,6 +57,8 @@ public class CourseFilter {
      * @param hasMajorRestriction Whether to include or exclude exclusively classes with major restrictions
      * @param hasPrerequisite     Whether to include or exclude exclusively classes with prereqs
      * @param canAudit            Whether to include or exclude exclusively classes with an audit option
+     * @param excludeFull         Whether to include or exclude exclusively completely full classes
+     * @param excludeWaitlist     Whether to include or exclude exclusively completely classes with a waitlist
      * @param acceptInstructors   Instructors to exclusively allow
      * @param rejectInstructors   Instructors to exclusively reject
      * @param titleKeywordFilter  Filter for accept and reject keywords in the course title
@@ -74,6 +78,8 @@ public class CourseFilter {
             Boolean hasMajorRestriction,
             Boolean hasPrerequisite,
             Boolean canAudit,
+            Boolean excludeFull,
+            Boolean excludeWaitlist,
             Set<String> acceptInstructors,
             Set<String> rejectInstructors,
             RegexFilter titleKeywordFilter,
@@ -93,15 +99,33 @@ public class CourseFilter {
         this.hasMajorRestriction = hasMajorRestriction;
         this.hasPrerequisites = hasPrerequisite;
         this.canAudit = canAudit;
+        this.excludeFull = excludeFull;
+        this.excludeWaitlist = excludeWaitlist;
         this.acceptInstructors = acceptInstructors;
         this.rejectInstructors = rejectInstructors;
         this.titleKeywordFilter = titleKeywordFilter;
         this.descKeywordFilter = descKeywordFilter;
 
         // precompute skips
-        this.skipCourseValidation = (courseNumberFilter == null && courseIDFilter == null && titleKeywordFilter == null && descKeywordFilter == null && hasPrerequisite == null && canAudit == null && hasMajorRestriction == null);
-        this.skipSectionValidation = (acceptCRNs == null && rejectCRNs == null && acceptInstructors == null && rejectInstructors == null);
-        this.skipMeetingValidation = (acceptDays == null && rejectDays == null && startAfter == null && endBefore == null && onlyOnline == null && onlyAsync == null);
+        this.skipCourseValidation = (courseNumberFilter == null
+                && courseIDFilter == null
+                && titleKeywordFilter == null
+                && descKeywordFilter == null
+                && hasPrerequisite == null
+                && canAudit == null
+                && hasMajorRestriction == null);
+        this.skipSectionValidation = (acceptCRNs == null
+                && rejectCRNs == null
+                && acceptInstructors == null
+                && rejectInstructors == null
+                && excludeFull == null
+                && excludeWaitlist == null);
+        this.skipMeetingValidation = (acceptDays == null
+                && rejectDays == null
+                && startAfter == null
+                && endBefore == null
+                && onlyOnline == null
+                && onlyAsync == null);
     }
 
     /**
@@ -154,6 +178,16 @@ public class CourseFilter {
         // short circuit if no section or meeting checks
         if (skipSectionValidation && skipMeetingValidation)
             return false;
+
+        // excludeFull == true: reject section with no seats in the section and waitlist
+        // excludeFull == false or null: no-op, don't filter on this
+        if (Boolean.TRUE.equals(excludeFull) && section.isFull())
+            return true;
+
+        // excludeWaitlisted == true: reject section with no seats in the section but seats in the waitlist
+        // excludeWaitlisted == false or null: no-op, don't filter on this
+        if (Boolean.TRUE.equals(excludeWaitlist) && section.isWaitlisted())
+            return true;
 
         // reject if not a requested crn
         if (acceptCRNs != null && !acceptCRNs.contains(section.getCrn()))

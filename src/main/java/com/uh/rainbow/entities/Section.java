@@ -91,6 +91,24 @@ public class Section {
     }
 
     /**
+     * Check if the section is completely full
+     *
+     * @return True if no seats available and the waitlist is full
+     */
+    public boolean isFull() {
+        return curEnrolled >= maxEnrolled && curWaitlist >= maxWaitlist;
+    }
+
+    /**
+     * Check if the section is full but space on waitlist
+     *
+     * @return True if no seats available and the waitlist is has seats open
+     */
+    public boolean isWaitlisted() {
+        return curEnrolled >= maxEnrolled && curWaitlist < maxWaitlist;
+    }
+
+    /**
      * Convert this section to a DTO
      *
      * @return {@link SectionDTO}

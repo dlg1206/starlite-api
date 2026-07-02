@@ -24,6 +24,8 @@ import java.util.Set;
  * @param hasMajorRestriction Whether to include or exclude exclusively classes with major restrictions
  * @param hasPrereq           Whether to include or exclude exclusively classes with prerequisites
  * @param canAudit            Whether to include or exclude exclusively classes with an audit option
+ * @param excludeFull         Whether to include or exclude exclusively completely full classes
+ * @param excludeWaitlisted   Whether to include or exclude exclusively completely classes with a waitlist
  * @param acceptInstructors   Instructors to exclusively allow
  * @param rejectInstructors   Instructors to reject
  * @param acceptTitleKeywords Keywords in course name to exclusively accept
@@ -47,6 +49,8 @@ public record CourseFilterRequest(
         Boolean hasMajorRestriction,
         Boolean hasPrereq,
         Boolean canAudit,
+        Boolean excludeFull,
+        Boolean excludeWaitlisted,
         Set<String> acceptInstructors,
         Set<String> rejectInstructors,
         Set<String> acceptTitleKeywords,
