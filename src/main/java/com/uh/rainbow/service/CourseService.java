@@ -3,7 +3,6 @@ package com.uh.rainbow.service;
 import com.uh.rainbow.banner.*;
 import com.uh.rainbow.dto.course.CourseDTO;
 import com.uh.rainbow.entities.Course;
-import com.uh.rainbow.entities.Meeting;
 import com.uh.rainbow.entities.Section;
 import com.uh.rainbow.filter.CourseFilter;
 import com.uh.rainbow.log.Logger;
@@ -99,58 +98,50 @@ public class CourseService {
      * @return List of courses and sections
      */
     private List<Course> constructCourses(SubjectResult result) {
-        Map<String, Course> courseLookup = new HashMap<>();
-        Map<String, Course> crnCourseLookup = new HashMap<>();
 
-        // map courses
+        // init all course builders
+        Map<String, Course.Builder> courseBuilderLookup = new HashMap<>();  // cache to ensure 1 builder per course not crn
+        Map<String, Course.Builder> courseBuilderLookupByCRN = new HashMap<>();
         for (CoursesResponse cr : result.crl) {
-            String key = "%s_%s".formatted(cr.subjCode(), cr.formatCourseNumber());
-            // create course if dne
-            courseLookup.putIfAbsent(key, cr.toCourse());
-            // map crn to course
-            crnCourseLookup.put(cr.ssbsectCrn1(), courseLookup.get(key));
+            String courseKey = cr.formatCourseNumber();
+            Course.Builder cb = courseBuilderLookup.computeIfAbsent(courseKey, k -> cr.toCourseBuilder());
+            courseBuilderLookupByCRN.put(cr.ssbsectCrn1(), cb);
         }
 
         // add course details
-        result.cdrl.forEach((cdr -> crnCourseLookup.get(cdr.ssbsectCrn1()).setDescription(cdr.textNarrative())));
-        result.cgrl.forEach((cdr -> crnCourseLookup.get(cdr.ssbsectCrn1()).addGradingOption(cdr.toGradingOption())));
+        result.cdrl.forEach((cdr -> courseBuilderLookupByCRN.get(cdr.ssbsectCrn1()).setDescription(cdr.textNarrative())));
+        result.cgrl.forEach((cdr -> courseBuilderLookupByCRN.get(cdr.ssbsectCrn1()).addGradingOption(cdr.toGradingOption())));
 
-        // fetch meetings - needed for sections
-        Map<String, List<Meeting>> meetingsMap = new HashMap<>();
-        result.mrl.forEach((m) -> {
-            Course c = crnCourseLookup.get(m.ssbsectCrn());
-            c.setStartDate(m.formatStartDate());
-            c.setEndDate(m.formatEndDate());
-            // update meetings for a section
-            meetingsMap.merge(
-                    m.ssbsectCrn(), // key
-                    new ArrayList<>(m.toMeetings()), // value
-                    (existing, added) -> {
-                        existing.addAll(added);
-                        return existing;
-                    }
-            );
-        });
-
-        // map sections
-        Map<String, Section> sectionLookup = result.bsrl.stream()
+        // init all section builders
+        Map<String, Section.Builder> sectionBuilderLookup = result.bsrl.stream()
                 .collect(Collectors.toMap(
-                        BaseSectionResponse::ssbsectCrn,    // key
-                        bsr -> bsr.toSection(meetingsMap.get(bsr.ssbsectCrn())), // value - fetch meetings
-                        (existing, duplicate) -> existing
+                        BaseSectionResponse::ssbsectCrn,        // key
+                        BaseSectionResponse::toSectionBuilder,  // value
+                        (existing, duplicate) -> existing   // keep existing builder
                 ));
 
         // add section details
-        result.sdrl.forEach((cdr -> sectionLookup.get(cdr.crn()).addDescription(cdr.text())));
-        result.snrl.forEach((cdr -> sectionLookup.get(cdr.crn()).addNote(cdr.textNarrative())));
-        result.sarl.forEach((cdr -> sectionLookup.get(cdr.ssbsectCrn()).addAttribute(cdr.desc())));
-        result.scrl.forEach((scr -> sectionLookup.get(scr.crn()).setEnrollmentCounts(scr.enrl(), scr.maxEnrl(), scr.waitCount(), scr.waitCapacity())));
+        result.sdrl.forEach((cdr -> sectionBuilderLookup.get(cdr.crn()).addDescription(cdr.text())));
+        result.snrl.forEach((cdr -> sectionBuilderLookup.get(cdr.crn()).addNote(cdr.textNarrative())));
+        result.sarl.forEach((cdr -> sectionBuilderLookup.get(cdr.ssbsectCrn()).addAttribute(cdr.desc())));
+        result.scrl.forEach((scr -> sectionBuilderLookup.get(scr.crn()).setEnrollmentCounts(scr.enrl(), scr.maxEnrl(), scr.waitCount(), scr.waitCapacity())));
+
+        // add meeting details
+        result.mrl.forEach((mr) -> {
+            // add start and end dates
+            Course.Builder cb = courseBuilderLookupByCRN.get(mr.ssbsectCrn());
+            cb.setStartDate(mr.formatStartDate());
+            cb.setEndDate(mr.formatEndDate());
+            // add meetings to a section
+            sectionBuilderLookup.get(mr.ssbsectCrn()).addMeetings(mr.toMeetings());
+        });
 
         // Add sections to courses
-        sectionLookup.forEach((crn, s) -> crnCourseLookup.get(crn).addSection(s));
-
-        // return courses
-        return courseLookup.values().stream().toList();
+        sectionBuilderLookup.forEach((crn, sb) -> courseBuilderLookupByCRN.get(crn).addSection(sb.build()));
+        // build and return courses
+        return courseBuilderLookup.values().stream()
+                .map(Course.Builder::build)
+                .toList();
     }
 
     /**

@@ -19,82 +19,60 @@ import java.util.regex.Pattern;
  * <p>
  * <b>Description:</b> University course
  * <p>
- * todo - grading options
  *
  * @author Derek Garcia
  */
 public class Course {
-
-    private static final Pattern prereqRegex = Pattern.compile(" Pre: (?!consent)(.*?)\\.");
 
     private final String subjectCode;
     @Getter
     private final String number;
     @Getter
     private final String name;
+    @Getter
+    private final String description;
+    private final String prereqDescription;
     private final int credits;
-
     private final Set<GradingOption> gradingOptions;
+    private final LocalDate startDate;
+    private final LocalDate endDate;
     @Getter
     private final Map<Integer, Section> sections;
-    @Getter
-    private String description;
-    @Getter
-    private String prereqDescription;
-    @Setter
-    private LocalDate startDate;
-    @Setter
-    private LocalDate endDate;
 
     /**
-     * Create new course
+     * Create new immutable course
      *
-     * @param subjectCode Subject code of course
-     * @param number      Course number
-     * @param name        Full name of the course
-     * @param credits     Number of credits the course is worth
+     * @param subjectCode       Subject code of course
+     * @param number            Course number
+     * @param name              Full name of the course
+     * @param description       Description of the course
+     * @param prereqDescription Description of course prerequirements
+     * @param startDate         Start date of course
+     * @param credits           Number of credits the course is worth
+     * @param gradingOptions    Set of grading options available for this corse
+     * @param endDate           End date of course
+     * @param sections          Map of sections and their course reference numbers belonging to this course
      */
-    public Course(String subjectCode, String number, String name, int credits) {
+    private Course(String subjectCode,
+                   String number,
+                   String name,
+                   String description,
+                   String prereqDescription,
+                   int credits,
+                   Set<GradingOption> gradingOptions,
+                   LocalDate startDate,
+                   LocalDate endDate,
+                   Map<Integer, Section> sections) {
         this.subjectCode = subjectCode;
         this.number = number;
         this.name = name;
-        this.credits = credits;
-        this.sections = new HashMap<>();
-        this.gradingOptions = new HashSet<>();
-    }
-
-    /**
-     * Set overall course description. Will extract prereq if detected
-     *
-     * @param description Course description
-     */
-    public void setDescription(String description) {
-        description = description.strip();
-        Matcher m = prereqRegex.matcher(description);
-        // if find match, extract and remove from destining
-        if (m.find()) {
-            this.prereqDescription = m.group(1).strip();
-            description = description.replace(m.group(), "");
-        }
         this.description = description;
-    }
-
-    /**
-     * Add a grading option for this course
-     *
-     * @param gradingOption {@link GradingOption}
-     */
-    public void addGradingOption(GradingOption gradingOption) {
-        this.gradingOptions.add(gradingOption);
-    }
-
-    /**
-     * Add a section to this course
-     *
-     * @param section Section
-     */
-    public void addSection(Section section) {
-        sections.put(section.getCrn(), section);
+        this.prereqDescription = prereqDescription;
+        this.credits = credits;
+        this.gradingOptions = gradingOptions;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.sections = sections;
     }
 
     /**
@@ -119,7 +97,6 @@ public class Course {
     public boolean canAudit() {
         return gradingOptions.contains(new GradingOption("A", ""));
     }
-
 
     /**
      * Convert this course to DTO without section details
@@ -150,5 +127,92 @@ public class Course {
     @Override
     public String toString() {
         return getCourseID();
+    }
+
+    public static class Builder {
+        private static final Pattern prereqRegex = Pattern.compile(" Pre: (?!consent)(.*?)\\.");
+
+        private final String subjectCode;
+        private final String number;
+        private final String name;
+        private final int credits;
+        private final Set<GradingOption> gradingOptions;
+        private final Map<Integer, Section> sections;
+        private String description;
+        private String prereqDescription;
+        @Setter
+        private LocalDate startDate;
+        @Setter
+        private LocalDate endDate;
+
+        /**
+         * Create new {@link Course} builder
+         *
+         * @param subjectCode Subject code of course
+         * @param number      Course number
+         * @param name        Full name of the course
+         * @param credits     Number of credits the course is worth
+         */
+        public Builder(String subjectCode, String number, String name, int credits) {
+            this.subjectCode = subjectCode;
+            this.number = number;
+            this.name = name;
+            this.credits = credits;
+            this.gradingOptions = new HashSet<>();
+            this.sections = new HashMap<>();
+        }
+
+        /**
+         * Set overall course description. Will extract prereq if detected
+         *
+         * @param description Course description
+         */
+        public void setDescription(String description) {
+            description = description.strip();
+            Matcher m = prereqRegex.matcher(description);
+            // if find match, extract and remove from destining
+            if (m.find()) {
+                this.prereqDescription = m.group(1).strip();
+                description = description.replace(m.group(), "");
+            }
+            this.description = description;
+        }
+
+        /**
+         * Add a grading option for this course
+         *
+         * @param gradingOption {@link GradingOption}
+         */
+        public void addGradingOption(GradingOption gradingOption) {
+            this.gradingOptions.add(gradingOption);
+        }
+
+        /**
+         * Add a section to this course
+         *
+         * @param section Section
+         */
+        public void addSection(Section section) {
+            sections.put(section.getCrn(), section);
+        }
+
+        /**
+         * Create new immutable course
+         *
+         * @return {@link Course}
+         */
+        public Course build() {
+            return new Course(
+                    subjectCode,
+                    number,
+                    name,
+                    description,
+                    prereqDescription,
+                    credits,
+                    gradingOptions,
+                    startDate,
+                    endDate,
+                    sections);
+        }
     }
 }

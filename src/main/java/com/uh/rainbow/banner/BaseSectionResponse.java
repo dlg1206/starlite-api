@@ -2,10 +2,7 @@ package com.uh.rainbow.banner;
 
 
 import com.uh.rainbow.entities.Instructor;
-import com.uh.rainbow.entities.Meeting;
 import com.uh.rainbow.entities.Section;
-
-import java.util.List;
 
 /**
  * DTO for fields from <a href="https://www.sis.hawaii.edu:9350/crseavail/api/base-section">/base-section</a> Banner9 API. Only relevant fields have been included.
@@ -29,12 +26,11 @@ public record BaseSectionResponse(String ssbsectCrn, String ssbsectSeqNumb,
                                   String spridenLastName, String goremalEmailAddress) implements BannerResponse {
 
     /**
-     * Create new section
+     * Create new section builder
      *
-     * @param meetings List of meetings this section occurs on
-     * @return {@link Section}
+     * @return {@link Section.Builder}
      */
-    public Section toSection(List<Meeting> meetings) {
+    public Section.Builder toSectionBuilder() {
         // set instructor to null if one hasn't been assigned
         Instructor instructor = (spridenFirstName == null && spridenMi == null && spridenLastName == null && goremalEmailAddress == null)
                 ? null
@@ -46,8 +42,8 @@ public record BaseSectionResponse(String ssbsectCrn, String ssbsectSeqNumb,
                 ? null
                 : stvsaprDesc.replace(" Approval", "");
 
-        return new Section(Integer.parseInt(ssbsectCrn), ssbsectSeqNumb,
-                ssrrmajCrn != null, approvalAuthority, instructor,
-                meetings);
+        return new Section.Builder(Integer.parseInt(ssbsectCrn),
+                ssbsectSeqNumb, ssrrmajCrn != null,
+                approvalAuthority, instructor);
     }
 }

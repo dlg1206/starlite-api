@@ -1,6 +1,7 @@
 package com.uh.rainbow.banner;
 
 import com.uh.rainbow.entities.Course;
+import com.uh.rainbow.entities.Section;
 
 /***
  * DTO for fields from <a href="https://www.sis.hawaii.edu:9350/crseavail/api/courses">/courses</a> Banner9 API. Only relevant fields have been included.
@@ -13,16 +14,17 @@ import com.uh.rainbow.entities.Course;
  * @param crseNumb Course number
  * @param billHrLow Credits
  */
-public record CoursesResponse(String ssbsectCrn1, String title, String subjCode, String crseNumb,
-                              int billHrLow) implements BannerResponse {
+public record CoursesResponse(String ssbsectCrn1,
+                              String title, String subjCode,
+                              String crseNumb, int billHrLow) implements BannerResponse {
 
     /**
-     * Create new course without any sections
+     * Create new course builder
      *
-     * @return Course
+     * @return {@link Section.Builder}
      */
-    public Course toCourse() {
-        return new Course(subjCode, formatCourseNumber(), title, billHrLow);
+    public Course.Builder toCourseBuilder() {
+        return new Course.Builder(subjCode, formatCourseNumber(), title, billHrLow);
     }
 
     /**

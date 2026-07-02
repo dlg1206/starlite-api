@@ -6,6 +6,7 @@ import com.uh.rainbow.enums.Day;
 import lombok.Getter;
 
 import java.time.LocalTime;
+import java.util.Objects;
 
 /**
  * <b>File:</b> Meeting.java
@@ -89,4 +90,16 @@ public class Meeting {
         return new MeetingDTO(day, startTime, endTime, buildingCode, roomCode);
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Meeting meeting = (Meeting) o;
+        return day == meeting.day && Objects.equals(startTime, meeting.startTime) && Objects.equals(endTime, meeting.endTime) && Objects.equals(buildingCode, meeting.buildingCode) && Objects.equals(roomCode, meeting.roomCode);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(day, startTime, endTime, buildingCode, roomCode);
+    }
 }
