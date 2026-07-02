@@ -63,12 +63,14 @@ public class CourseService {
         // course details
         CompletableFuture<List<CoursesResponse>> crlFuture = bannerAPIService.fetchCoursesAsync(instID, termID, subjectID, true);
         CompletableFuture<List<CourseDescResponse>> cdrlFuture = bannerAPIService.fetchCourseDescriptionsAsync(instID, termID, subjectID, true);
-        CompletableFuture<List<SectionDescResponse>> sdrlFuture = bannerAPIService.fetchSectionDescriptionsAsync(instID, termID, subjectID, true);
-        CompletableFuture<List<SectionNotesResponse>> snrlFuture = bannerAPIService.fetchSectionNotesAsync(instID, termID, subjectID, true);
-        CompletableFuture<List<SectionAttribResponse>> sarlFuture = bannerAPIService.fetchSectionAttributesAsync(instID, termID, subjectID, true);
+        CompletableFuture<List<CourseGradingResponse>> cgrlFuture = bannerAPIService.fetchCourseGradingAsync(instID, termID, subjectID, true);
         // Section details
         CompletableFuture<List<BaseSectionResponse>> bsrlFuture = bannerAPIService.fetchSectionInstructorsAsync(instID, termID, subjectID, true);
         CompletableFuture<List<SectionCountsResponse>> scrlFuture = bannerAPIService.fetchSectionCountsAsync(instID, termID, subjectID, true);
+        CompletableFuture<List<SectionDescResponse>> sdrlFuture = bannerAPIService.fetchSectionDescriptionsAsync(instID, termID, subjectID, true);
+        CompletableFuture<List<SectionNotesResponse>> snrlFuture = bannerAPIService.fetchSectionNotesAsync(instID, termID, subjectID, true);
+        CompletableFuture<List<SectionAttribResponse>> sarlFuture = bannerAPIService.fetchSectionAttributesAsync(instID, termID, subjectID, true);
+        // meeting details
         CompletableFuture<List<MeetingsResponse>> mrlFuture = bannerAPIService.fetchMeetingsAsync(instID, termID, subjectID, true);
 
         // return future of waiting for all endpoints to resolve
@@ -80,6 +82,7 @@ public class CourseService {
                 subjectID,
                 crlFuture.join(),
                 cdrlFuture.join(),
+                cgrlFuture.join(),
                 sdrlFuture.join(),
                 snrlFuture.join(),
                 sarlFuture.join(),
@@ -110,6 +113,7 @@ public class CourseService {
 
         // add course details
         result.cdrl.forEach((cdr -> crnCourseLookup.get(cdr.ssbsectCrn1()).setDescription(cdr.textNarrative())));
+        result.cgrl.forEach((cdr -> crnCourseLookup.get(cdr.ssbsectCrn1()).addGradingOption(cdr.toGradingOption())));
 
         // fetch meetings - needed for sections
         Map<String, List<Meeting>> meetingsMap = new HashMap<>();
@@ -237,6 +241,7 @@ public class CourseService {
      * @param subjectID Subject code
      * @param crl       List of {@link  CourseResponse}
      * @param cdrl      List of {@link CourseDescResponse}
+     * @param cgrl      List of {@link CourseGradingResponse}
      * @param sdrl      List of {@link SectionDescResponse}
      * @param snrl      List of {@link SectionNotesResponse}
      * @param sarl      List of {@link SectionAttribResponse}
@@ -248,6 +253,7 @@ public class CourseService {
             String subjectID,
             List<CoursesResponse> crl,
             List<CourseDescResponse> cdrl,
+            List<CourseGradingResponse> cgrl,
             List<SectionDescResponse> sdrl,
             List<SectionNotesResponse> snrl,
             List<SectionAttribResponse> sarl,

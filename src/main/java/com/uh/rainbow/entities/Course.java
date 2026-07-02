@@ -1,13 +1,16 @@
 package com.uh.rainbow.entities;
 
 import com.uh.rainbow.dto.course.DetailedCourseDTO;
+import com.uh.rainbow.dto.course.GradingOption;
 import com.uh.rainbow.dto.course.SimpleCourseDTO;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +33,8 @@ public class Course {
     @Getter
     private final String name;
     private final int credits;
+
+    private final Set<GradingOption> gradingOptions;
     @Getter
     private final Map<Integer, Section> sections;
     @Getter
@@ -55,6 +60,7 @@ public class Course {
         this.name = name;
         this.credits = credits;
         this.sections = new HashMap<>();
+        this.gradingOptions = new HashSet<>();
     }
 
     /**
@@ -74,6 +80,15 @@ public class Course {
     }
 
     /**
+     * Add a grading option for this course
+     *
+     * @param gradingOption {@link GradingOption}
+     */
+    public void addGradingOption(GradingOption gradingOption) {
+        this.gradingOptions.add(gradingOption);
+    }
+
+    /**
      * Add a section to this course
      *
      * @param section Section
@@ -81,7 +96,6 @@ public class Course {
     public void addSection(Section section) {
         sections.put(section.getCrn(), section);
     }
-
 
     /**
      * Get the course ID formatted as SubjectCode_CourseNumber (ICS_101)
@@ -107,7 +121,8 @@ public class Course {
      */
     public SimpleCourseDTO toSimpleCourseDTO() {
         return new SimpleCourseDTO(subjectCode, number, name,
-                description, prereqDescription, credits,
+                description, prereqDescription,
+                credits, gradingOptions.stream().map(GradingOption::description).sorted().toList(),
                 startDate.toString(), endDate.toString(),
                 sections.size());
     }
@@ -119,7 +134,8 @@ public class Course {
      */
     public DetailedCourseDTO toDetailedCourseDTO() {
         return new DetailedCourseDTO(subjectCode, number, name,
-                description, prereqDescription, credits,
+                description, prereqDescription,
+                credits, gradingOptions.stream().map(GradingOption::description).sorted().toList(),
                 startDate.toString(), endDate.toString(),
                 sections.values().stream().map(Section::toSectionDTO).toList());
     }

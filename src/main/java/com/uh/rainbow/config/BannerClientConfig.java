@@ -26,7 +26,7 @@ import java.util.concurrent.Semaphore;
 @Configuration
 public class BannerClientConfig {
 
-    private static final int BATCH_SIZE = 8;    // min size per batch so at least 1 subject
+    private static final int BATCH_SIZE = 9;    // min size per batch so at least 1 subject
 
     @Value("${rainbow.banner.api}")
     private String baseUrl;
@@ -39,6 +39,9 @@ public class BannerClientConfig {
 
     @Value("${rainbow.banner.api.endpoint.course-desc}")
     private String courseDescEndpoint;
+
+    @Value("${rainbow.banner.api.endpoint.course-grading}")
+    private String courseGradingEndpoint;
 
     @Value("${rainbow.banner.api.endpoint.section-desc}")
     private String sectionDescEndpoint;

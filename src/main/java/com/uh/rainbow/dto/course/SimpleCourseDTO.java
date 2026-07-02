@@ -1,5 +1,7 @@
 package com.uh.rainbow.dto.course;
 
+import java.util.List;
+
 /**
  * Course DTO with only course details
  *
@@ -13,7 +15,8 @@ package com.uh.rainbow.dto.course;
  * @param numSections  Total sections for course
  */
 public record SimpleCourseDTO(String subjectCode, String courseNumber, String name,
-                              String description, String prereqDescription, int credits,
+                              String description, String prereqDescription,
+                              int credits, List<String> gradingOptions,
                               String startDate, String endDate,
                               int numSections) implements CourseDTO {
     /**

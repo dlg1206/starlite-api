@@ -193,6 +193,43 @@ public class BannerAPIService {
         return CompletableFuture.completedFuture(callWithLimit(() -> fetchCourseDescriptions(instID, termID, subjectID, deduplicate)));
     }
 
+    /**
+     * Fetch all course grading options
+     *
+     * @param instID      Campus code
+     * @param termID      Term code
+     * @param subjectID   Subject code
+     * @param deduplicate Deduplicate response
+     * @return List of course grading options for given campus, term, and subject
+     */
+    public List<CourseGradingResponse> fetchCourseGrading(String instID, String termID, String subjectID, boolean deduplicate) {
+        Instant start = Instant.now();
+        List<CourseGradingResponse> list = fetch(config.getCourseGradingEndpoint(), instID, termID, subjectID)
+                .body(new ParameterizedTypeReference<>() {
+                });
+        LOGGER.info(new MessageBuilder(MessageBuilder.Type.BANNER)
+                .addDetails(instID)
+                .addDetails(termID)
+                .addDetails(subjectID)
+                .addDetails(config.getCourseDescEndpoint())
+                .setDuration(start));
+        return deduplicate ? deduplicate(list) : list;
+    }
+
+    /**
+     * Fetch all course grading options with async wrapper
+     *
+     * @param instID      Campus code
+     * @param termID      Term code
+     * @param subjectID   Subject code
+     * @param deduplicate Deduplicate response
+     * @return Future for list of course grading options for given campus, term, and subject
+     */
+    @Async("bannerTaskExecutor")
+    public CompletableFuture<List<CourseGradingResponse>> fetchCourseGradingAsync(String instID, String termID, String subjectID, boolean deduplicate) {
+        return CompletableFuture.completedFuture(callWithLimit(() -> fetchCourseGrading(instID, termID, subjectID, deduplicate)));
+    }
+
 
     /**
      * Fetch all section descriptions

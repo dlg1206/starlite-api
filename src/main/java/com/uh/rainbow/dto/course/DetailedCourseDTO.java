@@ -6,17 +6,19 @@ import java.util.List;
 /**
  * Course DTO with course and section details
  *
- * @param subjectCode  Subject code
- * @param courseNumber Course number
- * @param name         Name of course
- * @param description  Description of course
- * @param credits      Total credits
- * @param startDate    Start date of course
- * @param endDate      End date of course
- * @param sections     List of sections of the course
+ * @param subjectCode       Subject code
+ * @param courseNumber      Course number
+ * @param name              Name of course
+ * @param description       Description of course
+ * @param prereqDescription Prereqs for the course
+ * @param credits           Total credits
+ * @param startDate         Start date of course
+ * @param endDate           End date of course
+ * @param sections          List of sections of the course
  */
 public record DetailedCourseDTO(String subjectCode, String courseNumber, String name,
-                                String description, String prereqDescription, int credits,
+                                String description, String prereqDescription,
+                                int credits, List<String> gradingOptions,
                                 String startDate, String endDate,
                                 List<SectionDTO> sections) implements CourseDTO {
 
