@@ -48,7 +48,9 @@ public record MeetingsResponse(String ssbsectCrn, String bldgCode, String roomCo
 
         // if no days assigned, return TBA section
         if (days.stream().allMatch(Objects::isNull))
-            return List.of(new Meeting(Day.TBD, startTime, endTime, bldgCode, roomCode));
+            return (startTime == null && endTime == null)
+                    ? List.of() // don't return any day times aren't assigned
+                    : List.of(new Meeting(Day.TBD, startTime, endTime, bldgCode, roomCode));
 
         // else get all meeting days
         return days.stream()

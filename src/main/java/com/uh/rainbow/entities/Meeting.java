@@ -90,7 +90,6 @@ public class Meeting {
         return new MeetingDTO(day, startTime, endTime, buildingCode, roomCode);
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
