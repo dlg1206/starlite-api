@@ -2,6 +2,7 @@ package com.uh.rainbow.entities;
 
 import com.uh.rainbow.dto.course.DetailedCourseDTO;
 import com.uh.rainbow.dto.course.GradingOption;
+import com.uh.rainbow.dto.course.ScheduledCourseDTO;
 import com.uh.rainbow.dto.course.SimpleCourseDTO;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,9 +25,8 @@ import java.util.regex.Pattern;
  */
 public class Course {
 
-    private final String subjectCode;
     @Getter
-    private final String number;
+    private final CourseID courseID;
     @Getter
     private final String name;
     @Getter
@@ -70,8 +70,7 @@ public class Course {
                    LocalDate startDate,
                    LocalDate endDate,
                    Map<Integer, Section> sections) {
-        this.subjectCode = subjectCode;
-        this.number = number;
+        this.courseID = new CourseID(subjectCode, number);
         this.name = name;
         this.description = description;
         this.prereqDescription = prereqDescription;
@@ -82,15 +81,6 @@ public class Course {
         this.startDate = startDate;
         this.endDate = endDate;
         this.sections = sections;
-    }
-
-    /**
-     * Get the course ID formatted as SubjectCode_CourseNumber (ICS_101)
-     *
-     * @return Course ID
-     */
-    public String getCourseID() {
-        return "%s_%s".formatted(subjectCode, number);
     }
 
     /**
@@ -113,7 +103,7 @@ public class Course {
      * @return {@link SimpleCourseDTO}
      */
     public SimpleCourseDTO toSimpleCourseDTO() {
-        return new SimpleCourseDTO(subjectCode, number, name,
+        return new SimpleCourseDTO(courseID.subjectCode(), courseID.number(), name,
                 description, prereqDescription,
                 credits, gradingOptions.stream().map(GradingOption::description).sorted().toList(),
                 majorRestriction, approvalAuthority,
@@ -127,7 +117,7 @@ public class Course {
      * @return {@link DetailedCourseDTO}
      */
     public DetailedCourseDTO toDetailedCourseDTO() {
-        return new DetailedCourseDTO(subjectCode, number, name,
+        return new DetailedCourseDTO(courseID.subjectCode(), courseID.number(), name,
                 description, prereqDescription,
                 credits, gradingOptions.stream().map(GradingOption::description).sorted().toList(),
                 majorRestriction, approvalAuthority,
@@ -135,9 +125,15 @@ public class Course {
                 sections.values().stream().map(Section::toSectionDTO).toList());
     }
 
-    @Override
-    public String toString() {
-        return getCourseID();
+    /**
+     * Convert this course into a scheduled course DTO with a specific section
+     *
+     * @param sectionCRN Course reference number of section to included
+     * @return {@link ScheduledCourseDTO}
+     */
+    public ScheduledCourseDTO toScheduleDTO(int sectionCRN) {
+        return new ScheduledCourseDTO(courseID.subjectCode(), courseID.number(), name, description, credits,
+                sections.get(sectionCRN).toSectionDTO());
     }
 
     public static class Builder {

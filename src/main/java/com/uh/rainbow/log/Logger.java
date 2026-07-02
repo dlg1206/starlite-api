@@ -1,6 +1,5 @@
 package com.uh.rainbow.log;
 
-import org.jsoup.HttpStatusException;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.HttpStatusCodeException;
 
@@ -26,21 +25,6 @@ public class Logger {
         this.log = LoggerFactory.getLogger(reference);
     }
 
-
-    /**
-     * Util logging method for reporting HTTP failures
-     *
-     * @param type Log type
-     * @param e    HttpStatusException
-     */
-    @Deprecated
-    public void reportHTTPAccessError(MessageBuilder.Type type, HttpStatusException e) {
-        MessageBuilder mb = new MessageBuilder(type)
-                .addDetails("Failed to fetch HTML")
-                .addDetails(e.getStatusCode());
-        warn(mb);
-        debug(mb.addDetails(e));
-    }
 
     /**
      * Util logging method for reporting HTTP failures

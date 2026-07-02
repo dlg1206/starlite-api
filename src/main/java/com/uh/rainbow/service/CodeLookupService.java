@@ -99,7 +99,7 @@ public class CodeLookupService {
      *
      * @return List of terms available
      */
-    public List<IdentifierDTO> fetchTerms() {
+    public List<IdentifierDTO> fetchTermDTOs() {
         loadCache();
         return terms;
     }
@@ -138,7 +138,7 @@ public class CodeLookupService {
      * @throws InvalidCampusCodeException If the provided campus code is invalid
      * @throws InvalidTermCodeException   If the provided term code is invalid
      */
-    public List<IdentifierDTO> lookupSubjectIdentifiers(String instID, String termID) throws InvalidCampusCodeException, InvalidTermCodeException {
+    public List<IdentifierDTO> lookupSubjectIdentifierDTOs(String instID, String termID) throws InvalidCampusCodeException, InvalidTermCodeException {
         // convert to identifiers
         return lookupSubjectCodes(instID, termID).stream()
                 .map(s -> new IdentifierDTO(s, subjectLookup.get(s)))

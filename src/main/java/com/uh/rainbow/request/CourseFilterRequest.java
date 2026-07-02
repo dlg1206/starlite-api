@@ -2,6 +2,12 @@ package com.uh.rainbow.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.uh.rainbow.enums.Day;
+import com.uh.rainbow.filter.CourseFilter;
+import com.uh.rainbow.filter.CourseFilterMappable;
+import com.uh.rainbow.service.CourseFilterMapper;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 
 import java.time.LocalTime;
 import java.util.Set;
@@ -34,14 +40,14 @@ import java.util.Set;
  * @param rejectDescKeywords  Keywords in course description to exclusively reject
  */
 public record CourseFilterRequest(
-        @JsonProperty("accept_crns") Set<Integer> acceptCRNs,
-        @JsonProperty("reject_crns") Set<Integer> rejectCRNs,
-        Set<String> acceptCourseNumbers,
-        Set<String> rejectCourseNumbers,
-        @JsonProperty("accept_course_ids") Set<String> acceptCourseIDs,
-        @JsonProperty("reject_course_ids") Set<String> rejectCourseIDs,
-        Set<String> acceptDays,
-        Set<String> rejectDays,
+        @JsonProperty("accept_crns") Set<@Positive Integer> acceptCRNs,
+        @JsonProperty("reject_crns") Set<@Positive Integer> rejectCRNs,
+        Set<@NotBlank String> acceptCourseNumbers,
+        Set<@NotBlank String> rejectCourseNumbers,
+        @JsonProperty("accept_course_ids") Set<@NotBlank String> acceptCourseIDs,
+        @JsonProperty("reject_course_ids") Set<@NotBlank String> rejectCourseIDs,
+        Set<@NotBlank Day> acceptDays,
+        Set<@NotBlank Day> rejectDays,
         @JsonFormat(pattern = "HH:mm") LocalTime startAfter,
         @JsonFormat(pattern = "HH:mm") LocalTime endBefore,
         Boolean onlyOnline,
@@ -51,11 +57,21 @@ public record CourseFilterRequest(
         Boolean canAudit,
         Boolean excludeFull,
         Boolean excludeWaitlisted,
-        Set<String> acceptInstructors,
-        Set<String> rejectInstructors,
-        Set<String> acceptTitleKeywords,
-        Set<String> rejectTitleKeywords,
-        Set<String> acceptDescKeywords,
-        Set<String> rejectDescKeywords
-) {
+        Set<@NotBlank String> acceptInstructors,
+        Set<@NotBlank String> rejectInstructors,
+        Set<@NotBlank String> acceptTitleKeywords,
+        Set<@NotBlank String> rejectTitleKeywords,
+        Set<@NotBlank String> acceptDescKeywords,
+        Set<@NotBlank String> rejectDescKeywords
+) implements CourseFilterMappable {
+    /**
+     * Map this object to a course filter
+     *
+     * @param courseFilterMapper Mapper to course filter
+     * @return {@link CourseFilter}
+     */
+    @Override
+    public CourseFilter toCourseFilter(CourseFilterMapper courseFilterMapper) {
+        return courseFilterMapper.toFilter(this);
+    }
 }

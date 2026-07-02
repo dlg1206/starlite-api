@@ -19,19 +19,10 @@ public enum Day {
      * @return Day Enum
      */
     @JsonCreator
-    public static Day fromString(String value) {
-        return Day.valueOf(value.toUpperCase());
-    }
-
-    /**
-     * Convert string to Day enum
-     * Supports UH day codes
-     *
-     * @param code string code ID
-     * @return Day Enum, null if not
-     */
-    public static Day fromDayString(String code) {
-        return switch (code.toLowerCase()) {
+    public static Day fromDayString(String value) {
+        if (value == null)
+            throw new IllegalArgumentException("Day value must not be null");
+        return switch (value.toLowerCase()) {
             case "sun", "sunday", "u" -> SUN;
             case "mon", "monday", "m" -> MON;
             case "tue", "tuesday", "t" -> TUE;
@@ -40,7 +31,7 @@ public enum Day {
             case "fri", "friday", "f" -> FRI;
             case "sat", "saturday", "s" -> SAT;
             case "tba" -> TBD;
-            default -> null;
+            default -> throw new IllegalArgumentException("Unknown day code: " + value);
         };
     }
 }

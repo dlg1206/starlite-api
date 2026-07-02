@@ -24,12 +24,11 @@ test {
 dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     compileOnly 'org.projectlombok:lombok'
-    // jsoup HTML parser library @ https://jsoup.org/
-    implementation 'org.jsoup:jsoup:1.22.2'
     implementation 'org.apache.commons:commons-lang3'
     implementation 'tools.jackson.core:jackson-databind'
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

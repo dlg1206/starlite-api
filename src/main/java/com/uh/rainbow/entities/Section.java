@@ -22,6 +22,7 @@ public class Section {
 
     @Getter
     private final int crn;
+    @Getter
     private final String sectionNumber;            // section not always number
     @Getter
     private final SectionFormat sectionFormat;

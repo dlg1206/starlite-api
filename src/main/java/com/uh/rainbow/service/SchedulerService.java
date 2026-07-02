@@ -1,101 +1,91 @@
 package com.uh.rainbow.service;
 
-import com.uh.rainbow.entities.PotentialSchedule;
+import com.uh.rainbow.dto.course.ScheduledCourseDTO;
+import com.uh.rainbow.entities.Course;
+import com.uh.rainbow.entities.CourseID;
 import com.uh.rainbow.entities.Section;
-import com.uh.rainbow.util.logging.Logger;
-import com.uh.rainbow.util.logging.MessageBuilder;
+import com.uh.rainbow.log.Logger;
+import com.uh.rainbow.request.ScheduleRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <b>File:</b> SchedulerService.java
  * <p>
- * <b>Description:</b> Service responsible for generating course schedules
+ * <b>Description:</b> Service responsible for generating schedules
  *
  * @author Derek Garcia
  */
 @Service
+@RequiredArgsConstructor
 public class SchedulerService {
-    public static final Logger LOGGER = new Logger(SchedulerService.class);
+
+    private static final Logger LOGGER = new Logger(SchedulerService.class);
+
+    private final CourseService courseService;
+
 
     /**
-     * Generate list of valid schedules
+     * Generate all valid schedules for a list of courses
      *
-     * @return List of valid schedules
+     * @param instID          Campus code
+     * @param termID          Term code
+     * @param scheduleRequest DTO with schedule options mappable to a course filter
+     * @return List of courses that match the filter if provided
      */
-    public List<PotentialSchedule> schedule(List<Section> sections) {
-        // Generate all possible schedules
-        return new Scheduler(sections).solve();
-    }
+    public List<List<ScheduledCourseDTO>> generateScheduleDTOs(String instID, String termID, ScheduleRequest scheduleRequest) {
+        // fetch courses
+        Set<String> subjectCodes = scheduleRequest.courses().stream()
+                .map(ScheduleRequest.RequestedCourse::subjectCode)
+                .collect(Collectors.toSet());
+        List<Course> courses = courseService.filterCourses(scheduleRequest, courseService.fetchCourses(instID, termID, subjectCodes));
 
-    /**
-     * Scheduler that generates valid schedules
-     */
-    private static class Scheduler {
-        private final Set<String> requiredCourses = new HashSet<>();
-        private final PotentialSchedule seed;
-        private final List<PotentialSchedule> results = new ArrayList<>();
+        // map courses
+        Map<CourseID, Set<Integer>> requestedCRNs = scheduleRequest.getRequestedCRNS();
+        Map<Integer, Section> sectionByCRN = new HashMap<>();
+        Map<CourseID, Set<Integer>> crnsByCourseID = new HashMap<>();
+        Map<Integer, Course> courseByCRN = new HashMap<>();
 
-        /**
-         * Create a new Scheduler
-         *
-         * @param sections Initial pool of sections to use
-         */
-        public Scheduler(List<Section> sections) {
-            sections.forEach((s) -> this.requiredCourses.add(s.getCID()));
-            this.seed = new PotentialSchedule(sections);
-        }
+        for (Course c : courses) {
+            // update crn -> course mapping
+            c.getSections().keySet().forEach(crn -> courseByCRN.put(crn, c));
 
-        /**
-         * Attempt to solve a partially completed potentialSchedule
-         *
-         * @param potentialSchedule Starting potentialSchedule to complete
-         */
-        private void solve(PotentialSchedule potentialSchedule) {
-            // Add new potentialSchedule if has all courses and the result doesn't contain an equivalent potentialSchedule
-            if (potentialSchedule.isComplete(this.requiredCourses) && this.results.stream().noneMatch((s) -> s.isEquals(potentialSchedule))) {
-                LOGGER.info(new MessageBuilder(MessageBuilder.Type.SCHEDULE)
-                        .addDetails("Found new schedule")
-                        .addDetails(potentialSchedule)
-                );
-                this.results.add(potentialSchedule);
-            }
-
-            // Solve each successor potentialSchedule
-            if (!potentialSchedule.getSections().isEmpty())
-                LOGGER.info(new MessageBuilder(MessageBuilder.Type.SCHEDULE).addDetails("Attempting to solve " + potentialSchedule));
-            potentialSchedule.getSuccessors().forEach(this::solve);
-
-            // When reach here, all potential solutions have been found
-            if (!potentialSchedule.getSections().isEmpty())
-                LOGGER.info(new MessageBuilder(MessageBuilder.Type.SCHEDULE).addDetails("All schedules exhausted for " + potentialSchedule));
-        }
-
-        /**
-         * Entrypoint to recursive solver using initial values
-         *
-         * @return List of valid potential schedules found
-         */
-        public List<PotentialSchedule> solve() {
-            // Solve seed and return results
-            Instant start = Instant.now();
-            solve(this.seed);
-            // Log findings
-            MessageBuilder mb = new MessageBuilder(MessageBuilder.Type.SCHEDULE).setDuration(start);
-            if (this.results.isEmpty()) {
-                LOGGER.warn(mb.addDetails("No valid schedules found"));
+            Set<Integer> requested = requestedCRNs.get(c.getCourseID());
+            if (requested != null && !requested.isEmpty()) {
+                // only add specific crns if requested
+                requested.stream()
+                        .filter(crn -> c.getSections().containsKey(crn)) // skip invalid crns todo warn bad crn?
+                        .forEach(crn -> {
+                            sectionByCRN.put(crn, c.getSections().get(crn));
+                            crnsByCourseID
+                                    .computeIfAbsent(c.getCourseID(), id -> new HashSet<>())
+                                    .add(crn);
+                        });
             } else {
-                LOGGER.info(mb.addDetails("Found %s schedule%s".formatted(this.results.size(), this.results.size() == 1 ? "" : "s")));
+                // default: all sections
+                sectionByCRN.putAll(c.getSections());
+                crnsByCourseID.put(c.getCourseID(), new HashSet<>(c.getSections().keySet()));
             }
-
-            return this.results;
         }
 
+        // Generate all possible schedules
+        Scheduler scheduler = new Scheduler(sectionByCRN, crnsByCourseID);
+        List<List<Integer>> schedules = scheduler.generateSchedules();
+        // no valid schedules found, exit early
+        if (schedules.isEmpty())
+            return new ArrayList<>();
+
+        // map back to courses
+        return schedules.stream()
+                // foreach schedule in schedules
+                .map(schedule -> schedule.stream()
+                        // foreach crn in schedule -> convert to dto
+                        .map(crn -> courseByCRN.get(crn).toScheduleDTO(crn))
+                        .toList())
+                .toList();
     }
 
 }

@@ -1,9 +1,9 @@
 package com.uh.rainbow.service;
 
-import com.uh.rainbow.enums.Day;
 import com.uh.rainbow.filter.CourseFilter;
 import com.uh.rainbow.filter.RegexFilter;
 import com.uh.rainbow.request.CourseFilterRequest;
+import com.uh.rainbow.request.ScheduleRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -13,19 +13,18 @@ import java.util.stream.Collectors;
 /**
  * <b>File:</b> CourseFilterMapper.java
  * <p>
- * <b>Description:</b> Map requests to course filters
+ * <b>Description:</b> Map a course filter request to internal filter opbject
  *
  * @author Derek Garcia
  */
 @Component
 public class CourseFilterMapper {
 
-
     /**
-     * Format Course ID request into regex
+     * Format a 1** pattern to regex
      *
-     * @param pattern Course ID to format
-     * @return Regex of course id
+     * @param pattern Course ID pattern to format
+     * @return Regex equivalent of pattern
      */
     private String formatCourseIDRegex(String pattern) {
         return pattern.strip()
@@ -82,8 +81,8 @@ public class CourseFilterMapper {
                 cfr.rejectCRNs(),
                 createCourseFilter(cfr.acceptCourseNumbers(), cfr.rejectCourseNumbers()),
                 createCourseFilter(cfr.acceptCourseIDs(), cfr.rejectCourseIDs()),
-                cfr.acceptDays() == null ? null : cfr.acceptDays().stream().map(Day::fromDayString).collect(Collectors.toSet()),
-                cfr.rejectDays() == null ? null : cfr.rejectDays().stream().map(Day::fromDayString).collect(Collectors.toSet()),
+                cfr.acceptDays(),
+                cfr.rejectDays(),
                 cfr.startAfter(),
                 cfr.endBefore(),
                 cfr.onlyOnline(),
@@ -97,6 +96,36 @@ public class CourseFilterMapper {
                 cfr.rejectInstructors() == null ? null : cfr.rejectInstructors().stream().map(String::toLowerCase).collect(Collectors.toSet()),
                 createRegexFilter(cfr.acceptTitleKeywords(), cfr.rejectTitleKeywords()),
                 createRegexFilter(cfr.acceptDescKeywords(), cfr.rejectDescKeywords())
+        );
+    }
+
+    /**
+     * Convert a schedule request into internal filter object
+     *
+     * @param scheduleRequest Schedule request to build filter from
+     * @return {@link CourseFilter}
+     */
+    public CourseFilter toFilter(ScheduleRequest scheduleRequest) {
+        return new CourseFilter(
+                null,
+                null,
+                null,
+                createCourseFilter(scheduleRequest.courses().stream().map(rc -> rc.getCourseID().toString()).toList(), null),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
         );
     }
 }

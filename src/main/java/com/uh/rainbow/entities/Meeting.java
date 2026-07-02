@@ -48,22 +48,24 @@ public class Meeting {
      * @return True if conflict, false if otherwise
      */
     public boolean conflictsWith(Meeting other) {
-        // todo
-        return true;
-        // TBA days can't conflict
-//        if (this.day == Day.TBA || other.day == Day.TBA)
-//            return false;
-//
-//        // Can't conflict if on different days
-//        if (this.day != other.day)
-//            return false;
-//
-//        // todo handle single day meetings
-//
-//        // Conflict if times overlap
-//        return this.startTime.beforeOrEqual(other.endTime) == 1 && this.endTime.afterOrEqual(other.startTime) == 1;
+        // TBD days can't conflict
+        if (day == Day.TBD || other.day == Day.TBD)
+            return false;
 
-        // No conflicts
+        // Async days can't conflict
+        if (isAsync() || other.isAsync())
+            return false;
+
+        // Can't conflict if on different days
+        if (day != other.day)
+            return false;
+
+        // can't check if time conflicts if times are null
+        if (startTime == null || endTime == null || other.startTime == null || other.endTime == null)
+            return false;
+
+        // Conflict if this starts before other ends or ends after other starts
+        return startTime.isBefore(other.endTime) && other.startTime.isBefore(endTime);
     }
 
     /**

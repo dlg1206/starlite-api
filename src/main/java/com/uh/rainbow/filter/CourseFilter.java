@@ -233,10 +233,10 @@ public class CourseFilter {
         if (canAudit != null && course.canAudit() != canAudit)
             return true;
 
-        if (courseNumberFilter != null && courseNumberFilter.reject(course.getNumber()))
+        if (courseNumberFilter != null && courseNumberFilter.reject(course.getCourseID().number()))
             return true;
 
-        if (courseIDFilter != null && courseIDFilter.reject(course.getCourseID()))
+        if (courseIDFilter != null && courseIDFilter.reject(course.getCourseID().toString()))
             return true;
 
         if (titleKeywordFilter != null && titleKeywordFilter.reject(course.getName()))

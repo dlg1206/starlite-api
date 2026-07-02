@@ -5,9 +5,11 @@ import com.uh.rainbow.exception.InvalidTermCodeException;
 import com.uh.rainbow.log.Logger;
 import com.uh.rainbow.log.MessageBuilder;
 import com.uh.rainbow.request.CourseFilterRequest;
+import com.uh.rainbow.request.ScheduleRequest;
 import com.uh.rainbow.response.*;
 import com.uh.rainbow.service.CodeLookupService;
 import com.uh.rainbow.service.CourseService;
+import com.uh.rainbow.service.SchedulerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +34,7 @@ public class CourseController {
 
     private final CodeLookupService codeLookupService;
     private final CourseService courseService;
+    private final SchedulerService schedulerService;
 
     /**
      * GET Endpoint: /term/{termID}/campus/{instID}/subjects
@@ -44,7 +47,7 @@ public class CourseController {
     @GetMapping(value = "/{termID}/campus/{instID}/subjects")
     public ResponseEntity<Response> getSubjects(@PathVariable String termID, @PathVariable String instID) {
         try {
-            return ResponseEntity.ok(new IdentifierResponse(codeLookupService.lookupSubjectIdentifiers(instID, termID)));
+            return ResponseEntity.ok(new IdentifierResponse(codeLookupService.lookupSubjectIdentifierDTOs(instID, termID)));
         } catch (HttpStatusCodeException e) {
             // Report and return html access failure
             LOGGER.reportBannerAccessError(MessageBuilder.Type.SUBJECT, e);
@@ -79,7 +82,7 @@ public class CourseController {
             @RequestParam(defaultValue = "false") boolean detailed
     ) {
         try {
-            return ResponseEntity.ok(new CourseResponse(courseService.fetchCourses(instID, termID, subjects, detailed, null)));
+            return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(instID, termID, subjects, detailed, null)));
         } catch (Exception e) {
             // Internal Server Error
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.SUBJECT).addDetails(e));
@@ -106,7 +109,30 @@ public class CourseController {
             @RequestParam(defaultValue = "false") boolean detailed,
             @RequestBody CourseFilterRequest request) {
         try {
-            return ResponseEntity.ok(new CourseResponse(courseService.fetchCourses(instID, termID, subjects, detailed, request)));
+            return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(instID, termID, subjects, detailed, request)));
+        } catch (Exception e) {
+            // Internal Server Error
+            LOGGER.error(new MessageBuilder(MessageBuilder.Type.SUBJECT).addDetails(e));
+            return new ResponseEntity<>(new RainbowErrorResponse(e), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * POST Endpoint: /term/{termID}/campus/{instID}/schedule
+     * Generate potential schedules for a list of courses
+     *
+     * @param termID  Term code to search for subjects
+     * @param instID  Campus code to search for subjects
+     * @param request Scheduled filter details
+     * @return List of courses for a given campus and term that pass filters
+     */
+    @PostMapping(value = "/{termID}/campus/{instID}/schedule")
+    public ResponseEntity<Response> getSchedules(
+            @PathVariable String termID,
+            @PathVariable String instID,
+            @RequestBody ScheduleRequest request) {
+        try {
+            return ResponseEntity.ok(new ScheduleResponse(schedulerService.generateScheduleDTOs(instID, termID, request)));
         } catch (Exception e) {
             // Internal Server Error
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.SUBJECT).addDetails(e));

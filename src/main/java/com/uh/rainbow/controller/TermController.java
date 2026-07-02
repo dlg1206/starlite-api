@@ -39,7 +39,7 @@ public class TermController {
     @GetMapping(value = "")
     public ResponseEntity<Response> getAllTerms() {
         try {
-            return ResponseEntity.ok(new IdentifierResponse(codeLookupService.fetchTerms()));
+            return ResponseEntity.ok(new IdentifierResponse(codeLookupService.fetchTermDTOs()));
         } catch (HttpStatusCodeException e) {
             // Report and return html access failure
             LOGGER.reportBannerAccessError(MessageBuilder.Type.TERM, e);
