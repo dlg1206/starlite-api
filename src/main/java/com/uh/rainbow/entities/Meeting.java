@@ -6,7 +6,6 @@ import com.uh.rainbow.enums.Day;
 import lombok.Getter;
 
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * <b>File:</b> Meeting.java
@@ -87,11 +86,7 @@ public class Meeting {
      * @return {@link MeetingDTO}
      */
     public MeetingDTO toMeetingDTO() {
-        return new MeetingDTO(day.name(),
-                startTime == null ? null : startTime.format(DateTimeFormatter.ofPattern("HHmm")),
-                endTime == null ? null : endTime.format(DateTimeFormatter.ofPattern("HHmm")),
-                buildingCode, roomCode
-        );
+        return new MeetingDTO(day, startTime, endTime, buildingCode, roomCode);
     }
 
 }

@@ -5,6 +5,7 @@ import com.uh.rainbow.entities.Instructor;
 import com.uh.rainbow.enums.SectionFormat;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -29,4 +30,16 @@ public record SectionDTO(int crn, String sectionNumber,
                          int curWaitlist, int maxWaitlist,
                          Collection<String> attributes, Collection<String> descriptions, Collection<String> notes,
                          List<MeetingDTO> meetings) {
+
+    // comparator that sorts meetings by the day of the week, then starting time
+    private static final Comparator<MeetingDTO> BY_MEETING_TIME = Comparator
+            .comparing(MeetingDTO::day)
+            .thenComparing(MeetingDTO::startTime);
+
+    // compact constructor - normalizes/sorts meetings on construction
+    public SectionDTO {
+        meetings = meetings.stream()
+                .sorted(BY_MEETING_TIME)
+                .toList();
+    }
 }

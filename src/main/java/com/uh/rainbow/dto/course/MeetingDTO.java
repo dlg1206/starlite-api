@@ -1,6 +1,11 @@
 package com.uh.rainbow.dto.course;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.uh.rainbow.enums.Day;
+
+import java.time.LocalTime;
+
 /**
  * Meeting DTO with section details
  *
@@ -10,7 +15,8 @@ package com.uh.rainbow.dto.course;
  * @param buildingCode Building code
  * @param roomCode     Room code
  */
-public record MeetingDTO(String day,
-                         String startTime, String endTime,
+public record MeetingDTO(Day day,
+                         @JsonFormat(pattern = "HHmm") LocalTime startTime,
+                         @JsonFormat(pattern = "HHmm") LocalTime endTime,
                          String buildingCode, String roomCode) {
 }
