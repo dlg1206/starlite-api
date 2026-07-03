@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author Derek Garcia
  */
-@JsonPropertyOrder({"timestamp", "courses"})
+@JsonPropertyOrder({"timestamp", "courseIDs"})
 public class CourseResponse extends Response {
     // custom comparator that extracts number from course number since can include letters
     private static final Comparator<CourseDTO> BY_COURSE_NUMBER = Comparator

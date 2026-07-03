@@ -4,7 +4,7 @@ import com.uh.rainbow.entities.Course;
 import com.uh.rainbow.entities.Section;
 
 /***
- * DTO for fields from <a href="https://www.sis.hawaii.edu:9350/crseavail/api/courses">/courses</a> Banner9 API. Only relevant fields have been included.
+ * DTO for fields from <a href="https://www.sis.hawaii.edu:9350/crseavail/api/courses">/courseIDs</a> Banner9 API. Only relevant fields have been included.
  * <p>
  * Retrieve overall details about a course
  *

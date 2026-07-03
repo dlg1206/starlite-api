@@ -21,8 +21,17 @@ public record SubjectsResponse(String ssbsectCampCode,
      *
      * @return {@link IdentifierDTO} with term code and name
      */
-    public IdentifierDTO toTermIdentifier() {
+    public IdentifierDTO toTermIdentifierDTO() {
         return new IdentifierDTO(stvtermCode, stvtermDesc);
+    }
+
+    /**
+     * Extracts the subject details from this subject object
+     *
+     * @return {@link IdentifierDTO} with subject code and name
+     */
+    public IdentifierDTO toSubjectIdentifierDTO() {
+        return new IdentifierDTO(stvsubjCode, stvsubjDesc);
     }
 
 }

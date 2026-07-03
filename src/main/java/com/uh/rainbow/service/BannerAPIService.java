@@ -126,7 +126,7 @@ public class BannerAPIService {
      * @param termID      Term code
      * @param subjectID   Subject code
      * @param deduplicate Deduplicate response
-     * @return List of courses offered for given campus, term, and subject
+     * @return List of courseIDs offered for given campus, term, and subject
      */
     public List<CoursesResponse> fetchCourses(String instID, String termID, String subjectID, boolean deduplicate) {
         Instant start = Instant.now();
@@ -149,7 +149,7 @@ public class BannerAPIService {
      * @param termID      Term code
      * @param subjectID   Subject code
      * @param deduplicate Deduplicate response
-     * @return Future for list of courses offered for given campus, term, and subject
+     * @return Future for list of courseIDs offered for given campus, term, and subject
      */
     @Async("bannerTaskExecutor")
     public CompletableFuture<List<CoursesResponse>> fetchCoursesAsync(String instID, String termID, String subjectID, boolean deduplicate) {

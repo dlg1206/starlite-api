@@ -20,6 +20,13 @@ public record CourseID(String subjectCode, String number) {
         return new CourseID("PLACEHOLDER", Integer.toString(new Random().nextInt()));
     }
 
+    /**
+     * @return True if course number contains wildcard, false otherwise
+     */
+    public boolean containsWildcard() {
+        return number.contains("*");
+    }
+
     @Override
     public String toString() {
         return "%s %s".formatted(subjectCode, number);

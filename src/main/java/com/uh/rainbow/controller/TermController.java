@@ -6,10 +6,11 @@ import com.uh.rainbow.response.BannerErrorResponse;
 import com.uh.rainbow.response.IdentifierResponse;
 import com.uh.rainbow.response.RainbowErrorResponse;
 import com.uh.rainbow.response.Response;
-import com.uh.rainbow.service.CodeLookupService;
+import com.uh.rainbow.service.TermService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -21,25 +22,26 @@ import org.springframework.web.client.HttpStatusCodeException;
  *
  * @author Derek Garcia
  */
-@RequestMapping("/terms")
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/campuses")
 public class TermController {
 
     private final static Logger LOGGER = new Logger(TermController.class);
 
-    private final CodeLookupService codeLookupService;
+    private final TermService termService;
 
     /**
-     * GET Endpoint: /terms
-     * Get list of terms
+     * GET Endpoint: /campuses/{campusCode}/terms
+     * Get list of terms a campus has details for
      *
+     * @param campusCode Campus code
      * @return List of term names and their ID's
      */
-    @GetMapping(value = "")
-    public ResponseEntity<Response> getAllTerms() {
+    @GetMapping(value = "/{campusCode}/terms")
+    public ResponseEntity<Response> getAllTerms(@PathVariable String campusCode) {
         try {
-            return ResponseEntity.ok(new IdentifierResponse(codeLookupService.fetchTermDTOs()));
+            return ResponseEntity.ok(new IdentifierResponse(termService.fetchTermCodeIdentifierDTOs(campusCode)));
         } catch (HttpStatusCodeException e) {
             // Report and return html access failure
             LOGGER.reportBannerAccessError(MessageBuilder.Type.TERM, e);

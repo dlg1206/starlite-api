@@ -5,11 +5,10 @@ import com.uh.rainbow.exception.InvalidTermCodeException;
 import com.uh.rainbow.log.Logger;
 import com.uh.rainbow.log.MessageBuilder;
 import com.uh.rainbow.request.CourseFilterRequest;
-import com.uh.rainbow.request.ScheduleRequest;
 import com.uh.rainbow.response.*;
-import com.uh.rainbow.service.CodeLookupService;
 import com.uh.rainbow.service.CourseService;
-import com.uh.rainbow.service.SchedulerService;
+import com.uh.rainbow.service.SubjectService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpStatusCodeException;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * <b>File:</b> CourseController.java
@@ -25,29 +25,28 @@ import java.util.List;
  *
  * @author Derek Garcia
  */
-@RequestMapping("/term")
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/campuses")
 public class CourseController {
 
     private final static Logger LOGGER = new Logger(CourseController.class);
 
-    private final CodeLookupService codeLookupService;
+    private final SubjectService subjectService;
     private final CourseService courseService;
-    private final SchedulerService schedulerService;
 
     /**
-     * GET Endpoint: /term/{termID}/campus/{instID}/subjects
+     * GET Endpoint: /campuses/{campusCode}/terms/{termCode}/subjects
      * Get list of subjects for a given campus and term
      *
-     * @param termID Term code to search for subjects
-     * @param instID Campus code to search for subjects
+     * @param campusCode Campus code to search for subjects
+     * @param termCode   Term code to search for subjects
      * @return List of subjects for a given campus and term
      */
-    @GetMapping(value = "/{termID}/campus/{instID}/subjects")
-    public ResponseEntity<Response> getSubjects(@PathVariable String termID, @PathVariable String instID) {
+    @GetMapping(value = "/{campusCode}/terms/{termCode}/subjects")
+    public ResponseEntity<Response> getSubjects(@PathVariable String campusCode, @PathVariable String termCode) {
         try {
-            return ResponseEntity.ok(new IdentifierResponse(codeLookupService.lookupSubjectIdentifierDTOs(instID, termID)));
+            return ResponseEntity.ok(new IdentifierResponse(subjectService.fetchSubjectIdentifierDTOs(campusCode, termCode)));
         } catch (HttpStatusCodeException e) {
             // Report and return html access failure
             LOGGER.reportBannerAccessError(MessageBuilder.Type.SUBJECT, e);
@@ -65,24 +64,24 @@ public class CourseController {
     }
 
     /**
-     * GET Endpoint: /term/{termID}/campus/{instID}/courses
-     * Search for courses for a given campus and term without a filter
+     * GET Endpoint: /campuses/{campusCode}/terms/{termCode}/courseIDs
+     * Get all courseIDs offered at a campus and term
      *
-     * @param termID   Term code to search for subjects
-     * @param instID   Campus code to search for subjects
-     * @param subjects Optional list of subject codes to filter for (Default: All)
-     * @param detailed Include section and meeting details in response (Default: false)
-     * @return List of courses for a given campus and term that pass filters
+     * @param campusCode Campus code to search for subjects
+     * @param termCode   Term code to search for subjects
+     * @param subjects   Optional list of subject codes to filter for (Default: All)
+     * @param detailed   Include section and meeting details in response (Default: false)
+     * @return List of courseIDs for a given campus and term
      */
-    @GetMapping(value = "/{termID}/campus/{instID}/courses")
+    @GetMapping(value = "/{campusCode}/terms/{termCode}/courses")
     public ResponseEntity<Response> getCourses(
-            @PathVariable String termID,
-            @PathVariable String instID,
-            @RequestParam(required = false) List<String> subjects,
+            @PathVariable String campusCode,
+            @PathVariable String termCode,
+            @RequestParam(required = false) Set<String> subjects,
             @RequestParam(defaultValue = "false") boolean detailed
     ) {
         try {
-            return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(instID, termID, subjects, detailed, null)));
+            return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(campusCode, termCode, subjects, detailed)));
         } catch (Exception e) {
             // Internal Server Error
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.SUBJECT).addDetails(e));
@@ -91,25 +90,25 @@ public class CourseController {
     }
 
     /**
-     * POST Endpoint: /term/{termID}/campus/{instID}/courses
-     * Search for courses for a given campus and term with a filter
+     * POST Endpoint: /campuses/{campusCode}/terms/{termCode}/courseIDs
+     * Search for courseIDs for a given campus and term with a filter
      *
-     * @param termID   Term code to search for subjects
-     * @param instID   Campus code to search for subjects
-     * @param subjects Optional list of subject codes to filter for (Default: All)
-     * @param detailed Include section and meeting details in response (Default: false)
-     * @param request  Additional details to filter search
-     * @return List of courses for a given campus and term that pass filters
+     * @param campusCode Campus code to search for subjects
+     * @param termCode   Term code to search for subjects
+     * @param subjects   Optional list of subject codes to filter for (Default: All)
+     * @param detailed   Include section and meeting details in response (Default: false)
+     * @param request    Additional details to filter search
+     * @return List of courseIDs for a given campus and term that pass filters
      */
-    @PostMapping(value = "/{termID}/campus/{instID}/courses")
+    @PostMapping(value = "/{campusCode}/terms/{termCode}/courses")
     public ResponseEntity<Response> getCourses(
-            @PathVariable String termID,
-            @PathVariable String instID,
+            @PathVariable String campusCode,
+            @PathVariable String termCode,
             @RequestParam(required = false) List<String> subjects,
             @RequestParam(defaultValue = "false") boolean detailed,
-            @RequestBody CourseFilterRequest request) {
+            @Valid @RequestBody CourseFilterRequest request) {
         try {
-            return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(instID, termID, subjects, detailed, request)));
+            return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(campusCode, termCode, subjects, detailed, request)));
         } catch (Exception e) {
             // Internal Server Error
             LOGGER.error(new MessageBuilder(MessageBuilder.Type.SUBJECT).addDetails(e));
@@ -117,26 +116,5 @@ public class CourseController {
         }
     }
 
-    /**
-     * POST Endpoint: /term/{termID}/campus/{instID}/schedule
-     * Generate potential schedules for a list of courses
-     *
-     * @param termID  Term code to search for subjects
-     * @param instID  Campus code to search for subjects
-     * @param request Scheduled filter details
-     * @return List of courses for a given campus and term that pass filters
-     */
-    @PostMapping(value = "/{termID}/campus/{instID}/schedule")
-    public ResponseEntity<Response> getSchedules(
-            @PathVariable String termID,
-            @PathVariable String instID,
-            @RequestBody ScheduleRequest request) {
-        try {
-            return ResponseEntity.ok(new ScheduleResponse(schedulerService.generateScheduleDTOs(instID, termID, request)));
-        } catch (Exception e) {
-            // Internal Server Error
-            LOGGER.error(new MessageBuilder(MessageBuilder.Type.SUBJECT).addDetails(e));
-            return new ResponseEntity<>(new RainbowErrorResponse(e), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+
 }

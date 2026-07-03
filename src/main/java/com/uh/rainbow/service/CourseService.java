@@ -20,19 +20,19 @@ import java.util.concurrent.CompletableFuture;
 /**
  * <b>File:</b> CampusService.java
  * <p>
- * <b>Description:</b> Service loading University of Hawai'i campus codes
+ * <b>Description:</b> Service searching for course details
  *
  * @author Derek Garcia
  */
-
 @Service
 @RequiredArgsConstructor
 public class CourseService {
 
     private static final Logger LOGGER = new Logger(CourseService.class);
-    private final CodeLookupService codeLookupService;
-    private final BannerAPIService bannerAPIService;
+
+    private final SubjectService subjectService;
     private final CourseFilterMapper courseFilterMapper;
+    private final BannerAPIService bannerAPIService;
 
     /**
      * Fetch all course data concurrently for a single subject
@@ -77,10 +77,10 @@ public class CourseService {
     }
 
     /**
-     * Construct a list of courses from Banner API
+     * Construct a list of courseIDs from Banner API
      *
      * @param result DTO containing all Banner API responses
-     * @return List of courses and sections
+     * @return List of courseIDs and sections
      */
     private List<Course> constructCourses(SubjectResult result) {
 
@@ -123,9 +123,9 @@ public class CourseService {
             sectionBuilderLookup.get(mr.ssbsectCrn()).addMeetings(mr.toMeetings());
         });
 
-        // Add sections to courses
+        // Add sections to courseIDs
         sectionBuilderLookup.forEach((crn, sb) -> courseBuilderLookupByCRN.get(crn).addSection(sb.build()));
-        // build and return courses
+        // build and return courseIDs
         return courseBuilderLookup.values().stream()
                 .map(Course.Builder::build)
                 .toList();
@@ -137,7 +137,7 @@ public class CourseService {
      * @param instID    Campus code
      * @param termID    Term code
      * @param subjectID Subject code
-     * @return Future resolving to the constructed courses for this subject
+     * @return Future resolving to the constructed courseIDs for this subject
      */
     private CompletableFuture<List<Course>> constructCoursesJob(String instID, String termID, String subjectID) {
         // construct course after done fetching data
@@ -145,10 +145,10 @@ public class CourseService {
     }
 
     /**
-     * Apply a filter to a list of courses
+     * Apply a filter to a list of courseIDs
      *
      * @param request Request to build filter from
-     * @return List of filtered courses
+     * @return List of filtered courseIDs
      */
     public List<Course> filterCourses(CourseFilterMappable request, List<Course> courses) {
         CourseFilter filter = request.toCourseFilter(courseFilterMapper);
@@ -165,27 +165,31 @@ public class CourseService {
     }
 
     /**
-     * Fetch all courses for subjects
+     * Fetch all courseIDs for subjects
      *
-     * @param instID     Campus code
-     * @param termID     Term code
-     * @param subjectIDs List of subjects to fetch courses for
-     * @return List of courses that match the filter if provided
+     * @param campusCode   Campus code
+     * @param termCode     Term code
+     * @param subjectCodes List of subjects to fetch courseIDs for
+     * @return List of courseIDs that match the filter if provided
      */
-    public List<Course> fetchCourses(String instID, String termID, Collection<String> subjectIDs) {
+    public List<Course> fetchCourses(String campusCode, String termCode, Collection<String> subjectCodes) {
+        // validate before fetch
+        Set<String> normalizedSubjectCodes = subjectService.validateCampusTermSubjects(campusCode, termCode, subjectCodes);
+
         // todo check if request needed against cache
         Instant start = Instant.now();
-        LOGGER.info(new MessageBuilder(MessageBuilder.Type.COURSE).addDetails("Constructing %s courses".formatted(subjectIDs.size())));
+        LOGGER.info(new MessageBuilder(MessageBuilder.Type.COURSE)
+                .addDetails("Constructing %s courseIDs".formatted(normalizedSubjectCodes.size())));
 
         // start async jobs
-        List<CompletableFuture<List<Course>>> coursesFutures = subjectIDs.stream()
-                .map(subjectID -> constructCoursesJob(instID, termID, subjectID))
+        List<CompletableFuture<List<Course>>> coursesFutures = normalizedSubjectCodes.stream()
+                .map(subjectID -> constructCoursesJob(campusCode, termCode, subjectID))
                 .toList();
 
         // block until all jobs have finished
         CompletableFuture.allOf(coursesFutures.toArray(new CompletableFuture[0])).join();
         LOGGER.info(new MessageBuilder(MessageBuilder.Type.COURSE)
-                .addDetails("Constructed %s courses".formatted(subjectIDs.size()))
+                .addDetails("Constructed %s courseIDs".formatted(normalizedSubjectCodes.size()))
                 .setDuration(start));
 
         // create master list once all jobs are done
@@ -197,23 +201,34 @@ public class CourseService {
         // todo store results
     }
 
+
     /**
-     * Fetch all courses for subjects as DTOs
+     * Fetch all courseIDs for subjects as DTOs
      *
-     * @param instID        Campus code
-     * @param termID        Term code
-     * @param subjectIDs    List of subjects to fetch courses for
+     * @param campusCode   Campus code
+     * @param termCode     Term code
+     * @param subjectCodes List of subjects to fetch courseIDs for
+     * @param detailed     Return detailed course information
+     * @return List of courseIDs that match the filter if provided
+     */
+    public List<? extends CourseDTO> fetchCourseDTOs(String campusCode, String termCode, Set<String> subjectCodes, boolean detailed) {
+        // wrapper for filter method
+        return fetchCourseDTOs(campusCode, termCode, subjectCodes, detailed, null);
+    }
+
+    /**
+     * Fetch all courseIDs for subjects as DTOs
+     *
+     * @param campusCode    Campus code
+     * @param termCode      Term code
+     * @param subjectCodes  List of subjects to fetch courseIDs for
      * @param detailed      Return detailed course information
      * @param filterRequest DTO with filter options mappable to a course filter
-     * @return List of courses that match the filter if provided
+     * @return List of courseIDs that match the filter if provided
      */
-    public List<? extends CourseDTO> fetchCourseDTOs(String instID, String termID, Collection<String> subjectIDs, boolean detailed, CourseFilterMappable filterRequest) {
-        // todo validate codes
-        if (subjectIDs == null || subjectIDs.isEmpty())
-            subjectIDs = codeLookupService.lookupSubjectCodes(instID, termID);
-
-        // fetch courses
-        List<Course> allCourses = fetchCourses(instID, termID, subjectIDs);
+    public List<? extends CourseDTO> fetchCourseDTOs(String campusCode, String termCode, Collection<String> subjectCodes, boolean detailed, CourseFilterMappable filterRequest) {
+        // fetch courseIDs
+        List<Course> allCourses = fetchCourses(campusCode, termCode, subjectCodes);
 
         // apply filter if provided
         if (filterRequest != null)
@@ -226,7 +241,7 @@ public class CourseService {
     }
 
     /**
-     * Holds the 8 Banner9 API results for a single subject.
+     * Holds the 9 Banner9 API results for a single subject.
      *
      * @param subjectID Subject code
      * @param crl       List of {@link CourseResponse}

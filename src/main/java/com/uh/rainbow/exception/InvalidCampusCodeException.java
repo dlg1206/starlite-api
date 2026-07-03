@@ -8,7 +8,15 @@ package com.uh.rainbow.exception;
  * @author Derek Garcia
  */
 public class InvalidCampusCodeException extends RuntimeException {
-    public InvalidCampusCodeException(String campusCode) {
-        super("'%s' is an invalid campus code".formatted(campusCode));
+    private final String invalidCampusCode;
+
+    /**
+     * Create new {@link InvalidCampusCodeException}
+     *
+     * @param invalidCampusCode Invalid campus code
+     */
+    public InvalidCampusCodeException(String invalidCampusCode) {
+        super("'%s' is an invalid campus code".formatted(invalidCampusCode));
+        this.invalidCampusCode = invalidCampusCode;
     }
 }

@@ -5,12 +5,13 @@ import com.uh.rainbow.entities.CourseID;
 import com.uh.rainbow.entities.ReservedTime;
 import com.uh.rainbow.entities.TimeBuffer;
 import com.uh.rainbow.enums.Day;
-import com.uh.rainbow.filter.CourseFilter;
-import com.uh.rainbow.filter.CourseFilterMappable;
-import com.uh.rainbow.service.CourseFilterMapper;
+import com.uh.rainbow.exception.InvalidCourseIDsException;
+import com.uh.rainbow.exception.InvalidTimeSpanException;
+import com.uh.rainbow.filter.ScheduleFilter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 import java.time.LocalTime;
@@ -25,54 +26,72 @@ import java.util.stream.Collectors;
  * Input request for generating schedules
  *
  * @param bufferTime Optional minimum buffer time between classes
- * @param courses    Set of courses to make schedules with
+ * @param courses    Set of courseIDs to make schedules with
  * @param blocks     Optional list of reserved blocks of time
  */
 public record ScheduleRequest(Integer bufferTime,
                               @NotEmpty Set<@Valid RequestedCourse> courses,
-                              Set<@Valid BlockDTO> blocks) implements CourseFilterMappable {
+                              Set<@Valid BlockDTO> blocks) {
+
 
     /**
-     * Map course IDs to specific course reference numbers if any
+     * Validate that course numbers do not contain a wildcard
      *
-     * @return Map of course IDs and requested crns
+     * @return List of validated course IDs
      */
-    public Map<CourseID, Set<Integer>> getRequestedCRNs() {
-        return courses.stream()
-                .filter(rc -> rc.crns() != null && !rc.crns().isEmpty())    // skip null or empty sets
-                .collect(Collectors.toMap(
-                        RequestedCourse::getCourseID,
-                        RequestedCourse::crns
-                ));
+    private List<CourseID> validateCourseIDs() {
+        // true - invalid (contains wildcard), false - valid (no wildcard)
+        Map<Boolean, List<CourseID>> partitioned = courses.stream()
+                .map(RequestedCourse::toCourseID)
+                .collect(Collectors.partitioningBy(CourseID::containsWildcard));
+
+        // valid
+        if (partitioned.get(true).isEmpty())
+            return partitioned.get(false);
+
+        // invalid
+        throw InvalidCourseIDsException.wildcardNotAllowed(partitioned.get(true));
     }
 
     /**
-     * Map time buffers to auto generated reference numbers
+     * Create new schedule filter with validation checks
      *
-     * @return Map of generated IDs and time buffers
+     * @return {@link ScheduleFilter}
      */
-    public Map<Integer, TimeBuffer> getTimeBuffers() {
-        Map<Integer, TimeBuffer> result = new HashMap<>();
-        for (BlockDTO blockDTO : blocks) {
+    public ScheduleFilter toSchedulerFilter() {
+        // validate no wildcard course numbers
+        List<CourseID> validCourses = validateCourseIDs();
+
+        // map crns
+        Map<CourseID, Set<Integer>> requestedCRNs = courses.stream()
+                .filter(rc -> rc.crns() != null && !rc.crns().isEmpty())    // skip null or empty sets
+                .collect(Collectors.toMap(
+                        ScheduleRequest.RequestedCourse::toCourseID,
+                        ScheduleRequest.RequestedCourse::crns
+                ));
+        // exit early if no blocks
+        if (blocks == null || blocks.isEmpty())
+            return new ScheduleFilter(validCourses, requestedCRNs);
+
+        // validate blocks
+        List<InvalidTimeSpanException.InvalidTimeSpan> invalidSpans = blocks.stream()
+                .filter(ScheduleRequest.BlockDTO::isInvalid)
+                .map(ScheduleRequest.BlockDTO::toInvalidTimeSpanDTO)
+                .toList();
+        if (!invalidSpans.isEmpty())
+            throw new InvalidTimeSpanException(invalidSpans);
+
+        // map valid spans
+        Map<Integer, TimeBuffer> timeBuffers = new HashMap<>();
+        for (ScheduleRequest.BlockDTO blockDTO : blocks) {
             int key;
             do {
                 key = -(ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE) + 1);
-            } while (result.containsKey(key)); // avoid collisions
-            result.put(key, new TimeBuffer(blockDTO.toReservedTimes()));
+            } while (timeBuffers.containsKey(key)); // avoid collisions
+            timeBuffers.put(key, new TimeBuffer(blockDTO.toReservedTimes()));
         }
-        return Map.copyOf(result);
-    }
 
-
-    /**
-     * Map this object to a course filter
-     *
-     * @param courseFilterMapper Mapper to course filter
-     * @return {@link CourseFilter}
-     */
-    @Override
-    public CourseFilter toCourseFilter(CourseFilterMapper courseFilterMapper) {
-        return courseFilterMapper.toFilter(this);
+        return new ScheduleFilter(validCourses, requestedCRNs, timeBuffers);
     }
 
     /**
@@ -84,16 +103,10 @@ public record ScheduleRequest(Integer bufferTime,
      */
     public record RequestedCourse(@NotBlank String subjectCode, @NotBlank String number, Set<@Positive Integer> crns) {
 
-        // validate number does not contain any wild card characters
-        public RequestedCourse {
-            if (number != null && number.contains("*"))
-                throw new IllegalArgumentException("Course number cannot contain wildcard '*' characters"); // todo - include bad number
-        }
-
         /**
          * @return Formated course ID
          */
-        public CourseID getCourseID() {
+        public CourseID toCourseID() {
             return new CourseID(subjectCode, number);
         }
     }
@@ -106,15 +119,15 @@ public record ScheduleRequest(Integer bufferTime,
      * @param start Start time block
      * @param end   End time block
      */
-    private record BlockDTO(Set<@NotBlank Day> days,
-                            @NotBlank @JsonFormat(pattern = "HH:mm") LocalTime start,
-                            @NotBlank @JsonFormat(pattern = "HH:mm") LocalTime end) {
+    public record BlockDTO(Set<@NotBlank Day> days,
+                           @NotNull @JsonFormat(pattern = "HH:mm") LocalTime start,
+                           @NotNull @JsonFormat(pattern = "HH:mm") LocalTime end) {
 
-        // Validate that the start and end times are sequential
-        public BlockDTO {
-            if (!start.isBefore(end))
-                throw new IllegalArgumentException("Time span must start before it ends");
-            // valid
+        /**
+         * @return True if end before start, else false
+         */
+        public boolean isInvalid() {
+            return end.isBefore(start);
         }
 
         /**
@@ -125,6 +138,13 @@ public record ScheduleRequest(Integer bufferTime,
         public List<ReservedTime> toReservedTimes() {
             return ((days == null || days.isEmpty()) ? Day.getWeek() : days).stream()
                     .map(d -> new ReservedTime(d, start, end)).toList();
+        }
+
+        /**
+         * @return InvalidTimeSpanDTO for error logging
+         */
+        public InvalidTimeSpanException.InvalidTimeSpan toInvalidTimeSpanDTO() {
+            return new InvalidTimeSpanException.InvalidTimeSpan(start, end);
         }
     }
 }

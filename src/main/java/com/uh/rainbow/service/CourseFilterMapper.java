@@ -2,8 +2,8 @@ package com.uh.rainbow.service;
 
 import com.uh.rainbow.filter.CourseFilter;
 import com.uh.rainbow.filter.RegexFilter;
+import com.uh.rainbow.filter.ScheduleFilter;
 import com.uh.rainbow.request.CourseFilterRequest;
-import com.uh.rainbow.request.ScheduleRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -102,15 +102,15 @@ public class CourseFilterMapper {
     /**
      * Convert a schedule request into internal filter object
      *
-     * @param scheduleRequest Schedule request to build filter from
+     * @param scheduleFilter Schedule request to build filter from
      * @return {@link CourseFilter}
      */
-    public CourseFilter toFilter(ScheduleRequest scheduleRequest) {
+    public CourseFilter toFilter(ScheduleFilter scheduleFilter) {
         return new CourseFilter(
                 null,
                 null,
                 null,
-                createCourseFilter(scheduleRequest.courses().stream().map(rc -> rc.getCourseID().toString()).toList(), null),
+                createCourseFilter(scheduleFilter.getCourseIDsAsStrings(), null),
                 null,
                 null,
                 null,

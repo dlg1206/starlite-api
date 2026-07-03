@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * <b>File:</b> CourseFilter.java
  * <p>
- * <b>Description:</b> Filter for courses and sections
+ * <b>Description:</b> Filter for courseIDs and sections
  *
  * @author Derek Garcia
  */
@@ -223,13 +223,13 @@ public class CourseFilter {
         if (hasMajorRestriction != null && course.isMajorRestriction() != hasMajorRestriction)
             return true;
 
-        // hasPrerequisites == true: reject courses without a prereq
-        // hasPrerequisites == false: reject courses with a prereq
+        // hasPrerequisites == true: reject courseIDs without a prereq
+        // hasPrerequisites == false: reject courseIDs with a prereq
         if (hasPrerequisites != null && course.hasPrerequisite() != hasPrerequisites)
             return true;
 
-        // canAudit == true: reject courses without an option to audit
-        // canAudit == false: reject courses with an option to audit
+        // canAudit == true: reject courseIDs without an option to audit
+        // canAudit == false: reject courseIDs with an option to audit
         if (canAudit != null && course.canAudit() != canAudit)
             return true;
 

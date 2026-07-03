@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 /**
  * <b>File:</b> Scheduler.java
  * <p>
- * <b>Description:</b> Single use scheduler that generates all valid schedules given a list of courses
+ * <b>Description:</b> Single use scheduler that generates all valid schedules given a list of courseIDs
  *
  * @author Derek Garcia
  */
@@ -123,8 +123,8 @@ class Scheduler {
     /**
      * Internal starting seed for a schedule
      *
-     * @param remainingCourses Remaining courses to schedule
-     * @param startCRN         Course reference number of next course not in remaining courses
+     * @param remainingCourses Remaining courseIDs to schedule
+     * @param startCRN         Course reference number of next course not in remaining courseIDs
      */
     private record Seed(HashMap<CourseID, Set<Integer>> remainingCourses, int startCRN) {
     }
@@ -141,7 +141,7 @@ class Scheduler {
         /**
          * Create a new starting potential schedule
          *
-         * @param remainingCourses Remaining courses to that can potentially be included in this schedule
+         * @param remainingCourses Remaining courseIDs to that can potentially be included in this schedule
          * @param startCRN         Section to start with
          */
         public PotentialSchedule(Map<CourseID, Set<Integer>> remainingCourses, int startCRN) {
@@ -182,7 +182,7 @@ class Scheduler {
             if (nextConflictsWithExisting)
                 return Optional.empty();
 
-            // create a copy of remaining courses without the next course
+            // create a copy of remaining courseIDs without the next course
             Map<CourseID, Set<Integer>> nextCourses = remainingCourses.entrySet().stream()
                     .filter(e -> !e.getKey().equals(nextCourseID))
                     .collect(Collectors.toMap(Map.Entry::getKey, e -> new HashSet<>(e.getValue())));
@@ -209,7 +209,7 @@ class Scheduler {
          * Using the course with the minimum remaining values heuristic tends to
          * hit conflicts and prune dead branches earlier than a fixed/arbitrary order.
          *
-         * @return Course ID with the fewest sections in the remaining courses
+         * @return Course ID with the fewest sections in the remaining courseIDs
          */
         private CourseID pickFewestSections() {
             return remainingCourses.entrySet().stream()
@@ -220,7 +220,7 @@ class Scheduler {
 
 
         /**
-         * Get all the successors ( current courses + 1 new course ) for this current schedule
+         * Get all the successors ( current courseIDs + 1 new course ) for this current schedule
          *
          * @return List of valid potential successor schedules
          */
@@ -230,7 +230,7 @@ class Scheduler {
             if (remainingCourses.isEmpty())
                 return successors;
 
-            // pick a single course with the fewest sections - other branches will handle other courses
+            // pick a single course with the fewest sections - other branches will handle other courseIDs
             CourseID nextCourseID = pickFewestSections();
             for (int nextCRN : remainingCourses.get(nextCourseID))
                 trySuccessor(nextCourseID, nextCRN).ifPresent(successors::add);
@@ -244,7 +244,7 @@ class Scheduler {
          * @return True if complete, false otherwise
          */
         public boolean isComplete() {
-            // no courses left means all courses have been used
+            // no courseIDs left means all courseIDs have been used
             return remainingCourses.isEmpty();
         }
 
