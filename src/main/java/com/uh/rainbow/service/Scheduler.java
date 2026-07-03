@@ -2,7 +2,7 @@ package com.uh.rainbow.service;
 
 
 import com.uh.rainbow.entities.CourseID;
-import com.uh.rainbow.entities.Section;
+import com.uh.rainbow.entities.TimeBlock;
 import com.uh.rainbow.log.Logger;
 import com.uh.rainbow.log.MessageBuilder;
 import lombok.Getter;
@@ -27,7 +27,7 @@ class Scheduler {
             Comparator.comparingInt(e -> e.getValue().size());
     private static final Logger LOGGER = new Logger(Scheduler.class);
 
-    private static Map<Integer, Section> sectionByCRN;
+    private static Map<Integer, TimeBlock> sectionByCRN;
     private static Integer bufferTime;
     private final Map<CourseID, Set<Integer>> crnsByCourseID;
     // shared solution data structure
@@ -40,7 +40,7 @@ class Scheduler {
      * @param crnsByCourseID Map of the course reference numbers that belong to a course index by a course ID
      * @param bufferTime     Optional minimum buffer time (in minutes) between classes
      */
-    public Scheduler(Map<Integer, Section> sectionByCRN, Map<CourseID, Set<Integer>> crnsByCourseID, Integer bufferTime) {
+    public Scheduler(Map<Integer, TimeBlock> sectionByCRN, Map<CourseID, Set<Integer>> crnsByCourseID, Integer bufferTime) {
         Scheduler.sectionByCRN = sectionByCRN;
         this.crnsByCourseID = crnsByCourseID;
         this.schedules = new ConcurrentHashMap<>();
@@ -171,7 +171,7 @@ class Scheduler {
          * @return Optional of PotentialSchedule if valid successor
          */
         private Optional<PotentialSchedule> trySuccessor(CourseID nextCourseID, int nextCRN) {
-            Section nextSection = sectionByCRN.get(nextCRN);
+            TimeBlock nextSection = sectionByCRN.get(nextCRN);
 
             // check for conflicts in current schedule - reject if conflict
             boolean nextConflictsWithExisting = currentCRNs.stream()
@@ -252,6 +252,7 @@ class Scheduler {
         public boolean equals(Object o) {
             if (o == null || getClass() != o.getClass()) return false;
             PotentialSchedule that = (PotentialSchedule) o;
+            // use order of crns as uid
             return Objects.equals(currentCRNs, that.currentCRNs);
         }
 

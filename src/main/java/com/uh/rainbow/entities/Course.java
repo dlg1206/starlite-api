@@ -87,7 +87,7 @@ public class Course {
      * @return True if the course has a prereq, false otherise
      */
     public boolean hasPrerequisite() {
-        return prereqDescription == null || prereqDescription.isEmpty();
+        return prereqDescription != null && !prereqDescription.isEmpty();
     }
 
     /**

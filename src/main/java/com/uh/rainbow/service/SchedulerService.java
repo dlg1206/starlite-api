@@ -3,7 +3,8 @@ package com.uh.rainbow.service;
 import com.uh.rainbow.dto.course.ScheduledCourseDTO;
 import com.uh.rainbow.entities.Course;
 import com.uh.rainbow.entities.CourseID;
-import com.uh.rainbow.entities.Section;
+import com.uh.rainbow.entities.TimeBlock;
+import com.uh.rainbow.entities.TimeBuffer;
 import com.uh.rainbow.log.Logger;
 import com.uh.rainbow.request.ScheduleRequest;
 import lombok.RequiredArgsConstructor;
@@ -44,8 +45,8 @@ public class SchedulerService {
         List<Course> courses = courseService.filterCourses(scheduleRequest, courseService.fetchCourses(instID, termID, subjectCodes));
 
         // map courses
-        Map<CourseID, Set<Integer>> requestedCRNs = scheduleRequest.getRequestedCRNS();
-        Map<Integer, Section> sectionByCRN = new HashMap<>();
+        Map<CourseID, Set<Integer>> requestedCRNs = scheduleRequest.getRequestedCRNs();
+        Map<Integer, TimeBlock> sectionByCRN = new HashMap<>();
         Map<CourseID, Set<Integer>> crnsByCourseID = new HashMap<>();
         Map<Integer, Course> courseByCRN = new HashMap<>();
 
@@ -71,6 +72,14 @@ public class SchedulerService {
             }
         }
 
+        // add time blocks if provided
+        if (scheduleRequest.blocks() != null) {
+            Map<Integer, TimeBuffer> blocks = scheduleRequest.getTimeBuffers();
+            sectionByCRN.putAll(blocks);
+            // generate dummy courses for each block - block per course to make it required
+            blocks.keySet().forEach(crn -> crnsByCourseID.put(CourseID.generatePlaceholder(), Set.of(crn)));
+        }
+
         // Generate all possible schedules
         Scheduler scheduler = new Scheduler(sectionByCRN, crnsByCourseID, scheduleRequest.bufferTime());
         List<List<Integer>> schedules = scheduler.generateSchedules();
@@ -82,6 +91,8 @@ public class SchedulerService {
         return schedules.stream()
                 // foreach schedule in schedules
                 .map(schedule -> schedule.stream()
+                        // exclude any temp time blocks
+                        .filter(courseByCRN::containsKey)
                         // foreach crn in schedule -> convert to dto
                         .map(crn -> courseByCRN.get(crn).toScheduleDTO(crn))
                         .toList())

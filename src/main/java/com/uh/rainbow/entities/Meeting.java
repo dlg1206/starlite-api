@@ -3,9 +3,7 @@ package com.uh.rainbow.entities;
 
 import com.uh.rainbow.dto.course.MeetingDTO;
 import com.uh.rainbow.enums.Day;
-import lombok.Getter;
 
-import java.time.Duration;
 import java.time.LocalTime;
 import java.util.Objects;
 
@@ -16,95 +14,15 @@ import java.util.Objects;
  *
  * @author Derek Garcia
  */
-public class Meeting {
-    @Getter
-    private final Day day;
-    @Getter
-    private final LocalTime startTime;
-    @Getter
-    private final LocalTime endTime;
-
-    private final String buildingCode;
-    private final String roomCode;
-
-
-    /**
-     * Create new meeting
-     *
-     * @param day      Day of Week
-     * @param roomCode Room
-     */
-    public Meeting(Day day, LocalTime startTime, LocalTime endTime, String buildingCode, String roomCode) {
-        this.day = day;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.buildingCode = buildingCode;
-        this.roomCode = roomCode;
-    }
-
-    /**
-     * Get the buffer time (time elapsed between end of other meeting and start of this one) between meetings
-     *
-     * @param other Other meeting
-     * @return Buffer time in minutes
-     */
-    public int bufferTime(Meeting other) {
-        return (int) Duration.between(other.endTime, startTime).toMinutes();
-    }
-
-    /**
-     * Determine if this meeting conflicts with another meeting
-     *
-     * @param other Other meeting to compare against
-     * @return True if conflict, false if otherwise
-     */
-    public boolean conflictsWith(Meeting other) {
-        // TBD days can't conflict
-        if (day == Day.TBD || other.day == Day.TBD)
-            return false;
-
-        // Async days can't conflict
-        if (isAsync() || other.isAsync())
-            return false;
-
-        // Can't conflict if on different days
-        if (day != other.day)
-            return false;
-
-        // can't check if time conflicts if times are null
-        if (startTime == null || endTime == null || other.startTime == null || other.endTime == null)
-            return false;
-
-        // Conflict if this starts before other ends or ends after other starts
-        return startTime.isBefore(other.endTime) && other.startTime.isBefore(endTime);
-    }
-
-    /**
-     * Determine if this meeting conflicts with another meeting with a buffer
-     *
-     * @param other      Other meeting to compare against
-     * @param bufferTime Minimum buffer time (in minutes) between classes
-     * @return True if conflict, false if otherwise
-     */
-    public boolean conflictsWith(Meeting other, int bufferTime) {
-        // check if conflicts without buffer then check buffer
-        return conflictsWith(other) || bufferTime(other) < bufferTime;
-    }
+public record Meeting(Day day, LocalTime startTime, LocalTime endTime, String buildingCode,
+                      String roomCode) implements TimeSpan {
 
     /**
      * @return If this meeting is online
      */
     public boolean isOnline() {
-        return buildingCode.equals("ONLINE");
+        return buildingCode != null && buildingCode.equals("ONLINE");
     }
-
-    /**
-     * @return If this meeting is async
-     */
-    public boolean isAsync() {
-        return roomCode.equals("ASYNC");
-    }
-
 
     /**
      * Convert this meeting to a DTO
@@ -113,6 +31,38 @@ public class Meeting {
      */
     public MeetingDTO toMeetingDTO() {
         return new MeetingDTO(day, startTime, endTime, buildingCode, roomCode);
+    }
+
+    /**
+     * @return If this meeting is async
+     */
+    @Override
+    public boolean isAsync() {
+        return roomCode != null && roomCode.equals("ASYNC");
+    }
+
+    /**
+     * @return Day meeting occurs on
+     */
+    @Override
+    public Day getDay() {
+        return day;
+    }
+
+    /**
+     * @return Start time of meeting
+     */
+    @Override
+    public LocalTime getStartTime() {
+        return startTime;
+    }
+
+    /**
+     * @return End time of meeting
+     */
+    @Override
+    public LocalTime getEndTime() {
+        return endTime;
     }
 
     @Override

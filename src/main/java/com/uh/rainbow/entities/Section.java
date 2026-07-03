@@ -18,7 +18,7 @@ import java.util.Set;
  *
  * @author Derek Garcia
  */
-public class Section {
+public class Section implements TimeBlock {
 
     @Getter
     private final int crn;
@@ -81,32 +81,6 @@ public class Section {
     }
 
     /**
-     * Check to see if this section has any conflicts with another section
-     *
-     * @param other Other section to compare against
-     * @return True if conflicts, false otherwise
-     */
-    public boolean conflictsWith(Section other) {
-        // Check to see if any of this meetings conflicts with any other meeting
-        return meetings.stream()
-                .anyMatch((m) -> other.meetings.stream().anyMatch(m::conflictsWith));
-    }
-
-    /**
-     * Check to see if this section has any conflicts with another section with a buffer
-     *
-     * @param other      Other section to compare against
-     * @param bufferTime Minimum buffer time (in minutes) between classes
-     * @return True if conflicts, false otherwise
-     */
-    public boolean conflictsWith(Section other, int bufferTime) {
-        // Check to see if any of this meetings conflicts with any other meeting
-        return meetings.stream()
-                .anyMatch(m -> other.meetings.stream()
-                        .anyMatch(n -> m.conflictsWith(n, bufferTime)));
-    }
-
-    /**
      * Check if the section is completely full
      *
      * @return True if no seats available and the waitlist is full
@@ -136,6 +110,14 @@ public class Section {
                 attributes, descriptions, notes,
                 meetings.stream().map(Meeting::toMeetingDTO).toList()
         );
+    }
+
+    /**
+     * @return List of time spans this block has
+     */
+    @Override
+    public List<? extends TimeSpan> getSpans() {
+        return meetings;
     }
 
     public static class Builder {

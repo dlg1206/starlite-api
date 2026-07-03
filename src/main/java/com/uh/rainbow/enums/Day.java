@@ -2,6 +2,8 @@ package com.uh.rainbow.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
+import java.util.List;
+
 /**
  * <b>File:</b> Day.java
  * <p>
@@ -11,6 +13,15 @@ import com.fasterxml.jackson.annotation.JsonCreator;
  */
 public enum Day {
     SUN, MON, TUE, WED, THU, FRI, SAT, TBD;
+
+    /**
+     * Get a list that includes one enum of each day
+     *
+     * @return All days in a week
+     */
+    public static List<Day> getWeek() {
+        return List.of(SUN, MON, TUE, WED, THU, FRI, SAT);
+    }
 
     /**
      * Create day from string regardless of case

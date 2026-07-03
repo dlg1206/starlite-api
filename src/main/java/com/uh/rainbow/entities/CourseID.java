@@ -1,6 +1,7 @@
 package com.uh.rainbow.entities;
 
 import java.util.Objects;
+import java.util.Random;
 
 /**
  * Create new composite course ID
@@ -9,6 +10,15 @@ import java.util.Objects;
  * @param number      Course number
  */
 public record CourseID(String subjectCode, String number) {
+
+    /**
+     * Generate placeholder ID for {@link TimeBuffer}
+     *
+     * @return Unique placeholder ID
+     */
+    public static CourseID generatePlaceholder() {
+        return new CourseID("PLACEHOLDER", Integer.toString(new Random().nextInt()));
+    }
 
     @Override
     public String toString() {
