@@ -72,7 +72,7 @@ public class SchedulerService {
         }
 
         // Generate all possible schedules
-        Scheduler scheduler = new Scheduler(sectionByCRN, crnsByCourseID);
+        Scheduler scheduler = new Scheduler(sectionByCRN, crnsByCourseID, scheduleRequest.bufferTime());
         List<List<Integer>> schedules = scheduler.generateSchedules();
         // no valid schedules found, exit early
         if (schedules.isEmpty())

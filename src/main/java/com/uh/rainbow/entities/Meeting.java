@@ -5,6 +5,7 @@ import com.uh.rainbow.dto.course.MeetingDTO;
 import com.uh.rainbow.enums.Day;
 import lombok.Getter;
 
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.Objects;
 
@@ -42,6 +43,16 @@ public class Meeting {
     }
 
     /**
+     * Get the buffer time (time elapsed between end of other meeting and start of this one) between meetings
+     *
+     * @param other Other meeting
+     * @return Buffer time in minutes
+     */
+    public int bufferTime(Meeting other) {
+        return (int) Duration.between(other.endTime, startTime).toMinutes();
+    }
+
+    /**
      * Determine if this meeting conflicts with another meeting
      *
      * @param other Other meeting to compare against
@@ -66,6 +77,18 @@ public class Meeting {
 
         // Conflict if this starts before other ends or ends after other starts
         return startTime.isBefore(other.endTime) && other.startTime.isBefore(endTime);
+    }
+
+    /**
+     * Determine if this meeting conflicts with another meeting with a buffer
+     *
+     * @param other      Other meeting to compare against
+     * @param bufferTime Minimum buffer time (in minutes) between classes
+     * @return True if conflict, false if otherwise
+     */
+    public boolean conflictsWith(Meeting other, int bufferTime) {
+        // check if conflicts without buffer then check buffer
+        return conflictsWith(other) || bufferTime(other) < bufferTime;
     }
 
     /**

@@ -16,9 +16,11 @@ import java.util.stream.Collectors;
 /**
  * Input request for generating schedules
  *
- * @param courses Set of courses to make schedules with
+ * @param bufferTime Optional minimum buffer time between classes
+ * @param courses    Set of courses to make schedules with
  */
-public record ScheduleRequest(@NotEmpty Set<@Valid RequestedCourse> courses) implements CourseFilterMappable {
+public record ScheduleRequest(Integer bufferTime,
+                              @NotEmpty Set<@Valid RequestedCourse> courses) implements CourseFilterMappable {
 
     /**
      * Map course IDs to specific course reference numbers if any

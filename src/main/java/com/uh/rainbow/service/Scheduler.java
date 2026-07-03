@@ -28,8 +28,8 @@ class Scheduler {
     private static final Logger LOGGER = new Logger(Scheduler.class);
 
     private static Map<Integer, Section> sectionByCRN;
+    private static Integer bufferTime;
     private final Map<CourseID, Set<Integer>> crnsByCourseID;
-
     // shared solution data structure
     private final ConcurrentHashMap<Integer, Set<Integer>> schedules;
 
@@ -38,11 +38,13 @@ class Scheduler {
      *
      * @param sectionByCRN   Map of sections indexed by their course reference number
      * @param crnsByCourseID Map of the course reference numbers that belong to a course index by a course ID
+     * @param bufferTime     Optional minimum buffer time (in minutes) between classes
      */
-    public Scheduler(Map<Integer, Section> sectionByCRN, Map<CourseID, Set<Integer>> crnsByCourseID) {
+    public Scheduler(Map<Integer, Section> sectionByCRN, Map<CourseID, Set<Integer>> crnsByCourseID, Integer bufferTime) {
         Scheduler.sectionByCRN = sectionByCRN;
         this.crnsByCourseID = crnsByCourseID;
         this.schedules = new ConcurrentHashMap<>();
+        Scheduler.bufferTime = bufferTime;
     }
 
     /**
@@ -174,7 +176,9 @@ class Scheduler {
             // check for conflicts in current schedule - reject if conflict
             boolean nextConflictsWithExisting = currentCRNs.stream()
                     .map(sectionByCRN::get)
-                    .anyMatch(nextSection::conflictsWith);
+                    .anyMatch(s -> bufferTime == null
+                            ? nextSection.conflictsWith(s)
+                            : nextSection.conflictsWith(s, bufferTime));
             if (nextConflictsWithExisting)
                 return Optional.empty();
 
@@ -187,7 +191,9 @@ class Scheduler {
                 Set<Integer> crns = nextCourses.get(otherCourseID);
                 // remove all sections that conflict with the target section
                 Set<Integer> conflicting = crns.stream()
-                        .filter(c -> nextSection.conflictsWith(sectionByCRN.get(c)))
+                        .filter(c -> bufferTime == null
+                                ? nextSection.conflictsWith(sectionByCRN.get(c))
+                                : nextSection.conflictsWith(sectionByCRN.get(c), bufferTime))
                         .collect(Collectors.toSet());
                 crns.removeAll(conflicting);
                 // exit early if all sections conflict - this means will be missing a course
