@@ -1,10 +1,7 @@
 package com.uh.rainbow.controller;
 
 import com.uh.rainbow.log.Logger;
-import com.uh.rainbow.log.MessageBuilder;
 import com.uh.rainbow.response.IdentifierResponse;
-import com.uh.rainbow.response.RainbowErrorResponse;
-import com.uh.rainbow.response.Response;
 import com.uh.rainbow.service.CampusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -35,13 +32,7 @@ public class CampusController {
      * @return List of University of Hawai'i campuses and their ID's
      */
     @GetMapping(value = "")
-    public ResponseEntity<Response> getAllCampuses() {
-        try {
-            return ResponseEntity.ok(new IdentifierResponse(campusService.lookupCampusCodeIdentifierDTOs()));
-        } catch (Exception e) {
-            // Internal server error
-            LOGGER.error(new MessageBuilder(MessageBuilder.Type.INST).addDetails(e));
-            return ResponseEntity.internalServerError().body(new RainbowErrorResponse(e));
-        }
+    public ResponseEntity<IdentifierResponse> getAllCampuses() {
+        return ResponseEntity.ok(new IdentifierResponse(campusService.lookupCampusCodeIdentifierDTOs()));
     }
 }

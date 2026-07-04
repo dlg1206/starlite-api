@@ -2,6 +2,7 @@ package com.uh.rainbow.exception;
 
 import com.uh.rainbow.entities.CourseID;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -14,11 +15,10 @@ import java.util.List;
 public class InvalidCourseIDsException extends IllegalArgumentException {
     private final List<CourseID> invalidCourseIDs;
 
-
     /**
      * Internal factory constructor
      *
-     * @param message          Error message
+     * @param message          Error error
      * @param invalidCourseIDs List of invalid course IDs
      */
     private InvalidCourseIDsException(String message, List<CourseID> invalidCourseIDs) {
@@ -43,5 +43,26 @@ public class InvalidCourseIDsException extends IllegalArgumentException {
      */
     public static InvalidCourseIDsException notFound(List<CourseID> missingCourseIDs) {
         return new InvalidCourseIDsException("Requested courses not found", missingCourseIDs);
+    }
+
+    /**
+     * @return Exception as response
+     */
+    public InvalidCourseIDsException.Response toResponse() {
+        return new InvalidCourseIDsException.Response(super.getMessage(), invalidCourseIDs);
+    }
+
+    /**
+     * Response DTO
+     *
+     * @param timestamp        Timestamp
+     * @param error            Error message
+     * @param invalidCourseIDs List of invalid course IDs
+     */
+    public record Response(Date timestamp, String error, List<CourseID> invalidCourseIDs) {
+        // handle setting timestamp
+        Response(String error, List<CourseID> invalidCourseIDs) {
+            this(new Date(), error, invalidCourseIDs);
+        }
     }
 }

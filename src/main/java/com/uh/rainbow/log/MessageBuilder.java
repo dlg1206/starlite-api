@@ -23,14 +23,14 @@ public class MessageBuilder {
     /**
      * Create new builder
      *
-     * @param messageType Type of log message
+     * @param messageType Type of log error
      */
     public MessageBuilder(Type messageType) {
         this.messageType = messageType;
     }
 
     /**
-     * Add details to message
+     * Add details to error
      *
      * @param details List of objects to add as strings
      * @return this
@@ -52,9 +52,9 @@ public class MessageBuilder {
     }
 
     /**
-     * Used by logger, generate String log message
+     * Used by logger, generate String log error
      *
-     * @return String message
+     * @return String error
      */
     String build() {
         StringBuilder sb = new StringBuilder().append(this.messageType);

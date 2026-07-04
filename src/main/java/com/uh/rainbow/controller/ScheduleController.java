@@ -1,13 +1,10 @@
 package com.uh.rainbow.controller;
 
 import com.uh.rainbow.request.ScheduleRequest;
-import com.uh.rainbow.response.RainbowErrorResponse;
-import com.uh.rainbow.response.Response;
 import com.uh.rainbow.response.ScheduleResponse;
 import com.uh.rainbow.service.SchedulerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,15 +32,10 @@ public class ScheduleController {
      * @return List of courseIDs for a given campus and term that pass filters
      */
     @PostMapping(value = "/{campusCode}/terms/{termCode}/schedule")
-    public ResponseEntity<Response> getSchedules(
+    public ResponseEntity<ScheduleResponse> getSchedules(
             @PathVariable String campusCode,
             @PathVariable String termCode,
             @Valid @RequestBody ScheduleRequest request) {
-        try {
-            return ResponseEntity.ok(new ScheduleResponse(schedulerService.generateScheduleDTOs(campusCode, termCode, request)));
-        } catch (Exception e) {
-            // Internal Server Error
-            return new ResponseEntity<>(new RainbowErrorResponse(e), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return ResponseEntity.ok(new ScheduleResponse(schedulerService.generateScheduleDTOs(campusCode, termCode, request)));
     }
 }

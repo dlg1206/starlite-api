@@ -6,7 +6,7 @@ import com.uh.rainbow.entities.ReservedTime;
 import com.uh.rainbow.entities.TimeBuffer;
 import com.uh.rainbow.enums.Day;
 import com.uh.rainbow.exception.InvalidCourseIDsException;
-import com.uh.rainbow.exception.InvalidTimeSpanException;
+import com.uh.rainbow.exception.InvalidTimeSpansException;
 import com.uh.rainbow.filter.ScheduleFilter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -74,12 +74,12 @@ public record ScheduleRequest(Integer bufferTime,
             return new ScheduleFilter(validCourses, requestedCRNs);
 
         // validate blocks
-        List<InvalidTimeSpanException.InvalidTimeSpan> invalidSpans = blocks.stream()
+        List<InvalidTimeSpansException.InvalidTimeSpan> invalidSpans = blocks.stream()
                 .filter(ScheduleRequest.BlockDTO::isInvalid)
                 .map(ScheduleRequest.BlockDTO::toInvalidTimeSpanDTO)
                 .toList();
         if (!invalidSpans.isEmpty())
-            throw new InvalidTimeSpanException(invalidSpans);
+            throw new InvalidTimeSpansException(invalidSpans);
 
         // map valid spans
         Map<Integer, TimeBuffer> timeBuffers = new HashMap<>();
@@ -143,8 +143,8 @@ public record ScheduleRequest(Integer bufferTime,
         /**
          * @return InvalidTimeSpanDTO for error logging
          */
-        public InvalidTimeSpanException.InvalidTimeSpan toInvalidTimeSpanDTO() {
-            return new InvalidTimeSpanException.InvalidTimeSpan(start, end);
+        public InvalidTimeSpansException.InvalidTimeSpan toInvalidTimeSpanDTO() {
+            return new InvalidTimeSpansException.InvalidTimeSpan(start, end);
         }
     }
 }

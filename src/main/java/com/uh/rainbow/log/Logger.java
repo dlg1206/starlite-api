@@ -46,7 +46,7 @@ public class Logger {
      *
      * @param crns List of missing CRNs
      * @param cids List of missing CIDs
-     * @return Error message
+     * @return Error error
      */
     public String reportMissingSchedulingSections(Collection<String> crns, Collection<String> cids) {
         MessageBuilder mb = new MessageBuilder(MessageBuilder.Type.SCHEDULE)
@@ -63,27 +63,27 @@ public class Logger {
     }
 
     /**
-     * Log a debug message
+     * Log a debug error
      *
-     * @param mb MessageBuilder loaded with message details
+     * @param mb MessageBuilder loaded with error details
      */
     public void debug(MessageBuilder mb) {
         this.log.debug(mb.build());
     }
 
     /**
-     * Log an info message
+     * Log an info error
      *
-     * @param mb MessageBuilder loaded with message details
+     * @param mb MessageBuilder loaded with error details
      */
     public void info(MessageBuilder mb) {
         this.log.info(mb.build());
     }
 
     /**
-     * Log a warn message
+     * Log a warn error
      *
-     * @param mb MessageBuilder loaded with message details
+     * @param mb MessageBuilder loaded with error details
      */
     public void warn(MessageBuilder mb) {
         this.log.warn(mb.build());
@@ -91,9 +91,9 @@ public class Logger {
 
 
     /**
-     * Log an error message
+     * Log an error error
      *
-     * @param mb MessageBuilder loaded with message details
+     * @param mb MessageBuilder loaded with error details
      */
     public void error(MessageBuilder mb) {
         this.log.error(mb.build());

@@ -2,6 +2,8 @@ package com.uh.rainbow.response;
 
 import org.springframework.web.client.HttpStatusCodeException;
 
+import java.util.Date;
+
 /**
  * <b>File:</b> BadAccessResponseDTO.java
  * <p>
@@ -9,20 +11,22 @@ import org.springframework.web.client.HttpStatusCodeException;
  *
  * @author Derek Garcia
  */
-public class BannerErrorResponse extends Response {
+public class BannerErrorResponse {
+    public final Date timestamp;
     public final String source;
-    public final int response_code;
+    public final int responseCode;
     public final String response_message;
 
     /**
      * Create new failure
      *
      * @param url URL of API
-     * @param e   Error message
+     * @param e   Error error
      */
     public BannerErrorResponse(String url, HttpStatusCodeException e) {
+        this.timestamp = new Date();
         this.source = url;
-        this.response_code = e.getStatusCode().value();
+        this.responseCode = e.getStatusCode().value();
         this.response_message = e.getMessage();
     }
 }

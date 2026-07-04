@@ -1,5 +1,7 @@
 package com.uh.rainbow.exception;
 
+import java.util.Date;
+
 /**
  * <b>File:</b> InvalidCampusCodeException.java
  * <p>
@@ -19,4 +21,26 @@ public class InvalidCampusCodeException extends RuntimeException {
         super("'%s' is an invalid campus code".formatted(invalidCampusCode));
         this.invalidCampusCode = invalidCampusCode;
     }
+
+    /**
+     * @return Exception as response
+     */
+    public Response toResponse() {
+        return new Response(super.getMessage(), invalidCampusCode);
+    }
+
+    /**
+     * Response DTO
+     *
+     * @param timestamp         Timestamp
+     * @param error             Error message
+     * @param invalidCampusCode Invalid campus code
+     */
+    public record Response(Date timestamp, String error, String invalidCampusCode) {
+        // handle setting timestamp
+        Response(String error, String invalidCampusCode) {
+            this(new Date(), error, invalidCampusCode);
+        }
+    }
+
 }

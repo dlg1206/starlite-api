@@ -1,9 +1,9 @@
 package com.uh.rainbow.response;
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.uh.rainbow.dto.course.CourseDTO;
 
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,8 +13,7 @@ import java.util.List;
  *
  * @author Derek Garcia
  */
-@JsonPropertyOrder({"timestamp", "courseIDs"})
-public class CourseResponse extends Response {
+public class CourseResponse {
     // custom comparator that extracts number from course number since can include letters
     private static final Comparator<CourseDTO> BY_COURSE_NUMBER = Comparator
             .comparingInt((CourseDTO c) -> {
@@ -25,6 +24,7 @@ public class CourseResponse extends Response {
             })
             .thenComparing(CourseDTO::getCourseNumber);
 
+    public final Date timestamp;
     public final List<? extends CourseDTO> courses;
 
     /**
@@ -33,6 +33,7 @@ public class CourseResponse extends Response {
      * @param courses list of course DTOs
      */
     public CourseResponse(List<? extends CourseDTO> courses) {
+        this.timestamp = new Date();
         this.courses = courses.stream()
                 .sorted(BY_COURSE_NUMBER)
                 .toList();

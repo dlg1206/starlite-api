@@ -4,23 +4,22 @@ package com.uh.rainbow.response;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.uh.rainbow.dto.course.ScheduledCourseDTO;
 
+import java.util.Date;
 import java.util.List;
 
 /**
- * <b>File:</b> ScheduleResponseDTO.java
+ * <b>File:</b> ScheduleResponse.java
  * <p>
- * <b>Description:</b>
+ * <b>Description:</b> Response of all schedules
  *
  * @author Derek Garcia
  */
 @JsonPropertyOrder({"timestamp", "schedules"})
-public class ScheduleResponse extends Response {
-    public final List<List<ScheduledCourseDTO>> schedules;
-
+public record ScheduleResponse(Date timestamp, List<List<ScheduledCourseDTO>> schedules) {
     /**
      * Create new Schedule response with list of valid schedules
      */
     public ScheduleResponse(List<List<ScheduledCourseDTO>> schedules) {
-        this.schedules = schedules;
+        this(new Date(), schedules);
     }
 }
