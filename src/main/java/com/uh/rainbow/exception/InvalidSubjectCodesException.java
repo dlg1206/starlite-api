@@ -1,7 +1,5 @@
 package com.uh.rainbow.exception;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -25,12 +23,12 @@ public class InvalidSubjectCodesException extends RuntimeException {
      * @param termCode            Term code
      * @param invalidSubjectCodes Collection of invalid subject codes
      */
-    public InvalidSubjectCodesException(String campusCode, String termCode, Collection<String> invalidSubjectCodes) {
+    public InvalidSubjectCodesException(String campusCode, String termCode, List<String> invalidSubjectCodes) {
         super("Subject codes do not exist for campus '%s' and term '%s': '%s'".formatted(campusCode, termCode, String.join(", ", invalidSubjectCodes)));
 
         this.campusCode = campusCode;
         this.termCode = termCode;
-        this.invalidSubjectCodes = new ArrayList<>(invalidSubjectCodes);
+        this.invalidSubjectCodes = invalidSubjectCodes;
     }
 
 

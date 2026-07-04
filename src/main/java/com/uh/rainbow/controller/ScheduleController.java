@@ -5,6 +5,8 @@ import com.uh.rainbow.response.ScheduleResponse;
 import com.uh.rainbow.service.SchedulerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/campuses")
 public class ScheduleController {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(ScheduleController.class);
 
     private final SchedulerService schedulerService;
 
@@ -36,6 +40,7 @@ public class ScheduleController {
             @PathVariable String campusCode,
             @PathVariable String termCode,
             @Valid @RequestBody ScheduleRequest request) {
+        LOGGER.info("POST | /campuses/{}/terms/{}/schedule | Generating schedules", campusCode, termCode);
         return ResponseEntity.ok(new ScheduleResponse(schedulerService.generateScheduleDTOs(campusCode, termCode, request)));
     }
 }

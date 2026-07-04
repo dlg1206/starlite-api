@@ -1,9 +1,11 @@
 package com.uh.rainbow.controller;
 
-import com.uh.rainbow.log.Logger;
+
 import com.uh.rainbow.response.IdentifierResponse;
 import com.uh.rainbow.service.CampusService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/campuses")
 public class CampusController {
 
-    private final static Logger LOGGER = new Logger(CampusController.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(CampusController.class);
 
     private final CampusService campusService;
 
@@ -33,6 +35,7 @@ public class CampusController {
      */
     @GetMapping(value = "")
     public ResponseEntity<IdentifierResponse> getAllCampuses() {
+        LOGGER.info("GET | /campuses | Fetching all campus code identifiers");
         return ResponseEntity.ok(new IdentifierResponse(campusService.lookupCampusCodeIdentifierDTOs()));
     }
 }

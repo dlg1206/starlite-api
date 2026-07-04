@@ -41,17 +41,6 @@ public class CampusService {
     }
 
     /**
-     * Fetch all campus codes and names
-     *
-     * @return List of campus codes and names
-     */
-    public List<IdentifierDTO> lookupCampusCodeIdentifierDTOs() {
-        return campusLookup.entrySet().stream()
-                .map((e) -> new IdentifierDTO(e.getKey(), e.getValue()))
-                .toList();
-    }
-
-    /**
      * Validate that this campus code exists
      *
      * @param campusCode Campus code to validate
@@ -66,4 +55,14 @@ public class CampusService {
         throw new InvalidCampusCodeException(campusCode);
     }
 
+    /**
+     * Fetch all campus codes and names
+     *
+     * @return List of campus codes and names
+     */
+    public List<IdentifierDTO> lookupCampusCodeIdentifierDTOs() {
+        return campusLookup.entrySet().stream()
+                .map((e) -> new IdentifierDTO(e.getKey(), e.getValue()))
+                .toList();
+    }
 }

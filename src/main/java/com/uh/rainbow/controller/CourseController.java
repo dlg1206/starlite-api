@@ -1,6 +1,5 @@
 package com.uh.rainbow.controller;
 
-import com.uh.rainbow.log.Logger;
 import com.uh.rainbow.request.CourseFilterRequest;
 import com.uh.rainbow.response.CourseResponse;
 import com.uh.rainbow.response.IdentifierResponse;
@@ -8,11 +7,14 @@ import com.uh.rainbow.service.CourseService;
 import com.uh.rainbow.service.SubjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Set;
+import java.util.LinkedHashSet;
+
+import static com.uh.rainbow.util.Util.buildCoursesUri;
 
 /**
  * <b>File:</b> CourseController.java
@@ -26,7 +28,7 @@ import java.util.Set;
 @RequestMapping("/campuses")
 public class CourseController {
 
-    private final static Logger LOGGER = new Logger(CourseController.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(CourseController.class);
 
     private final SubjectService subjectService;
     private final CourseService courseService;
@@ -41,6 +43,7 @@ public class CourseController {
      */
     @GetMapping(value = "/{campusCode}/terms/{termCode}/subjects")
     public ResponseEntity<IdentifierResponse> getSubjects(@PathVariable String campusCode, @PathVariable String termCode) {
+        LOGGER.info("GET | /{}/terms/{}/subjects | Fetching subject codes", campusCode, termCode);
         return ResponseEntity.ok(new IdentifierResponse(subjectService.fetchSubjectIdentifierDTOs(campusCode, termCode)));
     }
 
@@ -58,9 +61,10 @@ public class CourseController {
     public ResponseEntity<CourseResponse> getCourses(
             @PathVariable String campusCode,
             @PathVariable String termCode,
-            @RequestParam(required = false) Set<String> subjects,
+            @RequestParam(required = false) LinkedHashSet<String> subjects,
             @RequestParam(defaultValue = "false") boolean detailed
     ) {
+        LOGGER.info("GET | {} | Fetching courses", buildCoursesUri(campusCode, termCode, subjects, detailed));
         return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(campusCode, termCode, subjects, detailed)));
     }
 
@@ -79,9 +83,10 @@ public class CourseController {
     public ResponseEntity<CourseResponse> getCourses(
             @PathVariable String campusCode,
             @PathVariable String termCode,
-            @RequestParam(required = false) List<String> subjects,
+            @RequestParam(required = false) LinkedHashSet<String> subjects,
             @RequestParam(defaultValue = "false") boolean detailed,
             @Valid @RequestBody CourseFilterRequest request) {
+        LOGGER.info("POST | {} | Searching courses", buildCoursesUri(campusCode, termCode, subjects, detailed));
         return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(campusCode, termCode, subjects, detailed, request)));
     }
 

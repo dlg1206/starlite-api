@@ -6,16 +6,19 @@ import com.uh.rainbow.entities.Course;
 import com.uh.rainbow.entities.Section;
 import com.uh.rainbow.filter.CourseFilter;
 import com.uh.rainbow.filter.CourseFilterMappable;
-import com.uh.rainbow.log.Logger;
-import com.uh.rainbow.log.MessageBuilder;
 import com.uh.rainbow.response.CourseResponse;
+import com.uh.rainbow.util.Timer;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+
+import static com.uh.rainbow.util.Util.distinct;
+import static com.uh.rainbow.util.Util.pluralS;
 
 /**
  * <b>File:</b> CampusService.java
@@ -28,7 +31,7 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 public class CourseService {
 
-    private static final Logger LOGGER = new Logger(CourseService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CourseService.class);
 
     private final SubjectService subjectService;
     private final CourseFilterMapper courseFilterMapper;
@@ -45,17 +48,17 @@ public class CourseService {
     @Async("bannerTaskExecutor")
     protected CompletableFuture<SubjectResult> fetchSubjectData(String instID, String termID, String subjectID) {
         // course details
-        CompletableFuture<List<CoursesResponse>> crlFuture = bannerAPIService.fetchCoursesAsync(instID, termID, subjectID, true);
-        CompletableFuture<List<CourseDescResponse>> cdrlFuture = bannerAPIService.fetchCourseDescriptionsAsync(instID, termID, subjectID, true);
-        CompletableFuture<List<CourseGradingResponse>> cgrlFuture = bannerAPIService.fetchCourseGradingAsync(instID, termID, subjectID, true);
+        CompletableFuture<List<CoursesResponse>> crlFuture = bannerAPIService.fetchCoursesAsync(instID, termID, subjectID);
+        CompletableFuture<List<CourseDescResponse>> cdrlFuture = bannerAPIService.fetchCourseDescriptionsAsync(instID, termID, subjectID);
+        CompletableFuture<List<CourseGradingResponse>> cgrlFuture = bannerAPIService.fetchCourseGradingAsync(instID, termID, subjectID);
         // Section details
-        CompletableFuture<List<BaseSectionResponse>> bsrlFuture = bannerAPIService.fetchSectionInstructorsAsync(instID, termID, subjectID, true);
-        CompletableFuture<List<SectionCountsResponse>> scrlFuture = bannerAPIService.fetchSectionCountsAsync(instID, termID, subjectID, true);
-        CompletableFuture<List<SectionDescResponse>> sdrlFuture = bannerAPIService.fetchSectionDescriptionsAsync(instID, termID, subjectID, true);
-        CompletableFuture<List<SectionNotesResponse>> snrlFuture = bannerAPIService.fetchSectionNotesAsync(instID, termID, subjectID, true);
-        CompletableFuture<List<SectionAttribResponse>> sarlFuture = bannerAPIService.fetchSectionAttributesAsync(instID, termID, subjectID, true);
+        CompletableFuture<List<BaseSectionResponse>> bsrlFuture = bannerAPIService.fetchSectionInstructorsAsync(instID, termID, subjectID);
+        CompletableFuture<List<SectionCountsResponse>> scrlFuture = bannerAPIService.fetchSectionCountsAsync(instID, termID, subjectID);
+        CompletableFuture<List<SectionDescResponse>> sdrlFuture = bannerAPIService.fetchSectionDescriptionsAsync(instID, termID, subjectID);
+        CompletableFuture<List<SectionNotesResponse>> snrlFuture = bannerAPIService.fetchSectionNotesAsync(instID, termID, subjectID);
+        CompletableFuture<List<SectionAttribResponse>> sarlFuture = bannerAPIService.fetchSectionAttributesAsync(instID, termID, subjectID);
         // meeting details
-        CompletableFuture<List<MeetingsResponse>> mrlFuture = bannerAPIService.fetchMeetingsAsync(instID, termID, subjectID, true);
+        CompletableFuture<List<MeetingsResponse>> mrlFuture = bannerAPIService.fetchMeetingsAsync(instID, termID, subjectID);
 
         // return future of waiting for all endpoints to resolve
         return CompletableFuture.allOf(
@@ -64,15 +67,16 @@ public class CourseService {
                 // then map results to DTO
         ).thenApply(v -> new SubjectResult(
                 subjectID,
-                crlFuture.join(),
-                cdrlFuture.join(),
-                cgrlFuture.join(),
-                sdrlFuture.join(),
-                snrlFuture.join(),
-                sarlFuture.join(),
-                bsrlFuture.join(),
-                scrlFuture.join(),
-                mrlFuture.join()
+                // dedupe
+                distinct(crlFuture.join()),
+                distinct(cdrlFuture.join()),
+                distinct(cgrlFuture.join()),
+                distinct(sdrlFuture.join()),
+                distinct(snrlFuture.join()),
+                distinct(sarlFuture.join()),
+                distinct(bsrlFuture.join()),
+                distinct(scrlFuture.join()),
+                distinct(mrlFuture.join())
         ));
     }
 
@@ -153,14 +157,21 @@ public class CourseService {
     public List<Course> filterCourses(CourseFilterMappable request, List<Course> courses) {
         CourseFilter filter = request.toCourseFilter(courseFilterMapper);
         List<Course> validCourses = new ArrayList<>();
+        int sectionReject = 0;
         for (Course c : courses) {
-            if (filter.rejectCourse(c))
+            if (filter.rejectCourse(c)) {
                 continue;
+            }
             // prune invalid sections
+            int before = c.getSections().size();
             c.getSections().values().removeIf(filter::rejectSection);
+            sectionReject += before - c.getSections().size();
             if (!c.getSections().isEmpty())
                 validCourses.add(c);
         }
+        LOGGER.info("Filtered out {} and {}",
+                pluralS(courses.size() - validCourses.size(), "course"),
+                pluralS(sectionReject, "section"));
         return validCourses;
     }
 
@@ -177,20 +188,17 @@ public class CourseService {
         Set<String> normalizedSubjectCodes = subjectService.validateCampusTermSubjects(campusCode, termCode, subjectCodes);
 
         // todo check if request needed against cache
-        Instant start = Instant.now();
-        LOGGER.info(new MessageBuilder(MessageBuilder.Type.COURSE)
-                .addDetails("Constructing %s courseIDs".formatted(normalizedSubjectCodes.size())));
 
         // start async jobs
+        LOGGER.info("Attempting to construct {}", pluralS(normalizedSubjectCodes.size(), "course"));
+        Timer timer = new Timer();
         List<CompletableFuture<List<Course>>> coursesFutures = normalizedSubjectCodes.stream()
                 .map(subjectID -> constructCoursesJob(campusCode, termCode, subjectID))
                 .toList();
 
         // block until all jobs have finished
         CompletableFuture.allOf(coursesFutures.toArray(new CompletableFuture[0])).join();
-        LOGGER.info(new MessageBuilder(MessageBuilder.Type.COURSE)
-                .addDetails("Constructed %s courses".formatted(normalizedSubjectCodes.size()))
-                .setDuration(start));
+        LOGGER.info("Constructed {} in {}", pluralS(normalizedSubjectCodes.size(), "courses"), timer.formatElapsed());
 
         // create master list once all jobs are done
         return coursesFutures.stream()
@@ -233,6 +241,9 @@ public class CourseService {
         // apply filter if provided
         if (filterRequest != null)
             allCourses = filterCourses(filterRequest, allCourses);
+
+        if (allCourses.isEmpty())
+            LOGGER.warn("No matching courses remain");
 
         // convert to dto
         return detailed

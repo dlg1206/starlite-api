@@ -4,11 +4,13 @@ import com.uh.rainbow.banner.SubjectsResponse;
 import com.uh.rainbow.dto.identifier.IdentifierDTO;
 import com.uh.rainbow.exception.InvalidTermCodeException;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+
+import static com.uh.rainbow.util.Util.pluralS;
 
 /**
  * <b>File:</b> TermService.java
@@ -20,6 +22,8 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class TermService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TermService.class);
 
     private final CampusService campusService;
     private final BannerAPIService bannerAPIService;
@@ -43,18 +47,21 @@ public class TermService {
      * Fetch all available terms codes for a campus
      *
      * @param campusCode Campus code
-     * @return Set of terms available for that campus
+     * @return List of terms available for that campus
      */
-    public Set<String> fetchTermCodes(String campusCode) {
+    public List<String> fetchTermCodes(String campusCode) {
         // validate campus code
         String normalizedCampusCode = campusService.validateAndNormalize(campusCode);
-        return bannerAPIService.fetchSubjects().stream()
+        List<String> results = bannerAPIService.fetchSubjects().stream()
                 // only get requested campus
                 .filter(sr -> sr.ssbsectCampCode().toUpperCase().equals(normalizedCampusCode))
                 .map(SubjectsResponse::stvtermCode)
                 // dedupe
-                .collect(Collectors.toSet());
+                .distinct().toList();
+        LOGGER.info("Found {} for {}", pluralS(results.size(), "term"), campusCode);
+        return results;
     }
+
 
     /**
      * Fetch all available terms for a campus

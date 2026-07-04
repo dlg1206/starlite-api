@@ -3,11 +3,8 @@ package com.uh.rainbow.service;
 
 import com.uh.rainbow.entities.CourseID;
 import com.uh.rainbow.entities.TimeBlock;
-import com.uh.rainbow.log.Logger;
-import com.uh.rainbow.log.MessageBuilder;
 import lombok.Getter;
 
-import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -25,7 +22,6 @@ class Scheduler {
     // custom minimum remaining values comparator
     private static final Comparator<Map.Entry<CourseID, Set<Integer>>> MRV_COMPARATOR =
             Comparator.comparingInt(e -> e.getValue().size());
-    private static final Logger LOGGER = new Logger(Scheduler.class);
 
     private static Map<Integer, TimeBlock> sectionByCRN;
     private static Integer bufferTime;
@@ -90,14 +86,6 @@ class Scheduler {
      * @return List of valid potential schedules found
      */
     public List<List<Integer>> generateSchedules() {
-        int potentialPaths = crnsByCourseID.values().stream()
-                .mapToInt(Set::size)
-                .reduce(1, (a, b) -> a * b);
-        LOGGER.info(new MessageBuilder(MessageBuilder.Type.SCHEDULE)
-                .addDetails("Generating schedules")
-                .addDetails("%s potential schedules".formatted(potentialPaths)));
-        Instant start = Instant.now();
-
         // build minimal threadpool
         List<Seed> seeds = generateSeeds();
         int poolSize = Math.min(seeds.size(), Runtime.getRuntime().availableProcessors());
@@ -108,16 +96,19 @@ class Scheduler {
                     executor.submit(() -> solve(new PotentialSchedule(s.remainingCourses, s.startCRN))));
         }
 
-        // report status
-        MessageBuilder mb = new MessageBuilder(MessageBuilder.Type.SCHEDULE).setDuration(start);
-        if (schedules.isEmpty()) {
-            LOGGER.warn(mb.addDetails("No valid schedules found"));
-            return new ArrayList<>();
-        }
-        LOGGER.info(mb.addDetails("Found %d valid schedule%s".formatted(schedules.size(), schedules.size() == 1 ? "" : "s")));
-
         // convert each schedule's section set to an immutable list
         return schedules.values().stream().map(List::copyOf).toList();
+    }
+
+    /**
+     * Calculate the maximum total schedules possible with the given configuration
+     *
+     * @return Max potential schedules
+     */
+    public int getMaxPotentialSchedules() {
+        return crnsByCourseID.values().stream()
+                .mapToInt(Set::size)
+                .reduce(1, (a, b) -> a * b);
     }
 
     /**

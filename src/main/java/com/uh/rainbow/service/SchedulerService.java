@@ -8,13 +8,17 @@ import com.uh.rainbow.entities.TimeBuffer;
 import com.uh.rainbow.exception.InvalidCourseIDsException;
 import com.uh.rainbow.exception.InvalidCourseReferenceNumberException;
 import com.uh.rainbow.filter.ScheduleFilter;
-import com.uh.rainbow.log.Logger;
 import com.uh.rainbow.request.ScheduleRequest;
+import com.uh.rainbow.util.Timer;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.uh.rainbow.util.Util.pluralS;
 
 /**
  * <b>File:</b> SchedulerService.java
@@ -27,7 +31,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SchedulerService {
 
-    private static final Logger LOGGER = new Logger(SchedulerService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SchedulerService.class);
 
     private final CourseService courseService;
 
@@ -117,11 +121,17 @@ public class SchedulerService {
 
         // Generate all possible schedules
         Scheduler scheduler = new Scheduler(sectionByCRN, crnsByCourseID, scheduleRequest.bufferTime());
+        LOGGER.info("Generating schedules | {}", pluralS(scheduler.getMaxPotentialSchedules(), "potential schedule"));
+        Timer timer = new Timer();
         List<List<Integer>> schedules = scheduler.generateSchedules();
-        // no valid schedules found, exit early
-        if (schedules.isEmpty())
-            return new ArrayList<>();
+        LOGGER.info("Completed generation in {}", timer.formatElapsed());
 
+        // no valid schedules found, exit early
+        if (schedules.isEmpty()) {
+            LOGGER.warn("No valid schedules found");
+            return List.of();
+        }
+        LOGGER.info("Generated {}", pluralS(schedules.size(), "valid schedule"));
         // map back to courseIDs
         return schedules.stream()
                 // foreach schedule in schedules
