@@ -3,6 +3,7 @@ package com.uh.rainbow.service;
 import com.uh.rainbow.banner.*;
 import com.uh.rainbow.config.BannerClientConfig;
 import com.uh.rainbow.util.Timer;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,7 +16,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Semaphore;
-import java.util.function.Supplier;
+
+import static com.uh.rainbow.util.Util.callWithSemaphore;
 
 /**
  * <b>File:</b> BannerService.java
@@ -35,43 +37,28 @@ public class BannerAPIService {
     private final RestClient bannerClient;
     private final BannerClientConfig config;
     private final Semaphore bannerSemaphore;
+    @Getter
+    private final Semaphore bannerBatchSemaphore;
 
 
     /**
      * Create new Banner9 service
      *
-     * @param bannerClient    REST client for the Banner9 API
-     * @param config          Config for the REST client
-     * @param bannerSemaphore Semaphore for limiting requests
+     * @param bannerClient         REST client for the Banner9 API
+     * @param config               Config for the REST client
+     * @param bannerSemaphore      Semaphore for limiting requests
+     * @param bannerBatchSemaphore Semaphore for limiting batch requests
      */
     public BannerAPIService(RestClient bannerClient,
                             BannerClientConfig config,
-                            @Qualifier("bannerSemaphore") Semaphore bannerSemaphore) {
+                            @Qualifier("bannerSemaphore") Semaphore bannerSemaphore,
+                            @Qualifier("bannerBatchSemaphore") Semaphore bannerBatchSemaphore) {
         this.bannerClient = bannerClient;
         this.config = config;
         this.bannerSemaphore = bannerSemaphore;
+        this.bannerBatchSemaphore = bannerBatchSemaphore;
     }
 
-
-    /**
-     * Semaphore wrapper to limit concurrent requests
-     *
-     * @param call Supplier representing the blocking Banner9 API call to execute
-     * @param <T>  Type of the result returned by the call
-     * @return Result of the call once a permit is acquired and the call completes
-     * @throws RuntimeException if the current thread is interrupted while waiting for a permit
-     */
-    private <T> T callWithLimit(Supplier<T> call) {
-        try {
-            bannerSemaphore.acquire();
-            return call.get();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new RuntimeException("Interrupted while waiting for Banner API permit", e);
-        } finally {
-            bannerSemaphore.release();
-        }
-    }
 
     /**
      * Fetches data from a Banner API endpoint, filtered by campus, term, and subject,
@@ -150,7 +137,7 @@ public class BannerAPIService {
      */
     @Async("bannerTaskExecutor")
     public CompletableFuture<List<CoursesResponse>> fetchCoursesAsync(String instID, String termID, String subjectID) {
-        return CompletableFuture.completedFuture(callWithLimit(() -> fetchCourses(instID, termID, subjectID)));
+        return CompletableFuture.completedFuture(callWithSemaphore(bannerSemaphore, () -> fetchCourses(instID, termID, subjectID)));
     }
 
     /**
@@ -176,7 +163,7 @@ public class BannerAPIService {
      */
     @Async("bannerTaskExecutor")
     public CompletableFuture<List<CourseDescResponse>> fetchCourseDescriptionsAsync(String instID, String termID, String subjectID) {
-        return CompletableFuture.completedFuture(callWithLimit(() -> fetchCourseDescriptions(instID, termID, subjectID)));
+        return CompletableFuture.completedFuture(callWithSemaphore(bannerSemaphore, () -> fetchCourseDescriptions(instID, termID, subjectID)));
     }
 
     /**
@@ -202,7 +189,7 @@ public class BannerAPIService {
      */
     @Async("bannerTaskExecutor")
     public CompletableFuture<List<CourseGradingResponse>> fetchCourseGradingAsync(String instID, String termID, String subjectID) {
-        return CompletableFuture.completedFuture(callWithLimit(() -> fetchCourseGrading(instID, termID, subjectID)));
+        return CompletableFuture.completedFuture(callWithSemaphore(bannerSemaphore, () -> fetchCourseGrading(instID, termID, subjectID)));
     }
 
 
@@ -229,7 +216,7 @@ public class BannerAPIService {
      */
     @Async("bannerTaskExecutor")
     public CompletableFuture<List<SectionDescResponse>> fetchSectionDescriptionsAsync(String instID, String termID, String subjectID) {
-        return CompletableFuture.completedFuture(callWithLimit(() -> fetchSectionDescriptions(instID, termID, subjectID)));
+        return CompletableFuture.completedFuture(callWithSemaphore(bannerSemaphore, () -> fetchSectionDescriptions(instID, termID, subjectID)));
     }
 
     /**
@@ -255,7 +242,7 @@ public class BannerAPIService {
      */
     @Async("bannerTaskExecutor")
     public CompletableFuture<List<SectionNotesResponse>> fetchSectionNotesAsync(String instID, String termID, String subjectID) {
-        return CompletableFuture.completedFuture(callWithLimit(() -> fetchSectionNotes(instID, termID, subjectID)));
+        return CompletableFuture.completedFuture(callWithSemaphore(bannerSemaphore, () -> fetchSectionNotes(instID, termID, subjectID)));
     }
 
     /**
@@ -281,7 +268,7 @@ public class BannerAPIService {
      */
     @Async("bannerTaskExecutor")
     public CompletableFuture<List<SectionAttribResponse>> fetchSectionAttributesAsync(String instID, String termID, String subjectID) {
-        return CompletableFuture.completedFuture(callWithLimit(() -> fetchSectionAttributes(instID, termID, subjectID)));
+        return CompletableFuture.completedFuture(callWithSemaphore(bannerSemaphore, () -> fetchSectionAttributes(instID, termID, subjectID)));
     }
 
 
@@ -308,7 +295,7 @@ public class BannerAPIService {
      */
     @Async("bannerTaskExecutor")
     public CompletableFuture<List<SectionCountsResponse>> fetchSectionCountsAsync(String instID, String termID, String subjectID) {
-        return CompletableFuture.completedFuture(callWithLimit(() -> fetchSectionCounts(instID, termID, subjectID)));
+        return CompletableFuture.completedFuture(callWithSemaphore(bannerSemaphore, () -> fetchSectionCounts(instID, termID, subjectID)));
     }
 
     /**
@@ -335,7 +322,7 @@ public class BannerAPIService {
      */
     @Async("bannerTaskExecutor")
     public CompletableFuture<List<BaseSectionResponse>> fetchSectionInstructorsAsync(String instID, String termID, String subjectID) {
-        return CompletableFuture.completedFuture(callWithLimit(() -> fetchSectionInstructors(instID, termID, subjectID)));
+        return CompletableFuture.completedFuture(callWithSemaphore(bannerSemaphore, () -> fetchSectionInstructors(instID, termID, subjectID)));
     }
 
     /**
@@ -361,6 +348,13 @@ public class BannerAPIService {
      */
     @Async("bannerTaskExecutor")
     public CompletableFuture<List<MeetingsResponse>> fetchMeetingsAsync(String instID, String termID, String subjectID) {
-        return CompletableFuture.completedFuture(callWithLimit(() -> fetchMeetings(instID, termID, subjectID)));
+        return CompletableFuture.completedFuture(callWithSemaphore(bannerSemaphore, () -> fetchMeetings(instID, termID, subjectID)));
+    }
+
+    /**
+     * @return Max number of batches allowed to send to Banner at once
+     */
+    public int getBatchLimit() {
+        return config.getMaxConcurrentBatches();
     }
 }

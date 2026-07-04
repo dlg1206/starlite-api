@@ -17,8 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-import static com.uh.rainbow.util.Util.distinct;
-import static com.uh.rainbow.util.Util.pluralS;
+import static com.uh.rainbow.util.Util.*;
 
 /**
  * <b>File:</b> CampusService.java
@@ -39,34 +38,35 @@ public class CourseService {
 
     /**
      * Fetch all course data concurrently for a single subject
+     * todo refactor out into own aggregation layer (fetch from api or db)
      *
-     * @param instID    Campus code
-     * @param termID    Term code
-     * @param subjectID Subject code
+     * @param campusCode  Campus code
+     * @param termCode    Term code
+     * @param subjectCode Subject code
      * @return Future with subject data
      */
     @Async("bannerTaskExecutor")
-    protected CompletableFuture<SubjectResult> fetchSubjectData(String instID, String termID, String subjectID) {
+    protected CompletableFuture<SubjectResult> fetchSubjectData(String campusCode, String termCode, String subjectCode) {
         // course details
-        CompletableFuture<List<CoursesResponse>> crlFuture = bannerAPIService.fetchCoursesAsync(instID, termID, subjectID);
-        CompletableFuture<List<CourseDescResponse>> cdrlFuture = bannerAPIService.fetchCourseDescriptionsAsync(instID, termID, subjectID);
-        CompletableFuture<List<CourseGradingResponse>> cgrlFuture = bannerAPIService.fetchCourseGradingAsync(instID, termID, subjectID);
+        CompletableFuture<List<CoursesResponse>> crlFuture = bannerAPIService.fetchCoursesAsync(campusCode, termCode, subjectCode);
+        CompletableFuture<List<CourseDescResponse>> cdrlFuture = bannerAPIService.fetchCourseDescriptionsAsync(campusCode, termCode, subjectCode);
+        CompletableFuture<List<CourseGradingResponse>> cgrlFuture = bannerAPIService.fetchCourseGradingAsync(campusCode, termCode, subjectCode);
         // Section details
-        CompletableFuture<List<BaseSectionResponse>> bsrlFuture = bannerAPIService.fetchSectionInstructorsAsync(instID, termID, subjectID);
-        CompletableFuture<List<SectionCountsResponse>> scrlFuture = bannerAPIService.fetchSectionCountsAsync(instID, termID, subjectID);
-        CompletableFuture<List<SectionDescResponse>> sdrlFuture = bannerAPIService.fetchSectionDescriptionsAsync(instID, termID, subjectID);
-        CompletableFuture<List<SectionNotesResponse>> snrlFuture = bannerAPIService.fetchSectionNotesAsync(instID, termID, subjectID);
-        CompletableFuture<List<SectionAttribResponse>> sarlFuture = bannerAPIService.fetchSectionAttributesAsync(instID, termID, subjectID);
+        CompletableFuture<List<BaseSectionResponse>> bsrlFuture = bannerAPIService.fetchSectionInstructorsAsync(campusCode, termCode, subjectCode);
+        CompletableFuture<List<SectionCountsResponse>> scrlFuture = bannerAPIService.fetchSectionCountsAsync(campusCode, termCode, subjectCode);
+        CompletableFuture<List<SectionDescResponse>> sdrlFuture = bannerAPIService.fetchSectionDescriptionsAsync(campusCode, termCode, subjectCode);
+        CompletableFuture<List<SectionNotesResponse>> snrlFuture = bannerAPIService.fetchSectionNotesAsync(campusCode, termCode, subjectCode);
+        CompletableFuture<List<SectionAttribResponse>> sarlFuture = bannerAPIService.fetchSectionAttributesAsync(campusCode, termCode, subjectCode);
         // meeting details
-        CompletableFuture<List<MeetingsResponse>> mrlFuture = bannerAPIService.fetchMeetingsAsync(instID, termID, subjectID);
+        CompletableFuture<List<MeetingsResponse>> mrlFuture = bannerAPIService.fetchMeetingsAsync(campusCode, termCode, subjectCode);
 
         // return future of waiting for all endpoints to resolve
         return CompletableFuture.allOf(
-                crlFuture, cdrlFuture, sdrlFuture, snrlFuture,
-                sarlFuture, bsrlFuture, scrlFuture, mrlFuture
+                crlFuture, cdrlFuture, cgrlFuture, sdrlFuture,
+                snrlFuture, sarlFuture, bsrlFuture, scrlFuture, mrlFuture
                 // then map results to DTO
         ).thenApply(v -> new SubjectResult(
-                subjectID,
+                subjectCode,
                 // dedupe
                 distinct(crlFuture.join()),
                 distinct(cdrlFuture.join()),
@@ -138,14 +138,30 @@ public class CourseService {
     /**
      * Fetches and constructs the course list for a single subject.
      *
-     * @param instID    Campus code
-     * @param termID    Term code
-     * @param subjectID Subject code
+     * @param campusCode  Campus code
+     * @param termCode    Term code
+     * @param subjectCode Subject code
      * @return Future resolving to the constructed courseIDs for this subject
      */
-    private CompletableFuture<List<Course>> constructCoursesJob(String instID, String termID, String subjectID) {
-        // construct course after done fetching data
-        return fetchSubjectData(instID, termID, subjectID).thenApply(this::constructCourses);
+    private CompletableFuture<List<Course>> constructCoursesJob(String campusCode, String termCode, String subjectCode) {
+        // wrap batch fetch with semaphore but not construct - no limit to concurrent constructs
+        Timer fetchTimer = new Timer();
+        return asyncCallWithSemaphore(bannerAPIService.getBannerBatchSemaphore(),
+                () -> {
+                    // semaphore acquired
+                    LOGGER.info("Acquired permit for {}:{}:{} after {} wait", campusCode, termCode, subjectCode, fetchTimer.formatElapsed());
+                    LOGGER.info("Fetching course details for {}:{}:{}", campusCode, termCode, subjectCode);
+                    fetchTimer.restart();
+                    return fetchSubjectData(campusCode, termCode, subjectCode);
+                }).thenApply(subjectResult -> {
+            // construct courses after done fetching data
+            LOGGER.info("Fetched course details for {}:{}:{} in {}", campusCode, termCode, subjectCode, fetchTimer.formatElapsed());
+            LOGGER.info("Constructing {}:{}:{} courses", campusCode, termCode, subjectCode);
+            Timer constructTimer = new Timer();
+            List<Course> courses = constructCourses(subjectResult);
+            LOGGER.info("Constructed {} {}:{}:{} courses in {}", courses.size(), campusCode, termCode, subjectCode, constructTimer.formatElapsed());
+            return courses;
+        });
     }
 
     /**
@@ -190,7 +206,9 @@ public class CourseService {
         // todo check if request needed against cache
 
         // start async jobs
-        LOGGER.info("Attempting to construct {}", pluralS(normalizedSubjectCodes.size(), "course"));
+        LOGGER.info("Attempting to construct {}", pluralS(normalizedSubjectCodes.size(), "subject"));
+        if (normalizedSubjectCodes.size() > bannerAPIService.getBatchLimit())
+            LOGGER.warn("Requested subjects exceed permitted concurrent batch size ({}) - response will be slower", bannerAPIService.getBatchLimit());
         Timer timer = new Timer();
         List<CompletableFuture<List<Course>>> coursesFutures = normalizedSubjectCodes.stream()
                 .map(subjectID -> constructCoursesJob(campusCode, termCode, subjectID))
@@ -198,7 +216,7 @@ public class CourseService {
 
         // block until all jobs have finished
         CompletableFuture.allOf(coursesFutures.toArray(new CompletableFuture[0])).join();
-        LOGGER.info("Constructed {} in {}", pluralS(normalizedSubjectCodes.size(), "courses"), timer.formatElapsed());
+        LOGGER.info("Constructed {} in {}", pluralS(normalizedSubjectCodes.size(), "subject"), timer.formatElapsed());
 
         // create master list once all jobs are done
         return coursesFutures.stream()

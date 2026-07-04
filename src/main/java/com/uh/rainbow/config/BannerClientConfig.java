@@ -28,6 +28,9 @@ public class BannerClientConfig {
 
     private static final int BATCH_SIZE = 9;    // min size per batch so at least 1 subject
 
+    @Value("${rainbow.banner.api.max-concurrent-batches}")
+    private int maxConcurrentBatches;
+
     @Value("${rainbow.banner.api}")
     private String baseUrl;
 
@@ -98,11 +101,20 @@ public class BannerClientConfig {
     /**
      * Create a semaphore to limit number of concurrent banner requests
      *
-     * @param maxConcurrentBatches Max number of concurrent batches
      * @return Semaphore
      */
     @Bean(name = "bannerSemaphore")
-    public Semaphore bannerConcurrencyLimiter(@Value("${rainbow.banner.api.max-concurrent-batches}") int maxConcurrentBatches) {
+    public Semaphore bannerConcurrencyLimiter() {
         return new Semaphore(BATCH_SIZE * maxConcurrentBatches);
+    }
+
+    /**
+     * Create a semaphore to limit number of concurrent banner batch requests
+     *
+     * @return Semaphore
+     */
+    @Bean(name = "bannerBatchSemaphore")
+    public Semaphore bannerBatchLimiter() {
+        return new Semaphore(maxConcurrentBatches);
     }
 }

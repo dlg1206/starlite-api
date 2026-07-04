@@ -58,7 +58,7 @@ public class TermService {
                 .map(SubjectsResponse::stvtermCode)
                 // dedupe
                 .distinct().toList();
-        LOGGER.info("Found {} for {}", pluralS(results.size(), "term"), campusCode);
+        LOGGER.info("Found {} for campus '{}'", pluralS(results.size(), "term"), campusCode);
         return results;
     }
 

@@ -75,7 +75,7 @@ public class SubjectService {
                 .map(String::toUpperCase)
                 // dedup
                 .distinct().toList();
-        LOGGER.info("Found {} {} for {}:{}", results.size(), pluralS(results.size(), "subject"), campusCode, termCode);
+        LOGGER.info("Found {} for {}:{}", pluralS(results.size(), "subject"), campusCode, termCode);
         return results;
     }
 

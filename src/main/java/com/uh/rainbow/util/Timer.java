@@ -12,12 +12,19 @@ import java.time.Instant;
  */
 public class Timer {
 
-    private final Instant start;
+    private Instant start;
 
     /**
      * Start new timer
      */
     public Timer() {
+        this.start = Instant.now();
+    }
+
+    /**
+     * Restart the timer
+     */
+    public void restart() {
         this.start = Instant.now();
     }
 
