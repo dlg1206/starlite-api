@@ -1,5 +1,6 @@
 package com.uh.rainbow.response;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.uh.rainbow.dto.course.CourseDTO;
 
 import java.util.Comparator;
@@ -13,6 +14,7 @@ import java.util.List;
  *
  * @author Derek Garcia
  */
+@JsonPropertyOrder({"timestamp", "identifiers"})
 public class CourseResponse {
     // custom comparator that extracts number from course number since can include letters
     private static final Comparator<CourseDTO> BY_COURSE_NUMBER = Comparator

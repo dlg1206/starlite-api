@@ -1,5 +1,6 @@
 package com.uh.rainbow.response;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.uh.rainbow.dto.identifier.IdentifierDTO;
 
 import java.util.Comparator;
@@ -13,6 +14,7 @@ import java.util.List;
  *
  * @author Derek Garcia
  */
+@JsonPropertyOrder({"timestamp", "identifiers"})
 public class IdentifierResponse {
     public final Date timestamp;
     public final List<IdentifierDTO> identifiers;
