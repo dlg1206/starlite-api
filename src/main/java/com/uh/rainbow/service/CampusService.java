@@ -1,6 +1,6 @@
 package com.uh.rainbow.service;
 
-import com.uh.rainbow.dto.identifier.IdentifierDTO;
+import com.uh.rainbow.dto.IdentifierDTO;
 import com.uh.rainbow.exception.InvalidCampusCodeException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;

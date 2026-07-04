@@ -1,4 +1,4 @@
-package com.uh.rainbow.banner;
+package com.uh.rainbow.client.banner;
 
 import com.uh.rainbow.entities.Course;
 import com.uh.rainbow.entities.Section;

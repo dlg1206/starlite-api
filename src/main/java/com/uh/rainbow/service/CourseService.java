@@ -1,7 +1,7 @@
 package com.uh.rainbow.service;
 
-import com.uh.rainbow.banner.*;
-import com.uh.rainbow.dto.course.CourseDTO;
+import com.uh.rainbow.client.banner.*;
+import com.uh.rainbow.dto.CourseDTO;
 import com.uh.rainbow.entities.Course;
 import com.uh.rainbow.entities.Section;
 import com.uh.rainbow.filter.CourseFilter;

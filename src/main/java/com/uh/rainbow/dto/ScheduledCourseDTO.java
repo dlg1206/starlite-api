@@ -1,4 +1,4 @@
-package com.uh.rainbow.dto.course;
+package com.uh.rainbow.dto;
 
 /**
  * DTO with some course metadata and a single section for the schedule

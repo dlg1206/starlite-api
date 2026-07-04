@@ -1,7 +1,7 @@
 package com.uh.rainbow.service;
 
-import com.uh.rainbow.banner.SubjectsResponse;
-import com.uh.rainbow.dto.identifier.IdentifierDTO;
+import com.uh.rainbow.client.banner.SubjectsResponse;
+import com.uh.rainbow.dto.IdentifierDTO;
 import com.uh.rainbow.exception.InvalidSubjectCodesException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

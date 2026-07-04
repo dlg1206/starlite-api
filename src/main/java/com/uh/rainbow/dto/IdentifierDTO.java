@@ -1,4 +1,4 @@
-package com.uh.rainbow.dto.identifier;
+package com.uh.rainbow.dto;
 
 /**
  * <b>File:</b> IdentifierDTO.java

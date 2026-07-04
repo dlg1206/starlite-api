@@ -1,4 +1,4 @@
-package com.uh.rainbow.dto.course;
+package com.uh.rainbow.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;

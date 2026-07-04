@@ -1,4 +1,4 @@
-package com.uh.rainbow.banner;
+package com.uh.rainbow.client.banner;
 
 import com.uh.rainbow.entities.Meeting;
 import com.uh.rainbow.enums.Day;

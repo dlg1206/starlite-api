@@ -1,4 +1,4 @@
-package com.uh.rainbow.dto.course;
+package com.uh.rainbow.dto;
 
 import java.util.Comparator;
 import java.util.List;

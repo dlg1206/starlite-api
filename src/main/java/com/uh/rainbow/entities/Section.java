@@ -1,7 +1,7 @@
 package com.uh.rainbow.entities;
 
 
-import com.uh.rainbow.dto.course.SectionDTO;
+import com.uh.rainbow.dto.SectionDTO;
 import com.uh.rainbow.enums.SectionFormat;
 import lombok.Getter;
 import lombok.Setter;

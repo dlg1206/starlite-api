@@ -2,7 +2,7 @@ package com.uh.rainbow.response;
 
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.uh.rainbow.dto.course.ScheduledCourseDTO;
+import com.uh.rainbow.dto.ScheduledCourseDTO;
 
 import java.util.Date;
 import java.util.List;

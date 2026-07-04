@@ -1,7 +1,7 @@
 package com.uh.rainbow.response;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.uh.rainbow.dto.identifier.IdentifierDTO;
+import com.uh.rainbow.dto.IdentifierDTO;
 
 import java.util.Comparator;
 import java.util.Date;

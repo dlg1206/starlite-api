@@ -1,6 +1,6 @@
 package com.uh.rainbow.service;
 
-import com.uh.rainbow.banner.*;
+import com.uh.rainbow.client.banner.*;
 import com.uh.rainbow.config.BannerClientConfig;
 import com.uh.rainbow.util.Timer;
 import lombok.Getter;

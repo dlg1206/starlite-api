@@ -1,7 +1,7 @@
 package com.uh.rainbow.entities;
 
 
-import com.uh.rainbow.dto.course.MeetingDTO;
+import com.uh.rainbow.dto.MeetingDTO;
 import com.uh.rainbow.enums.Day;
 
 import java.time.LocalTime;

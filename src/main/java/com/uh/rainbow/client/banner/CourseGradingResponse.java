@@ -1,6 +1,6 @@
-package com.uh.rainbow.banner;
+package com.uh.rainbow.client.banner;
 
-import com.uh.rainbow.dto.course.GradingOption;
+import com.uh.rainbow.dto.GradingOption;
 
 /***
  * DTO for fields from <a href="https://www.sis.hawaii.edu:9350/crseavail/api/course-grading">/course-grading</a> Banner9 API. Only relevant fields have been included.

@@ -1,9 +1,9 @@
 package com.uh.rainbow.entities;
 
-import com.uh.rainbow.dto.course.DetailedCourseDTO;
-import com.uh.rainbow.dto.course.GradingOption;
-import com.uh.rainbow.dto.course.ScheduledCourseDTO;
-import com.uh.rainbow.dto.course.SimpleCourseDTO;
+import com.uh.rainbow.dto.DetailedCourseDTO;
+import com.uh.rainbow.dto.GradingOption;
+import com.uh.rainbow.dto.ScheduledCourseDTO;
+import com.uh.rainbow.dto.SimpleCourseDTO;
 import lombok.Getter;
 import lombok.Setter;
 

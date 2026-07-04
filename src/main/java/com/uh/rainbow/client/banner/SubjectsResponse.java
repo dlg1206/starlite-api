@@ -1,6 +1,6 @@
-package com.uh.rainbow.banner;
+package com.uh.rainbow.client.banner;
 
-import com.uh.rainbow.dto.identifier.IdentifierDTO;
+import com.uh.rainbow.dto.IdentifierDTO;
 
 /**
  * DTO for fields from <a href="https://www.sis.hawaii.edu:9350/crseavail/api/subjects">/subjects</a> Banner9 API. All fields have been included

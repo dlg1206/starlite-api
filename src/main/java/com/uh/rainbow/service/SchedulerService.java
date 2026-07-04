@@ -1,6 +1,6 @@
 package com.uh.rainbow.service;
 
-import com.uh.rainbow.dto.course.ScheduledCourseDTO;
+import com.uh.rainbow.dto.ScheduledCourseDTO;
 import com.uh.rainbow.entities.Course;
 import com.uh.rainbow.entities.CourseID;
 import com.uh.rainbow.entities.TimeBlock;
