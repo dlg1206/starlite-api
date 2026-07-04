@@ -189,7 +189,7 @@ public class CourseService {
         // block until all jobs have finished
         CompletableFuture.allOf(coursesFutures.toArray(new CompletableFuture[0])).join();
         LOGGER.info(new MessageBuilder(MessageBuilder.Type.COURSE)
-                .addDetails("Constructed %s courseIDs".formatted(normalizedSubjectCodes.size()))
+                .addDetails("Constructed %s courses".formatted(normalizedSubjectCodes.size()))
                 .setDuration(start));
 
         // create master list once all jobs are done

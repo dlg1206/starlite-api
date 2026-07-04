@@ -9,6 +9,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -22,7 +23,6 @@ import java.util.function.Supplier;
  * <b>File:</b> BannerService.java
  * <p>
  * <b>Description:</b> Service that makes requests to banner API and caches responses
- * TODO - cache in sqlite database instead of memory
  *
  * @author Derek Garcia
  */
@@ -73,24 +73,47 @@ public class BannerAPIService {
     }
 
     /**
-     * Generic fetch to Banner9 API endpoint
+     * Fetches data from a Banner API endpoint, filtered by campus, term, and subject,
+     * and deserializes the response into the given type.
+     *
+     * @param uri     URI to fetch
+     * @param typeRef Type reference describing the expected response shape (e.g. {@code List<CoursesResponse>})
+     * @param <T>     the type of the deserialized response
+     * @return the deserialized response body, or {@code null} if the response has no body
+     */
+    private <T> T fetch(String uri, ParameterizedTypeReference<T> typeRef) {
+        Instant start = Instant.now();
+        T result = bannerClient.get()
+                .uri(uri)
+                .header("X-Recaptcha-Token", "")
+                .retrieve()
+                .body(typeRef);
+        LOGGER.info(new MessageBuilder(MessageBuilder.Type.BANNER)
+                .addDetails(config.getBaseUrl() + uri)
+                .setDuration(start));
+        return result;
+    }
+
+    /**
+     * Fetches data from a Banner API endpoint, filtered by campus, term, and subject,
+     * and deserializes the response into the given type.
      *
      * @param endpoint  Endpoint to fetch
      * @param instID    Campus code
      * @param termID    Term code
      * @param subjectID Subject code
-     * @return Banner9 API response
+     * @param typeRef   Type reference describing the expected response shape (e.g. {@code List<CoursesResponse>})
+     * @param <T>       the type of the deserialized response
+     * @return the deserialized response body, or {@code null} if the response has no body
      */
-    private RestClient.ResponseSpec fetch(String endpoint, String instID, String termID, String subjectID) {
-        return bannerClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path(endpoint)
-                        .queryParam("campusCode", instID.toUpperCase())
-                        .queryParam("termCode", termID)
-                        .queryParam("subjectCode", subjectID.toUpperCase())
-                        .build())
-                .header("X-Recaptcha-Token", "")
-                .retrieve();
+    private <T> T fetch(String endpoint, String instID, String termID, String subjectID, ParameterizedTypeReference<T> typeRef) {
+        String uri = UriComponentsBuilder
+                .fromPath(endpoint)
+                .queryParam("campusCode", instID.toUpperCase())
+                .queryParam("termCode", termID)
+                .queryParam("subjectCode", subjectID.toUpperCase())
+                .build().toUriString();
+        return fetch(uri, typeRef);
     }
 
     /**
@@ -111,11 +134,8 @@ public class BannerAPIService {
      * @return List of subjects
      */
     public List<SubjectsResponse> fetchSubjects() {
-        return bannerClient.get()
-                .uri(config.getSubjectsEndpoint())
-                .header("X-Recaptcha-Token", "")
-                .retrieve()
-                .body(new ParameterizedTypeReference<>() {
+        return fetch(UriComponentsBuilder.fromPath(config.getSubjectsEndpoint()).build().toUriString(),
+                new ParameterizedTypeReference<>() {
                 });
     }
 
@@ -129,16 +149,9 @@ public class BannerAPIService {
      * @return List of courseIDs offered for given campus, term, and subject
      */
     public List<CoursesResponse> fetchCourses(String instID, String termID, String subjectID, boolean deduplicate) {
-        Instant start = Instant.now();
-        List<CoursesResponse> list = fetch(config.getCoursesEndpoint(), instID, termID, subjectID)
-                .body(new ParameterizedTypeReference<>() {
+        List<CoursesResponse> list =
+                fetch(config.getCoursesEndpoint(), instID, termID, subjectID, new ParameterizedTypeReference<>() {
                 });
-        LOGGER.info(new MessageBuilder(MessageBuilder.Type.BANNER)
-                .addDetails(instID)
-                .addDetails(termID)
-                .addDetails(subjectID)
-                .addDetails(config.getCoursesEndpoint())
-                .setDuration(start));
         return deduplicate ? deduplicate(list) : list;
     }
 
@@ -166,16 +179,9 @@ public class BannerAPIService {
      * @return List of crns and descriptions for given campus, term, and subject
      */
     public List<CourseDescResponse> fetchCourseDescriptions(String instID, String termID, String subjectID, boolean deduplicate) {
-        Instant start = Instant.now();
-        List<CourseDescResponse> list = fetch(config.getCourseDescEndpoint(), instID, termID, subjectID)
-                .body(new ParameterizedTypeReference<>() {
+        List<CourseDescResponse> list =
+                fetch(config.getCourseDescEndpoint(), instID, termID, subjectID, new ParameterizedTypeReference<>() {
                 });
-        LOGGER.info(new MessageBuilder(MessageBuilder.Type.BANNER)
-                .addDetails(instID)
-                .addDetails(termID)
-                .addDetails(subjectID)
-                .addDetails(config.getCourseDescEndpoint())
-                .setDuration(start));
         return deduplicate ? deduplicate(list) : list;
     }
 
@@ -203,16 +209,9 @@ public class BannerAPIService {
      * @return List of course grading options for given campus, term, and subject
      */
     public List<CourseGradingResponse> fetchCourseGrading(String instID, String termID, String subjectID, boolean deduplicate) {
-        Instant start = Instant.now();
-        List<CourseGradingResponse> list = fetch(config.getCourseGradingEndpoint(), instID, termID, subjectID)
-                .body(new ParameterizedTypeReference<>() {
+        List<CourseGradingResponse> list =
+                fetch(config.getCourseGradingEndpoint(), instID, termID, subjectID, new ParameterizedTypeReference<>() {
                 });
-        LOGGER.info(new MessageBuilder(MessageBuilder.Type.BANNER)
-                .addDetails(instID)
-                .addDetails(termID)
-                .addDetails(subjectID)
-                .addDetails(config.getCourseDescEndpoint())
-                .setDuration(start));
         return deduplicate ? deduplicate(list) : list;
     }
 
@@ -241,16 +240,9 @@ public class BannerAPIService {
      * @return List of crns and descriptions for given campus, term, and subject
      */
     public List<SectionDescResponse> fetchSectionDescriptions(String instID, String termID, String subjectID, boolean deduplicate) {
-        Instant start = Instant.now();
-        List<SectionDescResponse> list = fetch(config.getSectionDescEndpoint(), instID, termID, subjectID)
-                .body(new ParameterizedTypeReference<>() {
+        List<SectionDescResponse> list =
+                fetch(config.getSectionDescEndpoint(), instID, termID, subjectID, new ParameterizedTypeReference<>() {
                 });
-        LOGGER.info(new MessageBuilder(MessageBuilder.Type.BANNER)
-                .addDetails(instID)
-                .addDetails(termID)
-                .addDetails(subjectID)
-                .addDetails(config.getSectionDescEndpoint())
-                .setDuration(start));
         return deduplicate ? deduplicate(list) : list;
     }
 
@@ -278,16 +270,9 @@ public class BannerAPIService {
      * @return List of crns and notes for given campus, term, and subject
      */
     public List<SectionNotesResponse> fetchSectionNotes(String instID, String termID, String subjectID, boolean deduplicate) {
-        Instant start = Instant.now();
-        List<SectionNotesResponse> list = fetch(config.getSectionNotesEndpoint(), instID, termID, subjectID)
-                .body(new ParameterizedTypeReference<>() {
+        List<SectionNotesResponse> list =
+                fetch(config.getSectionNotesEndpoint(), instID, termID, subjectID, new ParameterizedTypeReference<>() {
                 });
-        LOGGER.info(new MessageBuilder(MessageBuilder.Type.BANNER)
-                .addDetails(instID)
-                .addDetails(termID)
-                .addDetails(subjectID)
-                .addDetails(config.getSectionNotesEndpoint())
-                .setDuration(start));
         return deduplicate ? deduplicate(list) : list;
     }
 
@@ -315,16 +300,9 @@ public class BannerAPIService {
      * @return List of crns and attributes for given campus, term, and subject
      */
     public List<SectionAttribResponse> fetchSectionAttributes(String instID, String termID, String subjectID, boolean deduplicate) {
-        Instant start = Instant.now();
-        List<SectionAttribResponse> list = fetch(config.getSectionAttribEndpoint(), instID, termID, subjectID)
-                .body(new ParameterizedTypeReference<>() {
+        List<SectionAttribResponse> list =
+                fetch(config.getSectionAttribEndpoint(), instID, termID, subjectID, new ParameterizedTypeReference<>() {
                 });
-        LOGGER.info(new MessageBuilder(MessageBuilder.Type.BANNER)
-                .addDetails(instID)
-                .addDetails(termID)
-                .addDetails(subjectID)
-                .addDetails(config.getSectionAttribEndpoint())
-                .setDuration(start));
         return deduplicate ? deduplicate(list) : list;
     }
 
@@ -352,16 +330,9 @@ public class BannerAPIService {
      * @return List of crns and enrolled / waitlist status for given campus, term, and subject
      */
     public List<SectionCountsResponse> fetchSectionCounts(String instID, String termID, String subjectID, boolean deduplicate) {
-        Instant start = Instant.now();
-        List<SectionCountsResponse> list = fetch(config.getSectionCountsEndpoint(), instID, termID, subjectID)
-                .body(new ParameterizedTypeReference<>() {
+        List<SectionCountsResponse> list =
+                fetch(config.getSectionCountsEndpoint(), instID, termID, subjectID, new ParameterizedTypeReference<>() {
                 });
-        LOGGER.info(new MessageBuilder(MessageBuilder.Type.BANNER)
-                .addDetails(instID)
-                .addDetails(termID)
-                .addDetails(subjectID)
-                .addDetails(config.getSectionCountsEndpoint())
-                .setDuration(start));
         return deduplicate ? deduplicate(list) : list;
     }
 
@@ -388,16 +359,9 @@ public class BannerAPIService {
      * @return List of crns and section number and instructor for given campus, term, and subject
      */
     public List<BaseSectionResponse> fetchSectionInstructors(String instID, String termID, String subjectID, boolean deduplicate) {
-        Instant start = Instant.now();
-        List<BaseSectionResponse> list = fetch(config.getBaseSectionEndpoint(), instID, termID, subjectID)
-                .body(new ParameterizedTypeReference<>() {
+        List<BaseSectionResponse> list =
+                fetch(config.getBaseSectionEndpoint(), instID, termID, subjectID, new ParameterizedTypeReference<>() {
                 });
-        LOGGER.info(new MessageBuilder(MessageBuilder.Type.BANNER)
-                .addDetails(instID)
-                .addDetails(termID)
-                .addDetails(subjectID)
-                .addDetails(config.getBaseSectionEndpoint())
-                .setDuration(start));
         return deduplicate ? deduplicate(list) : list;
     }
 
@@ -425,16 +389,9 @@ public class BannerAPIService {
      * @return List of crns and meeting details for given campus, term, and subject
      */
     public List<MeetingsResponse> fetchMeetings(String instID, String termID, String subjectID, boolean deduplicate) {
-        Instant start = Instant.now();
-        List<MeetingsResponse> list = fetch(config.getMeetingsEndpoint(), instID, termID, subjectID)
-                .body(new ParameterizedTypeReference<>() {
+        List<MeetingsResponse> list =
+                fetch(config.getMeetingsEndpoint(), instID, termID, subjectID, new ParameterizedTypeReference<>() {
                 });
-        LOGGER.info(new MessageBuilder(MessageBuilder.Type.BANNER)
-                .addDetails(instID)
-                .addDetails(termID)
-                .addDetails(subjectID)
-                .addDetails(config.getMeetingsEndpoint())
-                .setDuration(start));
         return deduplicate ? deduplicate(list) : list;
     }
 
