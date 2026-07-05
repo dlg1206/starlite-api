@@ -227,9 +227,37 @@ public class CourseService {
         // todo store results
     }
 
+    /**
+     * Fetch all courses for subjects as DTOs
+     *
+     * @param campusCode  Campus code
+     * @param termCode    Term code
+     * @param subjectCode Subject to fetch courses for
+     * @param detailed    Return detailed course information
+     * @return List of courseIDs that match the filter if provided
+     */
+    public List<? extends CourseDTO> fetchCourseDTOs(String campusCode, String termCode, String subjectCode, boolean detailed) {
+        // wrapper for filter method
+        return fetchCourseDTOs(campusCode, termCode, List.of(subjectCode), detailed, null);
+    }
 
     /**
-     * Fetch all courseIDs for subjects as DTOs
+     * Fetch all courses for subjects as DTOs
+     *
+     * @param campusCode  Campus code
+     * @param termCode    Term code
+     * @param subjectCode Subject to fetch courses for
+     * @param detailed    Return detailed course information
+     * @return List of courseIDs that match the filter if provided
+     */
+    public List<? extends CourseDTO> fetchCourseDTOs(String campusCode, String termCode, String subjectCode, boolean detailed, CourseFilterMappable filterRequest) {
+        // wrapper for filter method
+        return fetchCourseDTOs(campusCode, termCode, List.of(subjectCode), detailed, filterRequest);
+    }
+
+
+    /**
+     * Fetch all courses for subjects as DTOs
      *
      * @param campusCode   Campus code
      * @param termCode     Term code
@@ -243,7 +271,7 @@ public class CourseService {
     }
 
     /**
-     * Fetch all courseIDs for subjects as DTOs
+     * Fetch all courses for subjects as DTOs
      *
      * @param campusCode    Campus code
      * @param termCode      Term code

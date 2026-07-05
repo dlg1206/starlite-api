@@ -48,6 +48,26 @@ public class Util {
     }
 
     /**
+     * Build a complex uri with optional params for logging
+     *
+     * @param campusCode  Campus code to search for subjects
+     * @param termCode    Term code to search for subjects
+     * @param subjectCode Subject code to filter for
+     * @param detailed    Include section and meeting details in response
+     * @return Formatted uri
+     */
+    public static String buildCoursesUri(String campusCode, String termCode, String subjectCode, boolean detailed) {
+
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .fromPath("/campuses/%s/terms/%s/subjects/%s".formatted(campusCode, termCode, subjectCode));
+        // add detailed param if provided
+        if (detailed)
+            builder.queryParam("detailed", "true");
+        // build
+        return builder.toUriString();
+    }
+
+    /**
      * Append 's' if appropriate
      *
      * @param quantity Quantity of subject

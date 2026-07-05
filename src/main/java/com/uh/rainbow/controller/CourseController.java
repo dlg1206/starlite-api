@@ -2,9 +2,7 @@ package com.uh.rainbow.controller;
 
 import com.uh.rainbow.request.CourseFilterRequest;
 import com.uh.rainbow.response.CourseResponse;
-import com.uh.rainbow.response.IdentifierResponse;
 import com.uh.rainbow.service.CourseService;
-import com.uh.rainbow.service.SubjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -30,22 +28,7 @@ public class CourseController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(CourseController.class);
 
-    private final SubjectService subjectService;
     private final CourseService courseService;
-
-    /**
-     * GET Endpoint: /campuses/{campusCode}/terms/{termCode}/subjects
-     * Get list of subjects for a given campus and term
-     *
-     * @param campusCode Campus code to search for subjects
-     * @param termCode   Term code to search for subjects
-     * @return List of subjects for a given campus and term
-     */
-    @GetMapping(value = "/{campusCode}/terms/{termCode}/subjects")
-    public ResponseEntity<IdentifierResponse> getSubjects(@PathVariable String campusCode, @PathVariable String termCode) {
-        LOGGER.info("GET | /{}/terms/{}/subjects | Fetching subject codes", campusCode, termCode);
-        return ResponseEntity.ok(new IdentifierResponse(subjectService.fetchSubjectIdentifierDTOs(campusCode, termCode)));
-    }
 
     /**
      * GET Endpoint: /campuses/{campusCode}/terms/{termCode}/courseIDs
@@ -69,8 +52,8 @@ public class CourseController {
     }
 
     /**
-     * POST Endpoint: /campuses/{campusCode}/terms/{termCode}/courseIDs
-     * Search for courseIDs for a given campus and term with a filter
+     * POST Endpoint: /campuses/{campusCode}/terms/{termCode}/courses
+     * Search for courses for a given campus and term with a filter
      *
      * @param campusCode Campus code to search for subjects
      * @param termCode   Term code to search for subjects
