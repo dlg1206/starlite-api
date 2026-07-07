@@ -1,0 +1,10 @@
+{
+  "timestamp": "<timestamp>",
+  "error": "<error message>",
+  "invalid_course_ids": [
+    {
+      "subject_code": "<valid subject code>",
+      "number": "<invalid number>"
+    }
+  ]
+}

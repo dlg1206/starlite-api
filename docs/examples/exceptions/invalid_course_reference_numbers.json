@@ -1,0 +1,13 @@
+{
+  "timestamp": "<timestamp>",
+  "error": "<error message>",
+  "invalid_crns": [
+    {
+      "subject_code": "<valid subject code>",
+      "number": "<valid number>",
+      "crns": [
+        "<invalid crn>"
+      ]
+    }
+  ]
+}

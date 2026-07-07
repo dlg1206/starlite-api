@@ -1,0 +1,9 @@
+{
+  "timestamp": "<timestamp>",
+  "identifiers": [
+    {
+      "id": "<id or code>",
+      "value": "<name or meaning>"
+    }
+  ]
+}

@@ -33,8 +33,8 @@ public class Section implements TimeBlock {
     private final int curWaitlist;
     private final int maxWaitlist;
     private final List<String> attributes;      // General Ed/Focus/Special Designation
-    private final List<String> descriptions;    // Appears above the section, see (BIOL 171L, 76946)
-    private final List<String> notes;           // Appears below the section, see (CEE 696, 77179)
+    private final List<String> descriptions;
+    private final List<String> notes;
     @Getter
     private final List<Meeting> meetings;
 

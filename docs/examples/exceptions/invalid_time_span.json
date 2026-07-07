@@ -1,0 +1,10 @@
+{
+  "timestamp": "<timestamp>",
+  "error": "<error message>",
+  "invalid_time_spans": [
+    {
+      "start": "<start timestamp>",
+      "end": "<start timestamp>"
+    }
+  ]
+}
