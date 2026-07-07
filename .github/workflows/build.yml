@@ -1,9 +1,9 @@
-name: Build and Test
+name: Build
 
 on: [ push ]
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: checkout
         uses: actions/checkout@v3.5.2
@@ -15,7 +15,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/actions/setup-gradle@v3
 
-      - name: Test
+      - name: Build with Gradle
         run: gradle clean build
