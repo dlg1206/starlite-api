@@ -61,4 +61,4 @@ API endpoint documentation can be found at [API Endpoints](docs/endpoints.md#api
 - [Filter Courses (Multiple Subjects)](docs/endpoints.md#filter-courses-multiple-subjects)
 - [Generate Schedules](docs/endpoints.md#generate-schedules)
 
-Insomnia documentation is also available [here](docs/rainbow-api-v2-docs.yaml).
+Insomnia documentation is also available [here](docs/starlite-api-v2-docs.yaml).
