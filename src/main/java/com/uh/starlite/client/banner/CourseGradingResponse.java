@@ -1,6 +1,7 @@
 package com.uh.starlite.client.banner;
 
-import com.uh.starlite.dto.GradingOption;
+
+import com.uh.starlite.enums.GradingOption;
 
 /***
  * DTO for fields from <a href="https://www.sis.hawaii.edu:9350/crseavail/api/course-grading">/course-grading</a> Banner9 API. Only relevant fields have been included.
@@ -20,6 +21,6 @@ public record CourseGradingResponse(String ssbsectCrn1, String code, String desc
      * @return {@link GradingOption}
      */
     public GradingOption toGradingOption() {
-        return new GradingOption(code, desc);
+        return GradingOption.fromCode(code);
     }
 }

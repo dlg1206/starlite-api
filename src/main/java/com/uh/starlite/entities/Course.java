@@ -1,9 +1,9 @@
 package com.uh.starlite.entities;
 
 import com.uh.starlite.dto.DetailedCourseDTO;
-import com.uh.starlite.dto.GradingOption;
 import com.uh.starlite.dto.ScheduledCourseDTO;
 import com.uh.starlite.dto.SimpleCourseDTO;
+import com.uh.starlite.enums.GradingOption;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -94,7 +94,7 @@ public class Course {
      * @return True if can audit this course, false otherise
      */
     public boolean canAudit() {
-        return gradingOptions.contains(new GradingOption("A", ""));
+        return gradingOptions.contains(GradingOption.AUDIT);
     }
 
     /**
@@ -105,7 +105,7 @@ public class Course {
     public SimpleCourseDTO toSimpleCourseDTO() {
         return new SimpleCourseDTO(courseID.subjectCode(), courseID.number(), name,
                 description, prereqDescription,
-                credits, gradingOptions.stream().map(GradingOption::description).sorted().toList(),
+                credits, gradingOptions.stream().map(GradingOption::getDescription).sorted().toList(),
                 majorRestriction, approvalAuthority,
                 startDate.toString(), endDate.toString(),
                 sections.size());
@@ -119,7 +119,7 @@ public class Course {
     public DetailedCourseDTO toDetailedCourseDTO() {
         return new DetailedCourseDTO(courseID.subjectCode(), courseID.number(), name,
                 description, prereqDescription,
-                credits, gradingOptions.stream().map(GradingOption::description).sorted().toList(),
+                credits, gradingOptions.stream().map(GradingOption::getDescription).sorted().toList(),
                 majorRestriction, approvalAuthority,
                 startDate.toString(), endDate.toString(),
                 sections.values().stream().map(Section::toSectionDTO).toList());
