@@ -9,19 +9,19 @@ RUN gradle build --no-daemon
 
 FROM eclipse-temurin:21-alpine AS runtime
 ENV API_VERSION=2.0.0
-LABEL name="rainbow-api"\
+LABEL name="starlite-api"\
       author="Derek Garcia" \
       github="dlg1206" \
       description="API service to navigate and search courses available at the University of Hawai'i"
 
-RUN adduser -D rainbow
-WORKDIR /rainbow
-COPY --from=build --chown=rainbow:rainbow /build/build/libs/*.jar /rainbow/rainbow.jar
+RUN adduser -D starlite
+WORKDIR /app
+COPY --from=build --chown=starlite:starlite /build/build/libs/*.jar /app/starlite.jar
 
-USER rainbow
+USER starlite
 EXPOSE 8080
 
-HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
-  CMD wget -qO- http://localhost:8080/health || exit 1
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD wget -qO- http://localhost:8080/api/v2/campuses || exit 1
 
-ENTRYPOINT ["java", "-jar", "rainbow.jar"]
+ENTRYPOINT ["java", "-jar", "starlite.jar"]

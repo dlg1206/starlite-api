@@ -1,6 +1,6 @@
 # API Endpoints
 
-> Insomnia documentation is also available [here](rainbow-api-v1-docs.yaml)
+> Insomnia documentation is also available [here](starlite-api-v2-docs.yaml)
 
 - [Get all Campuses](#get-all-campuses)
 - [Get all Terms](#get-all-terms)

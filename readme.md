@@ -1,4 +1,4 @@
-# Rainbow API v2
+# Starlite API v2
 
 > API that allows for searching for course details and generating schedules for the University of Hawai'i
 
@@ -29,7 +29,7 @@ gradle bootJar    # via Gradle
 2. Run jar
 
 ```bash
-java -jar ./build/libs/rainbow-2.0.0.jar
+java -jar ./build/libs/starlite-2.0.0.jar
 ```
 
 ### Docker (Recommended)
@@ -37,13 +37,13 @@ java -jar ./build/libs/rainbow-2.0.0.jar
 1. Build image
 
 ```bash
-docker build -t rainbow-api:2.0.0 .
+docker build -t starlite-api:2.0.0 .
 ```
 
 2. Run container
 
 ```bash
-docker run --rm -p 8080:8080 rainbow-api:2.0.0
+docker run --rm -p 8080:8080 starlite-api:2.0.0
 ```
 
 ## Usage
