@@ -3,7 +3,6 @@ package com.uh.starlite.service;
 import com.uh.starlite.client.banner.*;
 import com.uh.starlite.config.BannerClientConfig;
 import com.uh.starlite.util.Timer;
-import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,8 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Semaphore;
-
-import static com.uh.starlite.util.Util.callWithSemaphore;
+import java.util.function.Supplier;
 
 /**
  * <b>File:</b> BannerService.java
@@ -37,26 +35,42 @@ public class BannerAPIService {
     private final RestClient bannerClient;
     private final BannerClientConfig config;
     private final Semaphore bannerSemaphore;
-    @Getter
-    private final Semaphore bannerBatchSemaphore;
 
 
     /**
      * Create new Banner9 service
      *
-     * @param bannerClient         REST client for the Banner9 API
-     * @param config               Config for the REST client
-     * @param bannerSemaphore      Semaphore for limiting requests
-     * @param bannerBatchSemaphore Semaphore for limiting batch requests
+     * @param bannerClient    REST client for the Banner9 API
+     * @param config          Config for the REST client
+     * @param bannerSemaphore Semaphore for limiting requests
      */
     public BannerAPIService(RestClient bannerClient,
                             BannerClientConfig config,
-                            @Qualifier("bannerSemaphore") Semaphore bannerSemaphore,
-                            @Qualifier("bannerBatchSemaphore") Semaphore bannerBatchSemaphore) {
+                            @Qualifier("bannerSemaphore") Semaphore bannerSemaphore) {
         this.bannerClient = bannerClient;
         this.config = config;
         this.bannerSemaphore = bannerSemaphore;
-        this.bannerBatchSemaphore = bannerBatchSemaphore;
+    }
+
+    /**
+     * Semaphore wrapper to for synchronous methods
+     *
+     * @param semaphore Semaphore to acquire to limit
+     * @param call      Supplier representing the blocking call to execute
+     * @param <T>       Type of the result returned by the call
+     * @return Result of the call once a permit is acquired and the call completes
+     * @throws RuntimeException if the current thread is interrupted while waiting for a permit
+     */
+    public <T> T callWithSemaphore(Semaphore semaphore, Supplier<T> call) {
+        try {
+            semaphore.acquire();
+            return call.get();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Interrupted while waiting for permit", e);
+        } finally {
+            semaphore.release();
+        }
     }
 
 

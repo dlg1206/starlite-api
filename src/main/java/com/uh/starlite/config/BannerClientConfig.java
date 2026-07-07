@@ -107,14 +107,4 @@ public class BannerClientConfig {
     public Semaphore bannerConcurrencyLimiter() {
         return new Semaphore(BATCH_SIZE * maxConcurrentBatches);
     }
-
-    /**
-     * Create a semaphore to limit number of concurrent banner batch requests
-     *
-     * @return Semaphore
-     */
-    @Bean(name = "bannerBatchSemaphore")
-    public Semaphore bannerBatchLimiter() {
-        return new Semaphore(maxConcurrentBatches);
-    }
 }

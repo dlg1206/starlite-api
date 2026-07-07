@@ -17,7 +17,8 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-import static com.uh.starlite.util.Util.*;
+import static com.uh.starlite.util.Util.distinct;
+import static com.uh.starlite.util.Util.pluralS;
 
 /**
  * <b>File:</b> CampusService.java
@@ -47,6 +48,7 @@ public class CourseService {
      */
     @Async("bannerTaskExecutor")
     protected CompletableFuture<SubjectResult> fetchSubjectData(String campusCode, String termCode, String subjectCode) {
+        // @Async allows each service to run in parallel
         // course details
         CompletableFuture<List<CoursesResponse>> crlFuture = bannerAPIService.fetchCoursesAsync(campusCode, termCode, subjectCode);
         CompletableFuture<List<CourseDescResponse>> cdrlFuture = bannerAPIService.fetchCourseDescriptionsAsync(campusCode, termCode, subjectCode);
@@ -145,23 +147,18 @@ public class CourseService {
      */
     private CompletableFuture<List<Course>> constructCoursesJob(String campusCode, String termCode, String subjectCode) {
         // wrap batch fetch with semaphore but not construct - no limit to concurrent constructs
+        LOGGER.info("Fetching course details for {}:{}:{}", campusCode, termCode, subjectCode);
         Timer fetchTimer = new Timer();
-        return asyncCallWithSemaphore(bannerAPIService.getBannerBatchSemaphore(),
-                () -> {
-                    // semaphore acquired
-                    LOGGER.info("Acquired permit for {}:{}:{} after {} wait", campusCode, termCode, subjectCode, fetchTimer.formatElapsed());
-                    LOGGER.info("Fetching course details for {}:{}:{}", campusCode, termCode, subjectCode);
-                    fetchTimer.restart();
-                    return fetchSubjectData(campusCode, termCode, subjectCode);
-                }).thenApply(subjectResult -> {
-            // construct courses after done fetching data
-            LOGGER.info("Fetched course details for {}:{}:{} in {}", campusCode, termCode, subjectCode, fetchTimer.formatElapsed());
-            LOGGER.info("Constructing {}:{}:{} courses", campusCode, termCode, subjectCode);
-            Timer constructTimer = new Timer();
-            List<Course> courses = constructCourses(subjectResult);
-            LOGGER.info("Constructed {} {}:{}:{} courses in {}", courses.size(), campusCode, termCode, subjectCode, constructTimer.formatElapsed());
-            return courses;
-        });
+        return fetchSubjectData(campusCode, termCode, subjectCode)
+                .thenApply(subjectResult -> {
+                    // construct courses after done fetching data
+                    LOGGER.info("Fetched course details for {}:{}:{} in {}", campusCode, termCode, subjectCode, fetchTimer.formatElapsed());
+                    LOGGER.info("Constructing {}:{}:{} courses", campusCode, termCode, subjectCode);
+                    Timer constructTimer = new Timer();
+                    List<Course> courses = constructCourses(subjectResult);
+                    LOGGER.info("Constructed {} {}:{}:{} courses in {}", courses.size(), campusCode, termCode, subjectCode, constructTimer.formatElapsed());
+                    return courses;
+                });
     }
 
     /**
