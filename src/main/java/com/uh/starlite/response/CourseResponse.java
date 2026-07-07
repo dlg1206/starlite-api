@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author Derek Garcia
  */
-@JsonPropertyOrder({"timestamp", "identifiers"})
+@JsonPropertyOrder({"timestamp", "courses"})
 public class CourseResponse {
     // custom comparator that extracts number from course number since can include letters
     private static final Comparator<CourseDTO> BY_COURSE_NUMBER = Comparator
@@ -25,6 +25,8 @@ public class CourseResponse {
                 return Integer.parseInt(num.substring(0, i));
             })
             .thenComparing(CourseDTO::getCourseNumber);
+
+    private static final Comparator<CourseDTO> BY_SUBJECT_CODE = Comparator.comparing(CourseDTO::getSubjectCode);
 
     public final Date timestamp;
     public final List<? extends CourseDTO> courses;
@@ -37,7 +39,8 @@ public class CourseResponse {
     public CourseResponse(List<? extends CourseDTO> courses) {
         this.timestamp = new Date();
         this.courses = courses.stream()
-                .sorted(BY_COURSE_NUMBER)
+                // sort by subject then number
+                .sorted(BY_SUBJECT_CODE.thenComparing(BY_COURSE_NUMBER))
                 .toList();
     }
 
