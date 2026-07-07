@@ -123,9 +123,9 @@ public class BannerAPIService {
      * @return List of subjects
      */
     public List<SubjectsResponse> fetchSubjects() {
-        return fetch(UriComponentsBuilder.fromPath(config.getSubjectsEndpoint()).build().toUriString(),
-                new ParameterizedTypeReference<>() {
-                });
+        String uri = UriComponentsBuilder.fromPath(config.getSubjectsEndpoint()).build().toUriString();
+        return callWithSemaphore(bannerSemaphore, () -> fetch(uri, new ParameterizedTypeReference<>() {
+        }));
     }
 
     /**
