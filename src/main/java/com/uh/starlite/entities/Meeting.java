@@ -1,8 +1,8 @@
 package com.uh.starlite.entities;
 
-
 import com.uh.starlite.dto.MeetingDTO;
 import com.uh.starlite.enums.Day;
+import lombok.Getter;
 
 import java.time.LocalTime;
 import java.util.Objects;
@@ -14,14 +14,36 @@ import java.util.Objects;
  *
  * @author Derek Garcia
  */
-public record Meeting(Day day, LocalTime startTime, LocalTime endTime, String buildingCode,
-                      String roomCode) implements TimeSpan {
+public class Meeting implements TimeSpan {
+
+
+    private final Day day;
+    @Getter
+    private final boolean isOnline;
+    private final boolean isAsync;
+    private final LocalTime startTime;
+    private final LocalTime endTime;
+    private final String buildingCode;
+    private final String roomCode;
 
     /**
-     * @return If this meeting is online
+     * Create a new meeting
+     *
+     * @param day {@link Day} of week meeting occurs on
+     * @param startTime Start time of meeting
+     * @param endTime End time of meeting
+     * @param buildingCode Building code
+     * @param roomCode Room code
      */
-    public boolean isOnline() {
-        return buildingCode != null && buildingCode.equals("ONLINE");
+    public Meeting(Day day, LocalTime startTime, LocalTime endTime, String buildingCode, String roomCode){
+        this.day = day;
+        this.isOnline = buildingCode != null && buildingCode.equals("ONLINE");
+        this.isAsync = roomCode != null && roomCode.equals("ASYNC");
+        this.startTime = startTime;
+        this.endTime = endTime;
+        // only add codes if not online / async
+        this.buildingCode = this.isOnline ? null : buildingCode;
+        this.roomCode = this.isAsync ? null : roomCode;
     }
 
     /**
@@ -38,7 +60,7 @@ public record Meeting(Day day, LocalTime startTime, LocalTime endTime, String bu
      */
     @Override
     public boolean isAsync() {
-        return roomCode != null && roomCode.equals("ASYNC");
+        return isAsync;
     }
 
     /**

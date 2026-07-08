@@ -47,10 +47,13 @@ public record MeetingsResponse(String ssbsectCrn, String bldgCode, String roomCo
         List<String> days = Arrays.asList(sunDay, monDay, tueDay, wedDay, thuDay, friDay, satDay);
 
         // if no days assigned, return TBA section
-        if (days.stream().allMatch(Objects::isNull))
+        if (days.stream().allMatch(Objects::isNull)) {
             return (startTime == null && endTime == null)
-                    ? List.of() // don't return any day times aren't assigned
+                    // online async
+                    ? List.of(new Meeting(null, null, null, bldgCode, roomCode))
+                    // TBA section
                     : List.of(new Meeting(Day.TBD, startTime, endTime, bldgCode, roomCode));
+        }
 
         // else get all meeting days
         return days.stream()
