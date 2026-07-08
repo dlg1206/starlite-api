@@ -5,7 +5,7 @@ import lombok.Getter;
 /**
  * <b>File:</b> GradingOption.java
  * <p>
- * <b>Description:</b>
+ * <b>Description:</b> Grading option
  *
  * @author Derek Garcia
  */
@@ -13,6 +13,7 @@ import lombok.Getter;
 public enum GradingOption {
     GRADE("G", "Letter Plus + Minus"),
     PASS_FAIL("C", "Credit/No Credit"),
+    EXAM("M", "Credit By Exam"),
     AUDIT("A", "Audit");
 
     private final String code;
@@ -43,6 +44,7 @@ public enum GradingOption {
             case "g" -> GRADE;
             case "c" -> PASS_FAIL;
             case "a" -> AUDIT;
+            case "m" -> EXAM;
             default -> throw new IllegalArgumentException("Unknown grading code: " + code);
         };
     }
