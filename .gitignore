@@ -37,7 +37,9 @@ out/
 .vscode/
 
 # npm
-/node_modules/
+node_modules/
 
 # Developing files
 test.java
+
+.memo

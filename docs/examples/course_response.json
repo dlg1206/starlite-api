@@ -1,0 +1,56 @@
+{
+  "timestamp": "<timestamp>",
+  "courses": [
+    {
+      "subject_code": "<subject code>",
+      "course_number": "<course number>",
+      "name": "<name / title of course>",
+      "description": "<course description>",
+      "prereq_description": "<prereq details>",
+      "credits": "<course credits>",
+      "grading_options": [
+        "<available grading options"
+      ],
+      "major_restriction": "<boolean whether this course has major restriction>",
+      "approval_authority": "<approval authority (Instructor, Department, etc) required, null if none>",
+      "start_date": "<start date of course>",
+      "end_date": "<end date of course>",
+      "sections": [
+        {
+          "crn": "<course reference number of section>",
+          "section_number": "<section number>",
+          // instructor is null if one hasn't been assigned
+          "instructor": {
+            "first_name": "<instructor first name>",
+            "middle_initial": "<instructor middle initial / name>",
+            "last_name": "<instructor last name>",
+            "username": "<instructor UH username>"
+          },
+          "format": "<class format - ONSITE (in-person), ONLINE, HYBRID>",
+          "cur_enrolled": "<current number of students enrolled>",
+          "max_enrolled": "<section capacity",
+          "cur_waitlist": "<current number of students waitlisted>",
+          "max_waitlist": "<waitlist capacity",
+          "attributes": [
+            "<additional attributes (Writing intensive (WI), Non-introductory (NI), etc)>"
+          ],
+          "descriptions": [
+            "<additional descriptions - usually alternate names for special topics courses>"
+          ],
+          "notes": [
+            "<additional notes>"
+          ],
+          "meetings": [
+            {
+              "day": "<day of week or TBA>",
+              "start_time": "<HHmm start time>",
+              "end_time": "<HHmm end time>",
+              "building_code": "<building code>",
+              "room_code": "<room number>"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

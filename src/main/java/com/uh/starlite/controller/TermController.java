@@ -1,0 +1,43 @@
+package com.uh.starlite.controller;
+
+
+import com.uh.starlite.response.IdentifierResponse;
+import com.uh.starlite.service.TermService;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * <b>File:</b> TermController.java
+ * <p>
+ * <b>Description:</b> Controller that handles fetching term data
+ *
+ * @author Derek Garcia
+ */
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/campuses")
+public class TermController {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(TermController.class);
+
+    private final TermService termService;
+
+    /**
+     * GET Endpoint: /campuses/{campusCode}/terms
+     * Get list of terms a campus has details for
+     *
+     * @param campusCode Campus code
+     * @return List of term names and their ID's
+     */
+    @GetMapping(value = "/{campusCode}/terms")
+    public ResponseEntity<IdentifierResponse> getAllTerms(@PathVariable String campusCode) {
+        LOGGER.info("GET | /campuses/{}/terms | Fetching all term code identifiers", campusCode);
+        return ResponseEntity.ok(new IdentifierResponse(termService.fetchTermCodeIdentifierDTOs(campusCode)));
+    }
+}

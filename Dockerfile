@@ -1,31 +1,27 @@
-#
-# Build Rainbow API jar
-#
-FROM gradle:8.12.0-jdk21-alpine AS build
+FROM gradle:9.6.0-jdk21-alpine AS build
+WORKDIR /build
+# cache deps
+COPY --chown=gradle:gradle build.gradle settings.gradle /build/
+RUN gradle build --no-daemon -x test || return 0
+# build
+COPY --chown=gradle:gradle src/ /build/src/
+RUN gradle build --no-daemon
 
-WORKDIR /home/gradle
-COPY --chown=gradle:gradle build.gradle src/ /home/gradle/src/
-COPY --chown=gradle:gradle build.gradle settings.gradle /home/gradle/
-
-RUN gradle build --no-daemon  # no daemon since building only once
-
-#
-# Launch Rainbow API
-#
 FROM eclipse-temurin:21-alpine AS runtime
-
-ARG API_NAME=rainbow-api
-ARG API_VERSION=1.1.0
-
-LABEL name=$API_NAME \
-      version=$API_VERSION \
+ENV API_VERSION=2.0.0
+LABEL name="starlite-api"\
       author="Derek Garcia" \
-      description="API service to navigate and search courses available at the University of Hawaii"
+      github="dlg1206" \
+      description="API service to navigate and search courses available at the University of Hawai'i"
 
-RUN adduser -D rainbow
+RUN adduser -D starlite
+WORKDIR /app
+COPY --from=build --chown=starlite:starlite /build/build/libs/*.jar /app/starlite.jar
 
-WORKDIR /rainbow
-COPY --from=build --chown=rainbow:rainbow /home/gradle/build/libs/$API_NAME-$API_VERSION.jar /rainbow/rainbow.jar
+USER starlite
+EXPOSE 8080
 
-USER rainbow
-ENTRYPOINT ["java","-jar","rainbow.jar"]
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD wget -qO- http://localhost:8080/api/v2/actuator/health || exit 1
+
+ENTRYPOINT ["java", "-jar", "starlite.jar"]

@@ -1,0 +1,10 @@
+{
+  "timestamp": "<timestamp>",
+  "field_errors": [
+    {
+      "field": "<key in request body>",
+      "rejected_value": "<rejected value>",
+      "reason": "<reason failed>"
+    }
+  ]
+}

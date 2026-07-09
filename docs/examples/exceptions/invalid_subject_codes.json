@@ -1,0 +1,9 @@
+{
+  "timestamp": "<timestamp>",
+  "error": "<error message>",
+  "campus_code": "<valid campus code>",
+  "term_code": "<valid term code>",
+  "invalid_subject_codes": [
+    "<invalid subject codes>"
+  ]
+}
