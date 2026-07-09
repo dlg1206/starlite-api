@@ -183,7 +183,8 @@ public class Course {
             Matcher m = prereqRegex.matcher(description);
             // if find match, extract and remove from destining
             if (m.find()) {
-                this.prereqDescription = m.group(1).strip();
+                String prereqDescription = m.group(1).strip();
+                this.prereqDescription = prereqDescription.substring(0, 1).toUpperCase() + prereqDescription.substring(1);
                 description = description.replace(m.group(), "");
             }
             this.description = description;
