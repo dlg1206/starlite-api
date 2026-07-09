@@ -119,7 +119,7 @@ public record ScheduleRequest(Integer bufferTime,
      * @param start Start time block
      * @param end   End time block
      */
-    public record BlockDTO(Set<@NotBlank Day> days,
+    public record BlockDTO(Set<Day> days,
                            @NotNull @JsonFormat(pattern = "HH:mm") LocalTime start,
                            @NotNull @JsonFormat(pattern = "HH:mm") LocalTime end) {
 

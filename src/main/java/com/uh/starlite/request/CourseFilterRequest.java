@@ -7,6 +7,7 @@ import com.uh.starlite.filter.CourseFilter;
 import com.uh.starlite.filter.CourseFilterMappable;
 import com.uh.starlite.service.CourseFilterMapper;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 import java.time.LocalTime;
@@ -46,8 +47,8 @@ public record CourseFilterRequest(
         Set<@NotBlank String> rejectCourseNumbers,
         @JsonProperty("accept_course_ids") Set<@NotBlank String> acceptCourseIDs,
         @JsonProperty("reject_course_ids") Set<@NotBlank String> rejectCourseIDs,
-        Set<@NotBlank Day> acceptDays,
-        Set<@NotBlank Day> rejectDays,
+        Set<@NotNull Day> acceptDays,
+        Set<@NotNull Day> rejectDays,
         @JsonFormat(pattern = "HH:mm") LocalTime startAfter,
         @JsonFormat(pattern = "HH:mm") LocalTime endBefore,
         Boolean onlyOnline,
