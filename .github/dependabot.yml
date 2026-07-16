@@ -6,10 +6,15 @@ updates:
       interval: "weekly"
     open-pull-requests-limit: 10
     groups:
-      spring-boot:
+      # bump minor and patch updates
+      minor:
         patterns:
-          - "org.springframework.boot:*"
-          - "io.spring.dependency-management:*"
+          - "*"
         update-types:
           - "minor"
           - "patch"
+    # stop major updates
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
