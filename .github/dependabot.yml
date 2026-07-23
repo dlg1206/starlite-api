@@ -10,14 +10,13 @@ updates:
       timezone: "UTC"
     open-pull-requests-limit: 10
     groups:
+      # bump minor and patch updates
       all:
-        # bump minor and patch updates
-        minor:
-          patterns:
-            - "*"
-          update-types:
-            - "minor"
-            - "patch"
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
     # stop major updates
     ignore:
       - dependency-name: "*"
