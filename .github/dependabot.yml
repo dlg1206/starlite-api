@@ -1,19 +1,45 @@
 version: 2
 updates:
+  # starlite-api
   - package-ecosystem: "gradle"
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "UTC"
     open-pull-requests-limit: 10
     groups:
-      # bump minor and patch updates
-      minor:
+      all:
+        # bump minor and patch updates
+        minor:
+          patterns:
+            - "*"
+          update-types:
+            - "minor"
+            - "patch"
+    # stop major updates
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
+
+  # CI
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 10
+    groups:
+      github-actions:
         patterns:
           - "*"
         update-types:
           - "minor"
           - "patch"
-    # stop major updates
     ignore:
       - dependency-name: "*"
         update-types:
