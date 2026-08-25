@@ -675,7 +675,7 @@ collection:
 
         | Response Code | Type                                   | Description                                                        |
         |:-------------:|----------------------------------------|--------------------------------------------------------------------|
-        |      200      | ScheduleResponse                       | List of schedules and their details                                |
+        |      200      | SchedulesResponse                       | List of schedules and their details                               |
         |      400      | InvalidCampusCodeException             | Requested campus code does not exist                               |
         |      400      | InvalidTermCodeException               | Requested term code does exist for the provided campus             |
         |      400      | InvalidSubjectCodesException           | Requested subject code does exist for the provided campus and term |

@@ -21,9 +21,9 @@
 
 ### Responses
 
-| Response Code | Type               | Description                                          |
-|:-------------:|--------------------|------------------------------------------------------|
-|      200      | IdentifierResponse | List of University of Hawai'i campus codes and names |
+| Response Code | Type                                                    | Description                                          |
+|:-------------:|---------------------------------------------------------|------------------------------------------------------|
+|      200      | [IdentifierResponse](examples/identifier_response.json) | List of University of Hawai'i campus codes and names |
 
 ### Example
 
@@ -47,10 +47,10 @@ curl http://localhost:8080/api/v2/campuses
 
 ### Responses
 
-| Response Code | Type                       | Description                          |
-|:-------------:|----------------------------|--------------------------------------|
-|      200      | IdentifierResponse         | List of term codes and names         |
-|      400      | InvalidCampusCodeException | Requested campus code does not exist |
+| Response Code | Type                                                                       | Description                          |
+|:-------------:|----------------------------------------------------------------------------|--------------------------------------|
+|      200      | [IdentifierResponse](examples/identifier_response.json)                    | List of term codes and names         |
+|      400      | [InvalidCampusCodeException](examples/exceptions/invalid_campus_code.json) | Requested campus code does not exist |
 
 ### Example
 
@@ -76,11 +76,11 @@ curl http://localhost:8080/api/v2/campuses/man/terms
 
 ### Responses
 
-| Response Code | Type                       | Description                                            |
-|:-------------:|----------------------------|--------------------------------------------------------|
-|      200      | IdentifierResponse         | List of subject names and IDs                          |
-|      400      | InvalidCampusCodeException | Requested campus code does not exist                   |
-|      400      | InvalidTermCodeException   | Requested term code does exist for the provided campus |
+| Response Code | Type                                                                       | Description                                            |
+|:-------------:|----------------------------------------------------------------------------|--------------------------------------------------------|
+|      200      | [IdentifierResponse](examples/identifier_response.json)                    | List of subject names and IDs                          |
+|      400      | [InvalidCampusCodeException](examples/exceptions/invalid_campus_code.json) | Requested campus code does not exist                   |
+|      400      | [InvalidTermCodeException](examples/exceptions/invalid_term_code.json)     | Requested term code does exist for the provided campus |
 
 ### Example
 
@@ -113,12 +113,12 @@ curl http://localhost:8080/api/v2/campuses/man/terms/202710/subjects
 
 ### Responses
 
-| Response Code | Type                         | Description                                                        |
-|:-------------:|------------------------------|--------------------------------------------------------------------|
-|      200      | IdentifierResponse           | List of courses and their details                                  |
-|      400      | InvalidCampusCodeException   | Requested campus code does not exist                               |
-|      400      | InvalidTermCodeException     | Requested term code does exist for the provided campus             |
-|      400      | InvalidSubjectCodesException | Requested subject code does exist for the provided campus and term |
+| Response Code | Type                                                                           | Description                                                        |
+|:-------------:|--------------------------------------------------------------------------------|--------------------------------------------------------------------|
+|      200      | [IdentifierResponse](examples/identifier_response.json)                        | List of courses and their details                                  |
+|      400      | [InvalidCampusCodeException](examples/exceptions/invalid_campus_code.json)     | Requested campus code does not exist                               |
+|      400      | [InvalidTermCodeException](examples/exceptions/invalid_term_code.json)         | Requested term code does exist for the provided campus             |
+|      400      | [InvalidSubjectCodesException](examples/exceptions/invalid_subject_codes.json) | Requested subject code does exist for the provided campus and term |
 
 ### Example
 
@@ -179,13 +179,13 @@ curl http://localhost:8080/api/v2/campuses/man/terms/202710/subjects/ics
 
 ### Responses
 
-| Response Code | Type                         | Description                                                        |
-|:-------------:|------------------------------|--------------------------------------------------------------------|
-|      200      | CourseResponse               | List of courses and their details                                  |
-|      400      | InvalidCampusCodeException   | Requested campus code does not exist                               |
-|      400      | InvalidTermCodeException     | Requested term code does exist for the provided campus             |
-|      400      | InvalidSubjectCodesException | Requested subject code does exist for the provided campus and term |
-|      400      | InvalidRequestBodyResponse   | Request body is invalid                                            |
+| Response Code | Type                                                                           | Description                                                        |
+|:-------------:|--------------------------------------------------------------------------------|--------------------------------------------------------------------|
+|      200      | [CourseResponse](examples/course_response.json)                                | List of courses and their details                                  |
+|      400      | [InvalidCampusCodeException](examples/exceptions/invalid_campus_code.json)     | Requested campus code does not exist                               |
+|      400      | [InvalidTermCodeException](examples/exceptions/invalid_term_code.json)         | Requested term code does exist for the provided campus             |
+|      400      | [InvalidSubjectCodesException](examples/exceptions/invalid_subject_codes.json) | Requested subject code does exist for the provided campus and term |
+|      400      | [InvalidRequestBodyResponse](examples/exceptions/invalid_request_body.json)    | Request body is invalid                                            |
 
 ### Examples
 
@@ -243,12 +243,12 @@ curl --request POST \
 
 ### Responses
 
-| Response Code | Type                         | Description                                                        |
-|:-------------:|------------------------------|--------------------------------------------------------------------|
-|      200      | CourseResponse               | List of courses and their details                                  |
-|      400      | InvalidCampusCodeException   | Requested campus code does not exist                               |
-|      400      | InvalidTermCodeException     | Requested term code does exist for the provided campus             |
-|      400      | InvalidSubjectCodesException | Requested subject code does exist for the provided campus and term |
+| Response Code | Type                                                                           | Description                                                        |
+|:-------------:|--------------------------------------------------------------------------------|--------------------------------------------------------------------|
+|      200      | [CourseResponse](examples/course_response.json)                                | List of courses and their details                                  |
+|      400      | [InvalidCampusCodeException](examples/exceptions/invalid_campus_code.json)     | Requested campus code does not exist                               |
+|      400      | [InvalidTermCodeException](examples/exceptions/invalid_term_code.json)         | Requested term code does exist for the provided campus             |
+|      400      | [InvalidSubjectCodesException](examples/exceptions/invalid_subject_codes.json) | Requested subject code does exist for the provided campus and term |
 
 ### Example
 
@@ -316,13 +316,13 @@ curl http://localhost:8080/api/v2/campuses/man/terms/202710/subjects/icss?subjec
 
 ### Responses
 
-| Response Code | Type                         | Description                                                        |
-|:-------------:|------------------------------|--------------------------------------------------------------------|
-|      200      | CourseResponse               | List of courses and their details                                  |
-|      400      | InvalidCampusCodeException   | Requested campus code does not exist                               |
-|      400      | InvalidTermCodeException     | Requested term code does exist for the provided campus             |
-|      400      | InvalidSubjectCodesException | Requested subject code does exist for the provided campus and term |
-|      400      | InvalidRequestBodyResponse   | Request body is invalid                                            |
+| Response Code | Type                                                                           | Description                                                        |
+|:-------------:|--------------------------------------------------------------------------------|--------------------------------------------------------------------|
+|      200      | [CourseResponse](examples/course_response.json)                                | List of courses and their details                                  |
+|      400      | [InvalidCampusCodeException](examples/exceptions/invalid_campus_code.json)     | Requested campus code does not exist                               |
+|      400      | [InvalidTermCodeException](examples/exceptions/invalid_term_code.json)         | Requested term code does exist for the provided campus             |
+|      400      | [InvalidSubjectCodesException](examples/exceptions/invalid_subject_codes.json) | Requested subject code does exist for the provided campus and term |
+|      400      | [InvalidRequestBodyResponse](examples/exceptions/invalid_request_body.json)    | Request body is invalid                                            |
 
 ### Example
 
@@ -397,16 +397,16 @@ _Block_
 
 ### Responses
 
-| Response Code | Type                                   | Description                                                        |
-|:-------------:|----------------------------------------|--------------------------------------------------------------------|
-|      200      | ScheduleResponse                       | List of schedules and their details                                |
-|      400      | InvalidCampusCodeException             | Requested campus code does not exist                               |
-|      400      | InvalidTermCodeException               | Requested term code does exist for the provided campus             |
-|      400      | InvalidSubjectCodesException           | Requested subject code does exist for the provided campus and term |
-|      400      | InvalidRequestBodyResponse             | Request body is invalid                                            |
-|      400      | InvalidCourseIDsException              | Course number uses a wildcard or number not found for subject      |
-|      400      | InvalidCourseReferenceNumbersException | Course reference number not found for course                       |
-|      400      | InvalidTimeSpansException              | Block time starts after it ends                                    |
+| Response Code | Type                                                                                                | Description                                                        |
+|:-------------:|-----------------------------------------------------------------------------------------------------|--------------------------------------------------------------------|
+|      200      | [SchedulesResponse](examples/schedules_response.json)                                               | List of schedules and their details                                |
+|      400      | [InvalidCampusCodeException](examples/exceptions/invalid_campus_code.json)                          | Requested campus code does not exist                               |
+|      400      | [InvalidTermCodeException](examples/exceptions/invalid_term_code.json)                              | Requested term code does exist for the provided campus             |
+|      400      | [InvalidSubjectCodesException](examples/exceptions/invalid_subject_codes.json)                      | Requested subject code does exist for the provided campus and term |
+|      400      | [InvalidRequestBodyResponse](examples/exceptions/invalid_request_body.json)                         | Request body is invalid                                            |
+|      400      | [InvalidCourseIDsException](examples/exceptions/invalid_course_ids.json)                            | Course number uses a wildcard or number not found for subject      |
+|      400      | [InvalidCourseReferenceNumbersException](examples/exceptions/invalid_course_reference_numbers.json) | Course reference number not found for course                       |
+|      400      | [InvalidTimeSpansException](examples/exceptions/invalid_time_span.json)                             | Block time starts after it ends                                    |
 
 ### Examples
 
