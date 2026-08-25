@@ -224,11 +224,10 @@ curl --request POST \
 
 ### Path Variables
 
-|  Variable   | Type   | Description                            |
-|:-----------:|--------|----------------------------------------|
-| campusCode  | String | UH campus code to get the subjects for |
-|  termCode   | String | Term code to get the subjects for      |
-| subjectCode | String | Subject code to get the courses for    |
+|  Variable  | Type   | Description                            |
+|:----------:|--------|----------------------------------------|
+| campusCode | String | UH campus code to get the subjects for |
+|  termCode  | String | Term code to get the subjects for      |
 
 ### Query Params
 
@@ -268,11 +267,10 @@ curl http://localhost:8080/api/v2/campuses/man/terms/202710/subjects/icss?subjec
 
 ### Path Variables
 
-|  Variable   | Type   | Description                            |
-|:-----------:|--------|----------------------------------------|
-| campusCode  | String | UH campus code to get the subjects for |
-|  termCode   | String | Term code to get the subjects for      |
-| subjectCode | String | Subject code to get the courses for    |
+|  Variable  | Type   | Description                            |
+|:----------:|--------|----------------------------------------|
+| campusCode | String | UH campus code to get the subjects for |
+|  termCode  | String | Term code to get the subjects for      |
 
 ### Query Params
 
