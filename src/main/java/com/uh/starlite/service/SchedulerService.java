@@ -1,6 +1,6 @@
 package com.uh.starlite.service;
 
-import com.uh.starlite.dto.ScheduledCourseDTO;
+import com.uh.starlite.dto.ScheduleDTO;
 import com.uh.starlite.entities.Course;
 import com.uh.starlite.entities.CourseID;
 import com.uh.starlite.entities.TimeBlock;
@@ -57,14 +57,14 @@ public class SchedulerService {
     }
 
     /**
-     * Generate all valid schedules for a list of courseIDs
+     * Generate all valid schedules for a list of course
      *
      * @param instID          Campus code
      * @param termID          Term code
      * @param scheduleRequest DTO with schedule options mappable to a course filter
-     * @return List of courseIDs that match the filter if provided
+     * @return List of valid schedules that match the request
      */
-    public List<List<ScheduledCourseDTO>> generateScheduleDTOs(String instID, String termID, ScheduleRequest scheduleRequest) {
+    public List<ScheduleDTO> generateScheduleDTOs(String instID, String termID, ScheduleRequest scheduleRequest) {
         // fetch courseIDs
         ScheduleFilter scheduleFilter = scheduleRequest.toSchedulerFilter();
         List<String> subjectCodes = scheduleFilter.getSubjectCodes();
@@ -139,8 +139,9 @@ public class SchedulerService {
                         // exclude any temp time blocks
                         .filter(courseByCRN::containsKey)
                         // foreach crn in schedule -> convert to dto
-                        .map(crn -> courseByCRN.get(crn).toScheduleDTO(crn))
+                        .map(crn -> courseByCRN.get(crn).toScheduledCourseDTO(crn))
                         .toList())
+                .map(ScheduleDTO::new)
                 .toList();
     }
 

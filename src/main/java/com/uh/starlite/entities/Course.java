@@ -131,7 +131,7 @@ public class Course {
      * @param sectionCRN Course reference number of section to included
      * @return {@link ScheduledCourseDTO}
      */
-    public ScheduledCourseDTO toScheduleDTO(int sectionCRN) {
+    public ScheduledCourseDTO toScheduledCourseDTO(int sectionCRN) {
         return new ScheduledCourseDTO(courseID.subjectCode(), courseID.number(), name, description, credits,
                 sections.get(sectionCRN).toSectionDTO());
     }

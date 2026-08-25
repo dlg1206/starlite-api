@@ -1,7 +1,7 @@
 package com.uh.starlite.controller;
 
 import com.uh.starlite.request.ScheduleRequest;
-import com.uh.starlite.response.ScheduleResponse;
+import com.uh.starlite.response.SchedulesResponse;
 import com.uh.starlite.service.SchedulerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -36,11 +36,11 @@ public class ScheduleController {
      * @return List of courseIDs for a given campus and term that pass filters
      */
     @PostMapping(value = "/{campusCode}/terms/{termCode}/schedule")
-    public ResponseEntity<ScheduleResponse> getSchedules(
+    public ResponseEntity<SchedulesResponse> getSchedules(
             @PathVariable String campusCode,
             @PathVariable String termCode,
             @Valid @RequestBody ScheduleRequest request) {
         LOGGER.info("POST | /campuses/{}/terms/{}/schedule | Generating schedules", campusCode, termCode);
-        return ResponseEntity.ok(new ScheduleResponse(schedulerService.generateScheduleDTOs(campusCode, termCode, request)));
+        return ResponseEntity.ok(new SchedulesResponse(schedulerService.generateScheduleDTOs(campusCode, termCode, request)));
     }
 }
