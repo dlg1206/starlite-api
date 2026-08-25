@@ -4,6 +4,7 @@ import com.uh.starlite.client.banner.*;
 import com.uh.starlite.dto.CourseDTO;
 import com.uh.starlite.entities.Course;
 import com.uh.starlite.entities.Section;
+import com.uh.starlite.enums.GradingOption;
 import com.uh.starlite.filter.CourseFilter;
 import com.uh.starlite.filter.CourseFilterMappable;
 import com.uh.starlite.response.CourseResponse;
@@ -100,7 +101,14 @@ public class CourseService {
 
         // add course details
         result.cdrl.forEach((cdr -> courseBuilderLookupByCRN.get(cdr.ssbsectCrn1()).setDescription(cdr.textNarrative())));
-        result.cgrl.forEach((cdr -> courseBuilderLookupByCRN.get(cdr.ssbsectCrn1()).addGradingOption(cdr.toGradingOption())));
+        result.cgrl.forEach((cdr -> {
+            try {
+                courseBuilderLookupByCRN.get(cdr.ssbsectCrn1()).addGradingOption(cdr.toGradingOption());
+            } catch (IllegalArgumentException e) {
+                LOGGER.warn("Unknown grading option '{}'", cdr.code());
+                courseBuilderLookupByCRN.get(cdr.ssbsectCrn1()).addGradingOption(GradingOption.UNKNOWN);
+            }
+        }));
 
         // init all section builders
         Map<String, Section.Builder> sectionBuilderLookup = new HashMap<>();

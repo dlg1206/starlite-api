@@ -14,7 +14,8 @@ public enum GradingOption {
     GRADE("G", "Letter Plus + Minus"),
     PASS_FAIL("C", "Credit/No Credit"),
     EXAM("M", "Credit By Exam"),
-    AUDIT("A", "Audit");
+    AUDIT("A", "Audit"),
+    UNKNOWN(null, "Unknown grading code");
 
     private final String code;
     private final String description;
@@ -36,6 +37,7 @@ public enum GradingOption {
      *
      * @param code Code to convert into enum
      * @return Grading option enum
+     * @throws IllegalArgumentException If code is null or unknown
      */
     public static GradingOption fromCode(String code) {
         if (code == null)
