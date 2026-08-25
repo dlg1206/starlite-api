@@ -3,7 +3,6 @@ package com.uh.starlite.service;
 
 import com.uh.starlite.entities.CourseID;
 import com.uh.starlite.entities.TimeBlock;
-import lombok.Getter;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -72,7 +71,7 @@ class Scheduler {
     private void solve(PotentialSchedule potentialSchedule) {
         // Add schedule if complete and no equivalent schedule found
         if (potentialSchedule.isComplete()) {
-            schedules.putIfAbsent(potentialSchedule.hashCode(), potentialSchedule.getCurrentCRNs());
+            schedules.putIfAbsent(potentialSchedule.hashCode(), potentialSchedule.currentCRNs());
             return;
         }
 
@@ -122,134 +121,131 @@ class Scheduler {
 
     /**
      * Internal schedule object used for solving schedules
+     *
+     * @param currentCRNs Tree set orders ints in same way - can use as ID since order !matter
      */
-    private static class PotentialSchedule {
+        private record PotentialSchedule(Map<CourseID, Set<Integer>> remainingCourses, TreeSet<Integer> currentCRNs) {
 
-        private final Map<CourseID, Set<Integer>> remainingCourses;
-        @Getter
-        private final TreeSet<Integer> currentCRNs;     // Tree set orders ints in same way - can use as ID since order !matter
-
-        /**
-         * Create a new starting potential schedule
-         *
-         * @param remainingCourses Remaining courseIDs to that can potentially be included in this schedule
-         * @param startCRN         Section to start with
-         */
-        public PotentialSchedule(Map<CourseID, Set<Integer>> remainingCourses, int startCRN) {
-            this.remainingCourses = remainingCourses;
-            this.currentCRNs = new TreeSet<>();
-            this.currentCRNs.add(startCRN);
-        }
-
-        /**
-         * Private constructor that creates a copy of another schedule that includes an additional section
-         *
-         * @param other   Other schedule to copy
-         * @param nextCRN Next course reference number / section to add
-         */
-        private PotentialSchedule(PotentialSchedule other, Map<CourseID, Set<Integer>> remainingCourses, int nextCRN) {
-            this.remainingCourses = remainingCourses;   // generated with trySuccessors
-            this.currentCRNs = new TreeSet<>(other.currentCRNs);
-            this.currentCRNs.add(nextCRN);
-        }
-
-
-        /**
-         * Attempt to create a successor schedule to this one
-         *
-         * @param nextCourseID Course ID the nextCRN belongs to
-         * @param nextCRN      Course reference number of section to attempt to create successor with
-         * @return Optional of PotentialSchedule if valid successor
-         */
-        private Optional<PotentialSchedule> trySuccessor(CourseID nextCourseID, int nextCRN) {
-            TimeBlock nextSection = sectionByCRN.get(nextCRN);
-
-            // check for conflicts in current schedule - reject if conflict
-            boolean nextConflictsWithExisting = currentCRNs.stream()
-                    .map(sectionByCRN::get)
-                    .anyMatch(s -> bufferTime == null
-                            ? nextSection.conflictsWith(s)
-                            : nextSection.conflictsWith(s, bufferTime));
-            if (nextConflictsWithExisting)
-                return Optional.empty();
-
-            // create a copy of remaining courseIDs without the next course
-            Map<CourseID, Set<Integer>> nextCourses = remainingCourses.entrySet().stream()
-                    .filter(e -> !e.getKey().equals(nextCourseID))
-                    .collect(Collectors.toMap(Map.Entry::getKey, e -> new HashSet<>(e.getValue())));
-            // next section doesn't conflict existing, generate valid successors
-            for (CourseID otherCourseID : nextCourses.keySet()) {
-                Set<Integer> crns = nextCourses.get(otherCourseID);
-                // remove all sections that conflict with the target section
-                Set<Integer> conflicting = crns.stream()
-                        .filter(c -> bufferTime == null
-                                ? nextSection.conflictsWith(sectionByCRN.get(c))
-                                : nextSection.conflictsWith(sectionByCRN.get(c), bufferTime))
-                        .collect(Collectors.toSet());
-                crns.removeAll(conflicting);
-                // exit early if all sections conflict - this means will be missing a course
-                if (crns.isEmpty()) return Optional.empty();
+            /**
+             * Create a new starting potential schedule
+             *
+             * @param remainingCourses Remaining courseIDs to that can potentially be included in this schedule
+             * @param startCRN         Section to start with
+             */
+            public PotentialSchedule(Map<CourseID, Set<Integer>> remainingCourses, int startCRN) {
+                this(remainingCourses, new TreeSet<>());
+                this.currentCRNs.add(startCRN);
             }
 
-            // Each course has at least one non-conflicting section
-            return Optional.of(new PotentialSchedule(this, nextCourses, nextCRN));
-        }
-
-        /**
-         * Pick the course ID with the fewest section
-         * Using the course with the minimum remaining values heuristic tends to
-         * hit conflicts and prune dead branches earlier than a fixed/arbitrary order.
-         *
-         * @return Course ID with the fewest sections in the remaining courseIDs
-         */
-        private CourseID pickFewestSections() {
-            return remainingCourses.entrySet().stream()
-                    .min(MRV_COMPARATOR)
-                    .map(Map.Entry::getKey)
-                    .orElseThrow(); // safe: caller already checked remainingCourses is non-empty
-        }
+            /**
+             * Private constructor that creates a copy of another schedule that includes an additional section
+             *
+             * @param other   Other schedule to copy
+             * @param nextCRN Next course reference number / section to add
+             */
+            private PotentialSchedule(PotentialSchedule other, Map<CourseID, Set<Integer>> remainingCourses, int nextCRN) {
+                // generated with trySuccessors
+                this(remainingCourses, new TreeSet<>(other.currentCRNs));
+                this.currentCRNs.add(nextCRN);
+            }
 
 
-        /**
-         * Get all the successors ( current courseIDs + 1 new course ) for this current schedule
-         *
-         * @return List of valid potential successor schedules
-         */
-        public List<PotentialSchedule> getSuccessors() {
-            List<PotentialSchedule> successors = new ArrayList<>();
-            // exit early - schedule is complete
-            if (remainingCourses.isEmpty())
+            /**
+             * Attempt to create a successor schedule to this one
+             *
+             * @param nextCourseID Course ID the nextCRN belongs to
+             * @param nextCRN      Course reference number of section to attempt to create successor with
+             * @return Optional of PotentialSchedule if valid successor
+             */
+            private Optional<PotentialSchedule> trySuccessor(CourseID nextCourseID, int nextCRN) {
+                TimeBlock nextSection = sectionByCRN.get(nextCRN);
+
+                // check for conflicts in current schedule - reject if conflict
+                boolean nextConflictsWithExisting = currentCRNs.stream()
+                        .map(sectionByCRN::get)
+                        .anyMatch(s -> bufferTime == null
+                                ? nextSection.conflictsWith(s)
+                                : nextSection.conflictsWith(s, bufferTime));
+                if (nextConflictsWithExisting)
+                    return Optional.empty();
+
+                // create a copy of remaining courseIDs without the next course
+                Map<CourseID, Set<Integer>> nextCourses = remainingCourses.entrySet().stream()
+                        .filter(e -> !e.getKey().equals(nextCourseID))
+                        .collect(Collectors.toMap(Map.Entry::getKey, e -> new HashSet<>(e.getValue())));
+                // next section doesn't conflict existing, generate valid successors
+                for (CourseID otherCourseID : nextCourses.keySet()) {
+                    Set<Integer> crns = nextCourses.get(otherCourseID);
+                    // remove all sections that conflict with the target section
+                    Set<Integer> conflicting = crns.stream()
+                            .filter(c -> bufferTime == null
+                                    ? nextSection.conflictsWith(sectionByCRN.get(c))
+                                    : nextSection.conflictsWith(sectionByCRN.get(c), bufferTime))
+                            .collect(Collectors.toSet());
+                    crns.removeAll(conflicting);
+                    // exit early if all sections conflict - this means will be missing a course
+                    if (crns.isEmpty()) return Optional.empty();
+                }
+
+                // Each course has at least one non-conflicting section
+                return Optional.of(new PotentialSchedule(this, nextCourses, nextCRN));
+            }
+
+            /**
+             * Pick the course ID with the fewest section
+             * Using the course with the minimum remaining values heuristic tends to
+             * hit conflicts and prune dead branches earlier than a fixed/arbitrary order.
+             *
+             * @return Course ID with the fewest sections in the remaining courseIDs
+             */
+            private CourseID pickFewestSections() {
+                return remainingCourses.entrySet().stream()
+                        .min(MRV_COMPARATOR)
+                        .map(Map.Entry::getKey)
+                        .orElseThrow(); // safe: caller already checked remainingCourses is non-empty
+            }
+
+
+            /**
+             * Get all the successors ( current courseIDs + 1 new course ) for this current schedule
+             *
+             * @return List of valid potential successor schedules
+             */
+            public List<PotentialSchedule> getSuccessors() {
+                List<PotentialSchedule> successors = new ArrayList<>();
+                // exit early - schedule is complete
+                if (remainingCourses.isEmpty())
+                    return successors;
+
+                // pick a single course with the fewest sections - other branches will handle other courseIDs
+                CourseID nextCourseID = pickFewestSections();
+                for (int nextCRN : remainingCourses.get(nextCourseID))
+                    trySuccessor(nextCourseID, nextCRN).ifPresent(successors::add);
+
                 return successors;
+            }
 
-            // pick a single course with the fewest sections - other branches will handle other courseIDs
-            CourseID nextCourseID = pickFewestSections();
-            for (int nextCRN : remainingCourses.get(nextCourseID))
-                trySuccessor(nextCourseID, nextCRN).ifPresent(successors::add);
+            /**
+             * Test to see if this schedule is complete
+             *
+             * @return True if complete, false otherwise
+             */
+            public boolean isComplete() {
+                // no courseIDs left means all courseIDs have been used
+                return remainingCourses.isEmpty();
+            }
 
-            return successors;
+            @Override
+            public boolean equals(Object o) {
+                if (o == null || getClass() != o.getClass()) return false;
+                PotentialSchedule that = (PotentialSchedule) o;
+                // use order of crns as uid
+                return Objects.equals(currentCRNs, that.currentCRNs);
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(currentCRNs);
+            }
         }
-
-        /**
-         * Test to see if this schedule is complete
-         *
-         * @return True if complete, false otherwise
-         */
-        public boolean isComplete() {
-            // no courseIDs left means all courseIDs have been used
-            return remainingCourses.isEmpty();
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (o == null || getClass() != o.getClass()) return false;
-            PotentialSchedule that = (PotentialSchedule) o;
-            // use order of crns as uid
-            return Objects.equals(currentCRNs, that.currentCRNs);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(currentCRNs);
-        }
-    }
 }

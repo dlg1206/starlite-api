@@ -29,13 +29,13 @@ public class Meeting implements TimeSpan {
     /**
      * Create a new meeting
      *
-     * @param day {@link Day} of week meeting occurs on
-     * @param startTime Start time of meeting
-     * @param endTime End time of meeting
+     * @param day          {@link Day} of week meeting occurs on
+     * @param startTime    Start time of meeting
+     * @param endTime      End time of meeting
      * @param buildingCode Building code
-     * @param roomCode Room code
+     * @param roomCode     Room code
      */
-    public Meeting(Day day, LocalTime startTime, LocalTime endTime, String buildingCode, String roomCode){
+    public Meeting(Day day, LocalTime startTime, LocalTime endTime, String buildingCode, String roomCode) {
         this.day = day;
         this.isOnline = buildingCode != null && buildingCode.equals("ONLINE");
         this.isAsync = roomCode != null && roomCode.equals("ASYNC");
