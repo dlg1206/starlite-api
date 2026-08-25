@@ -39,7 +39,6 @@ public class CourseService {
 
     /**
      * Fetch all course data concurrently for a single subject
-     * todo refactor out into own aggregation layer (fetch from api or db)
      *
      * @param campusCode  Campus code
      * @param termCode    Term code
@@ -200,8 +199,6 @@ public class CourseService {
         // validate before fetch
         Set<String> normalizedSubjectCodes = subjectService.validateCampusTermSubjects(campusCode, termCode, subjectCodes);
 
-        // todo check if request needed against cache
-
         // start async jobs
         LOGGER.info("Attempting to construct {}", pluralS(normalizedSubjectCodes.size(), "subject"));
         if (normalizedSubjectCodes.size() > bannerAPIService.getBatchLimit())
@@ -220,8 +217,6 @@ public class CourseService {
                 .map(CompletableFuture::join)
                 .flatMap(List::stream)
                 .toList();
-
-        // todo store results
     }
 
     /**
