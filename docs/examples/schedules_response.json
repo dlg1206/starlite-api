@@ -2,6 +2,7 @@
   "timestamp": "<timestamp>",
   "schedules": [
     {
+      "json_url": "<url to get this schedule as a json object>",
       // list of courses with 1 section
       "courses": [
         {

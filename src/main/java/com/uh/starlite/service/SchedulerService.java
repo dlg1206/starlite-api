@@ -13,6 +13,8 @@ import com.uh.starlite.util.Timer;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -32,6 +34,9 @@ import static com.uh.starlite.util.Util.pluralS;
 public class SchedulerService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SchedulerService.class);
+
+    @Value("${starlite.public-endpoint}")
+    private String PUBLIC_ENDPOINT;
 
     private final CourseService courseService;
 
@@ -59,17 +64,17 @@ public class SchedulerService {
     /**
      * Generate all valid schedules for a list of course
      *
-     * @param instID          Campus code
-     * @param termID          Term code
+     * @param campusCode          Campus code
+     * @param termCode          Term code
      * @param scheduleRequest DTO with schedule options mappable to a course filter
      * @return List of valid schedules that match the request
      */
-    public List<ScheduleDTO> generateScheduleDTOs(String instID, String termID, ScheduleRequest scheduleRequest) {
+    public List<ScheduleDTO> generateScheduleDTOs(String campusCode, String termCode, ScheduleRequest scheduleRequest) {
         // fetch courseIDs
         ScheduleFilter scheduleFilter = scheduleRequest.toSchedulerFilter();
         List<String> subjectCodes = scheduleFilter.getSubjectCodes();
 
-        List<Course> courses = courseService.filterCourses(scheduleFilter, courseService.fetchCourses(instID, termID, subjectCodes));
+        List<Course> courses = courseService.filterCourses(scheduleFilter, courseService.fetchCourses(campusCode, termCode, subjectCodes));
 
         // check for missing courseIDs
         validateCourseIDs(courses, scheduleFilter.courseIDs());
@@ -141,7 +146,7 @@ public class SchedulerService {
                         // foreach crn in schedule -> convert to dto
                         .map(crn -> courseByCRN.get(crn).toScheduledCourseDTO(crn))
                         .toList())
-                .map(ScheduleDTO::new)
+                .map(c -> ScheduleDTO.of(PUBLIC_ENDPOINT, campusCode, termCode, c))
                 .toList();
     }
 

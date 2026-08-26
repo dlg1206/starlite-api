@@ -1,5 +1,7 @@
 package com.uh.starlite.dto;
 
+import com.uh.starlite.util.ScheduleCodec;
+
 import java.util.List;
 
 /**
@@ -7,5 +9,19 @@ import java.util.List;
  *
  * @param courses List of courses scheduled
  */
-public record ScheduleDTO(List<ScheduledCourseDTO> courses) {
+public record ScheduleDTO(String jsonURL, List<ScheduledCourseDTO> courses) {
+
+    /**
+     * Build a ScheduleDTO, deriving the encoding from campus, term, and courses.
+     *
+     * @param publicEndpoint Endpoint to access the API at for callback
+     * @param campusCode Campus code the schedule belongs to
+     * @param termCode Term code the schedule belongs to
+     * @param courses Courses included in the schedule
+     * @return A ScheduleDTO with courses and encoded version
+     */
+    public static ScheduleDTO of(String publicEndpoint, String campusCode, String termCode, List<ScheduledCourseDTO> courses) {
+        String jsonURL = publicEndpoint + "/schedules/" + ScheduleCodec.encode(campusCode, termCode, courses) + "/json";
+        return new ScheduleDTO(jsonURL, courses);
+    }
 }

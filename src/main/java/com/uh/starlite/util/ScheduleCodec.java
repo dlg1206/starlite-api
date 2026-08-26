@@ -40,8 +40,8 @@ public class ScheduleCodec {
         StringBuilder subjectSB = new StringBuilder().append(ID_DELIMITER);
         subjectCodes.forEach(s -> subjectSB.append(ID_SUB_DELIMITER).append(s));
 
-        // return Base64 encoded schedule
-        String scheduleID = locale + subjectSB + crnSB;
+        // return Base64 encoded schedule - remove leading sub delimiter
+        String scheduleID = locale + subjectSB.deleteCharAt(1) + crnSB.deleteCharAt(1);
         return Base64.getUrlEncoder().encodeToString(scheduleID.getBytes(StandardCharsets.UTF_8));
     }
 

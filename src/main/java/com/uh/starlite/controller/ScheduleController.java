@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/campuses")
 public class ScheduleController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ScheduleController.class);
@@ -28,14 +27,14 @@ public class ScheduleController {
 
     /**
      * POST Endpoint: /campuses/{campusCode}/terms/{termCode}/schedule
-     * Generate potential schedules for a list of courseIDs
+     * Generate potential schedules for a list of courses
      *
      * @param campusCode Campus code to search for subjects
      * @param termCode   Term code to search for subjects
      * @param request    Scheduled filter details
-     * @return List of courseIDs for a given campus and term that pass filters
+     * @return List of schedules for a given campus and term that pass filters
      */
-    @PostMapping(value = "/{campusCode}/terms/{termCode}/schedule")
+    @PostMapping(value = "/campuses/{campusCode}/terms/{termCode}/schedule")
     public ResponseEntity<SchedulesResponse> getSchedules(
             @PathVariable String campusCode,
             @PathVariable String termCode,
@@ -43,4 +42,21 @@ public class ScheduleController {
         LOGGER.info("POST | /campuses/{}/terms/{}/schedule | Generating schedules", campusCode, termCode);
         return ResponseEntity.ok(new SchedulesResponse(schedulerService.generateScheduleDTOs(campusCode, termCode, request)));
     }
+
+
+    /**
+     * GET Endpoint: /schedule/{encodedSchedule}/json
+     * Generate convert a schedule encoding to JSON
+     *
+     * @param encodedSchedule Base64 encoded schedule
+     * @return List of courseIDs for a given campus and term that pass filters
+     */
+    @GetMapping(value = "/schedule/{encodedSchedule}/json")
+    public ResponseEntity<SchedulesResponse> getSchedules(@PathVariable String encodedSchedule) {
+        LOGGER.info("GET | /schedule/{}/json | Reconstructing schedule", encodedSchedule);
+        // todo
+        return null;
+    }
+
+
 }
