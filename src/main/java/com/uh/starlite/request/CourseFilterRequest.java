@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.uh.starlite.enums.Day;
 import com.uh.starlite.filter.CourseFilter;
 import com.uh.starlite.filter.CourseFilterMappable;
-import com.uh.starlite.service.CourseFilterMapper;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 import java.time.LocalTime;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Input request for building a filter
@@ -65,14 +65,39 @@ public record CourseFilterRequest(
         Set<@NotBlank String> acceptDescKeywords,
         Set<@NotBlank String> rejectDescKeywords
 ) implements CourseFilterMappable {
+
     /**
      * Map this object to a course filter
      *
-     * @param courseFilterMapper Mapper to course filter
      * @return {@link CourseFilter}
      */
     @Override
-    public CourseFilter toCourseFilter(CourseFilterMapper courseFilterMapper) {
-        return courseFilterMapper.toFilter(this);
+    public CourseFilter toCourseFilter() {
+        CourseFilter.Builder builder = new CourseFilter.Builder()
+                .acceptCRNs(acceptCRNs)
+                .rejectCRNs(rejectCRNs)
+                .courseNumberFilter(acceptCourseNumbers, rejectCourseNumbers)
+                .courseIDFilter(acceptCourseIDs, rejectCourseIDs)
+                .acceptDays(acceptDays)
+                .rejectDays(rejectDays)
+                .startAfter(startAfter)
+                .endBefore(endBefore)
+                .onlyOnline(onlyOnline)
+                .onlyAsync(onlyAsync)
+                .hasMajorRestriction(hasMajorRestriction)
+                .hasPrerequisites(hasPrereq)
+                .canAudit(canAudit)
+                .excludeFull(excludeFull)
+                .excludeWaitlist(excludeWaitlisted)
+                .titleKeywordFilter(acceptTitleKeywords, rejectTitleKeywords)
+                .descKeywordFilter(acceptDescKeywords, rejectDescKeywords);
+        // add instructor filters
+        if (acceptInstructors != null)
+            builder.acceptInstructors(acceptInstructors().stream().map(String::toLowerCase).collect(Collectors.toSet()));
+        if (rejectInstructors != null)
+            builder.rejectInstructors(rejectInstructors().stream().map(String::toLowerCase).collect(Collectors.toSet()));
+
+        // build
+        return builder.build();
     }
 }

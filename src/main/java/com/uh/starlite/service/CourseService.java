@@ -5,7 +5,6 @@ import com.uh.starlite.dto.CourseDTO;
 import com.uh.starlite.entities.Course;
 import com.uh.starlite.entities.Section;
 import com.uh.starlite.enums.GradingOption;
-import com.uh.starlite.filter.CourseFilter;
 import com.uh.starlite.filter.CourseFilterMappable;
 import com.uh.starlite.response.CourseResponse;
 import com.uh.starlite.util.Timer;
@@ -35,7 +34,6 @@ public class CourseService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CourseService.class);
 
     private final SubjectService subjectService;
-    private final CourseFilterMapper courseFilterMapper;
     private final BannerAPIService bannerAPIService;
 
     /**
@@ -168,32 +166,6 @@ public class CourseService {
                 });
     }
 
-    /**
-     * Apply a filter to a list of courseIDs
-     *
-     * @param request Request to build filter from
-     * @return List of filtered courseIDs
-     */
-    public List<Course> filterCourses(CourseFilterMappable request, List<Course> courses) {
-        CourseFilter filter = request.toCourseFilter(courseFilterMapper);
-        List<Course> validCourses = new ArrayList<>();
-        int sectionReject = 0;
-        for (Course c : courses) {
-            if (filter.rejectCourse(c)) {
-                continue;
-            }
-            // prune invalid sections
-            int before = c.getSections().size();
-            c.getSections().values().removeIf(filter::rejectSection);
-            sectionReject += before - c.getSections().size();
-            if (!c.getSections().isEmpty())
-                validCourses.add(c);
-        }
-        LOGGER.info("Filtered out {} and {}",
-                pluralS(courses.size() - validCourses.size(), "course"),
-                pluralS(sectionReject, "section"));
-        return validCourses;
-    }
 
     /**
      * Fetch all courseIDs for subjects
@@ -234,9 +206,12 @@ public class CourseService {
      * @param termCode    Term code
      * @param subjectCode Subject to fetch courses for
      * @param detailed    Return detailed course information
-     * @return List of courseIDs that match the filter if provided
+     * @return List of courses that match the filter if provided
      */
-    public List<? extends CourseDTO> fetchCourseDTOs(String campusCode, String termCode, String subjectCode, boolean detailed) {
+    public List<? extends CourseDTO> fetchCourseDTOs(String campusCode,
+                                                     String termCode,
+                                                     String subjectCode,
+                                                     boolean detailed) {
         // wrapper for filter method
         return fetchCourseDTOs(campusCode, termCode, List.of(subjectCode), detailed, null);
     }
@@ -248,9 +223,13 @@ public class CourseService {
      * @param termCode    Term code
      * @param subjectCode Subject to fetch courses for
      * @param detailed    Return detailed course information
-     * @return List of courseIDs that match the filter if provided
+     * @return List of courses that match the filter if provided
      */
-    public List<? extends CourseDTO> fetchCourseDTOs(String campusCode, String termCode, String subjectCode, boolean detailed, CourseFilterMappable filterRequest) {
+    public List<? extends CourseDTO> fetchCourseDTOs(String campusCode,
+                                                     String termCode,
+                                                     String subjectCode,
+                                                     boolean detailed,
+                                                     CourseFilterMappable filterRequest) {
         // wrapper for filter method
         return fetchCourseDTOs(campusCode, termCode, List.of(subjectCode), detailed, filterRequest);
     }
@@ -263,9 +242,12 @@ public class CourseService {
      * @param termCode     Term code
      * @param subjectCodes List of subjects to fetch courseIDs for
      * @param detailed     Return detailed course information
-     * @return List of courseIDs that match the filter if provided
+     * @return List of courses that match the filter if provided
      */
-    public List<? extends CourseDTO> fetchCourseDTOs(String campusCode, String termCode, Set<String> subjectCodes, boolean detailed) {
+    public List<? extends CourseDTO> fetchCourseDTOs(String campusCode,
+                                                     String termCode,
+                                                     Set<String> subjectCodes,
+                                                     boolean detailed) {
         // wrapper for filter method
         return fetchCourseDTOs(campusCode, termCode, subjectCodes, detailed, null);
     }
@@ -278,15 +260,19 @@ public class CourseService {
      * @param subjectCodes  List of subjects to fetch courseIDs for
      * @param detailed      Return detailed course information
      * @param filterRequest DTO with filter options mappable to a course filter
-     * @return List of courseIDs that match the filter if provided
+     * @return List of courses that match the filter if provided
      */
-    public List<? extends CourseDTO> fetchCourseDTOs(String campusCode, String termCode, Collection<String> subjectCodes, boolean detailed, CourseFilterMappable filterRequest) {
+    public List<? extends CourseDTO> fetchCourseDTOs(String campusCode,
+                                                     String termCode,
+                                                     Collection<String> subjectCodes,
+                                                     boolean detailed,
+                                                     CourseFilterMappable filterRequest) {
         // fetch courseIDs
         List<Course> allCourses = fetchCourses(campusCode, termCode, subjectCodes);
 
         // apply filter if provided
         if (filterRequest != null)
-            allCourses = filterCourses(filterRequest, allCourses);
+            allCourses = filterRequest.toCourseFilter().filterCourses(allCourses);
 
         if (allCourses.isEmpty())
             LOGGER.warn("No matching courses remain");

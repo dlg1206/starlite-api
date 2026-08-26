@@ -15,9 +15,9 @@ public record ScheduleDTO(String jsonURL, List<ScheduledCourseDTO> courses) {
      * Build a ScheduleDTO, deriving the encoding from campus, term, and courses.
      *
      * @param publicEndpoint Endpoint to access the API at for callback
-     * @param campusCode Campus code the schedule belongs to
-     * @param termCode Term code the schedule belongs to
-     * @param courses Courses included in the schedule
+     * @param campusCode     Campus code the schedule belongs to
+     * @param termCode       Term code the schedule belongs to
+     * @param courses        Courses included in the schedule
      * @return A ScheduleDTO with courses and encoded version
      */
     public static ScheduleDTO of(String publicEndpoint, String campusCode, String termCode, List<ScheduledCourseDTO> courses) {

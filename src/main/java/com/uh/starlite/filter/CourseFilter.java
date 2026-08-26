@@ -4,11 +4,16 @@ import com.uh.starlite.entities.Course;
 import com.uh.starlite.entities.Meeting;
 import com.uh.starlite.entities.Section;
 import com.uh.starlite.enums.Day;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+
+import static com.uh.starlite.util.Util.pluralS;
 
 /**
  * <b>File:</b> CourseFilter.java
@@ -18,6 +23,9 @@ import java.util.Set;
  * @author Derek Garcia
  */
 public class CourseFilter {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CourseFilter.class);
+
     private final Set<Integer> acceptCRNs;
     private final Set<Integer> rejectCRNs;
     private final RegexFilter courseNumberFilter;
@@ -173,7 +181,7 @@ public class CourseFilter {
      * @param section Section to validate
      * @return true if reject, false otherwise
      */
-    public boolean rejectSection(Section section) {
+    private boolean rejectSection(Section section) {
 
         // short circuit if no section or meeting checks
         if (skipSectionValidation && skipMeetingValidation)
@@ -214,7 +222,7 @@ public class CourseFilter {
      * @param course Course to validate
      * @return true if reject, false otherwise
      */
-    public boolean rejectCourse(Course course) {
+    private boolean rejectCourse(Course course) {
         if (skipCourseValidation)
             return false;
 
@@ -245,6 +253,33 @@ public class CourseFilter {
         return descKeywordFilter != null && descKeywordFilter.reject(course.getDescription());
 
         // accept course
+    }
+
+    /**
+     * Apply a filter to a list of courses
+     *
+     * @param courses List of courses to filter
+     * @return List of filtered courseIDs
+     */
+    public List<Course> filterCourses(List<Course> courses) {
+        List<Course> validCourses = new ArrayList<>();
+        int sectionReject = 0;
+        for (Course c : courses) {
+            // skip invalid course
+            if (rejectCourse(c))
+                continue;
+
+            // prune invalid sections
+            int before = c.getSections().size();
+            c.getSections().values().removeIf(this::rejectSection);
+            sectionReject += before - c.getSections().size();
+            if (!c.getSections().isEmpty())
+                validCourses.add(c);
+        }
+        LOGGER.info("Filtered out {} and {}",
+                pluralS(courses.size() - validCourses.size(), "course"),
+                pluralS(sectionReject, "section"));
+        return validCourses;
     }
 
     public static class Builder {
