@@ -1,5 +1,6 @@
 package com.uh.starlite.service;
 
+import com.uh.starlite.dto.IcsDTO;
 import com.uh.starlite.dto.ScheduleDTO;
 import com.uh.starlite.dto.ScheduledCourseDTO;
 import com.uh.starlite.entities.*;
@@ -8,6 +9,7 @@ import com.uh.starlite.exception.InvalidCourseReferenceNumberException;
 import com.uh.starlite.filter.CourseFilter;
 import com.uh.starlite.filter.ScheduleFilter;
 import com.uh.starlite.request.ScheduleRequest;
+import com.uh.starlite.util.ICSBuilder;
 import com.uh.starlite.util.ScheduleCodec;
 import com.uh.starlite.util.Timer;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +37,9 @@ public class SchedulerService {
     private static final Logger LOGGER = LoggerFactory.getLogger(SchedulerService.class);
     private final CourseService courseService;
     @Value("${starlite.public-endpoint}")
-    private String PUBLIC_ENDPOINT;
+    private String publicEndpoint;
+    @Value("${server.servlet.context-path:}")
+    private String contextPath;
 
     /**
      * Validate that all requested course IDs exist
@@ -143,12 +147,12 @@ public class SchedulerService {
                         // foreach crn in schedule -> convert to dto
                         .map(crn -> courseByCRN.get(crn).toScheduledCourseDTO(crn))
                         .toList())
-                .map(c -> ScheduleDTO.of(PUBLIC_ENDPOINT, campusCode, termCode, c))
+                .map(c -> ScheduleDTO.of(publicEndpoint + contextPath, campusCode, termCode, c))
                 .toList();
     }
 
     /**
-     * Decode a Base64 encoded schedule into a schedule dto
+     * Decode a Base64 encoded schedule into a schedule DTO
      *
      * @param encodedSchedule Base64 encoded schedule
      * @return {@link ScheduleDTO}
@@ -204,6 +208,21 @@ public class SchedulerService {
         List<ScheduledCourseDTO> scheduledCourses = courses.stream()
                 .flatMap(c -> c.getSections().keySet().stream().map(c::toScheduledCourseDTO))
                 .toList();
-        return ScheduleDTO.of(PUBLIC_ENDPOINT, decoded.campusCode(), decoded.termCode(), scheduledCourses);
+        return ScheduleDTO.of(publicEndpoint + contextPath, decoded.campusCode(), decoded.termCode(), scheduledCourses);
+    }
+
+    /**
+     * Decode a Base64 encoded schedule into an ICS file
+     *
+     * @param encodedSchedule Base64 encoded schedule
+     * @return {@link IcsDTO}
+     */
+    public IcsDTO decodeScheduleToICS(String encodedSchedule) {
+        ScheduleCodec.Decoded d = ScheduleCodec.decode(encodedSchedule);
+        ScheduleDTO schedule = decodeSchedule(encodedSchedule);
+        return new IcsDTO(
+                d.campusCode().toLowerCase() + "_" + d.termCode() + "_" + String.valueOf(d.subjectCodes().hashCode()).substring(0, 5) + ".ics",
+                new ICSBuilder().createICSCalendar(schedule.courses()).toString()
+        );
     }
 }

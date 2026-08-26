@@ -3,6 +3,7 @@
   "schedules": [
     {
       "json_url": "<url to get this schedule as a json object>",
+      "ics_url": "<url to get this schedule as a ics file>",
       "start_date": "<start date of course>",
       "end_date": "<end date of course>",
       // list of courses with 1 section
@@ -15,7 +16,7 @@
           "prereq_description": "<prereq details>",
           "credits": "<course credits>",
           "grading_options": [
-            "<available grading options"
+            "<available grading options>"
           ],
           "major_restriction": "<boolean whether this course has major restriction>",
           "approval_authority": "<approval authority (Instructor, Department, etc) required, null if none>",

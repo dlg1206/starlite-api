@@ -1,5 +1,6 @@
 package com.uh.starlite.controller;
 
+import com.uh.starlite.dto.IcsDTO;
 import com.uh.starlite.request.ScheduleRequest;
 import com.uh.starlite.response.ScheduleResponse;
 import com.uh.starlite.response.SchedulesResponse;
@@ -8,6 +9,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,12 +53,29 @@ public class ScheduleController {
      * Generate convert a schedule encoding to JSON
      *
      * @param encodedSchedule Base64 encoded schedule
-     * @return List of courseIDs for a given campus and term that pass filters
+     * @return JSON of decoded schedule
      */
     @GetMapping(value = "/schedule/{encodedSchedule}/json")
-    public ResponseEntity<ScheduleResponse> getSchedules(@PathVariable String encodedSchedule) {
+    public ResponseEntity<ScheduleResponse> getScheduleJSON(@PathVariable String encodedSchedule) {
         LOGGER.info("GET | /schedule/{}/json | Reconstructing schedule", encodedSchedule);
         return ResponseEntity.ok(new ScheduleResponse(schedulerService.decodeSchedule(encodedSchedule)));
+    }
+
+    /**
+     * GET Endpoint: /schedule/{encodedSchedule}/ics
+     * Generate convert a schedule encoding to ICS file
+     *
+     * @param encodedSchedule Base64 encoded schedule
+     * @return ICS of decoded schedule
+     */
+    @GetMapping(value = "/schedule/{encodedSchedule}/ics", produces = "text/calendar")
+    public ResponseEntity<String> getScheduleICS(@PathVariable String encodedSchedule) {
+        LOGGER.info("GET | /schedule/{}/ics | Reconstructing schedule", encodedSchedule);
+        IcsDTO icsDTO = schedulerService.decodeScheduleToICS(encodedSchedule);
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("text/calendar; charset=UTF-8"))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + icsDTO.filename() + "\"")
+                .body(icsDTO.ics());
     }
 
 
