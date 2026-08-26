@@ -3,6 +3,8 @@
   "schedules": [
     {
       "json_url": "<url to get this schedule as a json object>",
+      "start_date": "<start date of course>",
+      "end_date": "<end date of course>",
       // list of courses with 1 section
       "courses": [
         {

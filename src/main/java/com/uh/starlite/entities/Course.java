@@ -132,8 +132,10 @@ public class Course {
      * @return {@link ScheduledCourseDTO}
      */
     public ScheduledCourseDTO toScheduledCourseDTO(int sectionCRN) {
-        return new ScheduledCourseDTO(courseID.subjectCode(), courseID.number(), name, description, credits,
-                sections.get(sectionCRN).toSectionDTO());
+        return new ScheduledCourseDTO(courseID.subjectCode(), courseID.number(),
+                name, description,
+                startDate, endDate,
+                credits, sections.get(sectionCRN).toSectionDTO());
     }
 
     public static class Builder {
