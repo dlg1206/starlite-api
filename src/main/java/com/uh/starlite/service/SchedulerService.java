@@ -1,14 +1,14 @@
 package com.uh.starlite.service;
 
 import com.uh.starlite.dto.ScheduleDTO;
-import com.uh.starlite.entities.Course;
-import com.uh.starlite.entities.CourseID;
-import com.uh.starlite.entities.TimeBlock;
-import com.uh.starlite.entities.TimeBuffer;
+import com.uh.starlite.dto.ScheduledCourseDTO;
+import com.uh.starlite.entities.*;
 import com.uh.starlite.exception.InvalidCourseIDsException;
 import com.uh.starlite.exception.InvalidCourseReferenceNumberException;
+import com.uh.starlite.filter.CourseFilter;
 import com.uh.starlite.filter.ScheduleFilter;
 import com.uh.starlite.request.ScheduleRequest;
+import com.uh.starlite.util.ScheduleCodec;
 import com.uh.starlite.util.Timer;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -42,6 +42,7 @@ public class SchedulerService {
      *
      * @param courses          List of all courses retrieved
      * @param requestCourseIDs List of requested course IDs
+     * @throws InvalidCourseIDsException If a request course is missing from the validated courses
      */
     private void validateCourseIDs(List<Course> courses, List<CourseID> requestCourseIDs) {
         Set<CourseID> foundCourseIDs = courses.stream()
@@ -67,7 +68,7 @@ public class SchedulerService {
      * @return List of valid schedules that match the request
      */
     public List<ScheduleDTO> generateScheduleDTOs(String campusCode, String termCode, ScheduleRequest scheduleRequest) {
-        // fetch courses
+        // fetch valid courses
         ScheduleFilter scheduleFilter = scheduleRequest.toSchedulerFilter();
         List<String> subjectCodes = scheduleFilter.getSubjectCodes();
         List<Course> courses = scheduleFilter.toCourseFilter()
@@ -75,7 +76,7 @@ public class SchedulerService {
         // check for missing courses
         validateCourseIDs(courses, scheduleFilter.courseIDs());
 
-        // map courseIDs
+        // map courses
         Map<CourseID, Set<Integer>> requestedCRNs = scheduleFilter.requestedCRNs();
         Map<Integer, TimeBlock> sectionByCRN = new HashMap<>();
         Map<CourseID, Set<Integer>> crnsByCourseID = new HashMap<>();
@@ -146,4 +147,63 @@ public class SchedulerService {
                 .toList();
     }
 
+    /**
+     * Decode a Base64 encoded schedule into a schedule dto
+     *
+     * @param encodedSchedule Base64 encoded schedule
+     * @return {@link ScheduleDTO}
+     */
+    public ScheduleDTO decodeSchedule(String encodedSchedule) {
+        ScheduleCodec.Decoded decoded = ScheduleCodec.decode(encodedSchedule);
+        CourseFilter cf = new CourseFilter.Builder().acceptCRNs(decoded.crns()).build();
+        // fetch requested courses
+        List<Course> courses = cf.filterCourses(courseService.fetchCourses(
+                decoded.campusCode(),
+                decoded.termCode(),
+                decoded.subjectCodes()
+        ));
+
+        // Verify all courses only have 1 section (valid schedule cannot have >1 section per course)
+        List<CourseID> multipleCRNs = new ArrayList<>();
+        List<Section> sections = new ArrayList<>(courses.stream()
+                .filter(c -> {
+                    if (c.getSections().size() != 1) {
+                        multipleCRNs.add(c.getCourseID());
+                        return false; // skip courses that violate the invariant
+                    }
+                    return true;
+                })
+                .map(c -> c.getSections().values().iterator().next())
+                .toList());
+        if (!multipleCRNs.isEmpty())
+            // todo - custom exception
+            throw new IllegalArgumentException(">1 crn");
+
+        // verify all requested crns were found / valid
+        Set<Integer> foundCRNs = sections.stream().map(Section::getCrn).collect(Collectors.toSet());
+        Set<Integer> missingCRNs = decoded.crns().stream()
+                .filter(crn -> !foundCRNs.contains(crn))
+                .collect(Collectors.toSet());
+        if (!missingCRNs.isEmpty())
+            // todo - custom exception
+            throw new IllegalArgumentException("Requested CRNs not found: " + missingCRNs);
+
+        // check for any section conflicts
+        while (!sections.isEmpty()) {
+            Section thisSection = sections.removeFirst();
+            sections.stream()
+                    .filter(thisSection::conflictsWith)
+                    .findAny()
+                    .ifPresent(s -> {
+                        // todo custom error
+                        throw new IllegalArgumentException(thisSection.getCrn() + " conflicts with " + s.getCrn());
+                    });
+        }
+
+        // all checks pass - map to scheduled courses
+        List<ScheduledCourseDTO> scheduledCourses = courses.stream()
+                .flatMap(c -> c.getSections().keySet().stream().map(c::toScheduledCourseDTO))
+                .toList();
+        return ScheduleDTO.of(PUBLIC_ENDPOINT, decoded.campusCode(), decoded.termCode(), scheduledCourses);
+    }
 }

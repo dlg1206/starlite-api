@@ -1,7 +1,6 @@
 package com.uh.starlite.util;
 
 import com.uh.starlite.dto.ScheduledCourseDTO;
-import com.uh.starlite.filter.CourseFilter;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -60,7 +59,7 @@ public class ScheduleCodec {
         // IllegalArgumentException
 
         String schedule = new String(bytes, StandardCharsets.UTF_8);
-        String[] details = schedule.split(ID_DELIMITER);
+        String[] details = schedule.strip().split(ID_DELIMITER);
 
         String[] locale = details[0].split(ID_SUB_DELIMITER);
         Set<String> subjectCodes = Arrays.stream(details[1].split(ID_SUB_DELIMITER))
@@ -74,8 +73,7 @@ public class ScheduleCodec {
         // ArrayIndexOutOfBoundsException
         // NumberFormatException
 
-        return new Decoded(locale[0], locale[1], subjectCodes,
-                new CourseFilter.Builder().acceptCRNs(crns).build());
+        return new Decoded(locale[0], locale[1], subjectCodes, crns);
     }
 
     /**
@@ -83,9 +81,12 @@ public class ScheduleCodec {
      *
      * @param campusCode   Campus code
      * @param termCode     Term code
-     * @param subjectCodes List of subjects to fetch courseIDs for
-     * @param courseFilter Course filter for CRNs
+     * @param subjectCodes List of subjects to fetch
+     * @param crns         CRNs to include
      */
-    public record Decoded(String campusCode, String termCode, Set<String> subjectCodes, CourseFilter courseFilter) {
+    public record Decoded(String campusCode,
+                          String termCode,
+                          Set<String> subjectCodes,
+                          Set<Integer> crns) {
     }
 }

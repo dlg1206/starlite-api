@@ -1,6 +1,7 @@
 package com.uh.starlite.controller;
 
 import com.uh.starlite.request.ScheduleRequest;
+import com.uh.starlite.response.ScheduleResponse;
 import com.uh.starlite.response.SchedulesResponse;
 import com.uh.starlite.service.SchedulerService;
 import jakarta.validation.Valid;
@@ -52,10 +53,9 @@ public class ScheduleController {
      * @return List of courseIDs for a given campus and term that pass filters
      */
     @GetMapping(value = "/schedule/{encodedSchedule}/json")
-    public ResponseEntity<SchedulesResponse> getSchedules(@PathVariable String encodedSchedule) {
+    public ResponseEntity<ScheduleResponse> getSchedules(@PathVariable String encodedSchedule) {
         LOGGER.info("GET | /schedule/{}/json | Reconstructing schedule", encodedSchedule);
-        // todo
-        return null;
+        return ResponseEntity.ok(new ScheduleResponse(schedulerService.decodeSchedule(encodedSchedule)));
     }
 
 
