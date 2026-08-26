@@ -1,6 +1,6 @@
 # Starlite API v2
 
-> API for searching for courses offered and generating schedules for all ten campuses at 
+> API for searching for courses offered and generating schedules for all ten campuses at
 > the [University of Hawai'i](https://www.hawaii.edu/)
 
 ## Quickstart Guide
@@ -64,4 +64,8 @@ API endpoint documentation can be found at [API Endpoints](docs/endpoints.md#api
 - [Decode Schedule to json](docs/endpoints.md#decode-schedule-to-json)
 - [Decode Schedule to ics](docs/endpoints.md#decode-schedule-to-ics)
 
-Insomnia documentation is also available [here](docs/starlite-api-v2-docs.yaml).
+Insomnia documentation is also available [here](docs/starlite-api-v2-docs.yaml), make sure to change `Base Environment`
+to the `Starlite`
+Environment in the
+[environment dropdown menu](https://developer.konghq.com/insomnia/environments/#create-a-sub-environment) after
+[importing](https://developer.konghq.com/insomnia/import-export/#import-methods).
