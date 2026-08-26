@@ -134,4 +134,16 @@ public class GlobalExceptionHandler {
         logError(e);
         return ResponseEntity.badRequest().body(e.toResponse());
     }
+
+    /**
+     * Handle invalid schedule encodings
+     *
+     * @param e {@link InvalidScheduleEncodingException}
+     * @return {@link ResponseEntity}
+     */
+    @ExceptionHandler(InvalidScheduleEncodingException.class)
+    public ResponseEntity<InvalidScheduleEncodingException.Response> handleInvalidScheduleEncodings(InvalidScheduleEncodingException e) {
+        logError(e);
+        return ResponseEntity.badRequest().body(e.toResponse());
+    }
 }

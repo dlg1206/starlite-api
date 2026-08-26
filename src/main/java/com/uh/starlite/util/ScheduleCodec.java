@@ -1,6 +1,7 @@
 package com.uh.starlite.util;
 
 import com.uh.starlite.dto.ScheduledCourseDTO;
+import com.uh.starlite.exception.InvalidScheduleEncodingException;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -49,31 +50,33 @@ public class ScheduleCodec {
      *
      * @param encodedSchedule Base64 url encoded schedule
      * @return {@link Decoded} schedule
-     * @throws IllegalArgumentException       If fail to decode Base64 schedule string
-     * @throws ArrayIndexOutOfBoundsException If fail to parse encoded schedule
-     * @throws NumberFormatException          If fail to parse CRN
+     * @throws InvalidScheduleEncodingException If fail to parse schedule encoding
      */
     public static Decoded decode(String encodedSchedule) {
-        byte[] bytes = Base64.getUrlDecoder().decode(encodedSchedule);
-        // todo - throw custom exception (see InvalidCourseIDsException)
-        // IllegalArgumentException
+        byte[] bytes;
+        try {
+            bytes = Base64.getUrlDecoder().decode(encodedSchedule);
+        } catch (IllegalArgumentException e) {
+            // fail to convert from Base64
+            throw InvalidScheduleEncodingException.invalidBase64(encodedSchedule);
+        }
 
         String schedule = new String(bytes, StandardCharsets.UTF_8);
         String[] details = schedule.strip().split(ID_DELIMITER);
 
         String[] locale = details[0].split(ID_SUB_DELIMITER);
-        Set<String> subjectCodes = Arrays.stream(details[1].split(ID_SUB_DELIMITER))
-                .map(String::toUpperCase)
-                .collect(Collectors.toSet());
-        Set<Integer> crns = Arrays.stream(details[2].split(ID_SUB_DELIMITER))
-                .map(Integer::parseInt)
-                .collect(Collectors.toSet());
-
-        // todo - throw custom exception (see InvalidCourseIDsException)
-        // ArrayIndexOutOfBoundsException
-        // NumberFormatException
-
-        return new Decoded(locale[0], locale[1], subjectCodes, crns);
+        try {
+            Set<String> subjectCodes = Arrays.stream(details[1].split(ID_SUB_DELIMITER))
+                    .map(String::toUpperCase)
+                    .collect(Collectors.toSet());
+            Set<Integer> crns = Arrays.stream(details[2].split(ID_SUB_DELIMITER))
+                    .map(Integer::parseInt)
+                    .collect(Collectors.toSet());
+            return new Decoded(locale[0], locale[1], subjectCodes, crns);
+        } catch (Exception e) {
+            // fail to parse schedule encoding
+            throw InvalidScheduleEncodingException.invalidEncoding(encodedSchedule);
+        }
     }
 
     /**

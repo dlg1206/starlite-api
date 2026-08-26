@@ -6,6 +6,7 @@ import com.uh.starlite.dto.ScheduledCourseDTO;
 import com.uh.starlite.entities.*;
 import com.uh.starlite.exception.InvalidCourseIDsException;
 import com.uh.starlite.exception.InvalidCourseReferenceNumberException;
+import com.uh.starlite.exception.InvalidScheduleEncodingException;
 import com.uh.starlite.filter.CourseFilter;
 import com.uh.starlite.filter.ScheduleFilter;
 import com.uh.starlite.request.ScheduleRequest;
@@ -156,16 +157,25 @@ public class SchedulerService {
      *
      * @param encodedSchedule Base64 encoded schedule
      * @return {@link ScheduleDTO}
+     * @throws InvalidScheduleEncodingException If fail to parse encoding or schedule is invalid
      */
     public ScheduleDTO decodeSchedule(String encodedSchedule) {
         ScheduleCodec.Decoded decoded = ScheduleCodec.decode(encodedSchedule);
         CourseFilter cf = new CourseFilter.Builder().acceptCRNs(decoded.crns()).build();
-        // fetch requested courses
-        List<Course> courses = cf.filterCourses(courseService.fetchCourses(
-                decoded.campusCode(),
-                decoded.termCode(),
-                decoded.subjectCodes()
-        ));
+        List<Course> courses;
+        try {
+            // fetch requested courses
+            courses = cf.filterCourses(courseService.fetchCourses(
+                    decoded.campusCode(),
+                    decoded.termCode(),
+                    decoded.subjectCodes()
+            ));
+
+        } catch (Exception e) {
+            // wrap any course search failure (Bad subject code, invalid campus, etc) as bad schedule
+            LOGGER.error(e.getMessage());
+            throw InvalidScheduleEncodingException.invalidSchedule(encodedSchedule);
+        }
 
         // Verify all courses only have 1 section (valid schedule cannot have >1 section per course)
         List<CourseID> multipleCRNs = new ArrayList<>();
@@ -179,18 +189,21 @@ public class SchedulerService {
                 })
                 .map(c -> c.getSections().values().iterator().next())
                 .toList());
-        if (!multipleCRNs.isEmpty())
-            // todo - custom exception
-            throw new IllegalArgumentException(">1 crn");
+        if (!multipleCRNs.isEmpty()) {
+            LOGGER.error("Requested schedule has multiple CRNs for the same course when only 1 expected: {}", multipleCRNs);
+            throw InvalidScheduleEncodingException.invalidSchedule(encodedSchedule);
+        }
+
 
         // verify all requested crns were found / valid
         Set<Integer> foundCRNs = sections.stream().map(Section::getCrn).collect(Collectors.toSet());
         Set<Integer> missingCRNs = decoded.crns().stream()
                 .filter(crn -> !foundCRNs.contains(crn))
                 .collect(Collectors.toSet());
-        if (!missingCRNs.isEmpty())
-            // todo - custom exception
-            throw new IllegalArgumentException("Requested CRNs not found: " + missingCRNs);
+        if (!missingCRNs.isEmpty()) {
+            LOGGER.error("Requested schedule contains missing CRNs: {}", missingCRNs);
+            throw InvalidScheduleEncodingException.invalidSchedule(encodedSchedule);
+        }
 
         // check for any section conflicts
         while (!sections.isEmpty()) {
@@ -199,8 +212,8 @@ public class SchedulerService {
                     .filter(thisSection::conflictsWith)
                     .findAny()
                     .ifPresent(s -> {
-                        // todo custom error
-                        throw new IllegalArgumentException(thisSection.getCrn() + " conflicts with " + s.getCrn());
+                        LOGGER.error("Requested schedule is invalid, CRN:{} conflicts with CRN:{}", thisSection.getCrn(), s.getCrn());
+                        throw InvalidScheduleEncodingException.invalidSchedule(encodedSchedule);
                     });
         }
 
