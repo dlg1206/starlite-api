@@ -238,7 +238,7 @@ public class CourseFilter {
 
         // canAudit == true: reject courseIDs without an option to audit
         // canAudit == false: reject courseIDs with an option to audit
-        if (canAudit != null && course.canAudit() != canAudit)
+        if (canAudit != null && course.isCanAudit() != canAudit)
             return true;
 
         if (courseNumberFilter != null && courseNumberFilter.reject(course.getCourseID().number()))

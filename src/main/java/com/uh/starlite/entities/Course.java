@@ -3,7 +3,6 @@ package com.uh.starlite.entities;
 import com.uh.starlite.dto.DetailedCourseDTO;
 import com.uh.starlite.dto.ScheduledCourseDTO;
 import com.uh.starlite.dto.SimpleCourseDTO;
-import com.uh.starlite.enums.GradingOption;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,6 +32,8 @@ public class Course {
     private final String description;
     private final String prereqDescription;
     private final int credits;
+    @Getter
+    private final boolean canAudit;
     private final Set<GradingOption> gradingOptions;
     @Getter
     private final boolean majorRestriction;
@@ -52,6 +53,7 @@ public class Course {
      * @param prereqDescription Description of course prerequirements
      * @param startDate         Start date of course
      * @param credits           Number of credits the course is worth
+     * @param canAudit          If this course is available to audit
      * @param gradingOptions    Set of grading options available for this course
      * @param majorRestriction  If the selection is restricted to the major of the parent course
      * @param approvalAuthority Authority approval required to take the course
@@ -64,6 +66,7 @@ public class Course {
                    String description,
                    String prereqDescription,
                    int credits,
+                   boolean canAudit,
                    Set<GradingOption> gradingOptions,
                    boolean majorRestriction,
                    String approvalAuthority,
@@ -75,6 +78,7 @@ public class Course {
         this.description = description;
         this.prereqDescription = prereqDescription;
         this.credits = credits;
+        this.canAudit = canAudit;
         this.gradingOptions = gradingOptions;
         this.majorRestriction = majorRestriction;
         this.approvalAuthority = approvalAuthority;
@@ -91,13 +95,6 @@ public class Course {
     }
 
     /**
-     * @return True if can audit this course, false otherise
-     */
-    public boolean canAudit() {
-        return gradingOptions.contains(GradingOption.AUDIT);
-    }
-
-    /**
      * Convert this course to DTO without section details
      *
      * @return {@link SimpleCourseDTO}
@@ -105,7 +102,7 @@ public class Course {
     public SimpleCourseDTO toSimpleCourseDTO() {
         return new SimpleCourseDTO(courseID.subjectCode(), courseID.number(), name,
                 description, prereqDescription,
-                credits, gradingOptions.stream().map(GradingOption::getDescription).sorted().toList(),
+                credits, gradingOptions.stream().map(GradingOption::description).sorted().toList(),
                 majorRestriction, approvalAuthority,
                 startDate.toString(), endDate.toString(),
                 sections.size());
@@ -119,7 +116,7 @@ public class Course {
     public DetailedCourseDTO toDetailedCourseDTO() {
         return new DetailedCourseDTO(courseID.subjectCode(), courseID.number(), name,
                 description, prereqDescription,
-                credits, gradingOptions.stream().map(GradingOption::getDescription).sorted().toList(),
+                credits, gradingOptions.stream().map(GradingOption::description).sorted().toList(),
                 majorRestriction, approvalAuthority,
                 startDate.toString(), endDate.toString(),
                 sections.values().stream().map(Section::toSectionDTO).toList());
@@ -147,6 +144,7 @@ public class Course {
         private final int credits;
         private final Set<GradingOption> gradingOptions;
         private final Map<Integer, Section> sections;
+        private boolean canAudit;
         private String description;
         private String prereqDescription;
         @Setter
@@ -171,6 +169,7 @@ public class Course {
             this.number = number;
             this.name = name;
             this.credits = credits;
+            this.canAudit = false; // assume false until find grading
             this.gradingOptions = new HashSet<>();
             this.sections = new HashMap<>();
         }
@@ -199,6 +198,8 @@ public class Course {
          */
         public void addGradingOption(GradingOption gradingOption) {
             this.gradingOptions.add(gradingOption);
+            if (gradingOption.code().equals("A"))
+                this.canAudit = true;
         }
 
         /**
@@ -223,6 +224,7 @@ public class Course {
                     description,
                     prereqDescription,
                     credits,
+                    canAudit,
                     gradingOptions,
                     majorRestriction,
                     approvalAuthority,
