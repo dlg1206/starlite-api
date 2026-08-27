@@ -180,6 +180,10 @@ public class Course {
          * @param description Course description
          */
         public void setDescription(String description) {
+            // skip parsing null description
+            if (description == null)
+                return;
+
             description = description.strip();
             Matcher m = prereqRegex.matcher(description);
             // if find match, extract and remove from destining
