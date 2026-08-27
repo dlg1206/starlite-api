@@ -449,7 +449,7 @@ public class CourseFilter {
          * @param v Boolean to allow or deny only online courses
          * @return {@link Builder}
          */
-        public Builder onlyOnline(boolean v) {
+        public Builder onlyOnline(Boolean v) {
             this.onlyOnline = v;
             return this;
         }
