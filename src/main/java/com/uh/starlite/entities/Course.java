@@ -136,7 +136,7 @@ public class Course {
     }
 
     public static class Builder {
-        private static final Pattern prereqRegex = Pattern.compile(" Pre: (?!consent)(.*?)\\.");
+        private static final Pattern prereqRegex = Pattern.compile(" Pre: (?!consent)(.*)\\.?");
 
         private final String subjectCode;
         private final String number;
