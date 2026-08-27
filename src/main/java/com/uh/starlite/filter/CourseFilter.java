@@ -122,19 +122,22 @@ public class CourseFilter {
                 && descKeywordFilter == null
                 && hasPrerequisite == null
                 && canAudit == null
-                && hasMajorRestriction == null);
+                && hasMajorRestriction == null
+        );
         this.skipSectionValidation = (acceptCRNs == null
                 && rejectCRNs == null
                 && acceptInstructors == null
                 && rejectInstructors == null
                 && excludeFull == null
-                && excludeWaitlist == null);
+                && excludeWaitlist == null
+                && onlyAsync == null
+        );
         this.skipMeetingValidation = (acceptDays == null
                 && rejectDays == null
                 && startAfter == null
                 && endBefore == null
                 && onlyOnline == null
-                && onlyAsync == null);
+        );
     }
 
     /**
@@ -209,6 +212,12 @@ public class CourseFilter {
             return true;
 
         if (rejectInstructors != null && rejectInstructors.contains(section.getInstructor().username()))
+            return true;
+
+        // onlyAsync == true: reject sync classes
+        // onlyAsync == false: reject async classes
+        // section with no classes is async by default
+        if (onlyAsync != null && section.getMeetings().isEmpty() != onlyAsync)
             return true;
 
         // validate meetings if not skipping
