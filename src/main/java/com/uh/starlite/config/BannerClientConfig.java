@@ -4,13 +4,13 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
 
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.net.http.HttpClient;
+import java.time.Duration;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
@@ -27,6 +27,7 @@ import java.util.concurrent.Semaphore;
 public class BannerClientConfig {
 
     private static final int BATCH_SIZE = 9;    // min size per batch so at least 1 subject
+    private static final int DEFAULT_TIMEOUT_S = 5;
 
     @Value("${starlite.banner.api.max-concurrent-batches}")
     private int maxConcurrentBatches;
@@ -77,9 +78,11 @@ public class BannerClientConfig {
         cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
         HttpClient httpClient = HttpClient.newBuilder()
                 .cookieHandler(cookieManager)
+                .connectTimeout(Duration.ofSeconds(DEFAULT_TIMEOUT_S))
                 .build();
 
-        ClientHttpRequestFactory requestFactory = new JdkClientHttpRequestFactory(httpClient);
+        JdkClientHttpRequestFactory requestFactory = new JdkClientHttpRequestFactory(httpClient);
+        requestFactory.setReadTimeout(Duration.ofSeconds(DEFAULT_TIMEOUT_S));
 
         // build the client
         return RestClient.builder()

@@ -7,11 +7,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Semaphore;
@@ -31,6 +34,7 @@ import java.util.function.Supplier;
 public class BannerAPIService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BannerAPIService.class);
+    private static final int DEFAULT_MAX_RETRIES = 3;
 
     private final RestClient bannerClient;
     private final BannerClientConfig config;
@@ -85,13 +89,38 @@ public class BannerAPIService {
      */
     private <T> T fetch(String uri, ParameterizedTypeReference<T> typeRef) {
         Timer timer = new Timer();
-        T result = bannerClient.get()
-                .uri(uri)
-                .header("X-Recaptcha-Token", "")
-                .retrieve()
-                .body(typeRef);
-        LOGGER.info("{}{} | Completed in {}", config.getBaseUrl(), uri, timer.formatElapsed());
-        return result;
+        T result;
+        for (int i = 0; i < DEFAULT_MAX_RETRIES; i++) {
+            timer.restart();
+            // log attempt
+            if (i > 0)
+                LOGGER.warn("{}{} | Attempt {}/3", config.getBaseUrl(), uri, i + 1);
+            // fetch
+            try {
+                result = bannerClient.get()
+                        .uri(uri)
+                        .header("X-Recaptcha-Token", "")
+                        .retrieve()
+                        .onStatus(status -> !status.equals(HttpStatus.OK),
+                                (request, response) -> {
+                                    String body = new String(response.getBody().readAllBytes(), StandardCharsets.UTF_8);
+                                    LOGGER.error("{}{} | {} | Failed after {} | Body: {}", config.getBaseUrl(), uri, response.getStatusCode(), timer.formatElapsed(), body);
+                                })
+                        .body(typeRef);
+            } catch (ResourceAccessException e) {
+                // timeout
+                LOGGER.error("{}{} | Request timed out after {}", config.getBaseUrl(), uri, timer.formatElapsed());
+                continue;
+            }
+            // 2XX response
+            if (result != null) {
+                LOGGER.info("{}{} | Completed in {}", config.getBaseUrl(), uri, timer.formatElapsed());
+                return result;
+            }
+        }
+        // todo - should not reach here
+        LOGGER.error("{}{} | Failed to fetch after three attempts in {}", config.getBaseUrl(), uri, timer.formatElapsed());
+        return null;
     }
 
     /**
