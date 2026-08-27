@@ -32,7 +32,7 @@ public record DetailedCourseDTO(String subjectCode, String courseNumber, String 
                 String num = s.sectionNumber();
                 int i = 0;
                 while (i < num.length() && Character.isDigit(num.charAt(i))) i++;
-                return Integer.parseInt(num.substring(0, i));
+                return i == 0 ? Integer.MAX_VALUE : Integer.parseInt(num.substring(0, i));
             }).thenComparing(SectionDTO::sectionNumber);
 
     // compact constructor - normalizes/sorts sections on construction
