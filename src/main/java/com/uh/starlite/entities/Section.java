@@ -253,7 +253,7 @@ public class Section implements TimeBlock {
                     new ArrayList<>(notes),
                     // remove any placeholder online async meetings
                     meetings.stream().filter(m -> m.getDay() != null).toList()
-                    );
+            );
         }
 
 

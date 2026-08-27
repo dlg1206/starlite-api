@@ -1,11 +1,10 @@
 package com.uh.starlite.dto;
 
 /**
- * <b>File:</b> IdentifierDTO.java
- * <p>
- * <b>Description:</b> IdentifierDTO
+ * DTO for key:value pair
  *
- * @author Derek Garcia
+ * @param id    Key or ID
+ * @param value Value of ID
  */
 public record IdentifierDTO(String id, String value) {
 }

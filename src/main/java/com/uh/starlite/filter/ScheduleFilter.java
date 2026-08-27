@@ -2,7 +2,6 @@ package com.uh.starlite.filter;
 
 import com.uh.starlite.entities.CourseID;
 import com.uh.starlite.entities.TimeBuffer;
-import com.uh.starlite.service.CourseFilterMapper;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,13 +31,6 @@ public record ScheduleFilter(
     }
 
     /**
-     * @return Requested course IDs as strings
-     */
-    public List<String> getCourseIDsAsStrings() {
-        return courseIDs.stream().map(CourseID::toString).toList();
-    }
-
-    /**
      * @return Subject codes for this filter
      */
     public List<String> getSubjectCodes() {
@@ -48,11 +40,12 @@ public record ScheduleFilter(
     /**
      * Map this object to a course filter
      *
-     * @param courseFilterMapper Mapper to course filter
      * @return {@link CourseFilter}
      */
     @Override
-    public CourseFilter toCourseFilter(CourseFilterMapper courseFilterMapper) {
-        return courseFilterMapper.toFilter(this);
+    public CourseFilter toCourseFilter() {
+        return new CourseFilter.Builder()
+                .courseIDFilter(courseIDs.stream().map(CourseID::toString).toList(), null)
+                .build();
     }
 }

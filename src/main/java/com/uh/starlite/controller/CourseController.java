@@ -31,7 +31,7 @@ public class CourseController {
     private final CourseService courseService;
 
     /**
-     * GET Endpoint: /campuses/{campusCode}/terms/{termCode}/courseIDs
+     * GET Endpoint: /campuses/{campusCode}/terms/{termCode}/courses
      * Get all courseIDs offered at a campus and term
      *
      * @param campusCode Campus code to search for subjects

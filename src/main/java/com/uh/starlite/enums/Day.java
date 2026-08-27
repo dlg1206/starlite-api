@@ -1,7 +1,9 @@
 package com.uh.starlite.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import net.fortuna.ical4j.model.WeekDay;
 
+import java.time.DayOfWeek;
 import java.util.List;
 
 /**
@@ -43,6 +45,42 @@ public enum Day {
             case "sat", "saturday", "s" -> SAT;
             case "tba" -> TBD;
             default -> throw new IllegalArgumentException("Unknown day code: " + value);
+        };
+    }
+
+    /**
+     * Convert Day to {@link DayOfWeek}
+     *
+     * @return {@link DayOfWeek} or null if TBD
+     */
+    public DayOfWeek toDayOfWeek() {
+        return switch (this) {
+            case SUN -> DayOfWeek.SUNDAY;
+            case MON -> DayOfWeek.MONDAY;
+            case TUE -> DayOfWeek.TUESDAY;
+            case WED -> DayOfWeek.WEDNESDAY;
+            case THU -> DayOfWeek.THURSDAY;
+            case FRI -> DayOfWeek.FRIDAY;
+            case SAT -> DayOfWeek.SATURDAY;
+            default -> null;
+        };
+    }
+
+    /**
+     * Convert Day to {@link WeekDay}
+     *
+     * @return {@link WeekDay} or null if TBD
+     */
+    public WeekDay toWeekDay() {
+        return switch (this) {
+            case SUN -> WeekDay.SU;
+            case MON -> WeekDay.MO;
+            case TUE -> WeekDay.TU;
+            case WED -> WeekDay.WE;
+            case THU -> WeekDay.TH;
+            case FRI -> WeekDay.FR;
+            case SAT -> WeekDay.SA;
+            default -> null;
         };
     }
 }

@@ -3,7 +3,6 @@ package com.uh.starlite.service;
 
 import com.uh.starlite.entities.CourseID;
 import com.uh.starlite.entities.TimeBlock;
-import lombok.Getter;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -72,7 +71,7 @@ class Scheduler {
     private void solve(PotentialSchedule potentialSchedule) {
         // Add schedule if complete and no equivalent schedule found
         if (potentialSchedule.isComplete()) {
-            schedules.putIfAbsent(potentialSchedule.hashCode(), potentialSchedule.getCurrentCRNs());
+            schedules.putIfAbsent(potentialSchedule.hashCode(), potentialSchedule.currentCRNs());
             return;
         }
 
@@ -122,12 +121,10 @@ class Scheduler {
 
     /**
      * Internal schedule object used for solving schedules
+     *
+     * @param currentCRNs Tree set orders ints in same way - can use as ID since order !matter
      */
-    private static class PotentialSchedule {
-
-        private final Map<CourseID, Set<Integer>> remainingCourses;
-        @Getter
-        private final TreeSet<Integer> currentCRNs;     // Tree set orders ints in same way - can use as ID since order !matter
+    private record PotentialSchedule(Map<CourseID, Set<Integer>> remainingCourses, TreeSet<Integer> currentCRNs) {
 
         /**
          * Create a new starting potential schedule
@@ -136,8 +133,7 @@ class Scheduler {
          * @param startCRN         Section to start with
          */
         public PotentialSchedule(Map<CourseID, Set<Integer>> remainingCourses, int startCRN) {
-            this.remainingCourses = remainingCourses;
-            this.currentCRNs = new TreeSet<>();
+            this(remainingCourses, new TreeSet<>());
             this.currentCRNs.add(startCRN);
         }
 
@@ -148,8 +144,8 @@ class Scheduler {
          * @param nextCRN Next course reference number / section to add
          */
         private PotentialSchedule(PotentialSchedule other, Map<CourseID, Set<Integer>> remainingCourses, int nextCRN) {
-            this.remainingCourses = remainingCourses;   // generated with trySuccessors
-            this.currentCRNs = new TreeSet<>(other.currentCRNs);
+            // generated with trySuccessors
+            this(remainingCourses, new TreeSet<>(other.currentCRNs));
             this.currentCRNs.add(nextCRN);
         }
 

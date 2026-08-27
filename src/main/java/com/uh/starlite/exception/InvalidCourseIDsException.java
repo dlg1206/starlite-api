@@ -33,7 +33,6 @@ public class InvalidCourseIDsException extends IllegalArgumentException {
      */
     public static InvalidCourseIDsException wildcardNotAllowed(List<CourseID> invalidCourseIDs) {
         return new InvalidCourseIDsException("Course number cannot contain wildcard '*' characters", invalidCourseIDs);
-
     }
 
     /**
