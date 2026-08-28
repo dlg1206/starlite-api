@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashSet;
 
-import static com.uh.starlite.util.Util.buildCoursesUri;
+import static com.uh.starlite.util.Uri.courses;
 
 /**
  * <b>File:</b> CourseController.java
@@ -47,7 +47,7 @@ public class CourseController {
             @RequestParam(required = false) LinkedHashSet<String> subjects,
             @RequestParam(defaultValue = "false") boolean detailed
     ) {
-        LOGGER.info("GET | {} | Fetching courses", buildCoursesUri(campusCode, termCode, subjects, detailed));
+        LOGGER.info("GET | {} | Fetching courses", courses(campusCode, termCode, subjects, detailed));
         return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(campusCode, termCode, subjects, detailed)));
     }
 
@@ -69,7 +69,7 @@ public class CourseController {
             @RequestParam(required = false) LinkedHashSet<String> subjects,
             @RequestParam(defaultValue = "false") boolean detailed,
             @Valid @RequestBody CourseFilterRequest request) {
-        LOGGER.info("POST | {} | Searching courses", buildCoursesUri(campusCode, termCode, subjects, detailed));
+        LOGGER.info("POST | {} | Searching courses", courses(campusCode, termCode, subjects, detailed));
         return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(campusCode, termCode, subjects, detailed, request)));
     }
 

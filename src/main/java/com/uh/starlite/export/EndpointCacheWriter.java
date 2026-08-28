@@ -6,7 +6,6 @@ import com.uh.starlite.entities.Course;
 import com.uh.starlite.response.CourseResponse;
 import com.uh.starlite.response.IdentifierResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
@@ -14,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.uh.starlite.util.Util.buildCoursesUri;
+import static com.uh.starlite.util.Uri.*;
 
 /**
  * <b>File:</b> CacheWriter.java
@@ -27,8 +26,6 @@ import static com.uh.starlite.util.Util.buildCoursesUri;
 public class EndpointCacheWriter implements ExportWriter {
     private final Map<String, Object> endpointCache;
     private final ObjectMapper mapper;
-    @Value("${server.servlet.context-path}")
-    private String apiPrefix;
 
     /**
      * Format and write campuses
@@ -37,7 +34,7 @@ public class EndpointCacheWriter implements ExportWriter {
      */
     @Override
     public void writeCampuses(List<IdentifierDTO> campuses) {
-        endpointCache.put("%s/campuses".formatted(apiPrefix), mapper.writeValueAsString(new IdentifierResponse(campuses)));
+        endpointCache.put(campuses(), mapper.writeValueAsString(new IdentifierResponse(campuses)));
     }
 
     /**
@@ -48,10 +45,7 @@ public class EndpointCacheWriter implements ExportWriter {
      */
     @Override
     public void writeTerms(String campusCode, List<IdentifierDTO> terms) {
-        endpointCache.put(
-                "%s/campuses/%s".formatted(apiPrefix, campusCode),
-                mapper.writeValueAsString(new IdentifierResponse(terms))
-        );
+        endpointCache.put(terms(campusCode), mapper.writeValueAsString(new IdentifierResponse(terms)));
     }
 
     /**
@@ -63,10 +57,7 @@ public class EndpointCacheWriter implements ExportWriter {
      */
     @Override
     public void writeSubjects(String campusCode, String termCode, List<IdentifierDTO> subjects) {
-        endpointCache.put(
-                "%s/campuses/%s/terms/%s/subjects".formatted(apiPrefix, campusCode, termCode),
-                mapper.writeValueAsString(new IdentifierResponse(subjects))
-        );
+        endpointCache.put(subjects(campusCode, termCode), mapper.writeValueAsString(new IdentifierResponse(subjects)));
     }
 
     /**
@@ -90,18 +81,20 @@ public class EndpointCacheWriter implements ExportWriter {
         // convert into responses
         subjectMap.entrySet().parallelStream()
                 .forEach(e -> endpointCache
-                        .put("%s/%s".formatted(apiPrefix, buildCoursesUri(campusCode, termCode, e.getKey(), true)),
+                        .put(subjects(campusCode, termCode, e.getKey(), true),
                                 mapper.writeValueAsString(new CourseResponse(e.getValue())))
                 );
     }
 
     /**
-     * Close and export data
+     * Close and export data. Deletes any saved data
      *
      * @return Export
      */
     @Override
     public byte[] write() {
-        return new byte[0];
+        byte[] result = mapper.writeValueAsBytes(endpointCache);
+        endpointCache.clear();
+        return result;
     }
 }

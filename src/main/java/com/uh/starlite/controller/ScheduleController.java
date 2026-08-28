@@ -14,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.uh.starlite.util.Uri.*;
+
 /**
  * <b>File:</b> ScheduleController.java
  * <p>
@@ -43,7 +45,7 @@ public class ScheduleController {
             @PathVariable String campusCode,
             @PathVariable String termCode,
             @Valid @RequestBody ScheduleRequest request) {
-        LOGGER.info("POST | /campuses/{}/terms/{}/schedule | Generating schedules", campusCode, termCode);
+        LOGGER.info("POST | {} | Generating schedules", schedule(campusCode, termCode));
         return ResponseEntity.ok(new SchedulesResponse(schedulerService.generateScheduleDTOs(campusCode, termCode, request)));
     }
 
@@ -52,26 +54,26 @@ public class ScheduleController {
      * GET Endpoint: /schedule/{encodedSchedule}/json
      * Generate convert a schedule encoding to JSON
      *
-     * @param encodedSchedule Base64 encoded schedule
+     * @param encoding Base64 encoded schedule
      * @return JSON of decoded schedule
      */
-    @GetMapping(value = "/schedule/{encodedSchedule}/json")
-    public ResponseEntity<ScheduleResponse> getScheduleJSON(@PathVariable String encodedSchedule) {
-        LOGGER.info("GET | /schedule/{}/json | Reconstructing schedule", encodedSchedule);
-        return ResponseEntity.ok(new ScheduleResponse(schedulerService.decodeSchedule(encodedSchedule)));
+    @GetMapping(value = "/schedule/{encoding}/json")
+    public ResponseEntity<ScheduleResponse> getScheduleJSON(@PathVariable String encoding) {
+        LOGGER.info("GET | {} | Reconstructing schedule", scheduleJson(encoding));
+        return ResponseEntity.ok(new ScheduleResponse(schedulerService.decodeSchedule(encoding)));
     }
 
     /**
      * GET Endpoint: /schedule/{encodedSchedule}/ics
      * Generate convert a schedule encoding to ICS file
      *
-     * @param encodedSchedule Base64 encoded schedule
+     * @param encoding Base64 encoded schedule
      * @return ICS of decoded schedule
      */
-    @GetMapping(value = "/schedule/{encodedSchedule}/ics", produces = "text/calendar")
-    public ResponseEntity<String> getScheduleICS(@PathVariable String encodedSchedule) {
-        LOGGER.info("GET | /schedule/{}/ics | Reconstructing schedule", encodedSchedule);
-        IcsDTO icsDTO = schedulerService.decodeScheduleToICS(encodedSchedule);
+    @GetMapping(value = "/schedule/{encoding}/ics", produces = "text/calendar")
+    public ResponseEntity<String> getScheduleICS(@PathVariable String encoding) {
+        LOGGER.info("GET | {} | Reconstructing schedule", scheduleIcs(encoding));
+        IcsDTO icsDTO = schedulerService.decodeScheduleToICS(encoding);
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("text/calendar; charset=UTF-8"))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + icsDTO.filename() + "\"")
