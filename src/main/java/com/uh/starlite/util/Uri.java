@@ -144,4 +144,16 @@ public class Uri {
     }
 
 
+    /**
+     * Build a complex uri with optional params for logging
+     *
+     * @return Formatted uri
+     */
+    public static String exportData() {
+        return UriComponentsBuilder
+                .fromPath("%s/export/data".formatted(API_PREFIX))
+                .toUriString();
+    }
+
+
 }

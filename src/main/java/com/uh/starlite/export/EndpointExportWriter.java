@@ -15,20 +15,20 @@ import java.util.Map;
 import static com.uh.starlite.util.Uri.*;
 
 /**
- * <b>File:</b> CacheWriter.java
+ * <b>File:</b> EndpointExportWriter.java
  * <p>
  * <b>Description:</b> Cache endpoint responses for offline use
  *
  * @author Derek Garcia
  */
-public class EndpointCacheWriter implements ExportWriter {
+public class EndpointExportWriter implements ExportWriter {
     private final Map<String, Object> endpointCache;
     private final ObjectMapper mapper;
 
     /**
      * Create new endpoint cache writer
      */
-    public EndpointCacheWriter() {
+    public EndpointExportWriter() {
         this.endpointCache = new HashMap<>();
         this.mapper = new ObjectMapper();
     }

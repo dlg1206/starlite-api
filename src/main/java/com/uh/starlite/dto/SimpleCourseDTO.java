@@ -1,5 +1,6 @@
 package com.uh.starlite.dto;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -21,7 +22,7 @@ public record SimpleCourseDTO(String subjectCode, String courseNumber, String na
                               String description, String prereqDescription,
                               int credits, List<String> gradingOptions,
                               boolean majorRestriction, String approvalAuthority,
-                              String startDate, String endDate,
+                              LocalDate startDate, LocalDate endDate,
                               int numSections) implements CourseDTO {
     /**
      * @return Course subject code

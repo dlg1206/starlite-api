@@ -4,6 +4,7 @@ import com.uh.starlite.dto.IdentifierDTO;
 import com.uh.starlite.dto.OfferingDTO;
 import com.uh.starlite.entities.Course;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -43,5 +44,5 @@ public interface ExportWriter {
      *
      * @return Export
      */
-    byte[] write();
+    byte[] write() throws IOException;
 }

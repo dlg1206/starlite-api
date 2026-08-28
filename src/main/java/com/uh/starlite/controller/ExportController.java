@@ -1,7 +1,6 @@
 package com.uh.starlite.controller;
 
 
-import com.uh.starlite.export.EndpointCacheWriter;
 import com.uh.starlite.service.ExportService;
 import com.uh.starlite.util.Uri;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
 
 /**
  * <b>File:</b> ExportController.java
@@ -32,6 +33,9 @@ public class ExportController {
     @Value("${starlite.export.endpoint-cache}")
     private String endpointCacheFile;
 
+    @Value("${starlite.export.data-cache}")
+    private String dataCacheFile;
+
     /**
      * GET Endpoint: /export/endpoints
      * Export a JSON of all campus, term, and course requests
@@ -40,15 +44,28 @@ public class ExportController {
      * @return JSON of all campus, term, and course requests
      */
     @GetMapping("/endpoints")
-    public ResponseEntity<byte[]> exportEndpoints() {
+    public ResponseEntity<byte[]> exportEndpoints() throws IOException {
         LOGGER.info("GET | {} | Exported endpoint cache", Uri.exportEndpoints());
-        byte[] data = exportService.exportCourses(new EndpointCacheWriter());
+        byte[] data = exportService.exportEndpoints();
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .header(
-                        HttpHeaders.CONTENT_DISPOSITION,
-                        "attachment; filename=\"%s\"".formatted(endpointCacheFile)
-                )
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"%s\"".formatted(endpointCacheFile))
+                .body(data);
+    }
+
+    /**
+     * GET Endpoint: /export/jsonl
+     * Export a zip archive with jsonl files for campus, term, course, and instructor details
+     *
+     * @return zip archive
+     */
+    @GetMapping("/jsonl")
+    public ResponseEntity<byte[]> exportData() throws IOException {
+        LOGGER.info("GET | {} | Exported data", Uri.exportData());
+        byte[] data = exportService.exportData();
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("application/zip"))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"%s\"".formatted(dataCacheFile))
                 .body(data);
     }
 }

@@ -1,5 +1,6 @@
 package com.uh.starlite.entities;
 
+import com.uh.starlite.dto.CourseRecord;
 import com.uh.starlite.dto.DetailedCourseDTO;
 import com.uh.starlite.dto.ScheduledCourseDTO;
 import com.uh.starlite.dto.SimpleCourseDTO;
@@ -104,7 +105,7 @@ public class Course {
                 description, prereqDescription,
                 credits, gradingOptions.stream().map(GradingOption::description).sorted().toList(),
                 majorRestriction, approvalAuthority,
-                startDate.toString(), endDate.toString(),
+                startDate, endDate,
                 sections.size());
     }
 
@@ -118,7 +119,7 @@ public class Course {
                 description, prereqDescription,
                 credits, gradingOptions.stream().map(GradingOption::description).sorted().toList(),
                 majorRestriction, approvalAuthority,
-                startDate.toString(), endDate.toString(),
+                startDate, endDate,
                 sections.values().stream().map(Section::toSectionDTO).toList());
     }
 
@@ -134,6 +135,23 @@ public class Course {
                 startDate, endDate,
                 credits, sections.get(sectionCRN).toSectionDTO());
     }
+
+    /**
+     * Convert this course into a jsonl record map
+     *
+     * @param campusCode Campus code
+     * @param termCode   Term code
+     * @return {@link CourseRecord}
+     */
+    public CourseRecord toCourseRecord(String campusCode, String termCode) {
+        return new CourseRecord(courseID.uuid(),
+                campusCode, termCode, courseID.subjectCode(), courseID.number(),
+                name, description, prereqDescription,
+                credits, gradingOptions.stream().map(GradingOption::description).sorted().toList(),
+                majorRestriction, approvalAuthority,
+                startDate, endDate);
+    }
+
 
     public static class Builder {
         private static final Pattern prereqRegex = Pattern.compile(" Pre: (?!consent)(.*)\\.?");

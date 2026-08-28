@@ -3,17 +3,19 @@ package com.uh.starlite.service;
 import com.uh.starlite.dto.IdentifierDTO;
 import com.uh.starlite.dto.OfferingDTO;
 import com.uh.starlite.entities.Course;
+import com.uh.starlite.export.EndpointExportWriter;
 import com.uh.starlite.export.ExportWriter;
+import com.uh.starlite.export.JsonlExportWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
 import static com.uh.starlite.util.Util.pluralS;
@@ -78,12 +80,12 @@ public class ExportService {
     }
 
     /**
-     * Export all courses offered by the University of Hawai'i
+     * Export course data offering by the University of Hawai'i
      *
      * @param writer Writer to format Banner9 responses for export
      * @return export
      */
-    public byte[] exportCourses(ExportWriter writer) {
+    private byte[] exportCourses(ExportWriter writer) throws IOException {
         // write campus codes
         List<IdentifierDTO> campuses = campusService.lookupCampusCodeIdentifierDTOs();
         writer.writeCampuses(campuses);
@@ -92,20 +94,38 @@ public class ExportService {
         List<OfferingDTO> offerings = termService.fetchAllCourseOfferings();
         writer.writeOfferings(offerings);
 
-        AtomicInteger processedOfferings = new AtomicInteger();
-
         // start all campus/term/subjects requests
         List<CompletableFuture<Void>> courseRequests =
                 offerings.stream()
                         .map(o -> CompletableFuture.runAsync(
-                                () -> processedOfferings.addAndGet(handleCourses(writer, o.campusCode(), o.termCode(), o.subjectCode())),
+                                () -> handleCourses(writer, o.campusCode(), o.termCode(), o.subjectCode()),
                                 exportExecutor
                         ))
                         .toList();
 
         // wait for all futures to finish and export final string
         CompletableFuture.allOf(courseRequests.toArray(new CompletableFuture[0])).join();
-        // todo - void?
         return writer.write();
+    }
+
+    /**
+     * Export a JSON of all campus, term, and course requests
+     * Courses and schedule endpoints are NOT included
+     *
+     * @return JSON bytes
+     * @throws IOException Fail to write bytes
+     */
+    public byte[] exportEndpoints() throws IOException {
+        return exportCourses(new EndpointExportWriter());
+    }
+
+    /**
+     * GET Endpoint: /export/jsonl
+     * Export a zip archive with jsonl files for campus, term, course, and instructor details
+     *
+     * @return zip bytes
+     */
+    public byte[] exportData() throws IOException {
+        return exportCourses(new JsonlExportWriter());
     }
 }
