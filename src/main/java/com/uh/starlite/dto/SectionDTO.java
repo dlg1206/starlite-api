@@ -33,8 +33,8 @@ public record SectionDTO(int crn, String sectionNumber,
 
     // comparator that sorts meetings by the day of the week, then starting time
     private static final Comparator<MeetingDTO> BY_MEETING_TIME = Comparator
-            .comparing(MeetingDTO::day)
-            .thenComparing(MeetingDTO::startTime);
+            .comparing(MeetingDTO::day, Comparator.nullsFirst(Comparator.naturalOrder()))
+            .thenComparing(MeetingDTO::startTime, Comparator.nullsFirst(Comparator.naturalOrder()));
 
     // compact constructor - normalizes/sorts meetings on construction
     public SectionDTO {

@@ -33,7 +33,8 @@ public record DetailedCourseDTO(String subjectCode, String courseNumber, String 
                 int i = 0;
                 while (i < num.length() && Character.isDigit(num.charAt(i))) i++;
                 return i == 0 ? Integer.MAX_VALUE : Integer.parseInt(num.substring(0, i));
-            }).thenComparing(SectionDTO::sectionNumber);
+            })
+            .thenComparing(SectionDTO::sectionNumber, Comparator.nullsFirst(Comparator.naturalOrder()));
 
     // compact constructor - normalizes/sorts sections on construction
     public DetailedCourseDTO {
