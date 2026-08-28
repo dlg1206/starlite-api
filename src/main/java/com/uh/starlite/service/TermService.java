@@ -54,7 +54,7 @@ public class TermService {
         List<OfferingDTO> results = bannerAPIService.fetchSubjects().stream()
                 .map(SubjectsResponse::toOfferingDTO)
                 .toList();
-        LOGGER.info("Found {}", pluralS(results.size(), "course offer"));
+        LOGGER.info("Found {}", pluralS(results.size(), "course offering"));
         return results;
     }
 

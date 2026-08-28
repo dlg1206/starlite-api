@@ -1,6 +1,7 @@
 package com.uh.starlite.export;
 
 import com.uh.starlite.dto.IdentifierDTO;
+import com.uh.starlite.dto.OfferingDTO;
 import com.uh.starlite.entities.Course;
 
 import java.util.List;
@@ -21,30 +22,21 @@ public interface ExportWriter {
     void writeCampuses(List<IdentifierDTO> campuses);
 
     /**
-     * Format and write terms
+     * Format and write terms and subjects
      *
-     * @param campusCode Campus code
-     * @param terms      List of term identifiers
+     * @param offerings List of subject offerings at campuses
      */
-    void writeTerms(String campusCode, List<IdentifierDTO> terms);
-
-    /**
-     * Format and write subjects
-     *
-     * @param campusCode Campus code
-     * @param termCode   Term code
-     * @param subjects   List of subject identifiers
-     */
-    void writeSubjects(String campusCode, String termCode, List<IdentifierDTO> subjects);
+    void writeOfferings(List<OfferingDTO> offerings);
 
     /**
      * Format and write courses
      *
-     * @param campusCode Campus code
-     * @param termCode   Term code
-     * @param courses    List of courses
+     * @param campusCode  Campus code
+     * @param termCode    Term code
+     * @param subjectCode Subject code
+     * @param courses     List of courses
      */
-    void writeCourses(String campusCode, String termCode, List<Course> courses);
+    void writeCourse(String campusCode, String termCode, String subjectCode, List<Course> courses);
 
     /**
      * Close and export data

@@ -77,7 +77,7 @@ public class SchedulerService {
         ScheduleFilter scheduleFilter = scheduleRequest.toSchedulerFilter();
         List<String> subjectCodes = scheduleFilter.getSubjectCodes();
         List<Course> courses = scheduleFilter.toCourseFilter()
-                .filterCourses(courseService.fetchCourses(campusCode, termCode, subjectCodes));
+                .filterCourses(courseService.fetchCourses(campusCode, termCode, subjectCodes, false));
         // check for missing courses
         validateCourseIDs(courses, scheduleFilter.courseIDs());
 
@@ -168,7 +168,8 @@ public class SchedulerService {
             courses = cf.filterCourses(courseService.fetchCourses(
                     decoded.campusCode(),
                     decoded.termCode(),
-                    decoded.subjectCodes()
+                    decoded.subjectCodes(),
+                    false
             ));
 
         } catch (Exception e) {

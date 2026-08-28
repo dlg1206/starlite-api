@@ -1,6 +1,5 @@
 package com.uh.starlite.util;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Collection;
@@ -13,8 +12,8 @@ import java.util.Collection;
  * @author Derek Garcia
  */
 public class Uri {
-    @Value("${server.servlet.context-path}")
-    private static String API_PREFIX;
+
+    private static final String API_PREFIX = "/api/v2";
 
     // prevent instantiation
     private Uri() {
@@ -132,4 +131,17 @@ public class Uri {
                 .fromPath("%s/schedule/%s/json".formatted(API_PREFIX, encoding))
                 .toUriString();
     }
+
+    /**
+     * Build a complex uri with optional params for logging
+     *
+     * @return Formatted uri
+     */
+    public static String exportEndpoints() {
+        return UriComponentsBuilder
+                .fromPath("%s/export/endpoints".formatted(API_PREFIX))
+                .toUriString();
+    }
+
+
 }

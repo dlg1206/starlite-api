@@ -1,6 +1,5 @@
 package com.uh.starlite.client.banner;
 
-import com.uh.starlite.dto.IdentifierDTO;
 import com.uh.starlite.dto.OfferingDTO;
 
 /**

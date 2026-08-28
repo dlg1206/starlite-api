@@ -114,7 +114,7 @@ public class BannerAPIService {
             }
             // 2XX response
             if (result != null) {
-                LOGGER.info("{}{} | Completed in {}", config.getBaseUrl(), uri, timer.formatElapsed());
+                LOGGER.debug("{}{} | Completed in {}", config.getBaseUrl(), uri, timer.formatElapsed());
                 return result;
             }
         }
