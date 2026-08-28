@@ -2,6 +2,7 @@ package com.uh.starlite.service;
 
 import com.uh.starlite.client.banner.SubjectsResponse;
 import com.uh.starlite.dto.IdentifierDTO;
+import com.uh.starlite.dto.OfferingDTO;
 import com.uh.starlite.exception.InvalidSubjectCodesException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -90,10 +91,10 @@ public class SubjectService {
         // validate campus and term
         String normalizedCampusCode = termService.validateCampusTerm(campusCode, termCode);
         // fetch subjects for campus and term
-        return bannerAPIService.fetchSubjects().stream()
-                .filter(sr -> sr.ssbsectCampCode().toUpperCase().equals(normalizedCampusCode))
-                .filter(sr -> sr.stvtermCode().equals(termCode))
-                .map(SubjectsResponse::toSubjectIdentifierDTO)
+        return termService.fetchAllCourseOfferings().stream()
+                .filter(o -> o.campusCode().toUpperCase().equals(normalizedCampusCode))
+                .filter(o -> o.termCode().equals(termCode))
+                .map(OfferingDTO::toSubjectIdentifierDTO)
                 // dedup
                 .distinct().toList();
     }
