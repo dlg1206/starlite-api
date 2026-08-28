@@ -32,6 +32,7 @@ public class JsonlExportWriter implements ExportWriter {
     private final LinkedHashSet<CampusRecord> campusSet;
     private final LinkedHashSet<TermRecord> termSet;
     private final LinkedHashSet<SubjectRecord> subjectSet;
+    private final LinkedHashSet<OfferingRecord> offeringSet;
     private final LinkedHashSet<CourseRecord> courseSet;
     private final LinkedHashSet<SectionRecord> sectionSet;
     private final LinkedHashSet<MeetingRecord> meetingSet;
@@ -51,6 +52,7 @@ public class JsonlExportWriter implements ExportWriter {
         this.campusSet = new LinkedHashSet<>();
         this.termSet = new LinkedHashSet<>();
         this.subjectSet = new LinkedHashSet<>();
+        this.offeringSet = new LinkedHashSet<>();
         this.courseSet = new LinkedHashSet<>();
         this.sectionSet = new LinkedHashSet<>();
         this.meetingSet = new LinkedHashSet<>();
@@ -126,6 +128,7 @@ public class JsonlExportWriter implements ExportWriter {
         files.put("campuses.jsonl", toByteArray(campusSet));
         files.put("terms.jsonl", toByteArray(termSet));
         files.put("subjects.jsonl", toByteArray(subjectSet));
+        files.put("offerings.jsonl", toByteArray(offeringSet));
         files.put("courses.jsonl", toByteArray(courseSet));
         files.put("sections.jsonl", toByteArray(sectionSet));
         files.put("meetings.jsonl", toByteArray(meetingSet));
@@ -153,7 +156,8 @@ public class JsonlExportWriter implements ExportWriter {
     public void writeOfferings(List<OfferingDTO> offerings) {
         offerings.forEach(o -> {
             termSet.add(new TermRecord(o.termCode(), o.termName()));
-            subjectSet.add(new SubjectRecord(o.campusCode(), o.termCode(), o.subjectCode(), o.subjectName()));
+            subjectSet.add(new SubjectRecord(o.subjectCode(), o.subjectName()));
+            offeringSet.add(new OfferingRecord(o.campusCode(), o.termCode(), o.subjectCode()));
         });
         updateWriteTime();
     }
@@ -227,12 +231,20 @@ public class JsonlExportWriter implements ExportWriter {
     /**
      * Internal subject record
      *
-     * @param campus  Campus code
-     * @param term    Term code
      * @param subject Subject code
      * @param name    Name of subject
      */
-    private record SubjectRecord(String campus, String term, String subject, String name) {
+    private record SubjectRecord(String subject, String name) {
+    }
+
+    /**
+     * Internal offering record
+     *
+     * @param campus  Campus code
+     * @param term    Term code
+     * @param subject Subject code
+     */
+    private record OfferingRecord(String campus, String term, String subject) {
     }
 
     /**
