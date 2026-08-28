@@ -2,7 +2,6 @@ package com.uh.starlite.entities;
 
 
 import com.uh.starlite.dto.SectionDTO;
-import com.uh.starlite.dto.SectionRecord;
 import com.uh.starlite.enums.SectionFormat;
 import lombok.Getter;
 import lombok.Setter;
@@ -113,20 +112,6 @@ public class Section implements TimeBlock {
         );
     }
 
-    /**
-     * Convert this section into a jsonl record map
-     *
-     * @param courseID ID of course this section belongs to
-     * @return {@link SectionRecord}
-     */
-    public SectionRecord toSectionRecord(CourseID courseID) {
-        return new SectionRecord(courseID.uuid(),
-                crn, sectionNumber, instructor == null ? null : instructor.username(), sectionFormat,
-                curEnrolled, maxEnrolled,
-                curWaitlist, maxWaitlist,
-                attributes, descriptions, notes
-        );
-    }
 
     /**
      * @return List of time spans this block has

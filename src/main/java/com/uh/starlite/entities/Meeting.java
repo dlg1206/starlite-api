@@ -1,7 +1,6 @@
 package com.uh.starlite.entities;
 
 import com.uh.starlite.dto.MeetingDTO;
-import com.uh.starlite.dto.MeetingRecord;
 import com.uh.starlite.enums.Day;
 import lombok.Getter;
 
@@ -54,16 +53,6 @@ public class Meeting implements TimeSpan {
      */
     public MeetingDTO toMeetingDTO() {
         return new MeetingDTO(day, startTime, endTime, buildingCode, roomCode);
-    }
-
-    /**
-     * Convert this section into a jsonl record map
-     *
-     * @param crn CRN of section this meeting belongs to
-     * @return {@link MeetingRecord}
-     */
-    public MeetingRecord toMeetingRecord(int crn) {
-        return new MeetingRecord(crn, day, startTime, endTime, buildingCode, roomCode);
     }
 
 
