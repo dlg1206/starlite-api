@@ -80,10 +80,10 @@ public class CourseService {
     }
 
     /**
-     * Construct a list of courseIDs from Banner API
+     * Construct a list of courses from Banner API
      *
      * @param result DTO containing all Banner API responses
-     * @return List of courseIDs and sections
+     * @return List of courses and sections
      */
     private List<Course> constructCourses(SubjectResult result) {
 
@@ -126,9 +126,9 @@ public class CourseService {
             sectionBuilderLookup.get(mr.ssbsectCrn()).addMeetings(mr.toMeetings());
         });
 
-        // Add sections to courseIDs
+        // Add sections to courses
         sectionBuilderLookup.forEach((crn, sb) -> courseBuilderLookupByCRN.get(crn).addSection(sb.build()));
-        // build and return courseIDs
+        // build and return courses
         return courseBuilderLookup.values().stream()
                 .map(Course.Builder::build)
                 .toList();
@@ -140,7 +140,7 @@ public class CourseService {
      * @param campusCode  Campus code
      * @param termCode    Term code
      * @param subjectCode Subject code
-     * @return Future resolving to the constructed courseIDs for this subject
+     * @return Future resolving to the constructed courses for this subject
      */
     private CompletableFuture<List<Course>> constructCoursesJob(String campusCode, String termCode, String subjectCode) {
         // wrap batch fetch with semaphore but not construct - no limit to concurrent constructs
@@ -160,12 +160,12 @@ public class CourseService {
 
 
     /**
-     * Fetch all courseIDs for subjects
+     * Sync wrapper to fetch all courses for subjects
      *
      * @param campusCode   Campus code
      * @param termCode     Term code
-     * @param subjectCodes List of subjects to fetch courseIDs for
-     * @return List of courseIDs that match the filter if provided
+     * @param subjectCodes List of subjects to fetch courses for
+     * @return List of courses that match the filter if provided
      */
     public List<Course> fetchCourses(String campusCode, String termCode, Collection<String> subjectCodes) {
         // validate before fetch
@@ -232,7 +232,7 @@ public class CourseService {
      *
      * @param campusCode   Campus code
      * @param termCode     Term code
-     * @param subjectCodes List of subjects to fetch courseIDs for
+     * @param subjectCodes List of subjects to fetch courses for
      * @param detailed     Return detailed course information
      * @return List of courses that match the filter if provided
      */
@@ -249,7 +249,7 @@ public class CourseService {
      *
      * @param campusCode    Campus code
      * @param termCode      Term code
-     * @param subjectCodes  List of subjects to fetch courseIDs for
+     * @param subjectCodes  List of subjects to fetch courses for
      * @param detailed      Return detailed course information
      * @param filterRequest DTO with filter options mappable to a course filter
      * @return List of courses that match the filter if provided
@@ -259,7 +259,7 @@ public class CourseService {
                                                      Collection<String> subjectCodes,
                                                      boolean detailed,
                                                      CourseFilterMappable filterRequest) {
-        // fetch courseIDs
+        // fetch courses
         List<Course> allCourses = fetchCourses(campusCode, termCode, subjectCodes);
 
         // apply filter if provided
