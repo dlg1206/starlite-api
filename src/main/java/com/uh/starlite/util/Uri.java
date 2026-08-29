@@ -59,15 +59,27 @@ public class Uri {
      * @param campusCode  Campus code
      * @param termCode    Term code
      * @param subjectCode Subject code
-     * @param detailed    Include section and meeting details in response
+     * @return Formatted uri
+     */
+    public static String subjects(String campusCode, String termCode, String subjectCode) {
+        return UriComponentsBuilder
+                .fromPath("%s/%s".formatted(subjects(campusCode, termCode), subjectCode))
+                .toUriString();
+    }
+
+    /**
+     * Build a complex uri with optional params for logging
+     *
+     * @param campusCode   Campus code
+     * @param termCode     Term code
+     * @param subjectCode Subject code
+     * @param detailed Include section and meeting details in response
      * @return Formatted uri
      */
     public static String subjects(String campusCode, String termCode, String subjectCode, boolean detailed) {
-        UriComponentsBuilder builder = UriComponentsBuilder
-                .fromPath("%s/%s".formatted(subjects(campusCode, termCode), subjectCode));
-        // add detailed param if provided
-        if (detailed)
-            builder.queryParam("detailed", "true");
+        UriComponentsBuilder builder = UriComponentsBuilder.fromPath(subjects(campusCode, termCode, subjectCode));
+        // add detailed param
+        builder.queryParam("detailed", Boolean.toString(detailed));
         // build
         return builder.toUriString();
     }
@@ -79,21 +91,35 @@ public class Uri {
      * @param campusCode   Campus code
      * @param termCode     Term code
      * @param subjectCodes Subject code
-     * @param detailed     Include section and meeting details in response
      * @return Formatted uri
      */
-    public static String courses(String campusCode, String termCode, Collection<String> subjectCodes, boolean detailed) {
+    public static String courses(String campusCode, String termCode, Collection<String> subjectCodes) {
         UriComponentsBuilder builder = UriComponentsBuilder
                 .fromPath("%s/%s/courses".formatted(terms(campusCode), termCode));
         // add subjects if provided
         if (subjectCodes != null && !subjectCodes.isEmpty())
             builder.queryParam("subjects", String.join(",", subjectCodes));
-        // add detailed param if provided
-        if (detailed)
-            builder.queryParam("detailed", "true");
         // build
         return builder.toUriString();
     }
+
+    /**
+     * Build a complex uri with optional params for logging
+     *
+     * @param campusCode   Campus code
+     * @param termCode     Term code
+     * @param subjectCodes Subject codes
+     * @param detailed Include section and meeting details in response
+     * @return Formatted uri
+     */
+    public static String courses(String campusCode, String termCode, Collection<String> subjectCodes, boolean detailed) {
+        UriComponentsBuilder builder = UriComponentsBuilder.fromPath(courses(campusCode, termCode, subjectCodes));
+        // add detailed param
+        builder.queryParam("detailed", Boolean.toString(detailed));
+        // build
+        return builder.toUriString();
+    }
+
 
     /**
      * Build a complex uri with optional params for logging

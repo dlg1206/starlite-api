@@ -75,7 +75,7 @@ public class EndpointExportWriter implements ExportWriter {
     @Override
     public void writeCourse(String campusCode, String termCode, String subjectCode, List<Course> courses) {
         endpointCache.put(
-                subjects(campusCode, termCode, subjectCode, true),
+                subjects(campusCode, termCode, subjectCode),
                 mapper.writeValueAsString(new CourseResponse(courses.stream().map(Course::toDetailedCourseDTO).toList())));
     }
 
