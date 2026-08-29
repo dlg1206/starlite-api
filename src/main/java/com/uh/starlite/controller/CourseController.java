@@ -37,7 +37,7 @@ public class CourseController {
      * @param campusCode Campus code to search for subjects
      * @param termCode   Term code to search for subjects
      * @param subjects   Optional list of subject codes to filter for (Default: All)
-     * @param detailed   Include section and meeting details in response (Default: false)
+     * @param detailed   Include section and meeting details in response (Default: true)
      * @return List of courseIDs for a given campus and term
      */
     @GetMapping(value = "/{campusCode}/terms/{termCode}/courses")
@@ -45,7 +45,7 @@ public class CourseController {
             @PathVariable String campusCode,
             @PathVariable String termCode,
             @RequestParam(required = false) LinkedHashSet<String> subjects,
-            @RequestParam(defaultValue = "false") boolean detailed
+            @RequestParam(defaultValue = "true") boolean detailed
     ) {
         LOGGER.info("GET | {} | Fetching courses", courses(campusCode, termCode, subjects, detailed));
         return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(campusCode, termCode, subjects, detailed)));
@@ -58,7 +58,7 @@ public class CourseController {
      * @param campusCode Campus code to search for subjects
      * @param termCode   Term code to search for subjects
      * @param subjects   Optional list of subject codes to filter for (Default: All)
-     * @param detailed   Include section and meeting details in response (Default: false)
+     * @param detailed   Include section and meeting details in response (Default: true)
      * @param request    Additional details to filter search
      * @return List of courseIDs for a given campus and term that pass filters
      */
@@ -67,7 +67,7 @@ public class CourseController {
             @PathVariable String campusCode,
             @PathVariable String termCode,
             @RequestParam(required = false) LinkedHashSet<String> subjects,
-            @RequestParam(defaultValue = "false") boolean detailed,
+            @RequestParam(defaultValue = "true") boolean detailed,
             @Valid @RequestBody CourseFilterRequest request) {
         LOGGER.info("POST | {} | Searching courses", courses(campusCode, termCode, subjects, detailed));
         return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(campusCode, termCode, subjects, detailed, request)));

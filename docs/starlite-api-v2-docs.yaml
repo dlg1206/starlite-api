@@ -182,7 +182,7 @@ collection:
 
             | Variable | Type    | Description                            | Default | Required? |
             |:--------:|---------|----------------------------------------|:-------:|:---------:|
-            | detailed | Boolean | Return section details with the course |  False  |    ❌️     |
+            | detailed | Boolean | Return section details with the course |  True   |    ❌️     |
 
             ### Responses
 
@@ -250,7 +250,7 @@ collection:
 
             | Variable | Type    | Description                            | Default | Required? |
             |:--------:|---------|----------------------------------------|:-------:|:---------:|
-            | detailed | Boolean | Return section details with the course |  False  |    ❌️     |
+            | detailed | Boolean | Return section details with the course |  True   |    ❌️     |
 
             ### Request Body
 
@@ -396,7 +396,7 @@ collection:
             | Variable | Type     | Description                            | Default | Required? |
             |:--------:|----------|----------------------------------------|:-------:|:---------:|
             | subjects | String[] | Subject codes of courses to fetch      |         |    ✔️     |
-            | detailed | Boolean  | Return section details with the course |  False  |    ❌️     |
+            | detailed | Boolean  | Return section details with the course |  True   |    ❌️     |
 
             > [!WARNING]
             > Fetching all subjects can be expensive!
@@ -471,7 +471,7 @@ collection:
             | Variable | Type     | Description                            | Default | Required? |
             |:--------:|----------|----------------------------------------|:-------:|:---------:|
             | subjects | String[] | Subject codes of courses to fetch      |         |    ✔️     |
-            | detailed | Boolean  | Return section details with the course |  False  |    ❌️     |
+            | detailed | Boolean  | Return section details with the course |  True   |    ❌️     |
 
             > [!WARNING]
             > Fetching all subjects can be expensive!

@@ -111,7 +111,7 @@ curl http://localhost:8080/api/v2/campuses/man/terms/202710/subjects
 
 | Variable | Type    | Description                            | Default | Required? |
 |:--------:|---------|----------------------------------------|:-------:|:---------:|
-| detailed | Boolean | Return section details with the course |  False  |    ❌️     |
+| detailed | Boolean | Return section details with the course |  True   |    ❌️     |
 
 ### Responses
 
@@ -149,7 +149,7 @@ curl http://localhost:8080/api/v2/campuses/man/terms/202710/subjects/ics
 
 | Variable | Type    | Description                            | Default | Required? |
 |:--------:|---------|----------------------------------------|:-------:|:---------:|
-| detailed | Boolean | Return section details with the course |  False  |    ❌️     |
+| detailed | Boolean | Return section details with the course |  True   |    ❌️     |
 
 ### Request Body
 
@@ -236,7 +236,7 @@ curl --request POST \
 | Variable | Type     | Description                            | Default | Required? |
 |:--------:|----------|----------------------------------------|:-------:|:---------:|
 | subjects | String[] | Subject codes of courses to fetch      |         |    ✔️     |
-| detailed | Boolean  | Return section details with the course |  False  |    ❌️     |
+| detailed | Boolean  | Return section details with the course |  True   |    ❌️     |
 
 > [!WARNING]
 > Fetching all subjects can be expensive!
@@ -279,7 +279,7 @@ curl http://localhost:8080/api/v2/campuses/man/terms/202710/subjects/icss?subjec
 | Variable | Type     | Description                            | Default | Required? |
 |:--------:|----------|----------------------------------------|:-------:|:---------:|
 | subjects | String[] | Subject codes of courses to fetch      |         |    ✔️     |
-| detailed | Boolean  | Return section details with the course |  False  |    ❌️     |
+| detailed | Boolean  | Return section details with the course |  True   |    ❌️     |
 
 > [!WARNING]
 > Fetching all subjects can be expensive!

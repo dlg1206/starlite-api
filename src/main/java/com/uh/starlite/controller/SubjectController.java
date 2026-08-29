@@ -71,7 +71,7 @@ public class SubjectController {
      *
      * @param campusCode Campus code to search for subjects
      * @param termCode   Term code to search for subjects
-     * @param detailed   Include section and meeting details in response (Default: false)
+     * @param detailed   Include section and meeting details in response (Default: true)
      * @param request    Additional details to filter search
      * @return List of courseIDs for a given campus and term that pass filters
      */
@@ -80,7 +80,7 @@ public class SubjectController {
             @PathVariable String campusCode,
             @PathVariable String termCode,
             @PathVariable String subjectCode,
-            @RequestParam(defaultValue = "false") boolean detailed,
+            @RequestParam(defaultValue = "true") boolean detailed,
             @Valid @RequestBody CourseFilterRequest request) {
         LOGGER.info("POST | {} | Searching courses", subjects(campusCode, termCode, subjectCode, detailed));
         return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(campusCode, termCode, subjectCode, detailed, request)));
