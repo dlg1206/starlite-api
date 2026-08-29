@@ -3,6 +3,7 @@ package com.uh.starlite.handler;
 import com.uh.starlite.exception.*;
 import com.uh.starlite.response.InvalidRequestBodyResponse;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -145,5 +146,17 @@ public class GlobalExceptionHandler {
     public ResponseEntity<InvalidScheduleEncodingException.Response> handleInvalidScheduleEncodings(InvalidScheduleEncodingException e) {
         logError(e);
         return ResponseEntity.badRequest().body(e.toResponse());
+    }
+
+    /**
+     * Handle busy export service
+     *
+     * @param e {@link ExportServiceBusyException}
+     * @return {@link ResponseEntity}
+     */
+    @ExceptionHandler(ExportServiceBusyException.class)
+    public ResponseEntity<ExportServiceBusyException.Response> handleExportBusy(ExportServiceBusyException e) {
+        logError(e);
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(e.toResponse());
     }
 }
