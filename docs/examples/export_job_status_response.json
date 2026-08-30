@@ -1,0 +1,10 @@
+{
+  "uuid": "<job id>",
+  "status": "<status>",
+  "started_at": "<timestamp>",
+  "finished_at": "<timestamp>",
+  "completed": "<number completed>",
+  "total": "<total tasks>",
+  "failed": "<total failures>",
+  "errors": ["<errors>"]
+}

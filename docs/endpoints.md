@@ -2,6 +2,8 @@
 
 > Insomnia documentation is also available [here](starlite-api-v2-docs.yaml)
 
+**General Info**
+
 - [Get all Campuses](#get-all-campuses)
 - [Get all Terms](#get-all-terms)
 - [Get all Subjects](#get-all-subjects)
@@ -9,9 +11,19 @@
 - [Filter Courses (Single Subject)](#filter-courses-single-subject)
 - [Get all Courses (Multiple Subjects)](#get-all-courses-multiple-subjects)
 - [Filter Courses (Multiple Subjects)](#filter-courses-multiple-subjects)
+
+**Schedule Generation**
+
 - [Generate Schedules](#generate-schedules)
 - [Decode Schedule to json](#decode-schedule-to-json)
 - [Decode Schedule to ics](#decode-schedule-to-ics)
+
+**Data Export**
+
+- [Start Export Job](#start-export-job)
+- [Poll Export Job](#poll-export-job)
+- [Export endpoints](#export-endpoints)
+- [Export course data](#export-course-data)
 
 ## Get All Campuses
 
@@ -528,14 +540,148 @@ under the `ics_url` key.
 
 ### Responses
 
-| Response Code | Type                                                                          | Description                                                                                                 |
-|:-------------:|-------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
-|      200      | text/calendar                                                                 | ical file reprenestation of the schedule. Default file name is `<campus_code>_<term_code>_<5 char uid>.ics` |
-|      400      | [InvalidScheduleEncodingException](examples/exceptions/invalid_schedule.json) | Requested schedule is invalid due to corrupted encoding or conflicting sections                             |
+| Response Code | Type                                                                          | Description                                                                                                   |
+|:-------------:|-------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|
+|      200      | `text/calendar`                                                               | `ical` file reprenestation of the schedule. Default file name is `<campus_code>_<term_code>_<5 char uid>.ics` |
+|      400      | [InvalidScheduleEncodingException](examples/exceptions/invalid_schedule.json) | Requested schedule is invalid due to corrupted encoding or conflicting sections                               |
 
 ### Example
 
 ```bash
 # Download the previously generated schedule for ICS 414 and ICS 101 for Hawai'i at Mānoa for Fall 2026 ics file
 curl -LOJ http://localhost:8080/api/v2/schedule/bWFuOjIwMjcxMF9pY3NfNzI0NjI6NzUwMTUK/ics
+```
+
+## Start Export Job
+
+> Start a job to export all course data
+
+**Endpoint:** `http://localhost:8080/api/v2/exports/start`
+
+**Request Method:** `GET`
+
+### Responses
+
+| Response Code | Type                                                                        | Description                             |
+|:-------------:|-----------------------------------------------------------------------------|-----------------------------------------|
+|      202      | [ExportJobStartResponse](examples/export_job_start_response.json)           | DTO with job details                    |
+|      503      | [ExportServiceBusyException](examples/exceptions/export_service_busy.json)) | Server is running max permitted exports |
+
+### Example
+
+```bash
+curl http://localhost:8080/api/v2/exports/start
+```
+
+## Poll Export Job
+
+> Poll an export job to get progress updates on the job
+
+**Endpoint:** `http://localhost:8080/api/v2/exports/{jobID}/status`
+
+**Request Method:** `GET`
+
+### Path Variables
+
+| Variable | Type   | Description |
+|:--------:|--------|-------------|
+|  jobID   | String | Job ID      |
+
+The `jobID` and polling url can be found in the [JobStartResponse](examples/export_job_start_response.json).
+
+### Responses
+
+| Response Code | Type                                                                     | Description                                   |
+|:-------------:|--------------------------------------------------------------------------|-----------------------------------------------|
+|      200      | [ExportJobStatusResponse](examples/export_job_status_response.json)      | Details about the current progress of the job |
+|      404      | [MissingExportIDException](examples/exceptions/export_id_not_found.json) | Requested ID does not exist                   |
+
+### Example
+
+```bash
+curl http://localhost:8080/api/v2/exports/nBJjqmqv2M2E/status
+```
+
+## Export Endpoints
+
+> Once an export job is complete, export endpoints and their responses. The `latest` fetches the most recent export if
+> one exists
+
+**Endpoint:** `http://localhost:8080/api/v2/exports/{jobID}/endpoints`
+
+**Endpoint:** `http://localhost:8080/api/v2/exports/latest/endpoints`
+
+**Request Method:** `GET`
+
+### Path Variables
+
+| Variable | Type   | Description |
+|:--------:|--------|-------------|
+|  jobID   | String | Job ID      |
+
+The `jobID` and polling url can be found in the [JobStartResponse](examples/export_job_start_response.json) or
+[ExportJobStatusResponse](examples/export_job_status_response.json).
+
+### Responses
+
+| Response Code | Type                                                                     | Description                                                                                             |
+|:-------------:|--------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
+|      200      | `application/json`                                                       | JSON of endpoint and cached responses. Default file name is `<export>_<export_date>_<export_time>.json` |
+|      404      | [MissingExportIDException](examples/exceptions/export_id_not_found.json) | Requested ID does not exist                                                                             |
+
+Only the following endpoints without any filters or params:
+
+- [Get all Campuses](#get-all-campuses)
+- [Get all Terms](#get-all-terms)
+- [Get all Subjects](#get-all-subjects)
+- [Get all Courses (Single Subject)](#get-all-courses-single-subject)
+
+### Example
+
+```bash
+curl -LOJ http://localhost:8080/api/v2/exports/nBJjqmqv2M2E/endpoints
+```
+
+## Export Course Data
+
+> Once an export job is complete, export a series of `jsonl` files with course details. The `latest` fetches the
+> most recent export if one exists
+
+**Endpoint:** `http://localhost:8080/api/v2/exports/{jobID}/records`
+
+**Endpoint:** `http://localhost:8080/api/v2/exports/latest/records`
+
+**Request Method:** `GET`
+
+### Path Variables
+
+| Variable | Type   | Description |
+|:--------:|--------|-------------|
+|  jobID   | String | Job ID      |
+
+The `jobID` and polling url can be found in the [JobStartResponse](examples/export_job_start_response.json) or
+[ExportJobStatusResponse](examples/export_job_status_response.json).
+
+### Responses
+
+| Response Code | Type                                                                     | Description                                                                              |
+|:-------------:|--------------------------------------------------------------------------|------------------------------------------------------------------------------------------|
+|      200      | `application/zip`                                                        | `zip` of `jsonl` files.  Default file name is `<export>_<export_date>_<export_time>.zip` |
+|      404      | [MissingExportIDException](examples/exceptions/export_id_not_found.json) | Requested ID does not exist                                                              |
+
+There are eight `jsonl` tables of data:
+
+- [`campuses.jsonl`](examples/records/campuses.jsonl): Campus codes and names
+- [`terms.jsonl`](examples/records/terms.jsonl): Term codes and names
+- [`subjects.jsonl`](examples/records/subjects.jsonl): Subject codes and names
+- [`offerings.jsonl`](examples/records/offerings.jsonl): Subjects offered at a campus during a term
+- [`courses.jsonl`](examples/records/courses.jsonl): Course details
+- [`sections.jsonl`](examples/records/sections.jsonl): Course section details
+- [`meetings.jsonl`](examples/records/meetings.jsonl): Section meeting time and locations
+- [`instructors.jsonl`](examples/records/instructors.jsonl): Instructor details
+
+### Example
+
+```bash
+curl -LOJ http://localhost:8080/api/v2/exports/nBJjqmqv2M2E/records
 ```
