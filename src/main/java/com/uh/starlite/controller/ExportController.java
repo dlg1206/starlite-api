@@ -62,16 +62,16 @@ public class ExportController {
     }
 
     /**
-     * GET Endpoint: /exports/{exportID}/raw
+     * GET Endpoint: /exports/{exportID}/endpoints
      * Export a JSON of all campus, term, and course requests
      * Courses and schedule endpoints are NOT included
      *
      * @param exportID Optional export id to fetch. Default is the latest export
      * @return JSON of all campus, term, and course requests
      */
-    @GetMapping("/{exportID}/raw")
+    @GetMapping("/{exportID}/endpoints")
     public ResponseEntity<byte[]> downloadRaw(@PathVariable String exportID) throws IOException {
-        LOGGER.info("GET | {} | Exported endpoint cache", Uri.downloadRaw(exportID));
+        LOGGER.info("GET | {} | Exported endpoint cache", Uri.downloadEndpoints(exportID));
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.CONTENT_DISPOSITION,
@@ -81,15 +81,15 @@ public class ExportController {
     }
 
     /**
-     * GET Endpoint: /exports/latest/raw
+     * GET Endpoint: /exports/latest/endpoints
      * Export a JSON of all campus, term, and course requests
      * Courses and schedule endpoints are NOT included
      *
      * @return JSON of all campus, term, and course requests
      */
-    @GetMapping("/latest/raw")
+    @GetMapping("/latest/endpoints")
     public ResponseEntity<byte[]> downloadLatestRaw() throws IOException {
-        LOGGER.info("GET | {} | Exported endpoint cache", Uri.downloadRaw("latest"));
+        LOGGER.info("GET | {} | Exported endpoint cache", Uri.downloadEndpoints("latest"));
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.CONTENT_DISPOSITION,

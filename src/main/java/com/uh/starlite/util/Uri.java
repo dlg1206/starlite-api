@@ -1,9 +1,11 @@
 package com.uh.starlite.util;
 
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * <b>File:</b> Uri.java
@@ -197,9 +199,9 @@ public class Uri {
      * @param exportID ID of export
      * @return Formatted uri
      */
-    public static String downloadRaw(String exportID) {
+    public static String downloadEndpoints(String exportID) {
         return ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/exports/{exportID}/raw")
+                .path("/exports/{exportID}/endpoints")
                 .buildAndExpand(exportID)
                 .toUriString();
     }
@@ -216,5 +218,24 @@ public class Uri {
                 .path("/exports/{jobID}/record")
                 .buildAndExpand(exportID)
                 .toUriString();
+    }
+
+    /**
+     * Strip scheme and host from urls
+     *
+     * @param fullURL Full URL containing scheme and host
+     * @return Url path
+     */
+    public static String pathOnly(String fullURL) {
+        UriComponents parsed = UriComponentsBuilder.fromUriString(fullURL).build();
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+        // add path iff exists
+        if (parsed.getPath()!= null)
+            builder.path(parsed.getPath());
+        // add params iff exits
+        if (parsed.getQuery()!= null)
+            builder.path(parsed.getQuery());
+
+        return builder.toUriString();
     }
 }
