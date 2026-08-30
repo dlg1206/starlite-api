@@ -2,6 +2,7 @@ package com.uh.starlite.controller;
 
 
 import com.uh.starlite.dto.ExportJobStatusDTO;
+import com.uh.starlite.response.JobStartResponse;
 import com.uh.starlite.service.ExportService;
 import com.uh.starlite.util.Uri;
 import lombok.RequiredArgsConstructor;
@@ -43,9 +44,10 @@ public class ExportController {
      * @return ID of newly started job
      */
     @GetMapping("/start")
-    public ResponseEntity<String> startExportJob() {
+    public ResponseEntity<JobStartResponse> startExportJob() {
         LOGGER.info("GET | {} | Starting export job", startExport());
-        return ResponseEntity.ok().body(exportService.tryStartExportJob());
+        String jobID = exportService.tryStartExportJob();
+        return ResponseEntity.accepted().body(new JobStartResponse(jobID));
     }
 
     /**
