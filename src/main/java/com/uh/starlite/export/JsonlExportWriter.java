@@ -1,7 +1,10 @@
 package com.uh.starlite.export;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.uh.starlite.dto.*;
+import com.uh.starlite.dto.CompleteOfferingDTO;
+import com.uh.starlite.dto.DetailedCourseDTO;
+import com.uh.starlite.dto.MeetingDTO;
+import com.uh.starlite.dto.SectionDTO;
 import com.uh.starlite.entities.*;
 import com.uh.starlite.enums.Day;
 import com.uh.starlite.enums.SectionFormat;
@@ -129,7 +132,7 @@ public class JsonlExportWriter implements ExportWriter {
     /**
      * Close and export data
      *
-     * @param data     List of complete course offerings
+     * @param data List of complete course offerings
      * @return Export bytes
      */
     @Override

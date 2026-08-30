@@ -51,11 +51,9 @@ public class TermService {
      */
     public List<OfferingDTO> fetchAllCourseOfferings() {
         // fetch offerings for campus and term
-        List<OfferingDTO> results = bannerAPIService.fetchSubjects().stream()
+        return bannerAPIService.fetchSubjects().stream()
                 .map(SubjectsResponse::toOfferingDTO)
                 .toList();
-        LOGGER.info("Found {}", pluralS(results.size(), "course offering"));
-        return results;
     }
 
     /**

@@ -4,7 +4,6 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.uh.starlite.dto.CompleteOfferingDTO;
 import com.uh.starlite.dto.ExportJobStatusDTO;
-import com.uh.starlite.dto.IdentifierDTO;
 import com.uh.starlite.dto.OfferingDTO;
 import com.uh.starlite.entities.Course;
 import com.uh.starlite.exception.ExportServiceBusyException;
@@ -316,6 +315,4 @@ public class ExportService {
             this(LocalDateTime.now(), offerings);
         }
     }
-
-
 }

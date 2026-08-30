@@ -1,7 +1,6 @@
 package com.uh.starlite.export;
 
 import com.uh.starlite.dto.CompleteOfferingDTO;
-import com.uh.starlite.dto.IdentifierDTO;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,7 +17,7 @@ public interface ExportWriter {
     /**
      * Close and export data
      *
-     * @param data     List of complete course offerings
+     * @param data List of complete course offerings
      * @return Export bytes
      */
     byte[] write(List<CompleteOfferingDTO> data) throws IOException;

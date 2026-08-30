@@ -38,7 +38,7 @@ public record OfferingDTO(String campusCode, String termCode, String termName, S
      * Add campus and course details to make this a complete offering
      *
      * @param campusName Name of campus
-     * @param courses List of course details for this offering
+     * @param courses    List of course details for this offering
      * @return {@link CompleteOfferingDTO}
      */
     public CompleteOfferingDTO toCompleteOfferingDTO(String campusName, List<Course> courses) {

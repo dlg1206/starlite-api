@@ -116,7 +116,11 @@ public class ExportJob {
     public ExportJobStatusDTO toExportJobStatusDTO() {
         updateLock.lock();
         try {
-            return new ExportJobStatusDTO(uuid, status.toString(), startedAt, finishedAt, completed.get(), total, failed.get(), errors);
+            return new ExportJobStatusDTO(uuid, status.toString(),
+                    startedAt, finishedAt,
+                    completed == null ? null : completed.get(),
+                    total, failed == null ? null : failed.get(),
+                    errors);
         } finally {
             updateLock.unlock();
         }

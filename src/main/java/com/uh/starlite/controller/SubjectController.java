@@ -52,6 +52,7 @@ public class SubjectController {
      * @param campusCode  Campus code to search for subjects
      * @param termCode    Term code to search for subjects
      * @param subjectCode Subject code to get courses for
+     * @param detailed    Optional extra course details
      * @return List of subjects for a given campus and term
      */
     @GetMapping(value = "/{campusCode}/terms/{termCode}/subjects/{subjectCode}")
@@ -59,9 +60,9 @@ public class SubjectController {
             @PathVariable String campusCode,
             @PathVariable String termCode,
             @PathVariable String subjectCode,
-            @RequestParam(defaultValue = "false") boolean detailed) {
+            @RequestParam(required = false) Boolean detailed) {
         LOGGER.info("GET | {} | Fetching courses", subjects(campusCode, termCode, subjectCode, detailed));
-        return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(campusCode, termCode, subjectCode, detailed)));
+        return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(campusCode, termCode, subjectCode, detailed == null || detailed)));
     }
 
 
@@ -80,9 +81,9 @@ public class SubjectController {
             @PathVariable String campusCode,
             @PathVariable String termCode,
             @PathVariable String subjectCode,
-            @RequestParam(defaultValue = "true") boolean detailed,
+            @RequestParam(required = false) Boolean detailed,
             @Valid @RequestBody CourseFilterRequest request) {
         LOGGER.info("POST | {} | Searching courses", subjects(campusCode, termCode, subjectCode, detailed));
-        return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(campusCode, termCode, subjectCode, detailed, request)));
+        return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(campusCode, termCode, subjectCode, detailed == null || detailed, request)));
     }
 }

@@ -68,7 +68,7 @@ public class EndpointExportWriter implements ExportWriter {
     /**
      * Close and export data
      *
-     * @param data     List of complete course offerings
+     * @param data List of complete course offerings
      * @return Export bytes
      */
     @Override

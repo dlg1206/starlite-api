@@ -19,7 +19,7 @@ import java.util.List;
  */
 public record ExportJobStatusDTO(String uuid, String status,
                                  LocalDateTime startedAt, LocalDateTime finishedAt,
-                                 int completed, int total,
-                                 int failed, List<ExportJobError> errors) {
+                                 Integer completed, Integer total,
+                                 Integer failed, List<ExportJobError> errors) {
 
 }

@@ -54,6 +54,7 @@ public class CampusService {
         // invalid
         throw new InvalidCampusCodeException(campusCode);
     }
+
     /**
      * Get campus name from code
      *

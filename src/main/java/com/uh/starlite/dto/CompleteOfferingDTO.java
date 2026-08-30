@@ -8,7 +8,7 @@ import java.util.List;
  * Complete course offering at a campus and term with courses
  *
  * @param campusCode  Campus code
- * @param campusName Name of campus
+ * @param campusName  Name of campus
  * @param termCode    Term code
  * @param termName    Name of term
  * @param subjectCode Subject code

@@ -44,11 +44,11 @@ public class CourseController {
     public ResponseEntity<CourseResponse> getCourses(
             @PathVariable String campusCode,
             @PathVariable String termCode,
-            @RequestParam(required = false) LinkedHashSet<String> subjects,
-            @RequestParam(defaultValue = "true") boolean detailed
+            @RequestParam LinkedHashSet<String> subjects,
+            @RequestParam(required = false) Boolean detailed
     ) {
         LOGGER.info("GET | {} | Fetching courses", courses(campusCode, termCode, subjects, detailed));
-        return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(campusCode, termCode, subjects, detailed)));
+        return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(campusCode, termCode, subjects, detailed == null || detailed)));
     }
 
     /**
@@ -66,11 +66,11 @@ public class CourseController {
     public ResponseEntity<CourseResponse> getCourses(
             @PathVariable String campusCode,
             @PathVariable String termCode,
-            @RequestParam(required = false) LinkedHashSet<String> subjects,
-            @RequestParam(defaultValue = "true") boolean detailed,
+            @RequestParam LinkedHashSet<String> subjects,
+            @RequestParam(required = false) Boolean detailed,
             @Valid @RequestBody CourseFilterRequest request) {
         LOGGER.info("POST | {} | Searching courses", courses(campusCode, termCode, subjects, detailed));
-        return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(campusCode, termCode, subjects, detailed, request)));
+        return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(campusCode, termCode, subjects, detailed == null || detailed, request)));
     }
 
 
