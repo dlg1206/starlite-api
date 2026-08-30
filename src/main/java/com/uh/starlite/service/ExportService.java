@@ -7,6 +7,7 @@ import com.uh.starlite.dto.ExportJobStatusDTO;
 import com.uh.starlite.dto.OfferingDTO;
 import com.uh.starlite.entities.Course;
 import com.uh.starlite.exception.ExportServiceBusyException;
+import com.uh.starlite.exception.MissingExportIDException;
 import com.uh.starlite.export.EndpointExportWriter;
 import com.uh.starlite.export.ExportJob;
 import com.uh.starlite.export.ExportWriter;
@@ -181,15 +182,11 @@ public class ExportService {
      * @throws IOException Failed to write to bytes
      */
     private byte[] exportDataFromCache(ExportWriter exportWriter, String entryID) throws IOException {
-        if (entryID == null)
-            // todo - custom dne
-            throw new RuntimeException();
-        ExportRecord mostRecentRecord = exportCache.getIfPresent(entryID);
-        if (mostRecentRecord == null)
-            // todo - custom dne
-            throw new RuntimeException();
+        ExportRecord record = exportCache.getIfPresent(entryID);
+        if (record == null)
+            throw MissingExportIDException.missingExport(entryID);
         // data is present, write data
-        return exportWriter.write(mostRecentRecord.offerings);
+        return exportWriter.write(record.offerings);
     }
 
     /**
@@ -228,19 +225,10 @@ public class ExportService {
     public ExportJobStatusDTO getJobStatus(String jobUUID) {
         ExportJob job = jobs.getIfPresent(jobUUID);
         if (job == null)
-            // todo custom error
-            throw new RuntimeException();
+            throw MissingExportIDException.missingJob(jobUUID);
         return job.toExportJobStatusDTO();
     }
 
-    /**
-     * Get the export timestamp of latest export
-     *
-     * @return String timestamp
-     */
-    public String getExportTimestamp() {
-        return getExportTimestamp(mostRecentEntryID.get());
-    }
 
     /**
      * Get the export timestamp
@@ -251,9 +239,20 @@ public class ExportService {
     public String getExportTimestamp(String exportID) {
         ExportRecord exportRecord = exportCache.getIfPresent(exportID);
         if (exportRecord == null)
-            // todo custom error
-            throw new RuntimeException();
+            throw MissingExportIDException.missingExport(exportID);
         return exportRecord.completedAt.format(EXPORT_FILENAME_FORMAT);
+    }
+
+    /**
+     * Get the export timestamp of latest export
+     *
+     * @return String timestamp
+     */
+    public String getExportTimestamp() {
+        String latestExportID = mostRecentEntryID.get();
+        if (latestExportID == null)
+            throw MissingExportIDException.missingLatestExport();
+        return getExportTimestamp(latestExportID);
     }
 
 
@@ -276,7 +275,10 @@ public class ExportService {
      * @return JSON bytes
      */
     public byte[] exportEndpoints() throws IOException {
-        return exportEndpoints(mostRecentEntryID.get());
+        String latestExportID = mostRecentEntryID.get();
+        if (latestExportID == null)
+            throw MissingExportIDException.missingLatestExport();
+        return exportEndpoints(latestExportID);
     }
 
 
@@ -286,7 +288,7 @@ public class ExportService {
      * @param exportID ID of export to get
      * @return zip bytes
      */
-    public byte[] exportDataFromCache(String exportID) throws IOException {
+    public byte[] exportRecords(String exportID) throws IOException {
         return exportDataFromCache(new JsonlExportWriter(), exportID);
     }
 
@@ -295,8 +297,11 @@ public class ExportService {
      *
      * @return zip bytes
      */
-    public byte[] exportDataFromCache() throws IOException {
-        return exportDataFromCache(mostRecentEntryID.get());
+    public byte[] exportRecords() throws IOException {
+        String latestExportID = mostRecentEntryID.get();
+        if (latestExportID == null)
+            throw MissingExportIDException.missingLatestExport();
+        return exportRecords(latestExportID);
     }
 
     /**

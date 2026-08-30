@@ -159,4 +159,16 @@ public class GlobalExceptionHandler {
         logError(e);
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(e.toResponse());
     }
+
+    /**
+     * Handle missing export ID
+     *
+     * @param e {@link MissingExportIDException}
+     * @return {@link ResponseEntity}
+     */
+    @ExceptionHandler(MissingExportIDException.class)
+    public ResponseEntity<MissingExportIDException.Response> handleExportBusy(MissingExportIDException e) {
+        logError(e);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.toResponse());
+    }
 }

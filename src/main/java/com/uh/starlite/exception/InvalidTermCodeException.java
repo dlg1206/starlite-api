@@ -9,7 +9,7 @@ import java.util.Date;
  *
  * @author Derek Garcia
  */
-public class InvalidTermCodeException extends RuntimeException {
+public class InvalidTermCodeException extends IllegalArgumentException {
 
     private final String campusCode;
     private final String invalidTermCode;

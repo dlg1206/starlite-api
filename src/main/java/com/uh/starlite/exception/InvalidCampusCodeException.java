@@ -9,7 +9,7 @@ import java.util.Date;
  *
  * @author Derek Garcia
  */
-public class InvalidCampusCodeException extends RuntimeException {
+public class InvalidCampusCodeException extends IllegalArgumentException {
     private final String invalidCampusCode;
 
     /**

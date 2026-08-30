@@ -18,7 +18,7 @@ public class InvalidCourseIDsException extends IllegalArgumentException {
     /**
      * Internal factory constructor
      *
-     * @param message          Error error
+     * @param message          Error msg
      * @param invalidCourseIDs List of invalid course IDs
      */
     private InvalidCourseIDsException(String message, List<CourseID> invalidCourseIDs) {

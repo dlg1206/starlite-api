@@ -8,7 +8,6 @@ import com.uh.starlite.util.Uri;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -114,7 +113,7 @@ public class ExportController {
                 .header(HttpHeaders.CONTENT_DISPOSITION,
                         "attachment; filename=\"export-%s-records.zip\""
                                 .formatted(exportService.getExportTimestamp(exportID)))
-                .body(exportService.exportDataFromCache(exportID));
+                .body(exportService.exportRecords(exportID));
     }
 
     /**
@@ -131,7 +130,7 @@ public class ExportController {
                 .header(HttpHeaders.CONTENT_DISPOSITION,
                         "attachment; filename=\"export-%s-records.zip\""
                                 .formatted(exportService.getExportTimestamp()))
-                .body(exportService.exportDataFromCache());
+                .body(exportService.exportRecords());
     }
 
 }

@@ -1,7 +1,6 @@
 package com.uh.starlite.dto;
 
 import com.uh.starlite.util.ScheduleCodec;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.Comparator;
 import java.util.List;
