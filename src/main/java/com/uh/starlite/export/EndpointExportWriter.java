@@ -53,16 +53,20 @@ public class EndpointExportWriter implements ExportWriter {
             );
             // courses: /campuses/CODE/term/CODE/subjects/SUBJECT
             endpointCache.put(
-                    subjects(o.campusCode(), o.termCode(), o.subjectCode()),
+                    pathOnly(subjects(o.campusCode(), o.termCode(), o.subjectCode())).toLowerCase(),
                     new CourseResponse(o.courses().stream().map(Course::toDetailedCourseDTO).toList())
             );
         }
         // add campus
-        endpointCache.put(campuses(), new IdentifierResponse(campuses.stream().toList()));
+        endpointCache.put(pathOnly(campuses()).toLowerCase(), new IdentifierResponse(campuses.stream().toList()));
         // add terms: /campuses/CODE/terms
-        campusTerm.forEach((k, v) -> endpointCache.put(k, new IdentifierResponse(v)));
+        campusTerm.forEach(
+                (k, v) -> endpointCache.put(pathOnly(k).toLowerCase(), new IdentifierResponse(v.stream().toList()))
+        );
         // subjects: /campuses/CODE/terms/CODE/subjects
-        campusTermSubject.forEach((k, v) -> endpointCache.put(k, new IdentifierResponse(v)));
+        campusTermSubject.forEach(
+                (k, v) -> endpointCache.put(pathOnly(k).toLowerCase(), new IdentifierResponse(v))
+        );
     }
 
     /**
