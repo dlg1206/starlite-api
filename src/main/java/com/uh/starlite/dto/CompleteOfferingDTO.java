@@ -8,16 +8,29 @@ import java.util.List;
  * Complete course offering at a campus and term with courses
  *
  * @param campusCode  Campus code
+ * @param campusName Name of campus
  * @param termCode    Term code
  * @param termName    Name of term
  * @param subjectCode Subject code
  * @param subjectName Name of subject
  * @param courses     List of courses offered for that subject
  */
-public record CompleteOfferingDTO(String campusCode, String termCode, String termName, String subjectCode,
-                                  String subjectName, List<Course> courses) {
+public record CompleteOfferingDTO(String campusCode, String campusName,
+                                  String termCode, String termName,
+                                  String subjectCode, String subjectName,
+                                  List<Course> courses) {
     /**
-     * Extracts the term details from this subject object
+     * Extracts the campus details
+     *
+     * @return {@link IdentifierDTO} with campus code and name
+     */
+    public IdentifierDTO toCampusIdentifierDTO() {
+        return new IdentifierDTO(campusCode, campusName);
+    }
+
+
+    /**
+     * Extracts the term details
      *
      * @return {@link IdentifierDTO} with term code and name
      */
@@ -26,7 +39,7 @@ public record CompleteOfferingDTO(String campusCode, String termCode, String ter
     }
 
     /**
-     * Extracts the subject details from this subject object
+     * Extracts the subject details
      *
      * @return {@link IdentifierDTO} with subject code and name
      */

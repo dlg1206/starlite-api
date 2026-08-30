@@ -98,9 +98,10 @@ public class JsonlExportWriter implements ExportWriter {
      *
      * @param data List of complete course offerings
      */
-    private void writeData(List<IdentifierDTO> campuses, List<CompleteOfferingDTO> data) {
-        campuses.forEach(i -> campusSet.add(new CampusRecord(i.id(), i.value())));
+    private void writeData(List<CompleteOfferingDTO> data) {
         for (CompleteOfferingDTO o : data) {
+            // add each campus
+            campusSet.add(new CampusRecord(o.campusCode(), o.campusName()));
             // add all courses
             for (Course c : o.courses()) {
                 // add all sections
@@ -128,14 +129,13 @@ public class JsonlExportWriter implements ExportWriter {
     /**
      * Close and export data
      *
-     * @param campuses List of campuses
      * @param data     List of complete course offerings
      * @return Export bytes
      */
     @Override
-    public byte[] write(List<IdentifierDTO> campuses, List<CompleteOfferingDTO> data) throws IOException {
+    public byte[] write(List<CompleteOfferingDTO> data) throws IOException {
         // write data
-        writeData(campuses, data);
+        writeData(data);
         // export as zip bytes
         ByteArrayOutputStream zipBuf = new ByteArrayOutputStream();
         try (ZipOutputStream zos = new ZipOutputStream(zipBuf)) {

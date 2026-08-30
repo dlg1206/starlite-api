@@ -18,9 +18,8 @@ public interface ExportWriter {
     /**
      * Close and export data
      *
-     * @param campuses List of campuses
      * @param data     List of complete course offerings
      * @return Export bytes
      */
-    byte[] write(List<IdentifierDTO> campuses, List<CompleteOfferingDTO> data) throws IOException;
+    byte[] write(List<CompleteOfferingDTO> data) throws IOException;
 }

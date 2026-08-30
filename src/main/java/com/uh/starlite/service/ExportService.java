@@ -140,9 +140,6 @@ public class ExportService {
     private void createExportRecord(ExportJob exportJob) {
         // accept the job
         exportJob.accept();
-        // fetch campus codes
-        List<IdentifierDTO> campuses = campusService.lookupCampusCodeIdentifierDTOs();
-
         // fetch terms and subject codes
         List<OfferingDTO> offerings = termService.fetchAllCourseOfferings();
 
@@ -153,9 +150,9 @@ public class ExportService {
                         // fetch course
                         .map(o -> CompletableFuture.supplyAsync(
                                 () -> o.toCompleteOfferingDTO(
-                                        fetchCourses(exportJob, o.campusCode(), o.termCode(), o.subjectCode()
-                                        )),
-                                exportExecutor
+                                        campusService.lookupCampusName(o.campusCode()),
+                                        fetchCourses(exportJob, o.campusCode(), o.termCode(), o.subjectCode())
+                                ), exportExecutor
                         ))
                         .toList();
         // wait for all jobs to finish
@@ -173,7 +170,7 @@ public class ExportService {
                 .filter(Objects::nonNull)
                 .toList();
         // save record
-        exportCache.put(exportJob.getUuid(), new ExportRecord(campuses, completeOfferings));
+        exportCache.put(exportJob.getUuid(), new ExportRecord(completeOfferings));
     }
 
     /**
@@ -193,7 +190,7 @@ public class ExportService {
             // todo - custom dne
             throw new RuntimeException();
         // data is present, write data
-        return exportWriter.write(mostRecentRecord.campuses, mostRecentRecord.offerings);
+        return exportWriter.write(mostRecentRecord.offerings);
     }
 
     /**
@@ -307,19 +304,16 @@ public class ExportService {
      * Internal cache record for storing data
      *
      * @param completedAt Time export completed at
-     * @param campuses    List of campuses
      * @param offerings   List of offerings
      */
-    private record ExportRecord(LocalDateTime completedAt, List<IdentifierDTO> campuses,
-                                List<CompleteOfferingDTO> offerings) {
+    private record ExportRecord(LocalDateTime completedAt, List<CompleteOfferingDTO> offerings) {
         /**
          * Internal cache record for storing data
          *
-         * @param campuses  List of campuses
          * @param offerings List of offerings
          */
-        public ExportRecord(List<IdentifierDTO> campuses, List<CompleteOfferingDTO> offerings) {
-            this(LocalDateTime.now(), campuses, offerings);
+        public ExportRecord(List<CompleteOfferingDTO> offerings) {
+            this(LocalDateTime.now(), offerings);
         }
     }
 
