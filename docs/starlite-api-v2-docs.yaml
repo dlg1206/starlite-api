@@ -897,7 +897,7 @@ collection:
 
                 **Endpoint:** `http://localhost:8080/api/v2/exports/start`
 
-                **Request Method:** `GET`
+                **Request Method:** `POST`
 
                 ### Responses
 
@@ -909,10 +909,10 @@ collection:
                 ### Example
 
                 ```bash
-                curl http://localhost:8080/api/v2/exports/start
+                curl -X POST http://localhost:8080/api/v2/exports/start
                 ```
               sortKey: -1788086304878
-            method: GET
+            method: POST
             settings:
               renderRequestBody: true
               encodeUrl: true

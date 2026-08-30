@@ -11,10 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -37,12 +34,12 @@ public class ExportController {
     private final ExportService exportService;
 
     /**
-     * GET Endpoint: /exports/start
+     * POST Endpoint: /exports/start
      * Attempt to start a new export job
      *
      * @return ID of newly started job
      */
-    @GetMapping("/start")
+    @PostMapping("/start")
     public ResponseEntity<ExportJobStartResponse> startExportJob() {
         LOGGER.info("GET | {} | Starting export job", startExport());
         String jobID = exportService.tryStartExportJob();

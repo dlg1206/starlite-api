@@ -558,7 +558,7 @@ curl -LOJ http://localhost:8080/api/v2/schedule/bWFuOjIwMjcxMF9pY3NfNzI0NjI6NzUw
 
 **Endpoint:** `http://localhost:8080/api/v2/exports/start`
 
-**Request Method:** `GET`
+**Request Method:** `POST`
 
 ### Responses
 
@@ -570,7 +570,7 @@ curl -LOJ http://localhost:8080/api/v2/schedule/bWFuOjIwMjcxMF9pY3NfNzI0NjI6NzUw
 ### Example
 
 ```bash
-curl http://localhost:8080/api/v2/exports/start
+curl -X http://localhost:8080/api/v2/exports/start
 ```
 
 ## Poll Export Job
