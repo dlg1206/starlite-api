@@ -70,10 +70,10 @@ public class Uri {
     /**
      * Build a complex uri with optional params for logging
      *
-     * @param campusCode   Campus code
-     * @param termCode     Term code
+     * @param campusCode  Campus code
+     * @param termCode    Term code
      * @param subjectCode Subject code
-     * @param detailed Include section and meeting details in response
+     * @param detailed    Include section and meeting details in response
      * @return Formatted uri
      */
     public static String subjects(String campusCode, String termCode, String subjectCode, boolean detailed) {
@@ -109,7 +109,7 @@ public class Uri {
      * @param campusCode   Campus code
      * @param termCode     Term code
      * @param subjectCodes Subject codes
-     * @param detailed Include section and meeting details in response
+     * @param detailed     Include section and meeting details in response
      * @return Formatted uri
      */
     public static String courses(String campusCode, String termCode, Collection<String> subjectCodes, boolean detailed) {
@@ -163,9 +163,9 @@ public class Uri {
      *
      * @return Formatted uri
      */
-    public static String exportEndpoints() {
+    public static String exports() {
         return UriComponentsBuilder
-                .fromPath("%s/export/endpoints".formatted(API_PREFIX))
+                .fromPath("%s/exports/".formatted(API_PREFIX))
                 .toUriString();
     }
 
@@ -175,9 +175,59 @@ public class Uri {
      *
      * @return Formatted uri
      */
-    public static String exportData() {
+    public static String startExport() {
         return UriComponentsBuilder
-                .fromPath("%s/export/data".formatted(API_PREFIX))
+                .fromPath("%s/start".formatted(exports()))
+                .toUriString();
+    }
+
+    /**
+     * Build a complex uri with optional params for logging
+     *
+     * @param exportID ID of export
+     * @return Formatted uri
+     */
+    private static String exportJob(String exportID) {
+        return UriComponentsBuilder
+                .fromPath("%s/%s".formatted(exports(), exportID))
+                .toUriString();
+    }
+
+    /**
+     * Build a complex uri with optional params for logging
+     *
+     * @param exportID ID of export
+     * @return Formatted uri
+     */
+    public static String exportStatus(String exportID) {
+        return UriComponentsBuilder
+                .fromPath("%s/status".formatted(exportJob(exportID)))
+                .toUriString();
+    }
+
+
+    /**
+     * Build a complex uri with optional params for logging
+     *
+     * @param exportID ID of export
+     * @return Formatted uri
+     */
+    public static String downloadRaw(String exportID) {
+        return UriComponentsBuilder
+                .fromPath("%s/raw".formatted(exportJob(exportID)))
+                .toUriString();
+    }
+
+
+    /**
+     * Build a complex uri with optional params for logging
+     *
+     * @param exportID ID of export
+     * @return Formatted uri
+     */
+    public static String downloadRecords(String exportID) {
+        return UriComponentsBuilder
+                .fromPath("%s/records".formatted(exportJob(exportID)))
                 .toUriString();
     }
 

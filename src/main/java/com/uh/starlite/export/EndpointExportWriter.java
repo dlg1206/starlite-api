@@ -1,7 +1,7 @@
 package com.uh.starlite.export;
 
+import com.uh.starlite.dto.CompleteOfferingDTO;
 import com.uh.starlite.dto.IdentifierDTO;
-import com.uh.starlite.dto.OfferingDTO;
 import com.uh.starlite.entities.Course;
 import com.uh.starlite.response.CourseResponse;
 import com.uh.starlite.response.IdentifierResponse;
@@ -34,85 +34,50 @@ public class EndpointExportWriter implements ExportWriter {
     }
 
     /**
-     * Format and write campuses
+     * Format and write data to sets
      *
-     * @param campuses List of campus identifiers
+     * @param data List of complete course offerings
      */
-    @Override
-    public void writeCampuses(List<IdentifierDTO> campuses) {
+    private void writeData(List<IdentifierDTO> campuses, List<CompleteOfferingDTO> data) {
+        Map<String, List<IdentifierDTO>> campusTerm = new HashMap<>();
+        Map<String, List<IdentifierDTO>> campusTermSubject = new HashMap<>();
+
+        // /campuses
         endpointCache.put(campuses(), mapper.writeValueAsString(new IdentifierResponse(campuses)));
+        // add remaining endpoints
+        for (CompleteOfferingDTO o : data) {
+            // add new term
+            campusTerm.computeIfAbsent(terms(o.campusCode()), k -> new ArrayList<>()).add(o.toTermIdentifierDTO());
+            // add new subject
+            campusTermSubject.computeIfAbsent(
+                    subjects(o.campusCode(), o.termCode()),
+                    k -> new ArrayList<>()).add(o.toSubjectIdentifierDTO()
+            );
+            // courses: /campuses/CODE/term/CODE/subjects/SUBJECT
+            endpointCache.put(
+                    subjects(o.campusCode(), o.termCode(), o.subjectCode()),
+                    new CourseResponse(o.courses().stream().map(Course::toDetailedCourseDTO).toList())
+            );
+        }
+
+        // add terms: /campuses/CODE/terms
+        campusTerm.forEach((k, v) -> endpointCache.put(k, new IdentifierResponse(v)));
+        // subjects: /campuses/CODE/terms/CODE/subjects
+        campusTermSubject.forEach((k, v) -> endpointCache.put(k, new IdentifierResponse(v)));
     }
 
     /**
-     * Format and write termIDs and terms
+     * Close and export data
      *
-     * @param offerings List of subject offerings at campuses
+     * @param campuses List of campuses
+     * @param data     List of complete course offerings
+     * @return Export bytes
      */
     @Override
-    public void writeOfferings(List<OfferingDTO> offerings) {
-        // sort into campuses
-        Map<String, TermsSubjects> campusMap = new HashMap<>();
-        offerings.forEach(o -> campusMap
-                .computeIfAbsent(o.campusCode(), k -> new TermsSubjects())
-                .addOffering(o)
-        );
-
-        // convert into responses
-        campusMap.forEach((key1, value1) -> {
-            endpointCache.put(terms(key1), new IdentifierResponse(value1.termIDs));
-            value1.terms.forEach((key, value) -> endpointCache.put(subjects(key1, key), new IdentifierResponse(value)));
-        });
-    }
-
-    /**
-     * Format and write courses
-     *
-     * @param campusCode  Campus code
-     * @param termCode    Term code
-     * @param subjectCode Subject code
-     * @param courses     List of courses
-     */
-    @Override
-    public void writeCourse(String campusCode, String termCode, String subjectCode, List<Course> courses) {
-        endpointCache.put(
-                subjects(campusCode, termCode, subjectCode),
-                mapper.writeValueAsString(new CourseResponse(courses.stream().map(Course::toDetailedCourseDTO).toList())));
-    }
-
-    /**
-     * Close and export data. Deletes any saved data
-     *
-     * @return Export
-     */
-    @Override
-    public byte[] write() {
+    public byte[] write(List<IdentifierDTO> campuses, List<CompleteOfferingDTO> data) {
+        writeData(campuses, data);
         byte[] result = mapper.writeValueAsBytes(endpointCache);
         endpointCache.clear();
         return result;
-    }
-
-    /**
-     * Util object to track termIDs and terms at a campuse
-     *
-     * @param termIDs List of term identifiers
-     * @param terms   Map of terms and subject IDs offered
-     */
-    private record TermsSubjects(List<IdentifierDTO> termIDs, Map<String, List<IdentifierDTO>> terms) {
-        /**
-         * Create empty record
-         */
-        public TermsSubjects() {
-            this(new ArrayList<>(), new HashMap<>());
-        }
-
-        /**
-         * Derive term and subject identifiers from offering
-         *
-         * @param o {@link OfferingDTO}
-         */
-        public void addOffering(OfferingDTO o) {
-            termIDs.add(o.toTermIdentifierDTO());
-            terms.computeIfAbsent(o.termCode(), k -> new ArrayList<>()).add(o.toSubjectIdentifierDTO());
-        }
     }
 }

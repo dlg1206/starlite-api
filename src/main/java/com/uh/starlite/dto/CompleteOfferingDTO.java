@@ -5,16 +5,17 @@ import com.uh.starlite.entities.Course;
 import java.util.List;
 
 /**
- * Course offering at a campus and term
+ * Complete course offering at a campus and term with courses
  *
  * @param campusCode  Campus code
  * @param termCode    Term code
  * @param termName    Name of term
  * @param subjectCode Subject code
  * @param subjectName Name of subject
+ * @param courses     List of courses offered for that subject
  */
-public record OfferingDTO(String campusCode, String termCode, String termName, String subjectCode, String subjectName) {
-
+public record CompleteOfferingDTO(String campusCode, String termCode, String termName, String subjectCode,
+                                  String subjectName, List<Course> courses) {
     /**
      * Extracts the term details from this subject object
      *
@@ -31,16 +32,5 @@ public record OfferingDTO(String campusCode, String termCode, String termName, S
      */
     public IdentifierDTO toSubjectIdentifierDTO() {
         return new IdentifierDTO(subjectCode, subjectName);
-    }
-
-
-    /**
-     * Add course details to make this a complete offering
-     *
-     * @param courses List of course details for this offering
-     * @return {@link CompleteOfferingDTO}
-     */
-    public CompleteOfferingDTO toCompleteOfferingDTO(List<Course> courses) {
-        return new CompleteOfferingDTO(campusCode, termCode, termName, subjectCode, subjectName, courses);
     }
 }

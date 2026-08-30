@@ -12,10 +12,8 @@ import tools.jackson.databind.json.JsonMapper;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -38,17 +36,12 @@ public class JsonlExportWriter implements ExportWriter {
     private final LinkedHashSet<MeetingRecord> meetingSet;
     private final LinkedHashSet<InstructorRecord> instructorSet;
 
-    // metadata
-    private final ReentrantLock timeLock;
     private final ObjectMapper mapper;
-    private LocalDateTime firstWrite;
-    private LocalDateTime lastWrite;
 
     /**
      * Create new jsonl export writer
      */
     public JsonlExportWriter() {
-        this.timeLock = new ReentrantLock();
         this.campusSet = new LinkedHashSet<>();
         this.termSet = new LinkedHashSet<>();
         this.subjectSet = new LinkedHashSet<>();
@@ -62,41 +55,6 @@ public class JsonlExportWriter implements ExportWriter {
                 .build();
     }
 
-
-    /**
-     * Update the first and last write times
-     */
-    private void updateWriteTime() {
-        timeLock.lock();
-        try {
-            if (firstWrite == null)
-                firstWrite = LocalDateTime.now();
-        } finally {
-            lastWrite = LocalDateTime.now();
-            timeLock.unlock();
-        }
-    }
-
-    /**
-     * Convert metadata into JSON byte array
-     *
-     * @return JSON byte array
-     */
-    private byte[] metaToByteArray() {
-        timeLock.lock();
-        try {
-            ByteArrayOutputStream metaBuf = new ByteArrayOutputStream();
-            mapper.writeValue(metaBuf, Map.of("start", firstWrite, "end", lastWrite));
-            metaBuf.write('\n');
-            return metaBuf.toByteArray();
-        } finally {
-            // reset writes
-            firstWrite = null;
-            lastWrite = null;
-            timeLock.unlock();
-        }
-
-    }
 
     /**
      * Flush a cache into jsonl byte array
@@ -124,7 +82,6 @@ public class JsonlExportWriter implements ExportWriter {
      */
     private Map<String, byte[]> toFileMap() {
         Map<String, byte[]> files = new LinkedHashMap<>();
-        files.put("metadata.json", metaToByteArray());
         files.put("campuses.jsonl", toByteArray(campusSet));
         files.put("terms.jsonl", toByteArray(termSet));
         files.put("subjects.jsonl", toByteArray(subjectSet));
@@ -137,67 +94,49 @@ public class JsonlExportWriter implements ExportWriter {
     }
 
     /**
-     * Format and write campuses
+     * Format and write data to sets
      *
-     * @param campuses List of campus identifiers
+     * @param data List of complete course offerings
      */
-    @Override
-    public void writeCampuses(List<IdentifierDTO> campuses) {
+    private void writeData(List<IdentifierDTO> campuses, List<CompleteOfferingDTO> data) {
         campuses.forEach(i -> campusSet.add(new CampusRecord(i.id(), i.value())));
-        updateWriteTime();
-    }
-
-    /**
-     * Format and write terms and subjects
-     *
-     * @param offerings List of subject offerings at campuses
-     */
-    @Override
-    public void writeOfferings(List<OfferingDTO> offerings) {
-        offerings.forEach(o -> {
+        for (CompleteOfferingDTO o : data) {
+            // add all courses
+            for (Course c : o.courses()) {
+                // add all sections
+                for (Section s : c.getSections().values()) {
+                    // add all meetings
+                    s.getMeetings().stream()
+                            .map(Meeting::toMeetingDTO)
+                            .forEach(m -> meetingSet.add(new MeetingRecord(s.getCrn(), m)));
+                    // add instructor if exists
+                    if (s.getInstructor() != null)
+                        instructorSet.add(new InstructorRecord(s.getInstructor()));
+                    // add section
+                    sectionSet.add(new SectionRecord(c.getCourseID(), s.toSectionDTO()));
+                }
+                // add course
+                courseSet.add(new CourseRecord(o.campusCode(), o.termCode(), c.getCourseID(), c.toDetailedCourseDTO()));
+            }
+            // add to other maps
             termSet.add(new TermRecord(o.termCode(), o.termName()));
             subjectSet.add(new SubjectRecord(o.subjectCode(), o.subjectName()));
             offeringSet.add(new OfferingRecord(o.campusCode(), o.termCode(), o.subjectCode()));
-        });
-        updateWriteTime();
-    }
-
-    /**
-     * Format and write courses
-     *
-     * @param campusCode  Campus code
-     * @param termCode    Term code
-     * @param subjectCode Subject code
-     * @param courses     List of courses
-     */
-    @Override
-    public void writeCourse(String campusCode, String termCode, String subjectCode, List<Course> courses) {
-        for (Course c : courses) {
-            // add all sections
-            for (Section s : c.getSections().values()) {
-                // add all meetings
-                s.getMeetings().stream()
-                        .map(Meeting::toMeetingDTO)
-                        .forEach(m -> meetingSet.add(new MeetingRecord(s.getCrn(), m)));
-                // add instructor if exists
-                if (s.getInstructor() != null)
-                    instructorSet.add(new InstructorRecord(s.getInstructor()));
-                // add section
-                sectionSet.add(new SectionRecord(c.getCourseID(), s.toSectionDTO()));
-            }
-            // add course
-            courseSet.add(new CourseRecord(campusCode, termCode, c.getCourseID(), c.toDetailedCourseDTO()));
         }
-        updateWriteTime();
     }
 
     /**
      * Close and export data
      *
-     * @return Export
+     * @param campuses List of campuses
+     * @param data     List of complete course offerings
+     * @return Export bytes
      */
     @Override
-    public byte[] write() throws IOException {
+    public byte[] write(List<IdentifierDTO> campuses, List<CompleteOfferingDTO> data) throws IOException {
+        // write data
+        writeData(campuses, data);
+        // export as zip bytes
         ByteArrayOutputStream zipBuf = new ByteArrayOutputStream();
         try (ZipOutputStream zos = new ZipOutputStream(zipBuf)) {
             // zip files
@@ -336,18 +275,18 @@ public class JsonlExportWriter implements ExportWriter {
     /**
      * Meeting record for jsonl
      *
-     * @param crn          CRN of section this meeting belongs to
-     * @param day          Day of week meeting occurs
-     * @param start        Start time of meeting in HHmm
-     * @param end          End time of meeting in HHmm
-     * @param buildingCode Building code
-     * @param roomCode     Room code
+     * @param crn      CRN of section this meeting belongs to
+     * @param day      Day of week meeting occurs
+     * @param start    Start time of meeting in HHmm
+     * @param end      End time of meeting in HHmm
+     * @param building Building code
+     * @param room     Room code
      */
     private record MeetingRecord(int crn,
                                  Day day,
                                  @JsonFormat(pattern = "HHmm") LocalTime start,
                                  @JsonFormat(pattern = "HHmm") LocalTime end,
-                                 String buildingCode, String roomCode) {
+                                 String building, String room) {
 
         /**
          * Create new record
