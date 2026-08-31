@@ -19,13 +19,18 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicReference;
+
+import static com.uh.starlite.util.Util.getDigestInstance;
 
 /**
  * <b>File:</b> ExportService.java
@@ -331,7 +336,8 @@ public class ExportService {
      * @param finishedAt Time export completed at
      * @param offerings  List of offerings
      */
-    private record ExportRecord(String exportID, LocalDateTime finishedAt, List<CompleteOfferingDTO> offerings) {
+    private record ExportRecord(String exportID, LocalDateTime finishedAt, String checksum,
+                                List<CompleteOfferingDTO> offerings) {
         /**
          * Internal cache record for storing data
          *
@@ -339,7 +345,13 @@ public class ExportService {
          * @param offerings List of offerings
          */
         public ExportRecord(String exportID, List<CompleteOfferingDTO> offerings) {
-            this(exportID, LocalDateTime.now(), offerings);
+            // calculate checksum
+            MessageDigest digest = getDigestInstance();
+            StringBuilder sb = new StringBuilder();
+            offerings.stream().map(CompleteOfferingDTO::digest).sorted().forEach(sb::append);  // sort digests before adding
+            digest.update(String.valueOf(sb).getBytes(StandardCharsets.UTF_8));
+            // return record
+            this(exportID, LocalDateTime.now(), HexFormat.of().formatHex(digest.digest()), offerings);
         }
 
         /**
@@ -348,7 +360,7 @@ public class ExportService {
          * @return {@link ExportMetadataDTO}
          */
         public ExportMetadataDTO toExportMetadataDTO() {
-            return new ExportMetadataDTO(exportID, finishedAt, offerings.size());
+            return new ExportMetadataDTO(exportID, finishedAt, offerings.size(), checksum);
         }
     }
 }

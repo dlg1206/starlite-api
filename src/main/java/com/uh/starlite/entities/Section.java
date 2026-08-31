@@ -6,10 +6,11 @@ import com.uh.starlite.enums.SectionFormat;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.*;
+
+import static com.uh.starlite.util.Util.getDigestInstance;
 
 /**
  * <b>File:</b> Section.java
@@ -32,9 +33,9 @@ public class Section implements TimeBlock {
     private final int maxEnrolled;
     private final int curWaitlist;
     private final int maxWaitlist;
-    private final List<String> attributes;      // General Ed/Focus/Special Designation
-    private final List<String> descriptions;
-    private final List<String> notes;
+    private final LinkedList<String> attributes;      // General Ed/Focus/Special Designation
+    private final LinkedList<String> descriptions;
+    private final LinkedList<String> notes;
     @Getter
     private final List<Meeting> meetings;
 
@@ -62,9 +63,9 @@ public class Section implements TimeBlock {
                     int maxEnrolled,
                     int curWaitlist,
                     int maxWaitlist,
-                    List<String> attributes,
-                    List<String> descriptions,
-                    List<String> notes,
+                    LinkedList<String> attributes,
+                    LinkedList<String> descriptions,
+                    LinkedList<String> notes,
                     List<Meeting> meetings) {
         this.crn = crn;
         this.sectionNumber = sectionNumber;
@@ -114,6 +115,37 @@ public class Section implements TimeBlock {
 
 
     /**
+     * Get the checksum digest of this section
+     *
+     * @return SHA-256 digest
+     */
+    public String digest() {
+        MessageDigest digest = getDigestInstance(crn, sectionNumber,
+                instructor == null ? String.valueOf((Object) null) : instructor.digest(), sectionFormat,
+                curEnrolled, maxEnrolled, curWaitlist, maxEnrolled);
+        // add attributes
+        StringBuilder attribSB = new StringBuilder();
+        attributes.stream().sorted().forEach(attribSB::append);
+        digest.update(String.valueOf(attribSB).getBytes(StandardCharsets.UTF_8));
+        // add desc
+        StringBuilder descSB = new StringBuilder();
+        descriptions.stream().sorted().forEach(descSB::append);
+        digest.update(descSB.toString().getBytes(StandardCharsets.UTF_8));
+        // add notes
+        StringBuilder notesSB = new StringBuilder();
+        notes.stream().sorted().forEach(notesSB::append);
+        digest.update(notesSB.toString().getBytes(StandardCharsets.UTF_8));
+        // add meetings
+        StringBuilder sb = new StringBuilder();
+        meetings.stream().map(Meeting::digest).sorted().forEach(sb::append);  // sort digests before adding
+        digest.update(sb.toString().getBytes(StandardCharsets.UTF_8));
+
+        // return final digest
+        return HexFormat.of().formatHex(digest.digest());
+    }
+
+
+    /**
      * @return List of time spans this block has
      */
     @Override
@@ -150,7 +182,7 @@ public class Section implements TimeBlock {
             this.crn = crn;
             this.sectionNumber = sectionNumber;
             this.instructor = instructor;
-            this.attributes = new HashSet<>();
+            this.attributes = new TreeSet<>();
             this.descriptions = new HashSet<>();
             this.notes = new HashSet<>();
             this.meetings = new HashSet<>();
@@ -249,15 +281,12 @@ public class Section implements TimeBlock {
                     maxEnrolled,
                     curWaitlist,
                     maxWaitlist,
-                    new ArrayList<>(attributes),
-                    new ArrayList<>(descriptions),
-                    new ArrayList<>(notes),
+                    new LinkedList<>(attributes),
+                    new LinkedList<>(descriptions),
+                    new LinkedList<>(notes),
                     // remove any placeholder online async meetings
                     meetings.stream().filter(m -> m.getDay() != null).toList()
             );
         }
-
-
     }
-
 }
