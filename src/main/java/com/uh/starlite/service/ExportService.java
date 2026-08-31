@@ -4,6 +4,7 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.uh.starlite.dto.CompleteOfferingDTO;
 import com.uh.starlite.dto.ExportJobStatusDTO;
+import com.uh.starlite.dto.ExportMetadataDTO;
 import com.uh.starlite.dto.OfferingDTO;
 import com.uh.starlite.entities.Course;
 import com.uh.starlite.exception.ExportServiceBusyException;
@@ -170,7 +171,7 @@ public class ExportService {
                 .filter(Objects::nonNull)
                 .toList();
         // save record
-        exportCache.put(exportJob.getUuid(), new ExportRecord(completeOfferings));
+        exportCache.put(exportJob.getUuid(), new ExportRecord(exportJob.getUuid(), completeOfferings));
     }
 
     /**
@@ -237,10 +238,7 @@ public class ExportService {
      * @return String timestamp
      */
     public String getExportTimestamp(String exportID) {
-        ExportRecord exportRecord = exportCache.getIfPresent(exportID);
-        if (exportRecord == null)
-            throw MissingExportIDException.missingExport(exportID);
-        return exportRecord.completedAt.format(EXPORT_FILENAME_FORMAT);
+        return getExportMetadata(exportID).finishedAt().format(EXPORT_FILENAME_FORMAT);
     }
 
     /**
@@ -249,10 +247,32 @@ public class ExportService {
      * @return String timestamp
      */
     public String getExportTimestamp() {
+        return getExportMetadata().finishedAt().format(EXPORT_FILENAME_FORMAT);
+    }
+
+    /**
+     * Get the metadata for an export
+     *
+     * @param exportID ID of export to get
+     * @return {@link ExportMetadataDTO}
+     */
+    public ExportMetadataDTO getExportMetadata(String exportID) {
+        ExportRecord exportRecord = exportCache.getIfPresent(exportID);
+        if (exportRecord == null)
+            throw MissingExportIDException.missingExport(exportID);
+        return exportRecord.toExportMetadataDTO();
+    }
+
+    /**
+     * Get the metadata for the lastest export
+     *
+     * @return {@link ExportMetadataDTO}
+     */
+    public ExportMetadataDTO getExportMetadata() {
         String latestExportID = mostRecentEntryID.get();
         if (latestExportID == null)
             throw MissingExportIDException.missingLatestExport();
-        return getExportTimestamp(latestExportID);
+        return getExportMetadata(latestExportID);
     }
 
 
@@ -307,17 +327,28 @@ public class ExportService {
     /**
      * Internal cache record for storing data
      *
-     * @param completedAt Time export completed at
-     * @param offerings   List of offerings
+     * @param exportID   ID of this export
+     * @param finishedAt Time export completed at
+     * @param offerings  List of offerings
      */
-    private record ExportRecord(LocalDateTime completedAt, List<CompleteOfferingDTO> offerings) {
+    private record ExportRecord(String exportID, LocalDateTime finishedAt, List<CompleteOfferingDTO> offerings) {
         /**
          * Internal cache record for storing data
          *
+         * @param exportID  ID of this export
          * @param offerings List of offerings
          */
-        public ExportRecord(List<CompleteOfferingDTO> offerings) {
-            this(LocalDateTime.now(), offerings);
+        public ExportRecord(String exportID, List<CompleteOfferingDTO> offerings) {
+            this(exportID, LocalDateTime.now(), offerings);
+        }
+
+        /**
+         * Convert this record into metadata
+         *
+         * @return {@link ExportMetadataDTO}
+         */
+        public ExportMetadataDTO toExportMetadataDTO() {
+            return new ExportMetadataDTO(exportID, finishedAt, offerings.size());
         }
     }
 }
