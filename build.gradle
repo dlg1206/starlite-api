@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.uh'
-version = '2.0.0'
+version = '2.2.0'
 
 java {
     toolchain {
@@ -25,6 +25,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     compileOnly 'org.projectlombok:lombok'
     implementation 'org.mnode.ical4j:ical4j:4.3.0'
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.2.4'
     implementation 'org.apache.commons:commons-lang3'
     implementation 'tools.jackson.core:jackson-databind'
     implementation 'org.springframework.boot:spring-boot-starter'

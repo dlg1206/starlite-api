@@ -2,880 +2,1107 @@ type: collection.insomnia.rest/5.0
 schema_version: "5.1"
 name: Starlite API v2
 meta:
-  id: wrk_scratchpad
-  created: 1771886263537
-  modified: 1771886263537
+  id: wrk_ac701d2a76984c5a9bfc5663f30cb17c
+  created: 1788085701646
+  modified: 1788085701646
   description: ""
 collection:
   - name: starlite
     meta:
-      id: fld_34f698e1837c4ecca3ccc3181299589e
+      id: fld_f4c9f715fe1548d5bb4c04af10d9ccd1
       created: 1787783819106
       modified: 1787783819106
       sortKey: -1787783819106
       description: ""
     children:
-      - url: http://{{ _.STARLITE_HOST }}/api/v2/campuses
-        name: Get all Campuses
+      - name: General Info
         meta:
-          id: req_74e7c68d6e534362b92c5ccc56f44704
-          created: 1783381092698
-          modified: 1787784435118
-          isPrivate: false
-          description: |-
-            ## Get All Campuses
-
-            > Get list of the University of Hawai'i campus codes
-
-            **Endpoint:** `http://localhost:8080/api/v2/campuses`
-
-            **Request Method:** `GET`
-
-            ### Responses
-
-            | Response Code | Type               | Description                                          |
-            |:-------------:|--------------------|------------------------------------------------------|
-            |      200      | IdentifierResponse | List of University of Hawai'i campus codes and names |
-
-            ### Example
-
-            ```bash
-            curl http://localhost:8080/api/v2/campuses
-            ```
-          sortKey: -1787783827949
-        method: GET
-        settings:
-          renderRequestBody: true
-          encodeUrl: true
-          followRedirects: global
-          cookies:
-            send: true
-            store: true
-          rebuildPath: true
-      - url: http://{{ _.STARLITE_HOST }}/api/v2/campuses/:campusCode/terms
-        name: Get all Terms
-        meta:
-          id: req_1d5515021e924f9994db0bcd10799693
-          created: 1783381315516
-          modified: 1787784787355
-          isPrivate: false
-          description: |-
-            ## Get All Terms
-
-            > Get all terms available for a University of Hawai'i campus
-
-            **Endpoint:** `http://localhost:8080/api/v2/campuses/{campusCode}/terms`
-
-            **Request Method:** `GET`
-
-            ### Path Variables
-
-            |  Variable  | Type   | Description                         |
-            |:----------:|--------|-------------------------------------|
-            | campusCode | String | UH Campus code to get the terms for |
-
-            ### Responses
-
-            | Response Code | Type                       | Description                          |
-            |:-------------:|----------------------------|--------------------------------------|
-            |      200      | IdentifierResponse         | List of term codes and names         |
-            |      400      | InvalidCampusCodeException | Requested campus code does not exist |
-
-            ### Example
-
-            ```bash
-            # Get all terms for the University of Hawai'i at Mānoa
-            curl http://localhost:8080/api/v2/campuses/man/terms
-            ```
-          sortKey: -1787783827849
-        method: GET
-        settings:
-          renderRequestBody: true
-          encodeUrl: true
-          followRedirects: global
-          cookies:
-            send: true
-            store: true
-          rebuildPath: true
-        pathParameters:
-          - name: campusCode
-            value: ""
-      - url: http://{{ _.STARLITE_HOST
-          }}/api/v2/campuses/:campusCode/terms/:termCode/subjects
-        name: Get all Subjects
-        meta:
-          id: req_88ce4a4297704bc9a0bb2b12ed79b283
-          created: 1783381444580
-          modified: 1787784442688
-          isPrivate: false
-          description: |-
-            ## Get All Subjects
-
-            > Get all subjects for a University of Hawai'i campus and term
-
-            **Endpoint:** `http://localhost:8080/api/v2/campuses/{campusCode}/terms/{termCode}/subjects`
-
-            **Request Method:** `GET`
-
-            ### Path Variables
-
-            |  Variable  | Type   | Description                            |
-            |:----------:|--------|----------------------------------------|
-            | campusCode | String | UH campus code to get the subjects for |
-            |  termCode  | String | Term code to get the subjects for      |
-
-            ### Responses
-
-            | Response Code | Type                       | Description                                            |
-            |:-------------:|----------------------------|--------------------------------------------------------|
-            |      200      | IdentifierResponse         | List of subject names and IDs                          |
-            |      400      | InvalidCampusCodeException | Requested campus code does not exist                   |
-            |      400      | InvalidTermCodeException   | Requested term code does exist for the provided campus |
-
-            ### Example
-
-            ```bash
-            # Get all subjects offered at the University of Hawai'i at Mānoa for Fall 2026
-            curl http://localhost:8080/api/v2/campuses/man/terms/202710/subjects
-            ```
-          sortKey: -1787783827749
-        method: GET
-        settings:
-          renderRequestBody: true
-          encodeUrl: true
-          followRedirects: global
-          cookies:
-            send: true
-            store: true
-          rebuildPath: true
-        pathParameters:
-          - name: campusCode
-            value: ""
-          - name: termCode
-            value: ""
-      - url: http://{{ _.STARLITE_HOST
-          }}/api/v2/campuses/:campusCode/terms/:termCode/subjects/:subjectCode
-        name: Get all Courses (Single Subject)
-        meta:
-          id: req_48b602a1fe9b433b8a2d5a01cd8a69ce
-          created: 1783381567532
-          modified: 1787784449087
-          isPrivate: false
-          description: |-
-            ## Get All Courses (Single Subject)
-
-            > Get all courses for a single subject for a University of Hawai'i campus and term
-
-            **Endpoint:** `http://localhost:8080/api/v2/campuses/{campusCode}/terms/{termCode}/subjects/{subjectCode}`
-
-            **Request Method:** `GET`
-
-            ### Path Variables
-
-            |  Variable   | Type   | Description                            |
-            |:-----------:|--------|----------------------------------------|
-            | campusCode  | String | UH campus code to get the subjects for |
-            |  termCode   | String | Term code to get the subjects for      |
-            | subjectCode | String | Subject code to get the courses for    |
-
-            ### Query Params
-
-            | Variable | Type    | Description                            | Default | Required? |
-            |:--------:|---------|----------------------------------------|:-------:|:---------:|
-            | detailed | Boolean | Return section details with the course |  False  |    ❌️     |
-
-            ### Responses
-
-            | Response Code | Type                         | Description                                                        |
-            |:-------------:|------------------------------|--------------------------------------------------------------------|
-            |      200      | IdentifierResponse           | List of courses and their details                                  |
-            |      400      | InvalidCampusCodeException   | Requested campus code does not exist                               |
-            |      400      | InvalidTermCodeException     | Requested term code does exist for the provided campus             |
-            |      400      | InvalidSubjectCodesException | Requested subject code does exist for the provided campus and term |
-
-            ### Example
-
-            ```bash
-            # Get all ICS courses offered at the University of Hawai'i at Mānoa for Fall 2026
-            curl http://localhost:8080/api/v2/campuses/man/terms/202710/subjects/ics
-            ```
-          sortKey: -1787783827649
-        method: GET
-        parameters:
-          - name: detailed
-            value: ""
-            description: boolean
-            disabled: true
-        settings:
-          renderRequestBody: true
-          encodeUrl: true
-          followRedirects: global
-          cookies:
-            send: true
-            store: true
-          rebuildPath: true
-        pathParameters:
-          - name: campusCode
-            value: ""
-          - name: termCode
-            value: ""
-          - name: subjectCode
-            value: ""
-      - url: http://{{ _.STARLITE_HOST
-          }}/api/v2/campuses/:campusCode/terms/:termCode/subjects/:subjectCode
-        name: Filter Courses (Single Subject)
-        meta:
-          id: req_46c8eb5c8c94419e95eb090511f1b61f
-          created: 1783382753736
-          modified: 1787784451932
-          isPrivate: false
-          description: |-
-            ## Filter Courses (Single Subject)
-
-            > Get all courses for a single subject for a University of Hawai'i campus and term
-
-            **Endpoint:** `http://localhost:8080/api/v2/campuses/{campusCode}/terms/{termCode}/subjects/{subjectCode}`
-
-            **Request Method:** `POST`
-
-            ### Path Variables
-
-            |  Variable   | Type   | Description                            |
-            |:-----------:|--------|----------------------------------------|
-            | campusCode  | String | UH campus code to get the subjects for |
-            |  termCode   | String | Term code to get the subjects for      |
-            | subjectCode | String | Subject code to get the courses for    |
-
-            ### Query Params
-
-            | Variable | Type    | Description                            | Default | Required? |
-            |:--------:|---------|----------------------------------------|:-------:|:---------:|
-            | detailed | Boolean | Return section details with the course |  False  |    ❌️     |
-
-            ### Request Body
-
-            | Field                 | Type      | Description                                                                                          |
-            |-----------------------|-----------|------------------------------------------------------------------------------------------------------|
-            | accept_crns           | Integer[] | Course reference numbers to exclusively include                                                      |
-            | reject_crns           | Integer[] | Course reference numbers to exclusively exclude                                                      |
-            | accept_course_numbers | String[]  | Course numbers to exclusively include. <br> `*` wild card can be used ie `1**`-> 101, 102, 110 etc.  |
-            | reject_course_numbers | String[]  | Course numbers to exclusively exclude. <br> `*` wild card can be used ie `1**` -> 101, 102, 110 etc. |
-            | accept_days           | Day[]     | Days of the week to exclusively include                                                              |
-            | reject_days           | Day[]     | Days of the week exclusively exclude                                                                 |
-            | start_after           | String    | Earliest time a class can start in HH:mm format (24hr)                                               |
-            | end_before            | String    | Latest time a class can run in HH:mm format (24hr)                                                   |
-            | only_online           | Boolean   | Whether to include or exclude exclusively online classes                                             |
-            | only_async            | Boolean   | Whether to include or exclude exclusively online sync classes                                        |
-            | has_major_restriction | Boolean   | Whether to include or exclude exclusively classes with major restrictions                            |
-            | has_prereq            | Boolean   | Whether to include or exclude exclusively classes with prerequisites                                 |
-            | can_audit             | Boolean   | Whether to include or exclude exclusively classes with an audit option                               |
-            | exclude_full          | Boolean   | Whether to include or exclude exclusively completely full classes                                    |
-            | exclude_waitlisted    | Boolean   | Whether to include or exclude exclusively completely classes with a waitlist                         |
-            | accept_instructors    | String[]  | Instructor usernames to exclusively allow                                                            |
-            | reject_instructors    | String[]  | Instructor usernames to reject                                                                       |
-            | accept_title_keywords | String[]  | Keywords in course name to exclusively accept                                                        |
-            | reject_title_keywords | String[]  | Keywords in course name to exclusively reject                                                        |
-            | accept_desc_keywords  | String[]  | Keywords in course description to exclusively accept                                                 |
-            | reject_desc_keywords  | String[]  | Keywords in course description to exclusively reject                                                 |
-
-            `Day` are either the first letters (`thu`), full day (`thursday`), or UH day code (`R`)
-
-            ### Responses
-
-            | Response Code | Type                         | Description                                                        |
-            |:-------------:|------------------------------|--------------------------------------------------------------------|
-            |      200      | CourseResponse               | List of courses and their details                                  |
-            |      400      | InvalidCampusCodeException   | Requested campus code does not exist                               |
-            |      400      | InvalidTermCodeException     | Requested term code does exist for the provided campus             |
-            |      400      | InvalidSubjectCodesException | Requested subject code does exist for the provided campus and term |
-            |      400      | InvalidRequestBodyResponse   | Request body is invalid                                            |
-
-            ### Examples
-
-            ```bash
-            # Get ICS 101, 211, and any 300 level course offered at the University of Hawai'i at Mānoa for Fall 2026
-            curl --request POST \
-              --url http://localhost:8080/api/v2/campuses/man/terms/202710/subjects/ics \
-              --header 'Content-Type: application/json' \
-              --data '{
-            	"accept_course_numbers": [
-            		"101", "211", "3**"
-            	]
-            }'
-            ```
-
-            ```bash
-            # Get all sections for ICS offered at the University of Hawai'i at Mānoa for Fall 2026 that aren't on Monday and starts after 10:00 am
-            curl --request POST \
-              --url http://localhost:8080/api/v2/campuses/man/terms/202710/subjects/ics \
-              --header 'Content-Type: application/json' \
-              --data '{
-            	"reject_days": [
-            		"m"
-            	],
-            	"start_after": "10:00"
-            }'
-            ```
-          sortKey: -1787783827549
-        method: POST
-        body:
-          mimeType: application/json
-          text: |-
-            {
-              "accept_crns": [],
-              "reject_crns": [],
-              "accept_course_numbers": [],
-              "reject_course_numbers": [],
-              "accept_days": [],
-              "reject_days": [],
-              "start_after": "",
-              "end_before": "",
-              "only_online": "",
-              "only_async": "",
-              "has_major_restriction": "",
-              "has_prereq": "",
-              "can_audit": "",
-              "exclude_full": "",
-              "exclude_waitlisted": "",
-              "accept_instructors": [],
-              "reject_instructors": [],
-              "accept_title_keywords": [],
-              "reject_title_keywords": [],
-              "accept_desc_keywords": [],
-              "reject_desc_keywords": []
-            }
-        parameters:
-          - name: detailed
-            value: ""
-            description: Boolean
-            disabled: true
-        headers:
-          - name: Content-Type
-            value: application/json
-        settings:
-          renderRequestBody: true
-          encodeUrl: true
-          followRedirects: global
-          cookies:
-            send: true
-            store: true
-          rebuildPath: true
-        pathParameters:
-          - name: campusCode
-            value: ""
-          - name: termCode
-            value: ""
-          - name: subjectCode
-            value: ""
-      - url: http://{{ _.STARLITE_HOST
-          }}/api/v2/campuses/:campusCode/terms/:termCode/courses
-        name: Get all Courses (Multiple Subjects)
-        meta:
-          id: req_fd8128e008cb4f8a824da2e8594ae80c
-          created: 1783383177614
-          modified: 1787784455224
-          isPrivate: false
-          description: |-
-            ## Get All Courses (Multiple Subjects)
-
-            > Get all courses for multiple subjects for a University of Hawai'i campus and term
-
-            **Endpoint:** `http://localhost:8080/api/v2/campuses/{campusCode}/terms/{termCode}/courses`
-
-            **Request Method:** `GET`
-
-            ### Path Variables
-
-            |  Variable   | Type   | Description                            |
-            |:-----------:|--------|----------------------------------------|
-            | campusCode  | String | UH campus code to get the subjects for |
-            |  termCode   | String | Term code to get the subjects for      |
-
-            ### Query Params
-
-            | Variable | Type     | Description                            | Default | Required? |
-            |:--------:|----------|----------------------------------------|:-------:|:---------:|
-            | subjects | String[] | Subject codes of courses to fetch      |         |    ✔️     |
-            | detailed | Boolean  | Return section details with the course |  False  |    ❌️     |
-
-            > [!WARNING]
-            > Fetching all subjects can be expensive!
-            >
-            > It is highly recommended to request no more than 3 courses at a time, but can do so if needed
-
-            ### Responses
-
-            | Response Code | Type                         | Description                                                        |
-            |:-------------:|------------------------------|--------------------------------------------------------------------|
-            |      200      | CourseResponse               | List of courses and their details                                  |
-            |      400      | InvalidCampusCodeException   | Requested campus code does not exist                               |
-            |      400      | InvalidTermCodeException     | Requested term code does exist for the provided campus             |
-            |      400      | InvalidSubjectCodesException | Requested subject code does exist for the provided campus and term |
-
-            ### Example
-
-            ```bash
-            # Get all ICS and ECE courses offered at the University of Hawai'i at Mānoa for Fall 2026
-            curl http://localhost:8080/api/v2/campuses/man/terms/202710/subjects/icss?subjects=ics,ece
-            ```
-          sortKey: -1787783827449
-        method: GET
-        parameters:
-          - name: subjects
-            value: ""
-            description: String[]
-            disabled: false
-          - name: detailed
-            value: ""
-            description: boolean
-            disabled: true
-        settings:
-          renderRequestBody: true
-          encodeUrl: true
-          followRedirects: global
-          cookies:
-            send: true
-            store: true
-          rebuildPath: true
-        pathParameters:
-          - name: campusCode
-            value: ""
-          - name: termCode
-            value: ""
-      - url: http://{{ _.STARLITE_HOST
-          }}/api/v2/campuses/:campusCode/terms/:termCode/courses
-        name: Filter Courses (Multiple Subjects)
-        meta:
-          id: req_a6f5f27010a94e048c3dd6f3431b649b
-          created: 1783383274965
-          modified: 1787784461314
-          isPrivate: false
-          description: |-
-            ## Filter Courses (Multiple Subjects)
-
-            > Get all courses for multiple subjects for a University of Hawai'i campus and term
-
-            **Endpoint:** `http://localhost:8080/api/v2/campuses/{campusCode}/terms/{termCode}/courses`
-
-            **Request Method:** `POST`
-
-            ### Path Variables
-
-            |  Variable   | Type   | Description                            |
-            |:-----------:|--------|----------------------------------------|
-            | campusCode  | String | UH campus code to get the subjects for |
-            |  termCode   | String | Term code to get the subjects for      |
-
-            ### Query Params
-
-            | Variable | Type     | Description                            | Default | Required? |
-            |:--------:|----------|----------------------------------------|:-------:|:---------:|
-            | subjects | String[] | Subject codes of courses to fetch      |         |    ✔️     |
-            | detailed | Boolean  | Return section details with the course |  False  |    ❌️     |
-
-            > [!WARNING]
-            > Fetching all subjects can be expensive!
-            >
-            > It is highly recommended to request no more than 3 courses at a time, but can do so if needed
-
-            ### Request Body
-
-            | Field                 | Type      | Description                                                                                                      |
-            |-----------------------|-----------|------------------------------------------------------------------------------------------------------------------|
-            | accept_crns           | Integer[] | Course reference numbers to exclusively include                                                                  |
-            | reject_crns           | Integer[] | Course reference numbers to exclusively exclude                                                                  |
-            | accept_course_numbers | String[]  | Course numbers to exclusively include. <br> `*` wild card can be used ie `1**`-> 101, 102, 110 etc.              |
-            | reject_course_numbers | String[]  | Course numbers to exclusively exclude. <br> `*` wild card can be used ie `1**` -> 101, 102, 110 etc.             |
-            | accept_course_ids     | String[]  | Course IDs to exclusively include. <br> `*` wild card can be used ie `ICS 1**` -> ICS 101, ICS 102, ICS 110 etc. |
-            | reject_course_ids     | String[]  | Course IDs to exclusively exclude. <br> `*` wild card can be used ie `ICS 1**` -> ICS 101, ICS 102, ICS 110 etc. |
-            | accept_days           | Day[]     | Days of the week to exclusively include                                                                          |
-            | reject_days           | Day[]     | Days of the week exclusively exclude                                                                             |
-            | start_after           | String    | Earliest time a class can start in HH:mm format (24hr)                                                           |
-            | end_before            | String    | Latest time a class can run in HH:mm format (24hr)                                                               |
-            | only_online           | Boolean   | Whether to include or exclude exclusively online classes                                                         |
-            | only_async            | Boolean   | Whether to include or exclude exclusively online sync classes                                                    |
-            | has_major_restriction | Boolean   | Whether to include or exclude exclusively classes with major restrictions                                        |
-            | has_prereq            | Boolean   | Whether to include or exclude exclusively classes with prerequisites                                             |
-            | can_audit             | Boolean   | Whether to include or exclude exclusively classes with an audit option                                           |
-            | exclude_full          | Boolean   | Whether to include or exclude exclusively completely full classes                                                |
-            | exclude_waitlisted    | Boolean   | Whether to include or exclude exclusively completely classes with a waitlist                                     |
-            | accept_instructors    | String[]  | Instructor usernames to exclusively allow                                                                        |
-            | reject_instructors    | String[]  | Instructor usernames to reject                                                                                   |
-            | accept_title_keywords | String[]  | Keywords in course name to exclusively accept                                                                    |
-            | reject_title_keywords | String[]  | Keywords in course name to exclusively reject                                                                    |
-            | accept_desc_keywords  | String[]  | Keywords in course description to exclusively accept                                                             |
-            | reject_desc_keywords  | String[]  | Keywords in course description to exclusively reject                                                             |
-
-            `Day` are either the first letters (`thu`), full day (`thursday`), or UH day code (`R`)
-
-            ### Responses
-
-            | Response Code | Type                         | Description                                                        |
-            |:-------------:|------------------------------|--------------------------------------------------------------------|
-            |      200      | CourseResponse               | List of courses and their details                                  |
-            |      400      | InvalidCampusCodeException   | Requested campus code does not exist                               |
-            |      400      | InvalidTermCodeException     | Requested term code does exist for the provided campus             |
-            |      400      | InvalidSubjectCodesException | Requested subject code does exist for the provided campus and term |
-            |      400      | InvalidRequestBodyResponse   | Request body is invalid                                            |
-
-            ### Example
-
-            ```bash
-            # Get ICS 101, 211, and any 300 level ICS or ECE course offered at the University of Hawai'i at Mānoa for Fall 2026
-            curl --request POST \
-              --url http://localhost:8080/api/v2/campuses/man/terms/202710/courses?subjects=ics,ece \
-              --header 'Content-Type: application/json' \
-              --data '{
-            	"accept_course_id": [
-            		"101", "211", "3**"
-            	],
-            	"accept_course_numbers":[
-            		"3**"
-            	]
-            }'
-            ```
-
-            ```bash
-            # Get all sections for ICS or ECE offered at the University of Hawai'i at Mānoa for Fall 2026 that aren't on Monday and starts after 10:00 am
-            curl --request POST \
-              --url http://localhost:8080/api/v2/campuses/man/terms/202710/courses?subjects=ics,ece \
-              --header 'Content-Type: application/json' \
-              --data '{
-            	"reject_days": [
-            		"m"
-            	],
-            	"start_after": "10:00"
-            }'
-            ```
-          sortKey: -1787783827349
-        method: POST
-        body:
-          mimeType: application/json
-          text: |-
-            {
-              "accept_crns": [],
-              "reject_crns": [],
-              "accept_course_numbers": [],
-              "reject_course_numbers": [],
-            	"accept_course_ids":[],
-            	"reject_course_ids":[],
-              "accept_days": [],
-              "reject_days": [],
-              "start_after": "",
-              "end_before": "",
-              "only_online": "",
-              "only_async": "",
-              "has_major_restriction": "",
-              "has_prereq": "",
-              "can_audit": "",
-              "exclude_full": "",
-              "exclude_waitlisted": "",
-              "accept_instructors": [],
-              "reject_instructors": [],
-              "accept_title_keywords": [],
-              "reject_title_keywords": [],
-              "accept_desc_keywords": [],
-              "reject_desc_keywords": []
-            }
-        parameters:
-          - name: subjects
-            value: ""
-            description: String[]
-            disabled: false
-          - name: detailed
-            value: ""
-            description: Boolean
-            disabled: true
-        headers:
-          - name: Content-Type
-            value: application/json
-            disabled: false
-        settings:
-          renderRequestBody: true
-          encodeUrl: true
-          followRedirects: global
-          cookies:
-            send: true
-            store: true
-          rebuildPath: true
-        pathParameters:
-          - name: campusCode
-            value: ""
-          - name: termCode
-            value: ""
-      - url: http://{{ _.STARLITE_HOST
-          }}/api/v2/campuses/:campusCode/terms/:termCode/schedule
-        name: Generate Schedules
-        meta:
-          id: req_744db69ef58145ab997e3dea90badd1f
-          created: 1783383375970
-          modified: 1787784465092
-          isPrivate: false
-          description: |
-            ## Generate Schedules
-
-            > Filter courses and sections to generate all possible schedules
-
-            **Endpoint:** `http://localhost:8080/api/v2/campuses/{campusCode}/terms/{termCode}/schedule`
-
-            **Request Method:** `POST`
-
-            ### Path Variables
-
-            |  Variable  | Type   | Description                          |
-            |:----------:|--------|--------------------------------------|
-            | campusCode | String | UH Campus ID to get the sections for |
-            |  termCode  | String | Term ID to get the sections for      |
-
-            ### Request Body
-
-            | Field       | Type              | Description                                                      |  Default   | Required? |
-            |-------------|-------------------|------------------------------------------------------------------|:----------:|:---------:|
-            | courses     | RequestedCourse[] | List of requested courses to make a schedule with                |            |    ✔️     |
-            | buffer_time | Integer           | Minimum time allowed between classes and blocks                  | No minimum |    ❌️     |
-            | blocks      | Block[]           | List of reserved blocks of time that no classes can be scheduled |    None    |    ❌️     |
-
-            _RequestedCourse_
-
-            | Field        | Type      | Description                                                                                  | Default  | Required? |
-            |--------------|-----------|----------------------------------------------------------------------------------------------|:--------:|:---------:|
-            | subject_code | String    | Subject code of course                                                                       |          |    ✔️     |
-            | number       | String    | Number of course <br> (wildcards are NOT supported)                                          |          |    ✔️     |
-            | crns         | Integer[] | List of course reference numbers that belong to that course that can be used in the schedule | All CRNs |    ❌️     |
-
-            _Block_
-
-            | Field | Type   | Description                                |   Default    | Required? |
-            |-------|--------|--------------------------------------------|:------------:|:---------:|
-            | start | String | Start time of block in HH:mm format (24hr) |              |    ✔️     |
-            | end   | String | End time of block in HH:mm format (24hr)   |              |    ✔️     |
-            | crns  | Day[]  | List of days this block occurs on          | All weekdays |    ❌️     |
-
-            `Day` are either the first letters (`thu`), full day (`thursday`), or UH day code (`R`)
-
-            ### Responses
-
-            | Response Code | Type                                   | Description                                                        |
-            |:-------------:|----------------------------------------|--------------------------------------------------------------------|
-            |      200      | SchedulesResponse                       | List of schedules and their details                               |
-            |      400      | InvalidCampusCodeException             | Requested campus code does not exist                               |
-            |      400      | InvalidTermCodeException               | Requested term code does exist for the provided campus             |
-            |      400      | InvalidSubjectCodesException           | Requested subject code does exist for the provided campus and term |
-            |      400      | InvalidRequestBodyResponse             | Request body is invalid                                            |
-            |      400      | InvalidCourseIDsException              | Course number uses a wildcard or number not found for subject      |
-            |      400      | InvalidCourseReferenceNumbersException | Course reference number not found for course                       |
-            |      400      | InvalidTimeSpansException              | Block time starts after it ends                                    |
-
-            ### Examples
-
-            ```bash
-            # Generate all schedules for ICS 101, ICS 111, and ICS 141 offered at 
-            # the University of Hawai'i at Mānoa for Fall 2026
-            curl --request POST \
-              --url http://localhost:8080/api/v2/campuses/man/terms/202710/schedule \
-              --header 'Content-Type: application/json' \
-              --data '{
-            	"courses": [
-            		{
-            			"subject_code": "ICS",
-            			"number": "101"
-            		},
-            				{
-            			"subject_code": "ICS",
-            			"number": "111"
-            		},
-            				{
-            			"subject_code": "ICS",
-            			"number": "141"
-            		}
-            	]
-            }'
-            ```
-
-            ```bash
-            # Generate all schedules for ICS 101 (75018, 75019) and ECE 11323L that
-            # allow for a minimum of 30 minutes between classes and have no class 
-            # between 9 and 12 on wednesdays and fridays offered at the University
-            # of Hawai'i at Mānoa for Fall 2026
-            curl --request POST \
-              --url http://localhost:8080/api/v2/campuses/man/terms/202710/schedule \
-              --header 'Content-Type: application/json' \
-              --data '{
-              "buffer_time": 30,
-              "courses": [
+          id: fld_921129f9953f4d6abc1df890e0305b25
+          created: 1788085955953
+          modified: 1788086006772
+          sortKey: -1788085956153
+          description: ""
+        children:
+          - url: http://{{ _.STARLITE_HOST }}/api/v2/campuses
+            name: Get all Campuses
+            meta:
+              id: req_32235803a1b148768ad87b558fda8ee2
+              created: 1783381092698
+              modified: 1788085959066
+              isPrivate: false
+              description: |-
+                ## Get All Campuses
+
+                > Get list of the University of Hawai'i campus codes
+
+                **Endpoint:** `http://localhost:8080/api/v2/campuses`
+
+                **Request Method:** `GET`
+
+                ### Responses
+
+                | Response Code | Type               | Description                                          |
+                |:-------------:|--------------------|------------------------------------------------------|
+                |      200      | IdentifierResponse | List of University of Hawai'i campus codes and names |
+
+                ### Example
+
+                ```bash
+                curl http://localhost:8080/api/v2/campuses
+                ```
+              sortKey: -1788085958984
+            method: GET
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://{{ _.STARLITE_HOST }}/api/v2/campuses/:campusCode/terms
+            name: Get all Terms
+            meta:
+              id: req_1ea73cea939e4828b1acc439a0bc2020
+              created: 1783381315516
+              modified: 1788085968152
+              isPrivate: false
+              description: |-
+                ## Get All Terms
+
+                > Get all terms available for a University of Hawai'i campus
+
+                **Endpoint:** `http://localhost:8080/api/v2/campuses/{campusCode}/terms`
+
+                **Request Method:** `GET`
+
+                ### Path Variables
+
+                |  Variable  | Type   | Description                         |
+                |:----------:|--------|-------------------------------------|
+                | campusCode | String | UH Campus code to get the terms for |
+
+                ### Responses
+
+                | Response Code | Type                       | Description                          |
+                |:-------------:|----------------------------|--------------------------------------|
+                |      200      | IdentifierResponse         | List of term codes and names         |
+                |      400      | InvalidCampusCodeException | Requested campus code does not exist |
+
+                ### Example
+
+                ```bash
+                # Get all terms for the University of Hawai'i at Mānoa
+                curl http://localhost:8080/api/v2/campuses/man/terms
+                ```
+              sortKey: -1788085958884
+            method: GET
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+            pathParameters:
+              - name: campusCode
+                value: ""
+          - url: http://{{ _.STARLITE_HOST
+              }}/api/v2/campuses/:campusCode/terms/:termCode/subjects
+            name: Get all Subjects
+            meta:
+              id: req_9b274bf70af54f04bc2ba72d211d9937
+              created: 1783381444580
+              modified: 1788085970063
+              isPrivate: false
+              description: |-
+                ## Get All Subjects
+
+                > Get all subjects for a University of Hawai'i campus and term
+
+                **Endpoint:** `http://localhost:8080/api/v2/campuses/{campusCode}/terms/{termCode}/subjects`
+
+                **Request Method:** `GET`
+
+                ### Path Variables
+
+                |  Variable  | Type   | Description                            |
+                |:----------:|--------|----------------------------------------|
+                | campusCode | String | UH campus code to get the subjects for |
+                |  termCode  | String | Term code to get the subjects for      |
+
+                ### Responses
+
+                | Response Code | Type                       | Description                                            |
+                |:-------------:|----------------------------|--------------------------------------------------------|
+                |      200      | IdentifierResponse         | List of subject names and IDs                          |
+                |      400      | InvalidCampusCodeException | Requested campus code does not exist                   |
+                |      400      | InvalidTermCodeException   | Requested term code does exist for the provided campus |
+
+                ### Example
+
+                ```bash
+                # Get all subjects offered at the University of Hawai'i at Mānoa for Fall 2026
+                curl http://localhost:8080/api/v2/campuses/man/terms/202710/subjects
+                ```
+              sortKey: -1788085958784
+            method: GET
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+            pathParameters:
+              - name: campusCode
+                value: ""
+              - name: termCode
+                value: ""
+          - url: http://{{ _.STARLITE_HOST
+              }}/api/v2/campuses/:campusCode/terms/:termCode/subjects/:subjectCode
+            name: Get all Courses (Single Subject)
+            meta:
+              id: req_75daec5d40634583b961e6a34ceb6947
+              created: 1783381567532
+              modified: 1788085971474
+              isPrivate: false
+              description: |-
+                ## Get All Courses (Single Subject)
+
+                > Get all courses for a single subject for a University of Hawai'i campus and term
+
+                **Endpoint:** `http://localhost:8080/api/v2/campuses/{campusCode}/terms/{termCode}/subjects/{subjectCode}`
+
+                **Request Method:** `GET`
+
+                ### Path Variables
+
+                |  Variable   | Type   | Description                            |
+                |:-----------:|--------|----------------------------------------|
+                | campusCode  | String | UH campus code to get the subjects for |
+                |  termCode   | String | Term code to get the subjects for      |
+                | subjectCode | String | Subject code to get the courses for    |
+
+                ### Query Params
+
+                | Variable | Type    | Description                            | Default | Required? |
+                |:--------:|---------|----------------------------------------|:-------:|:---------:|
+                | detailed | Boolean | Return section details with the course |  True   |    ❌️     |
+
+                ### Responses
+
+                | Response Code | Type                         | Description                                                        |
+                |:-------------:|------------------------------|--------------------------------------------------------------------|
+                |      200      | IdentifierResponse           | List of courses and their details                                  |
+                |      400      | InvalidCampusCodeException   | Requested campus code does not exist                               |
+                |      400      | InvalidTermCodeException     | Requested term code does exist for the provided campus             |
+                |      400      | InvalidSubjectCodesException | Requested subject code does exist for the provided campus and term |
+
+                ### Example
+
+                ```bash
+                # Get all ICS courses offered at the University of Hawai'i at Mānoa for Fall 2026
+                curl http://localhost:8080/api/v2/campuses/man/terms/202710/subjects/ics
+                ```
+              sortKey: -1788085958684
+            method: GET
+            parameters:
+              - name: detailed
+                value: ""
+                description: boolean
+                disabled: true
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+            pathParameters:
+              - name: campusCode
+                value: ""
+              - name: termCode
+                value: ""
+              - name: subjectCode
+                value: ""
+          - url: http://{{ _.STARLITE_HOST
+              }}/api/v2/campuses/:campusCode/terms/:termCode/subjects/:subjectCode
+            name: Filter Courses (Single Subject)
+            meta:
+              id: req_e6ec1c4307f34b92973cb7198bd2baa3
+              created: 1783382753736
+              modified: 1788085972952
+              isPrivate: false
+              description: |-
+                ## Filter Courses (Single Subject)
+
+                > Get all courses for a single subject for a University of Hawai'i campus and term
+
+                **Endpoint:** `http://localhost:8080/api/v2/campuses/{campusCode}/terms/{termCode}/subjects/{subjectCode}`
+
+                **Request Method:** `POST`
+
+                ### Path Variables
+
+                |  Variable   | Type   | Description                            |
+                |:-----------:|--------|----------------------------------------|
+                | campusCode  | String | UH campus code to get the subjects for |
+                |  termCode   | String | Term code to get the subjects for      |
+                | subjectCode | String | Subject code to get the courses for    |
+
+                ### Query Params
+
+                | Variable | Type    | Description                            | Default | Required? |
+                |:--------:|---------|----------------------------------------|:-------:|:---------:|
+                | detailed | Boolean | Return section details with the course |  True   |    ❌️     |
+
+                ### Request Body
+
+                | Field                 | Type      | Description                                                                                          |
+                |-----------------------|-----------|------------------------------------------------------------------------------------------------------|
+                | accept_crns           | Integer[] | Course reference numbers to exclusively include                                                      |
+                | reject_crns           | Integer[] | Course reference numbers to exclusively exclude                                                      |
+                | accept_course_numbers | String[]  | Course numbers to exclusively include. <br> `*` wild card can be used ie `1**`-> 101, 102, 110 etc.  |
+                | reject_course_numbers | String[]  | Course numbers to exclusively exclude. <br> `*` wild card can be used ie `1**` -> 101, 102, 110 etc. |
+                | accept_days           | Day[]     | Days of the week to exclusively include                                                              |
+                | reject_days           | Day[]     | Days of the week exclusively exclude                                                                 |
+                | start_after           | String    | Earliest time a class can start in HH:mm format (24hr)                                               |
+                | end_before            | String    | Latest time a class can run in HH:mm format (24hr)                                                   |
+                | only_online           | Boolean   | Whether to include or exclude exclusively online classes                                             |
+                | only_async            | Boolean   | Whether to include or exclude exclusively online sync classes                                        |
+                | has_major_restriction | Boolean   | Whether to include or exclude exclusively classes with major restrictions                            |
+                | has_prereq            | Boolean   | Whether to include or exclude exclusively classes with prerequisites                                 |
+                | can_audit             | Boolean   | Whether to include or exclude exclusively classes with an audit option                               |
+                | exclude_full          | Boolean   | Whether to include or exclude exclusively completely full classes                                    |
+                | exclude_waitlisted    | Boolean   | Whether to include or exclude exclusively completely classes with a waitlist                         |
+                | accept_instructors    | String[]  | Instructor usernames to exclusively allow                                                            |
+                | reject_instructors    | String[]  | Instructor usernames to reject                                                                       |
+                | accept_title_keywords | String[]  | Keywords in course name to exclusively accept                                                        |
+                | reject_title_keywords | String[]  | Keywords in course name to exclusively reject                                                        |
+                | accept_desc_keywords  | String[]  | Keywords in course description to exclusively accept                                                 |
+                | reject_desc_keywords  | String[]  | Keywords in course description to exclusively reject                                                 |
+
+                `Day` are either the first letters (`thu`), full day (`thursday`), or UH day code (`R`)
+
+                ### Responses
+
+                | Response Code | Type                         | Description                                                        |
+                |:-------------:|------------------------------|--------------------------------------------------------------------|
+                |      200      | CourseResponse               | List of courses and their details                                  |
+                |      400      | InvalidCampusCodeException   | Requested campus code does not exist                               |
+                |      400      | InvalidTermCodeException     | Requested term code does exist for the provided campus             |
+                |      400      | InvalidSubjectCodesException | Requested subject code does exist for the provided campus and term |
+                |      400      | InvalidRequestBodyResponse   | Request body is invalid                                            |
+
+                ### Examples
+
+                ```bash
+                # Get ICS 101, 211, and any 300 level course offered at the University of Hawai'i at Mānoa for Fall 2026
+                curl --request POST \
+                  --url http://localhost:8080/api/v2/campuses/man/terms/202710/subjects/ics \
+                  --header 'Content-Type: application/json' \
+                  --data '{
+                	"accept_course_numbers": [
+                		"101", "211", "3**"
+                	]
+                }'
+                ```
+
+                ```bash
+                # Get all sections for ICS offered at the University of Hawai'i at Mānoa for Fall 2026 that aren't on Monday and starts after 10:00 am
+                curl --request POST \
+                  --url http://localhost:8080/api/v2/campuses/man/terms/202710/subjects/ics \
+                  --header 'Content-Type: application/json' \
+                  --data '{
+                	"reject_days": [
+                		"m"
+                	],
+                	"start_after": "10:00"
+                }'
+                ```
+              sortKey: -1788085958584
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
                 {
-                  "subject_code": "ICS",
-                  "number": "101",
-                  "crns": [
-                    75018,
-                    75019
-                  ]
-                },
-                {
-                  "subject_code": "ECE",
-                  "number": "323L"
+                  "accept_crns": [],
+                  "reject_crns": [],
+                  "accept_course_numbers": [],
+                  "reject_course_numbers": [],
+                  "accept_days": [],
+                  "reject_days": [],
+                  "start_after": "",
+                  "end_before": "",
+                  "only_online": "",
+                  "only_async": "",
+                  "has_major_restriction": "",
+                  "has_prereq": "",
+                  "can_audit": "",
+                  "exclude_full": "",
+                  "exclude_waitlisted": "",
+                  "accept_instructors": [],
+                  "reject_instructors": [],
+                  "accept_title_keywords": [],
+                  "reject_title_keywords": [],
+                  "accept_desc_keywords": [],
+                  "reject_desc_keywords": []
                 }
-              ],
-              "blocks": [
+            parameters:
+              - name: detailed
+                value: ""
+                description: Boolean
+                disabled: true
+            headers:
+              - name: Content-Type
+                value: application/json
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+            pathParameters:
+              - name: campusCode
+                value: ""
+              - name: termCode
+                value: ""
+              - name: subjectCode
+                value: ""
+          - url: http://{{ _.STARLITE_HOST
+              }}/api/v2/campuses/:campusCode/terms/:termCode/courses
+            name: Get all Courses (Multiple Subjects)
+            meta:
+              id: req_f3165f459a5246aca2eea55b06ad1d70
+              created: 1783383177614
+              modified: 1788085974031
+              isPrivate: false
+              description: |-
+                ## Get All Courses (Multiple Subjects)
+
+                > Get all courses for multiple subjects for a University of Hawai'i campus and term
+
+                **Endpoint:** `http://localhost:8080/api/v2/campuses/{campusCode}/terms/{termCode}/courses`
+
+                **Request Method:** `GET`
+
+                ### Path Variables
+
+                |  Variable   | Type   | Description                            |
+                |:-----------:|--------|----------------------------------------|
+                | campusCode  | String | UH campus code to get the subjects for |
+                |  termCode   | String | Term code to get the subjects for      |
+
+                ### Query Params
+
+                | Variable | Type     | Description                            | Default | Required? |
+                |:--------:|----------|----------------------------------------|:-------:|:---------:|
+                | subjects | String[] | Subject codes of courses to fetch      |         |    ✔️     |
+                | detailed | Boolean  | Return section details with the course |  True   |    ❌️     |
+
+                > [!WARNING]
+                > Fetching all subjects can be expensive!
+                >
+                > It is highly recommended to request no more than 3 courses at a time, but can do so if needed
+
+                ### Responses
+
+                | Response Code | Type                         | Description                                                        |
+                |:-------------:|------------------------------|--------------------------------------------------------------------|
+                |      200      | CourseResponse               | List of courses and their details                                  |
+                |      400      | InvalidCampusCodeException   | Requested campus code does not exist                               |
+                |      400      | InvalidTermCodeException     | Requested term code does exist for the provided campus             |
+                |      400      | InvalidSubjectCodesException | Requested subject code does exist for the provided campus and term |
+
+                ### Example
+
+                ```bash
+                # Get all ICS and ECE courses offered at the University of Hawai'i at Mānoa for Fall 2026
+                curl http://localhost:8080/api/v2/campuses/man/terms/202710/subjects/icss?subjects=ics,ece
+                ```
+              sortKey: -1788085958484
+            method: GET
+            parameters:
+              - name: subjects
+                value: ""
+                description: String[]
+                disabled: false
+              - name: detailed
+                value: ""
+                description: boolean
+                disabled: true
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+            pathParameters:
+              - name: campusCode
+                value: ""
+              - name: termCode
+                value: ""
+          - url: http://{{ _.STARLITE_HOST
+              }}/api/v2/campuses/:campusCode/terms/:termCode/courses
+            name: Filter Courses (Multiple Subjects)
+            meta:
+              id: req_bc021d36dc514625ad0ba65805677617
+              created: 1783383274965
+              modified: 1788085975269
+              isPrivate: false
+              description: |-
+                ## Filter Courses (Multiple Subjects)
+
+                > Get all courses for multiple subjects for a University of Hawai'i campus and term
+
+                **Endpoint:** `http://localhost:8080/api/v2/campuses/{campusCode}/terms/{termCode}/courses`
+
+                **Request Method:** `POST`
+
+                ### Path Variables
+
+                |  Variable   | Type   | Description                            |
+                |:-----------:|--------|----------------------------------------|
+                | campusCode  | String | UH campus code to get the subjects for |
+                |  termCode   | String | Term code to get the subjects for      |
+
+                ### Query Params
+
+                | Variable | Type     | Description                            | Default | Required? |
+                |:--------:|----------|----------------------------------------|:-------:|:---------:|
+                | subjects | String[] | Subject codes of courses to fetch      |         |    ✔️     |
+                | detailed | Boolean  | Return section details with the course |  True   |    ❌️     |
+
+                > [!WARNING]
+                > Fetching all subjects can be expensive!
+                >
+                > It is highly recommended to request no more than 3 courses at a time, but can do so if needed
+
+                ### Request Body
+
+                | Field                 | Type      | Description                                                                                                      |
+                |-----------------------|-----------|------------------------------------------------------------------------------------------------------------------|
+                | accept_crns           | Integer[] | Course reference numbers to exclusively include                                                                  |
+                | reject_crns           | Integer[] | Course reference numbers to exclusively exclude                                                                  |
+                | accept_course_numbers | String[]  | Course numbers to exclusively include. <br> `*` wild card can be used ie `1**`-> 101, 102, 110 etc.              |
+                | reject_course_numbers | String[]  | Course numbers to exclusively exclude. <br> `*` wild card can be used ie `1**` -> 101, 102, 110 etc.             |
+                | accept_course_ids     | String[]  | Course IDs to exclusively include. <br> `*` wild card can be used ie `ICS 1**` -> ICS 101, ICS 102, ICS 110 etc. |
+                | reject_course_ids     | String[]  | Course IDs to exclusively exclude. <br> `*` wild card can be used ie `ICS 1**` -> ICS 101, ICS 102, ICS 110 etc. |
+                | accept_days           | Day[]     | Days of the week to exclusively include                                                                          |
+                | reject_days           | Day[]     | Days of the week exclusively exclude                                                                             |
+                | start_after           | String    | Earliest time a class can start in HH:mm format (24hr)                                                           |
+                | end_before            | String    | Latest time a class can run in HH:mm format (24hr)                                                               |
+                | only_online           | Boolean   | Whether to include or exclude exclusively online classes                                                         |
+                | only_async            | Boolean   | Whether to include or exclude exclusively online sync classes                                                    |
+                | has_major_restriction | Boolean   | Whether to include or exclude exclusively classes with major restrictions                                        |
+                | has_prereq            | Boolean   | Whether to include or exclude exclusively classes with prerequisites                                             |
+                | can_audit             | Boolean   | Whether to include or exclude exclusively classes with an audit option                                           |
+                | exclude_full          | Boolean   | Whether to include or exclude exclusively completely full classes                                                |
+                | exclude_waitlisted    | Boolean   | Whether to include or exclude exclusively completely classes with a waitlist                                     |
+                | accept_instructors    | String[]  | Instructor usernames to exclusively allow                                                                        |
+                | reject_instructors    | String[]  | Instructor usernames to reject                                                                                   |
+                | accept_title_keywords | String[]  | Keywords in course name to exclusively accept                                                                    |
+                | reject_title_keywords | String[]  | Keywords in course name to exclusively reject                                                                    |
+                | accept_desc_keywords  | String[]  | Keywords in course description to exclusively accept                                                             |
+                | reject_desc_keywords  | String[]  | Keywords in course description to exclusively reject                                                             |
+
+                `Day` are either the first letters (`thu`), full day (`thursday`), or UH day code (`R`)
+
+                ### Responses
+
+                | Response Code | Type                         | Description                                                        |
+                |:-------------:|------------------------------|--------------------------------------------------------------------|
+                |      200      | CourseResponse               | List of courses and their details                                  |
+                |      400      | InvalidCampusCodeException   | Requested campus code does not exist                               |
+                |      400      | InvalidTermCodeException     | Requested term code does exist for the provided campus             |
+                |      400      | InvalidSubjectCodesException | Requested subject code does exist for the provided campus and term |
+                |      400      | InvalidRequestBodyResponse   | Request body is invalid                                            |
+
+                ### Example
+
+                ```bash
+                # Get ICS 101, 211, and any 300 level ICS or ECE course offered at the University of Hawai'i at Mānoa for Fall 2026
+                curl --request POST \
+                  --url http://localhost:8080/api/v2/campuses/man/terms/202710/courses?subjects=ics,ece \
+                  --header 'Content-Type: application/json' \
+                  --data '{
+                	"accept_course_id": [
+                		"101", "211", "3**"
+                	],
+                	"accept_course_numbers":[
+                		"3**"
+                	]
+                }'
+                ```
+
+                ```bash
+                # Get all sections for ICS or ECE offered at the University of Hawai'i at Mānoa for Fall 2026 that aren't on Monday and starts after 10:00 am
+                curl --request POST \
+                  --url http://localhost:8080/api/v2/campuses/man/terms/202710/courses?subjects=ics,ece \
+                  --header 'Content-Type: application/json' \
+                  --data '{
+                	"reject_days": [
+                		"m"
+                	],
+                	"start_after": "10:00"
+                }'
+                ```
+              sortKey: -1788085958384
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
                 {
-                  "day": [
-                    "wed",
-                    "fri"
+                  "accept_crns": [],
+                  "reject_crns": [],
+                  "accept_course_numbers": [],
+                  "reject_course_numbers": [],
+                	"accept_course_ids":[],
+                	"reject_course_ids":[],
+                  "accept_days": [],
+                  "reject_days": [],
+                  "start_after": "",
+                  "end_before": "",
+                  "only_online": "",
+                  "only_async": "",
+                  "has_major_restriction": "",
+                  "has_prereq": "",
+                  "can_audit": "",
+                  "exclude_full": "",
+                  "exclude_waitlisted": "",
+                  "accept_instructors": [],
+                  "reject_instructors": [],
+                  "accept_title_keywords": [],
+                  "reject_title_keywords": [],
+                  "accept_desc_keywords": [],
+                  "reject_desc_keywords": []
+                }
+            parameters:
+              - name: subjects
+                value: ""
+                description: String[]
+                disabled: false
+              - name: detailed
+                value: ""
+                description: Boolean
+                disabled: true
+            headers:
+              - name: Content-Type
+                value: application/json
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+            pathParameters:
+              - name: campusCode
+                value: ""
+              - name: termCode
+                value: ""
+      - name: Schedule Generation
+        meta:
+          id: fld_1781e71525fd4b91a87ee1eaeb54a435
+          created: 1788085989278
+          modified: 1788086322930
+          sortKey: -1788085956128
+          description: ""
+        children:
+          - url: http://{{ _.STARLITE_HOST
+              }}/api/v2/campuses/:campusCode/terms/:termCode/schedule
+            name: Generate Schedules
+            meta:
+              id: req_2392a39f8bca48908b3f63d073911f41
+              created: 1783383375970
+              modified: 1788085992857
+              isPrivate: false
+              description: |
+                ## Generate Schedules
+
+                > Filter courses and sections to generate all possible schedules
+
+                **Endpoint:** `http://localhost:8080/api/v2/campuses/{campusCode}/terms/{termCode}/schedule`
+
+                **Request Method:** `POST`
+
+                ### Path Variables
+
+                |  Variable  | Type   | Description                          |
+                |:----------:|--------|--------------------------------------|
+                | campusCode | String | UH Campus ID to get the sections for |
+                |  termCode  | String | Term ID to get the sections for      |
+
+                ### Request Body
+
+                | Field       | Type              | Description                                                      |  Default   | Required? |
+                |-------------|-------------------|------------------------------------------------------------------|:----------:|:---------:|
+                | courses     | RequestedCourse[] | List of requested courses to make a schedule with                |            |    ✔️     |
+                | buffer_time | Integer           | Minimum time allowed between classes and blocks                  | No minimum |    ❌️     |
+                | blocks      | Block[]           | List of reserved blocks of time that no classes can be scheduled |    None    |    ❌️     |
+
+                _RequestedCourse_
+
+                | Field        | Type      | Description                                                                                  | Default  | Required? |
+                |--------------|-----------|----------------------------------------------------------------------------------------------|:--------:|:---------:|
+                | subject_code | String    | Subject code of course                                                                       |          |    ✔️     |
+                | number       | String    | Number of course <br> (wildcards are NOT supported)                                          |          |    ✔️     |
+                | crns         | Integer[] | List of course reference numbers that belong to that course that can be used in the schedule | All CRNs |    ❌️     |
+
+                _Block_
+
+                | Field | Type   | Description                                |   Default    | Required? |
+                |-------|--------|--------------------------------------------|:------------:|:---------:|
+                | start | String | Start time of block in HH:mm format (24hr) |              |    ✔️     |
+                | end   | String | End time of block in HH:mm format (24hr)   |              |    ✔️     |
+                | crns  | Day[]  | List of days this block occurs on          | All weekdays |    ❌️     |
+
+                `Day` are either the first letters (`thu`), full day (`thursday`), or UH day code (`R`)
+
+                ### Responses
+
+                | Response Code | Type                                   | Description                                                        |
+                |:-------------:|----------------------------------------|--------------------------------------------------------------------|
+                |      200      | SchedulesResponse                       | List of schedules and their details                               |
+                |      400      | InvalidCampusCodeException             | Requested campus code does not exist                               |
+                |      400      | InvalidTermCodeException               | Requested term code does exist for the provided campus             |
+                |      400      | InvalidSubjectCodesException           | Requested subject code does exist for the provided campus and term |
+                |      400      | InvalidRequestBodyResponse             | Request body is invalid                                            |
+                |      400      | InvalidCourseIDsException              | Course number uses a wildcard or number not found for subject      |
+                |      400      | InvalidCourseReferenceNumbersException | Course reference number not found for course                       |
+                |      400      | InvalidTimeSpansException              | Block time starts after it ends                                    |
+
+                ### Examples
+
+                ```bash
+                # Generate all schedules for ICS 101, ICS 111, and ICS 141 offered at 
+                # the University of Hawai'i at Mānoa for Fall 2026
+                curl --request POST \
+                  --url http://localhost:8080/api/v2/campuses/man/terms/202710/schedule \
+                  --header 'Content-Type: application/json' \
+                  --data '{
+                	"courses": [
+                		{
+                			"subject_code": "ICS",
+                			"number": "101"
+                		},
+                				{
+                			"subject_code": "ICS",
+                			"number": "111"
+                		},
+                				{
+                			"subject_code": "ICS",
+                			"number": "141"
+                		}
+                	]
+                }'
+                ```
+
+                ```bash
+                # Generate all schedules for ICS 101 (75018, 75019) and ECE 11323L that
+                # allow for a minimum of 30 minutes between classes and have no class 
+                # between 9 and 12 on wednesdays and fridays offered at the University
+                # of Hawai'i at Mānoa for Fall 2026
+                curl --request POST \
+                  --url http://localhost:8080/api/v2/campuses/man/terms/202710/schedule \
+                  --header 'Content-Type: application/json' \
+                  --data '{
+                  "buffer_time": 30,
+                  "courses": [
+                    {
+                      "subject_code": "ICS",
+                      "number": "101",
+                      "crns": [
+                        75018,
+                        75019
+                      ]
+                    },
+                    {
+                      "subject_code": "ECE",
+                      "number": "323L"
+                    }
                   ],
-                  "start": "09:00",
-                  "end": "12:00"
+                  "blocks": [
+                    {
+                      "day": [
+                        "wed",
+                        "fri"
+                      ],
+                      "start": "09:00",
+                      "end": "12:00"
+                    }
+                  ]
+                }'
+                ```
+              sortKey: -1788085992826
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"buffer_time":"",
+                	"courses": [],
+                	"blocks": []
                 }
-              ]
-            }'
-            ```
-          sortKey: -1787783827299
-        method: POST
-        body:
-          mimeType: application/json
-          text: |-
-            {
-            	"buffer_time":"",
-            	"courses": [],
-            	"blocks": []
-            }
-        headers:
-          - name: Content-Type
-            value: application/json
-        settings:
-          renderRequestBody: true
-          encodeUrl: true
-          followRedirects: global
-          cookies:
-            send: true
-            store: true
-          rebuildPath: true
-        pathParameters:
-          - name: campusCode
-            value: ""
-          - name: termCode
-            value: ""
-      - url: http://{{ _.STARLITE_HOST }}/api/v2/schedule/:encoding/json
-        name: Decode Schedule to json
+            headers:
+              - name: Content-Type
+                value: application/json
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+            pathParameters:
+              - name: campusCode
+                value: ""
+              - name: termCode
+                value: ""
+          - url: http://{{ _.STARLITE_HOST }}/api/v2/schedule/:encoding/json
+            name: Decode Schedule to json
+            meta:
+              id: req_b64dc969dc9c4e66ae2d2ca7cb8f3758
+              created: 1787783433419
+              modified: 1788085998174
+              isPrivate: false
+              description: |-
+                ## Decode Schedule to json
+
+                > Decode an encoded schedule into a JSON object.
+
+                **Endpoint:** `http://localhost:8080/api/v2/schedule/{encoding}/json`
+
+                **Request Method:** `GET`
+
+                ### Path Variables
+
+                | Variable | Type   | Description             |
+                |:--------:|--------|-------------------------|
+                | encoding | String | Base64 encoded schedule |
+
+                The resource url containing is included for each schedule in the SchedulesResponse under the `json_url` key.
+
+                ### Responses
+
+                | Response Code | Type                             | Description                                                                     |
+                |:-------------:|----------------------------------|---------------------------------------------------------------------------------|
+                |      200      | ScheduleResponse                 | JSON representation of the encoded schedule                                     |
+                |      400      | InvalidScheduleEncodingException | Requested schedule is invalid due to corrupted encoding or conflicting sections |
+
+                ### Example
+
+                ```bash
+                # Fetch the previously generated schedule for ICS 414 and ICS 101 for Hawai'i at Mānoa for Fall 2026
+                curl --request GET \
+                  --url http://localhost:8080/api/v2/schedule/bWFuOjIwMjcxMF9pY3NfNzI0NjI6NzUwMTUK/json
+                ```
+              sortKey: -1788085992726
+            method: GET
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+            pathParameters:
+              - name: encoding
+                value: ""
+          - url: http://{{ _.STARLITE_HOST }}/api/v2/schedule/:encoding/ics
+            name: Decode Schedule to ics
+            meta:
+              id: req_17421c8087e0413e8b6157761fb97d16
+              created: 1787783629800
+              modified: 1788085999306
+              isPrivate: false
+              description: |-
+                ## Decode Schedule to ics
+
+                > Decode an encoded schedule into a [ICalender](https://en.wikipedia.org/wiki/ICalendar) file that can be imported into
+                > [Google Calendar](https://support.google.com/calendar/answer/37118),
+                > [Apple Calendar](https://support.apple.com/guide/calendar/import-or-export-calendars-icl1023/mac),
+                > [Outlook](https://support.microsoft.com/en-us/outlook/import-or-subscribe-to-a-calendar-in-outlook-com-or-outlook-on-the-web),
+                > and other calendar software.
+
+                **Endpoint:** `http://localhost:8080/api/v2/schedule/{encoding}/ics`
+
+                **Request Method:** `GET`
+
+                ### Path Variables
+
+                | Variable | Type   | Description             |
+                |:--------:|--------|-------------------------|
+                | encoding | String | Base64 encoded schedule |
+
+                The resource url containing is included for each schedule in the SchedulesResponse under the `ics_url` key.
+
+                ### Responses
+
+                | Response Code | Type                             | Description                                                                                                   |
+                |:-------------:|----------------------------------|---------------------------------------------------------------------------------------------------------------|
+                |      200      | `text/calendar`                  | `ical` file representation of the schedule. Default file name is `<campus_code>_<term_code>_<5 char uid>.ics` |
+                |      400      | InvalidScheduleEncodingException | Requested schedule is invalid due to corrupted encoding or conflicting sections                               |
+
+                ### Example
+
+                ```bash
+                # Download the previously generated schedule for ICS 414 and ICS 101 for Hawai'i at Mānoa for Fall 2026 ics file
+                curl -LOJ http://localhost:8080/api/v2/schedule/bWFuOjIwMjcxMF9pY3NfNzI0NjI6NzUwMTUK/ics
+                ```
+              sortKey: -1788085992626
+            method: GET
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+            pathParameters:
+              - name: encoding
+                value: ""
+      - name: Data Export
         meta:
-          id: req_1aae27c4705749e68a5cd3bf653e1eb2
-          created: 1787783433419
-          modified: 1787784468629
-          isPrivate: false
-          description: |-
-            ## Decode Schedule to json
+          id: fld_bb85de76b6d44250a88a147beffaabe3
+          created: 1788086301747
+          modified: 1788086320841
+          sortKey: -1788085956103
+          description: ""
+        children:
+          - url: http://{{ _.STARLITE_HOST }}/api/v2/export/start
+            name: Start Export Job
+            meta:
+              id: req_64aa21555f22409f85fe6ccb097dd602
+              created: 1788085719167
+              modified: 1788086304907
+              isPrivate: false
+              description: |
+                ## Start Export Job
 
-            > Decode an encoded schedule into a JSON object.
+                > Start a job to export all course data
 
-            **Endpoint:** `http://localhost:8080/api/v2/schedule/{encoding}/json`
+                **Endpoint:** `http://localhost:8080/api/v2/exports/start`
 
-            **Request Method:** `GET`
+                **Request Method:** `POST`
 
-            ### Path Variables
+                ### Responses
 
-            | Variable | Type   | Description             |
-            |:--------:|--------|-------------------------|
-            | encoding | String | Base64 encoded schedule |
+                | Response Code | Type                       | Description                             |
+                |:-------------:|----------------------------|-----------------------------------------|
+                |      202      | ExportJobStartResponse     | DTO with job details                    |
+                |      503      | ExportServiceBusyException | Server is running max permitted exports |
 
-            The resource url containing is included for each schedule in the SchedulesResponse under the `json_url` key.
+                ### Example
 
-            ### Responses
+                ```bash
+                curl -X POST http://localhost:8080/api/v2/exports/start
+                ```
+              sortKey: -1788086304878
+            method: POST
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://{{ _.STARLITE_HOST }}/api/v2/exports/:jobID/status
+            name: Poll Export Job
+            meta:
+              id: req_83e1bc6a3724491a99aa17f3069116e0
+              created: 1788085863156
+              modified: 1788086313302
+              isPrivate: false
+              description: |
+                ## Poll Export Job
 
-            | Response Code | Type                             | Description                                                                     |
-            |:-------------:|----------------------------------|---------------------------------------------------------------------------------|
-            |      200      | ScheduleResponse                 | JSON representation of the encoded schedule                                     |
-            |      400      | InvalidScheduleEncodingException | Requested schedule is invalid due to corrupted encoding or conflicting sections |
+                > Poll an export job to get progress updates on the job
 
-            ### Example
+                **Endpoint:** `http://localhost:8080/api/v2/exports/{jobID}/status`
 
-            ```bash
-            # Fetch the previously generated schedule for ICS 414 and ICS 101 for Hawai'i at Mānoa for Fall 2026
-            curl --request GET \
-              --url http://localhost:8080/api/v2/schedule/bWFuOjIwMjcxMF9pY3NfNzI0NjI6NzUwMTUK/json
-            ```
-          sortKey: -1787783827249
-        method: GET
-        settings:
-          renderRequestBody: true
-          encodeUrl: true
-          followRedirects: global
-          cookies:
-            send: true
-            store: true
-          rebuildPath: true
-        pathParameters:
-          - name: encoding
-            value: ""
-      - url: http://{{ _.STARLITE_HOST }}/api/v2/schedule/:encoding/ics
-        name: Decode Schedule to ics
-        meta:
-          id: req_d50555e7b1fd4362951a8393ee9b77c4
-          created: 1787783629800
-          modified: 1787784473125
-          isPrivate: false
-          description: |-
-            ## Decode Schedule to ics
+                **Request Method:** `GET`
 
-            > Decode an encoded schedule into a [ICalender](https://en.wikipedia.org/wiki/ICalendar) file that can be imported into
-            > [Google Calendar](https://support.google.com/calendar/answer/37118),
-            > [Apple Calendar](https://support.apple.com/guide/calendar/import-or-export-calendars-icl1023/mac),
-            > [Outlook](https://support.microsoft.com/en-us/outlook/import-or-subscribe-to-a-calendar-in-outlook-com-or-outlook-on-the-web),
-            > and other calendar software.
+                ### Path Variables
 
-            **Endpoint:** `http://localhost:8080/api/v2/schedule/{encoding}/ics`
+                | Variable | Type   | Description |
+                |:--------:|--------|-------------|
+                |  jobID   | String | Job ID      |
 
-            **Request Method:** `GET`
+                The `jobID` and polling url can be found in the JobStartResponse.
 
-            ### Path Variables
+                ### Responses
 
-            | Variable | Type   | Description             |
-            |:--------:|--------|-------------------------|
-            | encoding | String | Base64 encoded schedule |
+                | Response Code | Type                     | Description                                   |
+                |:-------------:|--------------------------|-----------------------------------------------|
+                |      200      | ExportJobStatusResponse  | Details about the current progress of the job |
+                |      404      | MissingExportIDException | Requested ID does not exist                   |
+              sortKey: -1788086304778
+            method: GET
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+            pathParameters:
+              - name: jobID
+                value: ""
+          - url: http://{{ _.STARLITE_HOST }}/api/v2/exports/:jobID/endpoints
+            name: Export Endpoints
+            meta:
+              id: req_902a0cc82d774001ac6699d7fd3109c4
+              created: 1788086032478
+              modified: 1788086316086
+              isPrivate: false
+              description: |-
+                ## Export Endpoints
 
-            The resource url containing is included for each schedule in the SchedulesResponse under the `ics_url` key.
+                > Once an export job is complete, export endpoints and their responses. The `latest` fetches the most recent export if
+                > one exists
 
-            ### Responses
+                **Endpoint:** `http://localhost:8080/api/v2/exports/{jobID}/endpoints`
 
-            | Response Code | Type                             | Description                                                                                                 |
-            |:-------------:|----------------------------------|-------------------------------------------------------------------------------------------------------------|
-            |      200      | text/calendar                    | ical file reprenestation of the schedule. Default file name is `<campus_code>_<term_code>_<5 char uid>.ics` |
-            |      400      | InvalidScheduleEncodingException | Requested schedule is invalid due to corrupted encoding or conflicting sections                             |
+                **Endpoint:** `http://localhost:8080/api/v2/exports/latest/endpoints`
 
-            ### Example
+                **Request Method:** `GET`
 
-            ```bash
-            # Download the previously generated schedule for ICS 414 and ICS 101 for Hawai'i at Mānoa for Fall 2026 ics file
-            curl -LOJ http://localhost:8080/api/v2/schedule/bWFuOjIwMjcxMF9pY3NfNzI0NjI6NzUwMTUK/ics
-            ```
-          sortKey: -1787783827049
-        method: GET
-        settings:
-          renderRequestBody: true
-          encodeUrl: true
-          followRedirects: global
-          cookies:
-            send: true
-            store: true
-          rebuildPath: true
-        pathParameters:
-          - name: encoding
-            value: ""
+                ### Path Variables
+
+                | Variable | Type   | Description |
+                |:--------:|--------|-------------|
+                |  jobID   | String | Job ID      |
+
+                The `jobID` and polling url can be found in the JobStartResponse or ExportJobStatusResponse.
+
+                ### Responses
+
+                | Response Code | Type                     | Description                                                                                             |
+                |:-------------:|--------------------------|---------------------------------------------------------------------------------------------------------|
+                |      200      | `application/json`       | JSON of endpoint and cached responses. Default file name is `<export>_<export_date>_<export_time>.json` |
+                |      404      | MissingExportIDException | Requested ID does not exist                                                                             |
+
+                Only the following endpoints without any filters or params:
+
+                - Get all Campuses
+                - Get all Terms
+                - Get all Subjects
+                - Get all Courses (Single Subject)
+
+                ### Example
+
+                ```bash
+                curl -LOJ http://localhost:8080/api/v2/exports/nBJjqmqv2M2E/endpoints
+                ```
+              sortKey: -1788086304728
+            method: GET
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+            pathParameters:
+              - name: jobID
+                value: latest
+          - url: http://{{ _.STARLITE_HOST }}/api/v2/exports/:jobID/records
+            name: Export Course Data
+            meta:
+              id: req_6a5661dc85ab460cb47c404929d87751
+              created: 1788086171848
+              modified: 1788086314636
+              isPrivate: false
+              description: |-
+                ## Export Course Data
+
+                > Once an export job is complete, export a series of `jsonl` files with course details. The `latest` fetches the
+                > most recent export if one exists
+
+                **Endpoint:** `http://localhost:8080/api/v2/exports/{jobID}/records`
+
+                **Endpoint:** `http://localhost:8080/api/v2/exports/latest/records`
+
+                **Request Method:** `GET`
+
+                ### Path Variables
+
+                | Variable | Type   | Description |
+                |:--------:|--------|-------------|
+                |  jobID   | String | Job ID      |
+
+                The `jobID` and polling url can be found in the JobStartResponse or ExportJobStatusResponse.
+
+                ### Responses
+
+                | Response Code | Type                     | Description                                                                              |
+                |:-------------:|--------------------------|------------------------------------------------------------------------------------------|
+                |      200      | `application/zip`        | `zip` of `jsonl` files.  Default file name is `<export>_<export_date>_<export_time>.zip` |
+                |      404      | MissingExportIDException | Requested ID does not exist                                                              |
+
+                There are eight `jsonl` tables of data:
+
+                - `campuses.jsonl`: Campus codes and names
+                - `terms.jsonl`: Term codes and names
+                - `subjects.jsonl`: Subject codes and names
+                - `offerings.jsonl`: Subjects offered at a campus during a term
+                - `courses.jsonl`: Course details
+                - `sections.jsonl`: Course section details
+                - `meetings.jsonl`: Section meeting time and locations
+                - `instructors.jsonl`: Instructor details
+
+                ### Example
+
+                ```bash
+                curl -LOJ http://localhost:8080/api/v2/exports/nBJjqmqv2M2E/records
+                ```
+              sortKey: -1788086304678
+            method: GET
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+            pathParameters:
+              - name: jobID
+                value: latest
 cookieJar:
   name: Default Jar
   meta:
-    id: jar_99d30891da4bdcebc63947a8fc17f076de878684
+    id: jar_953258cd2e974b58b0f2d3f34e5125f1
     created: 1771886556651
     modified: 1787019389786
 environments:
   name: Base Environment
   meta:
-    id: env_99d30891da4bdcebc63947a8fc17f076de878684
+    id: env_ef76d5ea26f74a139ff6ed67f143dea7
     created: 1771886556646
     modified: 1787784675207
     isPrivate: false
   subEnvironments:
     - name: Starlite
       meta:
-        id: env_ff9229069cd34b22aebc463a0e1d6483
+        id: env_fcfa022027f6416b868f42a052911ea1
         created: 1787784920339
         modified: 1787784975968
         isPrivate: false

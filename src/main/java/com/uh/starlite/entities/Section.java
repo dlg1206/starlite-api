@@ -112,6 +112,7 @@ public class Section implements TimeBlock {
         );
     }
 
+
     /**
      * @return List of time spans this block has
      */

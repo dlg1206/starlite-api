@@ -2,6 +2,7 @@ package com.uh.starlite.service;
 
 import com.uh.starlite.client.banner.SubjectsResponse;
 import com.uh.starlite.dto.IdentifierDTO;
+import com.uh.starlite.dto.OfferingDTO;
 import com.uh.starlite.exception.InvalidTermCodeException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -44,6 +45,18 @@ public class TermService {
     }
 
     /**
+     * Fetch all course offerings at each campus
+     *
+     * @return List of course offerings
+     */
+    public List<OfferingDTO> fetchAllCourseOfferings() {
+        // fetch offerings for campus and term
+        return bannerAPIService.fetchSubjects().stream()
+                .map(SubjectsResponse::toOfferingDTO)
+                .toList();
+    }
+
+    /**
      * Fetch all available terms codes for a campus
      *
      * @param campusCode Campus code
@@ -72,10 +85,10 @@ public class TermService {
     public List<IdentifierDTO> fetchTermCodeIdentifierDTOs(String campusCode) {
         // validate campus code
         String normalizedCampusCode = campusService.validateAndNormalize(campusCode);
-        return bannerAPIService.fetchSubjects().stream()
+        return fetchAllCourseOfferings().stream()
                 // only get requested campus
-                .filter(sr -> sr.ssbsectCampCode().toUpperCase().equals(normalizedCampusCode))
-                .map(SubjectsResponse::toTermIdentifierDTO)
+                .filter(o -> o.campusCode().toUpperCase().equals(normalizedCampusCode))
+                .map(OfferingDTO::toTermIdentifierDTO)
                 // dedupe
                 .distinct().toList();
     }

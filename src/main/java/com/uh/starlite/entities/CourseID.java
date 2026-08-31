@@ -21,6 +21,19 @@ public record CourseID(String subjectCode, String number) {
     }
 
     /**
+     * Generate a uuid based of self
+     *
+     * @return 6 char uuid
+     */
+    public String uuid() {
+        int hash = this.hashCode();
+        long unsignedHash = hash & 0xFFFFFFFFL;
+        String encoded = Long.toString(unsignedHash, 36);
+        String padded = "0".repeat(Math.max(0, 6 - encoded.length())) + encoded;
+        return padded.substring(padded.length() - 6);
+    }
+
+    /**
      * @return True if course number contains wildcard, false otherwise
      */
     public boolean containsWildcard() {

@@ -16,7 +16,6 @@ import com.uh.starlite.util.Timer;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -37,10 +36,6 @@ public class SchedulerService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SchedulerService.class);
     private final CourseService courseService;
-    @Value("${starlite.public-endpoint}")
-    private String publicEndpoint;
-    @Value("${server.servlet.context-path:}")
-    private String contextPath;
 
     /**
      * Validate that all requested course IDs exist
@@ -77,7 +72,7 @@ public class SchedulerService {
         ScheduleFilter scheduleFilter = scheduleRequest.toSchedulerFilter();
         List<String> subjectCodes = scheduleFilter.getSubjectCodes();
         List<Course> courses = scheduleFilter.toCourseFilter()
-                .filterCourses(courseService.fetchCourses(campusCode, termCode, subjectCodes));
+                .filterCourses(courseService.fetchCourses(campusCode, termCode, subjectCodes, false));
         // check for missing courses
         validateCourseIDs(courses, scheduleFilter.courseIDs());
 
@@ -148,7 +143,7 @@ public class SchedulerService {
                         // foreach crn in schedule -> convert to dto
                         .map(crn -> courseByCRN.get(crn).toScheduledCourseDTO(crn))
                         .toList())
-                .map(c -> ScheduleDTO.of(publicEndpoint + contextPath, campusCode, termCode, c))
+                .map(c -> ScheduleDTO.of(campusCode, termCode, c))
                 .toList();
     }
 
@@ -168,7 +163,8 @@ public class SchedulerService {
             courses = cf.filterCourses(courseService.fetchCourses(
                     decoded.campusCode(),
                     decoded.termCode(),
-                    decoded.subjectCodes()
+                    decoded.subjectCodes(),
+                    false
             ));
 
         } catch (Exception e) {
@@ -221,7 +217,7 @@ public class SchedulerService {
         List<ScheduledCourseDTO> scheduledCourses = courses.stream()
                 .flatMap(c -> c.getSections().keySet().stream().map(c::toScheduledCourseDTO))
                 .toList();
-        return ScheduleDTO.of(publicEndpoint + contextPath, decoded.campusCode(), decoded.termCode(), scheduledCourses);
+        return ScheduleDTO.of(decoded.campusCode(), decoded.termCode(), scheduledCourses);
     }
 
     /**

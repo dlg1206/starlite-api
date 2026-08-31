@@ -1,6 +1,6 @@
 package com.uh.starlite.client.banner;
 
-import com.uh.starlite.dto.IdentifierDTO;
+import com.uh.starlite.dto.OfferingDTO;
 
 /**
  * DTO for fields from <a href="https://www.sis.hawaii.edu:9350/crseavail/api/subjects">/subjects</a> Banner9 API. All fields have been included
@@ -16,22 +16,14 @@ public record SubjectsResponse(String ssbsectCampCode,
                                String stvtermCode, String stvtermDesc,
                                String stvsubjCode, String stvsubjDesc,
                                int countStvtermCode) implements BannerResponse {
-    /**
-     * Extracts the term details from this subject object
-     *
-     * @return {@link IdentifierDTO} with term code and name
-     */
-    public IdentifierDTO toTermIdentifierDTO() {
-        return new IdentifierDTO(stvtermCode, stvtermDesc);
-    }
 
     /**
-     * Extracts the subject details from this subject object
+     * Extracts the campus, term, and subject details from this subject object
      *
-     * @return {@link IdentifierDTO} with subject code and name
+     * @return {@link OfferingDTO} with subject code and name
      */
-    public IdentifierDTO toSubjectIdentifierDTO() {
-        return new IdentifierDTO(stvsubjCode, stvsubjDesc);
+    public OfferingDTO toOfferingDTO() {
+        return new OfferingDTO(ssbsectCampCode, stvtermCode, stvtermDesc, stvsubjCode, stvsubjDesc);
     }
 
 }

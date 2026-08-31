@@ -122,19 +122,22 @@ public class CourseFilter {
                 && descKeywordFilter == null
                 && hasPrerequisite == null
                 && canAudit == null
-                && hasMajorRestriction == null);
+                && hasMajorRestriction == null
+        );
         this.skipSectionValidation = (acceptCRNs == null
                 && rejectCRNs == null
                 && acceptInstructors == null
                 && rejectInstructors == null
                 && excludeFull == null
-                && excludeWaitlist == null);
+                && excludeWaitlist == null
+                && onlyAsync == null
+        );
         this.skipMeetingValidation = (acceptDays == null
                 && rejectDays == null
                 && startAfter == null
                 && endBefore == null
                 && onlyOnline == null
-                && onlyAsync == null);
+        );
     }
 
     /**
@@ -211,6 +214,12 @@ public class CourseFilter {
         if (rejectInstructors != null && rejectInstructors.contains(section.getInstructor().username()))
             return true;
 
+        // onlyAsync == true: reject sync classes
+        // onlyAsync == false: reject async classes
+        // section with no classes is async by default
+        if (onlyAsync != null && section.getMeetings().isEmpty() != onlyAsync)
+            return true;
+
         // validate meetings if not skipping
         return !skipMeetingValidation && section.getMeetings().stream().anyMatch(this::rejectMeeting);
     }
@@ -238,7 +247,7 @@ public class CourseFilter {
 
         // canAudit == true: reject courseIDs without an option to audit
         // canAudit == false: reject courseIDs with an option to audit
-        if (canAudit != null && course.canAudit() != canAudit)
+        if (canAudit != null && course.isCanAudit() != canAudit)
             return true;
 
         if (courseNumberFilter != null && courseNumberFilter.reject(course.getCourseID().number()))
@@ -449,7 +458,7 @@ public class CourseFilter {
          * @param v Boolean to allow or deny only online courses
          * @return {@link Builder}
          */
-        public Builder onlyOnline(boolean v) {
+        public Builder onlyOnline(Boolean v) {
             this.onlyOnline = v;
             return this;
         }

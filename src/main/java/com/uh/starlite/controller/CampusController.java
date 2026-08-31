@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.uh.starlite.util.Uri.campuses;
+
 /**
  * <b>File:</b> CampusController.java
  * <p>
@@ -35,7 +37,7 @@ public class CampusController {
      */
     @GetMapping(value = "")
     public ResponseEntity<IdentifierResponse> getAllCampuses() {
-        LOGGER.info("GET | /campuses | Fetching all campus code identifiers");
+        LOGGER.info("GET | {} | Fetching all campus code identifiers", campuses());
         return ResponseEntity.ok(new IdentifierResponse(campusService.lookupCampusCodeIdentifierDTOs()));
     }
 }

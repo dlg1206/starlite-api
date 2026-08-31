@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashSet;
 
-import static com.uh.starlite.util.Util.buildCoursesUri;
+import static com.uh.starlite.util.Uri.courses;
 
 /**
  * <b>File:</b> CourseController.java
@@ -37,18 +37,18 @@ public class CourseController {
      * @param campusCode Campus code to search for subjects
      * @param termCode   Term code to search for subjects
      * @param subjects   Optional list of subject codes to filter for (Default: All)
-     * @param detailed   Include section and meeting details in response (Default: false)
+     * @param detailed   Include section and meeting details in response (Default: true)
      * @return List of courseIDs for a given campus and term
      */
     @GetMapping(value = "/{campusCode}/terms/{termCode}/courses")
     public ResponseEntity<CourseResponse> getCourses(
             @PathVariable String campusCode,
             @PathVariable String termCode,
-            @RequestParam(required = false) LinkedHashSet<String> subjects,
-            @RequestParam(defaultValue = "false") boolean detailed
+            @RequestParam LinkedHashSet<String> subjects,
+            @RequestParam(required = false) Boolean detailed
     ) {
-        LOGGER.info("GET | {} | Fetching courses", buildCoursesUri(campusCode, termCode, subjects, detailed));
-        return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(campusCode, termCode, subjects, detailed)));
+        LOGGER.info("GET | {} | Fetching courses", courses(campusCode, termCode, subjects, detailed));
+        return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(campusCode, termCode, subjects, detailed == null || detailed)));
     }
 
     /**
@@ -58,7 +58,7 @@ public class CourseController {
      * @param campusCode Campus code to search for subjects
      * @param termCode   Term code to search for subjects
      * @param subjects   Optional list of subject codes to filter for (Default: All)
-     * @param detailed   Include section and meeting details in response (Default: false)
+     * @param detailed   Include section and meeting details in response (Default: true)
      * @param request    Additional details to filter search
      * @return List of courseIDs for a given campus and term that pass filters
      */
@@ -66,11 +66,11 @@ public class CourseController {
     public ResponseEntity<CourseResponse> getCourses(
             @PathVariable String campusCode,
             @PathVariable String termCode,
-            @RequestParam(required = false) LinkedHashSet<String> subjects,
-            @RequestParam(defaultValue = "false") boolean detailed,
+            @RequestParam LinkedHashSet<String> subjects,
+            @RequestParam(required = false) Boolean detailed,
             @Valid @RequestBody CourseFilterRequest request) {
-        LOGGER.info("POST | {} | Searching courses", buildCoursesUri(campusCode, termCode, subjects, detailed));
-        return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(campusCode, termCode, subjects, detailed, request)));
+        LOGGER.info("POST | {} | Searching courses", courses(campusCode, termCode, subjects, detailed));
+        return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(campusCode, termCode, subjects, detailed == null || detailed, request)));
     }
 
 

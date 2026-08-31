@@ -4,7 +4,6 @@ import com.uh.starlite.client.banner.*;
 import com.uh.starlite.dto.CourseDTO;
 import com.uh.starlite.entities.Course;
 import com.uh.starlite.entities.Section;
-import com.uh.starlite.enums.GradingOption;
 import com.uh.starlite.filter.CourseFilterMappable;
 import com.uh.starlite.response.CourseResponse;
 import com.uh.starlite.util.Timer;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 import static com.uh.starlite.util.Util.distinct;
 import static com.uh.starlite.util.Util.pluralS;
@@ -81,10 +81,10 @@ public class CourseService {
     }
 
     /**
-     * Construct a list of courseIDs from Banner API
+     * Construct a list of courses from Banner API
      *
      * @param result DTO containing all Banner API responses
-     * @return List of courseIDs and sections
+     * @return List of courses and sections
      */
     private List<Course> constructCourses(SubjectResult result) {
 
@@ -99,14 +99,7 @@ public class CourseService {
 
         // add course details
         result.cdrl.forEach((cdr -> courseBuilderLookupByCRN.get(cdr.ssbsectCrn1()).setDescription(cdr.textNarrative())));
-        result.cgrl.forEach((cdr -> {
-            try {
-                courseBuilderLookupByCRN.get(cdr.ssbsectCrn1()).addGradingOption(cdr.toGradingOption());
-            } catch (IllegalArgumentException e) {
-                LOGGER.warn("Unknown grading option '{}'", cdr.code());
-                courseBuilderLookupByCRN.get(cdr.ssbsectCrn1()).addGradingOption(GradingOption.UNKNOWN);
-            }
-        }));
+        result.cgrl.forEach((cdr -> courseBuilderLookupByCRN.get(cdr.ssbsectCrn1()).addGradingOption(cdr.toGradingOption())));
 
         // init all section builders
         Map<String, Section.Builder> sectionBuilderLookup = new HashMap<>();
@@ -134,9 +127,9 @@ public class CourseService {
             sectionBuilderLookup.get(mr.ssbsectCrn()).addMeetings(mr.toMeetings());
         });
 
-        // Add sections to courseIDs
+        // Add sections to courses
         sectionBuilderLookup.forEach((crn, sb) -> courseBuilderLookupByCRN.get(crn).addSection(sb.build()));
-        // build and return courseIDs
+        // build and return courses
         return courseBuilderLookup.values().stream()
                 .map(Course.Builder::build)
                 .toList();
@@ -148,7 +141,7 @@ public class CourseService {
      * @param campusCode  Campus code
      * @param termCode    Term code
      * @param subjectCode Subject code
-     * @return Future resolving to the constructed courseIDs for this subject
+     * @return Future resolving to the constructed courses for this subject
      */
     private CompletableFuture<List<Course>> constructCoursesJob(String campusCode, String termCode, String subjectCode) {
         // wrap batch fetch with semaphore but not construct - no limit to concurrent constructs
@@ -168,19 +161,24 @@ public class CourseService {
 
 
     /**
-     * Fetch all courseIDs for subjects
+     * Sync wrapper to fetch all courses for subjects
      *
-     * @param campusCode   Campus code
-     * @param termCode     Term code
-     * @param subjectCodes List of subjects to fetch courseIDs for
-     * @return List of courseIDs that match the filter if provided
+     * @param campusCode     Campus code
+     * @param termCode       Term code
+     * @param subjectCodes   List of subjects to fetch courses for
+     * @param skipValidation Skip validation of input
+     * @return List of courses for the given campus, term, and subjects
      */
-    public List<Course> fetchCourses(String campusCode, String termCode, Collection<String> subjectCodes) {
+    public List<Course> fetchCourses(String campusCode, String termCode, Collection<String> subjectCodes, boolean skipValidation) {
         // validate before fetch
-        Set<String> normalizedSubjectCodes = subjectService.validateCampusTermSubjects(campusCode, termCode, subjectCodes);
+        Set<String> normalizedSubjectCodes = skipValidation
+                ? subjectCodes.stream().map(String::toUpperCase).collect(Collectors.toSet())
+                : subjectService.validateCampusTermSubjects(campusCode, termCode, subjectCodes);
 
         // start async jobs
-        LOGGER.info("Attempting to construct {}", pluralS(normalizedSubjectCodes.size(), "subject"));
+        LOGGER.info("Attempting to construct courses for {} for {}:{}",
+                pluralS(normalizedSubjectCodes.size(), "subject"), campusCode, termCode
+        );
         if (normalizedSubjectCodes.size() > bannerAPIService.getBatchLimit())
             LOGGER.warn("Requested subjects exceed permitted concurrent batch size ({}) - response will be slower", bannerAPIService.getBatchLimit());
         Timer timer = new Timer();
@@ -189,14 +187,81 @@ public class CourseService {
                 .toList();
 
         // block until all jobs have finished
-        CompletableFuture.allOf(coursesFutures.toArray(new CompletableFuture[0])).join();
-        LOGGER.info("Constructed {} in {}", pluralS(normalizedSubjectCodes.size(), "subject"), timer.formatElapsed());
-
-        // create master list once all jobs are done
-        return coursesFutures.stream()
+        List<Course> result = coursesFutures.stream()
                 .map(CompletableFuture::join)
                 .flatMap(List::stream)
                 .toList();
+        LOGGER.info("Constructed {} in {}", pluralS(normalizedSubjectCodes.size(), "subject"), timer.formatElapsed());
+        return result;
+    }
+
+    /**
+     * Sync wrapper to fetch all courses for subjects
+     *
+     * @param campusCode     Campus code
+     * @param termCode       Term code
+     * @param subjectCode    Subject code
+     * @param skipValidation Skip validation of input
+     * @return List of courses for the given campus, term, and subject
+     */
+    public List<Course> fetchCourses(String campusCode, String termCode, String subjectCode, boolean skipValidation) {
+        // validate before fetch
+        String normalizedSubjectCode = skipValidation
+                ? subjectCode.toUpperCase()
+                : subjectService.validateCampusTermSubjects(campusCode, termCode, List.of(subjectCode))
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Subject " + subjectCode + " failed validation"));
+        // construct single subject
+        return constructCoursesJob(campusCode, termCode, normalizedSubjectCode).join();
+    }
+
+    /**
+     * Fetch all courses for subjects as DTOs
+     *
+     * @param campusCode    Campus code
+     * @param termCode      Term code
+     * @param subjectCodes  List of subjects to fetch courses for
+     * @param detailed      Return detailed course information
+     * @param filterRequest DTO with filter options mappable to a course filter
+     * @return List of courses that match the filter if provided
+     */
+    public List<? extends CourseDTO> fetchCourseDTOs(String campusCode,
+                                                     String termCode,
+                                                     Collection<String> subjectCodes,
+                                                     boolean detailed,
+                                                     CourseFilterMappable filterRequest) {
+        // fetch courses
+        List<Course> allCourses = fetchCourses(campusCode, termCode, subjectCodes, false);
+
+        // apply filter if provided
+        if (filterRequest != null)
+            allCourses = filterRequest.toCourseFilter().filterCourses(allCourses);
+
+        if (allCourses.isEmpty())
+            LOGGER.warn("No matching courses remain");
+
+        // convert to dto
+        return detailed
+                ? allCourses.stream().map(Course::toDetailedCourseDTO).toList()
+                : allCourses.stream().map(Course::toSimpleCourseDTO).toList();
+    }
+
+    /**
+     * Fetch all courses for subjects as DTOs
+     *
+     * @param campusCode   Campus code
+     * @param termCode     Term code
+     * @param subjectCodes List of subjects to fetch courses for
+     * @param detailed     Return detailed course information
+     * @return List of courses that match the filter if provided
+     */
+    public List<? extends CourseDTO> fetchCourseDTOs(String campusCode,
+                                                     String termCode,
+                                                     Set<String> subjectCodes,
+                                                     boolean detailed) {
+        // wrapper for filter method
+        return fetchCourseDTOs(campusCode, termCode, subjectCodes, detailed, null);
     }
 
     /**
@@ -234,54 +299,6 @@ public class CourseService {
         return fetchCourseDTOs(campusCode, termCode, List.of(subjectCode), detailed, filterRequest);
     }
 
-
-    /**
-     * Fetch all courses for subjects as DTOs
-     *
-     * @param campusCode   Campus code
-     * @param termCode     Term code
-     * @param subjectCodes List of subjects to fetch courseIDs for
-     * @param detailed     Return detailed course information
-     * @return List of courses that match the filter if provided
-     */
-    public List<? extends CourseDTO> fetchCourseDTOs(String campusCode,
-                                                     String termCode,
-                                                     Set<String> subjectCodes,
-                                                     boolean detailed) {
-        // wrapper for filter method
-        return fetchCourseDTOs(campusCode, termCode, subjectCodes, detailed, null);
-    }
-
-    /**
-     * Fetch all courses for subjects as DTOs
-     *
-     * @param campusCode    Campus code
-     * @param termCode      Term code
-     * @param subjectCodes  List of subjects to fetch courseIDs for
-     * @param detailed      Return detailed course information
-     * @param filterRequest DTO with filter options mappable to a course filter
-     * @return List of courses that match the filter if provided
-     */
-    public List<? extends CourseDTO> fetchCourseDTOs(String campusCode,
-                                                     String termCode,
-                                                     Collection<String> subjectCodes,
-                                                     boolean detailed,
-                                                     CourseFilterMappable filterRequest) {
-        // fetch courseIDs
-        List<Course> allCourses = fetchCourses(campusCode, termCode, subjectCodes);
-
-        // apply filter if provided
-        if (filterRequest != null)
-            allCourses = filterRequest.toCourseFilter().filterCourses(allCourses);
-
-        if (allCourses.isEmpty())
-            LOGGER.warn("No matching courses remain");
-
-        // convert to dto
-        return detailed
-                ? allCourses.stream().map(Course::toDetailedCourseDTO).toList()
-                : allCourses.stream().map(Course::toSimpleCourseDTO).toList();
-    }
 
     /**
      * Holds the 9 Banner9 API results for a single subject.

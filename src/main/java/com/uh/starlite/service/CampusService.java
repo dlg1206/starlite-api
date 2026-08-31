@@ -56,6 +56,17 @@ public class CampusService {
     }
 
     /**
+     * Get campus name from code
+     *
+     * @param campusCode Campus code to validate
+     * @return Full campus name
+     */
+    public String lookupCampusName(String campusCode) {
+        return campusLookup.get(validateAndNormalize(campusCode));
+    }
+
+
+    /**
      * Fetch all campus codes and names
      *
      * @return List of campus codes and names

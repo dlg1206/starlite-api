@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.uh.starlite.util.Uri.terms;
+
 /**
  * <b>File:</b> TermController.java
  * <p>
@@ -37,7 +39,7 @@ public class TermController {
      */
     @GetMapping(value = "/{campusCode}/terms")
     public ResponseEntity<IdentifierResponse> getAllTerms(@PathVariable String campusCode) {
-        LOGGER.info("GET | /campuses/{}/terms | Fetching all term code identifiers", campusCode);
+        LOGGER.info("GET | {} | Fetching all term code identifiers", terms(campusCode));
         return ResponseEntity.ok(new IdentifierResponse(termService.fetchTermCodeIdentifierDTOs(campusCode)));
     }
 }

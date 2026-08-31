@@ -1,5 +1,6 @@
 package com.uh.starlite.dto;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public record DetailedCourseDTO(String subjectCode, String courseNumber, String 
                                 String description, String prereqDescription,
                                 int credits, List<String> gradingOptions,
                                 boolean majorRestriction, String approvalAuthority,
-                                String startDate, String endDate,
+                                LocalDate startDate, LocalDate endDate,
                                 List<SectionDTO> sections) implements CourseDTO {
 
     // custom comparator that extracts number from section number since can include letters
@@ -32,8 +33,9 @@ public record DetailedCourseDTO(String subjectCode, String courseNumber, String 
                 String num = s.sectionNumber();
                 int i = 0;
                 while (i < num.length() && Character.isDigit(num.charAt(i))) i++;
-                return Integer.parseInt(num.substring(0, i));
-            }).thenComparing(SectionDTO::sectionNumber);
+                return i == 0 ? Integer.MAX_VALUE : Integer.parseInt(num.substring(0, i));
+            })
+            .thenComparing(SectionDTO::sectionNumber, Comparator.nullsFirst(Comparator.naturalOrder()));
 
     // compact constructor - normalizes/sorts sections on construction
     public DetailedCourseDTO {

@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.uh.starlite.util.Util.buildCoursesUri;
+import static com.uh.starlite.util.Uri.subjects;
 
 /**
  * <b>File:</b> SubjectController.java
@@ -41,7 +41,7 @@ public class SubjectController {
      */
     @GetMapping(value = "/{campusCode}/terms/{termCode}/subjects")
     public ResponseEntity<IdentifierResponse> getSubjects(@PathVariable String campusCode, @PathVariable String termCode) {
-        LOGGER.info("GET | /{}/terms/{}/subjects | Fetching subject codes", campusCode, termCode);
+        LOGGER.info("GET | {} | Fetching subject codes", subjects(campusCode, termCode));
         return ResponseEntity.ok(new IdentifierResponse(subjectService.fetchSubjectIdentifierDTOs(campusCode, termCode)));
     }
 
@@ -52,6 +52,7 @@ public class SubjectController {
      * @param campusCode  Campus code to search for subjects
      * @param termCode    Term code to search for subjects
      * @param subjectCode Subject code to get courses for
+     * @param detailed    Optional extra course details
      * @return List of subjects for a given campus and term
      */
     @GetMapping(value = "/{campusCode}/terms/{termCode}/subjects/{subjectCode}")
@@ -59,9 +60,9 @@ public class SubjectController {
             @PathVariable String campusCode,
             @PathVariable String termCode,
             @PathVariable String subjectCode,
-            @RequestParam(defaultValue = "false") boolean detailed) {
-        LOGGER.info("GET | {} | Fetching courses", buildCoursesUri(campusCode, termCode, subjectCode, detailed));
-        return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(campusCode, termCode, subjectCode, detailed)));
+            @RequestParam(required = false) Boolean detailed) {
+        LOGGER.info("GET | {} | Fetching courses", subjects(campusCode, termCode, subjectCode, detailed));
+        return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(campusCode, termCode, subjectCode, detailed == null || detailed)));
     }
 
 
@@ -71,7 +72,7 @@ public class SubjectController {
      *
      * @param campusCode Campus code to search for subjects
      * @param termCode   Term code to search for subjects
-     * @param detailed   Include section and meeting details in response (Default: false)
+     * @param detailed   Include section and meeting details in response (Default: true)
      * @param request    Additional details to filter search
      * @return List of courseIDs for a given campus and term that pass filters
      */
@@ -80,9 +81,9 @@ public class SubjectController {
             @PathVariable String campusCode,
             @PathVariable String termCode,
             @PathVariable String subjectCode,
-            @RequestParam(defaultValue = "false") boolean detailed,
+            @RequestParam(required = false) Boolean detailed,
             @Valid @RequestBody CourseFilterRequest request) {
-        LOGGER.info("POST | {} | Searching courses", buildCoursesUri(campusCode, termCode, subjectCode, detailed));
-        return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(campusCode, termCode, subjectCode, detailed, request)));
+        LOGGER.info("POST | {} | Searching courses", subjects(campusCode, termCode, subjectCode, detailed));
+        return ResponseEntity.ok(new CourseResponse(courseService.fetchCourseDTOs(campusCode, termCode, subjectCode, detailed == null || detailed, request)));
     }
 }

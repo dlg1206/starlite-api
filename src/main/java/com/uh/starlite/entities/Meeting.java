@@ -55,6 +55,7 @@ public class Meeting implements TimeSpan {
         return new MeetingDTO(day, startTime, endTime, buildingCode, roomCode);
     }
 
+
     /**
      * @return If this meeting is async
      */

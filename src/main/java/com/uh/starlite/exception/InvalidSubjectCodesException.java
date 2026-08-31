@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author Derek Garcia
  */
-public class InvalidSubjectCodesException extends RuntimeException {
+public class InvalidSubjectCodesException extends IllegalArgumentException {
 
     private final String campusCode;
     private final String termCode;
