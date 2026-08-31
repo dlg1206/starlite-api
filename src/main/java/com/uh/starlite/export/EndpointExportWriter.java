@@ -6,6 +6,8 @@ import com.uh.starlite.entities.Course;
 import com.uh.starlite.response.CourseResponse;
 import com.uh.starlite.response.IdentifierResponse;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.PropertyNamingStrategies;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.*;
 
@@ -27,7 +29,9 @@ public class EndpointExportWriter implements ExportWriter {
      */
     public EndpointExportWriter() {
         this.endpointCache = new HashMap<>();
-        this.mapper = new ObjectMapper();
+        this.mapper = JsonMapper.builder()
+                .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+                .build();
     }
 
     /**
@@ -38,14 +42,14 @@ public class EndpointExportWriter implements ExportWriter {
     private void writeData(List<CompleteOfferingDTO> data) {
 
         Set<IdentifierDTO> campuses = new HashSet<>();
-        Map<String, List<IdentifierDTO>> campusTerm = new HashMap<>();
+        Map<String, Set<IdentifierDTO>> campusTerm = new HashMap<>();
         Map<String, List<IdentifierDTO>> campusTermSubject = new HashMap<>();
 
         for (CompleteOfferingDTO o : data) {
             // add campus
             campuses.add(o.toCampusIdentifierDTO());
             // add new term
-            campusTerm.computeIfAbsent(terms(o.campusCode()), k -> new ArrayList<>()).add(o.toTermIdentifierDTO());
+            campusTerm.computeIfAbsent(terms(o.campusCode()), k -> new HashSet<>()).add(o.toTermIdentifierDTO());
             // add new subject
             campusTermSubject.computeIfAbsent(
                     subjects(o.campusCode(), o.termCode()),
