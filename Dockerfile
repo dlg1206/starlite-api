@@ -8,7 +8,7 @@ COPY --chown=gradle:gradle src/ /build/src/
 RUN gradle build --no-daemon
 
 FROM eclipse-temurin:25-alpine AS runtime
-ENV API_VERSION=2.2.0
+ENV API_VERSION=2.3.0
 LABEL name="starlite-api"\
       author="Derek Garcia" \
       github="dlg1206" \

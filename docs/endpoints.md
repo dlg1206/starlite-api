@@ -22,6 +22,7 @@
 
 - [Start Export Job](#start-export-job)
 - [Poll Export Job](#poll-export-job)
+- [Get Export Metadata](#get-export-metadata)
 - [Export endpoints](#export-endpoints)
 - [Export course data](#export-course-data)
 
@@ -600,6 +601,36 @@ The `jobID` and polling url can be found in the [JobStartResponse](examples/expo
 
 ```bash
 curl http://localhost:8080/api/v2/exports/nBJjqmqv2M2E/status
+```
+
+## Get Export Metadata
+
+> Get metadata about an export
+
+**Endpoint:** `http://localhost:8080/api/v2/exports/{jobID}/metadata`
+**Endpoint:** `http://localhost:8080/api/v2/exports/latest/metadata`
+
+**Request Method:** `GET`
+
+### Path Variables
+
+| Variable | Type   | Description |
+|:--------:|--------|-------------|
+|  jobID   | String | Job ID      |
+
+The `jobID` and polling url can be found in the [JobStartResponse](examples/export_job_start_response.json).
+
+### Responses
+
+| Response Code | Type                                                                     | Description                 |
+|:-------------:|--------------------------------------------------------------------------|-----------------------------|
+|      200      | [ExportMetadataDTO](examples/export_metadata_response.json)              | Details about an export     |
+|      404      | [MissingExportIDException](examples/exceptions/export_id_not_found.json) | Requested ID does not exist |
+
+### Example
+
+```bash
+curl http://localhost:8080/api/v2/exports/nBJjqmqv2M2E/metadata
 ```
 
 ## Export Endpoints
