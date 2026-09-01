@@ -1,6 +1,6 @@
 package com.uh.starlite.exception;
 
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * <b>File:</b> InvalidTermCodeException.java
@@ -41,10 +41,10 @@ public class InvalidTermCodeException extends IllegalArgumentException {
      * @param campusCode      Campus code
      * @param invalidTermCode Invalid term code
      */
-    public record Response(Date timestamp, String error, String campusCode, String invalidTermCode) {
+    public record Response(Instant timestamp, String error, String campusCode, String invalidTermCode) {
         // handle setting timestamp
         Response(String error, String campusCode, String invalidTermCode) {
-            this(new Date(), error, campusCode, invalidTermCode);
+            this(Instant.now(), error, campusCode, invalidTermCode);
         }
     }
 }

@@ -22,7 +22,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.HexFormat;
 import java.util.List;
@@ -44,7 +45,7 @@ public class ExportService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExportService.class);
     private static final DateTimeFormatter EXPORT_FILENAME_FORMAT =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmm");
+            DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmm").withZone(ZoneOffset.UTC);
 
     // cache
     private final Cache<String, ExportRecord> exportCache;
@@ -243,7 +244,7 @@ public class ExportService {
      * @return String timestamp
      */
     public String getExportTimestamp(String exportID) {
-        return getExportMetadata(exportID).finishedAt().format(EXPORT_FILENAME_FORMAT);
+        return EXPORT_FILENAME_FORMAT.format(getExportMetadata(exportID).finishedAt());
     }
 
     /**
@@ -252,7 +253,7 @@ public class ExportService {
      * @return String timestamp
      */
     public String getExportTimestamp() {
-        return getExportMetadata().finishedAt().format(EXPORT_FILENAME_FORMAT);
+        return EXPORT_FILENAME_FORMAT.format(getExportMetadata().finishedAt());
     }
 
     /**
@@ -336,8 +337,8 @@ public class ExportService {
      * @param finishedAt Time export completed at
      * @param offerings  List of offerings
      */
-    private record ExportRecord(String exportID, LocalDateTime finishedAt, String checksum,
-                                List<CompleteOfferingDTO> offerings) {
+    private record ExportRecord(String exportID, Instant finishedAt,
+                                String checksum, List<CompleteOfferingDTO> offerings) {
         /**
          * Internal cache record for storing data
          *
@@ -351,7 +352,7 @@ public class ExportService {
             offerings.stream().map(CompleteOfferingDTO::digest).sorted().forEach(sb::append);  // sort digests before adding
             digest.update(String.valueOf(sb).getBytes(StandardCharsets.UTF_8));
             // return record
-            this(exportID, LocalDateTime.now(), HexFormat.of().formatHex(digest.digest()), offerings);
+            this(exportID, Instant.now(), HexFormat.of().formatHex(digest.digest()), offerings);
         }
 
         /**

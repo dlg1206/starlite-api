@@ -2,7 +2,7 @@ package com.uh.starlite.dto;
 
 import com.uh.starlite.export.ExportJobError;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -18,7 +18,7 @@ import java.util.List;
  * @param errors     Any error messages
  */
 public record ExportJobStatusDTO(String uuid, String status,
-                                 LocalDateTime startedAt, LocalDateTime finishedAt,
+                                 Instant startedAt, Instant finishedAt,
                                  Integer completed, Integer total,
                                  Integer failed, List<ExportJobError> errors) {
 

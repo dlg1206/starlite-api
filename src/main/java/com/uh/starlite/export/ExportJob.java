@@ -4,7 +4,7 @@ import com.uh.starlite.dto.ExportJobStatusDTO;
 import lombok.Getter;
 
 import java.security.SecureRandom;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Base64;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,8 +24,8 @@ public class ExportJob {
     @Getter
     private final String uuid;
     private Status status;
-    private LocalDateTime startedAt;
-    private LocalDateTime finishedAt;
+    private Instant startedAt;
+    private Instant finishedAt;
     private AtomicInteger completed;
     private Integer total;
     private AtomicInteger failed;
@@ -64,7 +64,7 @@ public class ExportJob {
         try {
             // todo handle starting a job that's already started
             status = Status.RUNNING;
-            startedAt = LocalDateTime.now();
+            startedAt = Instant.now();
             completed = new AtomicInteger();
             this.total = total;
             failed = new AtomicInteger();
@@ -88,7 +88,7 @@ public class ExportJob {
         updateLock.lock();
         try {
             // todo handle starting a job that's already started
-            finishedAt = LocalDateTime.now();
+            finishedAt = Instant.now();
             status = Status.COMPLETED;
         } finally {
             updateLock.unlock();

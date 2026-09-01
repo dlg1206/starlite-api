@@ -1,6 +1,6 @@
 package com.uh.starlite.exception;
 
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * <b>File:</b> ExportBusyException.java
@@ -30,10 +30,10 @@ public class ExportServiceBusyException extends RuntimeException {
      * @param timestamp Timestamp
      * @param error     Error message
      */
-    public record Response(Date timestamp, String error) {
+    public record Response(Instant timestamp, String error) {
         // handle setting timestamp
         Response(String error) {
-            this(new Date(), error);
+            this(Instant.now(), error);
         }
     }
 }

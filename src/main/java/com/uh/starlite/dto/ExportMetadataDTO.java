@@ -1,6 +1,6 @@
 package com.uh.starlite.dto;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  * Metadata about an export record
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * @param totalCompleteOfferings Total number of complete offerings this export has
  * @param checksum               Checksum of data
  */
-public record ExportMetadataDTO(LocalDateTime timestamp, String exportID, LocalDateTime finishedAt,
+public record ExportMetadataDTO(Instant timestamp, String exportID, Instant finishedAt,
                                 int totalCompleteOfferings, String checksum) {
     /**
      * Create new request
@@ -21,7 +21,7 @@ public record ExportMetadataDTO(LocalDateTime timestamp, String exportID, LocalD
      * @param totalCompleteOfferings Total number of complete offerings this export has
      * @param checksum               Checksum of data
      */
-    public ExportMetadataDTO(String exportID, LocalDateTime finishedAt, int totalCompleteOfferings, String checksum) {
-        this(LocalDateTime.now(), exportID, finishedAt, totalCompleteOfferings, checksum);
+    public ExportMetadataDTO(String exportID, Instant finishedAt, int totalCompleteOfferings, String checksum) {
+        this(Instant.now(), exportID, finishedAt, totalCompleteOfferings, checksum);
     }
 }

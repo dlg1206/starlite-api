@@ -3,8 +3,8 @@ package com.uh.starlite.response;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.uh.starlite.dto.CourseDTO;
 
+import java.time.Instant;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,7 +28,7 @@ public class CourseResponse {
 
     private static final Comparator<CourseDTO> BY_SUBJECT_CODE = Comparator.comparing(CourseDTO::getSubjectCode);
 
-    public final Date timestamp;
+    public final Instant timestamp;
     public final List<? extends CourseDTO> courses;
 
     /**
@@ -37,7 +37,7 @@ public class CourseResponse {
      * @param courses list of course DTOs
      */
     public CourseResponse(List<? extends CourseDTO> courses) {
-        this.timestamp = new Date();
+        this.timestamp = Instant.now();
         this.courses = courses.stream()
                 // sort by subject then number
                 .sorted(BY_SUBJECT_CODE.thenComparing(BY_COURSE_NUMBER))

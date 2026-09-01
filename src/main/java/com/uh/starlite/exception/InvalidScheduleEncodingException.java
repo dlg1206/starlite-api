@@ -1,6 +1,6 @@
 package com.uh.starlite.exception;
 
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * <b>File:</b> InvalidScheduleEncodingException.java
@@ -66,10 +66,10 @@ public class InvalidScheduleEncodingException extends IllegalArgumentException {
      * @param error           Error message
      * @param invalidEncoding Invalid schedule encoding
      */
-    public record Response(Date timestamp, String error, String invalidEncoding) {
+    public record Response(Instant timestamp, String error, String invalidEncoding) {
         // handle setting timestamp
         Response(String error, String invalidEncoding) {
-            this(new Date(), error, invalidEncoding);
+            this(Instant.now(), error, invalidEncoding);
         }
     }
 

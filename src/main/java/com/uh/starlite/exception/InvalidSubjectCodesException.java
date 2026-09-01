@@ -1,6 +1,6 @@
 package com.uh.starlite.exception;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -48,11 +48,11 @@ public class InvalidSubjectCodesException extends IllegalArgumentException {
      * @param termCode            Term code
      * @param invalidSubjectCodes Collection of invalid subject codes
      */
-    public record Response(Date timestamp, String error, String campusCode, String termCode,
+    public record Response(Instant timestamp, String error, String campusCode, String termCode,
                            List<String> invalidSubjectCodes) {
         // handle setting timestamp
         Response(String error, String campusCode, String termCode, List<String> invalidSubjectCodes) {
-            this(new Date(), error, campusCode, termCode, invalidSubjectCodes);
+            this(Instant.now(), error, campusCode, termCode, invalidSubjectCodes);
         }
     }
 }

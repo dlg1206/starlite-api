@@ -2,7 +2,7 @@ package com.uh.starlite.exception;
 
 import com.uh.starlite.entities.CourseID;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -58,10 +58,10 @@ public class InvalidCourseIDsException extends IllegalArgumentException {
      * @param error            Error message
      * @param invalidCourseIDs List of invalid course IDs
      */
-    public record Response(Date timestamp, String error, List<CourseID> invalidCourseIDs) {
+    public record Response(Instant timestamp, String error, List<CourseID> invalidCourseIDs) {
         // handle setting timestamp
         Response(String error, List<CourseID> invalidCourseIDs) {
-            this(new Date(), error, invalidCourseIDs);
+            this(Instant.now(), error, invalidCourseIDs);
         }
     }
 }
