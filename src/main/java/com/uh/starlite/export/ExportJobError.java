@@ -1,6 +1,6 @@
 package com.uh.starlite.export;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  * DTO for errors during export generation
@@ -8,13 +8,13 @@ import java.time.LocalDateTime;
  * @param timestamp Timestamp when error occurred
  * @param message   Error message
  */
-public record ExportJobError(LocalDateTime timestamp, String message) {
+public record ExportJobError(Instant timestamp, String message) {
     /**
      * Create error with default now timestamp
      *
      * @param message Error message
      */
     public ExportJobError(String message) {
-        this(LocalDateTime.now(), message);
+        this(Instant.now(), message);
     }
 }

@@ -3,7 +3,7 @@ package com.uh.starlite.exception;
 import com.uh.starlite.entities.CourseID;
 import com.uh.starlite.request.ScheduleRequest;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -44,10 +44,10 @@ public class InvalidCourseReferenceNumberException extends RuntimeException {
      * @param error       Error message
      * @param invalidCRNs List of invalid course reference numbers
      */
-    public record Response(Date timestamp, String error, List<ScheduleRequest.RequestedCourse> invalidCRNs) {
+    public record Response(Instant timestamp, String error, List<ScheduleRequest.RequestedCourse> invalidCRNs) {
         // handle setting timestamp
         Response(String error, Map<CourseID, Set<Integer>> invalidCRNs) {
-            this(new Date(), error, invalidCRNs.entrySet().stream()
+            this(Instant.now(), error, invalidCRNs.entrySet().stream()
                     .map(e -> {
                         CourseID cid = e.getKey();
                         return new ScheduleRequest.RequestedCourse(cid.subjectCode(), cid.number(), e.getValue());

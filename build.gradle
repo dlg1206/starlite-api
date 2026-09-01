@@ -5,11 +5,11 @@ plugins {
 }
 
 group = 'com.uh'
-version = '2.2.0'
+version = '2.3.0'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
 

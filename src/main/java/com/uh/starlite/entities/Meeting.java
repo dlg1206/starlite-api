@@ -5,7 +5,10 @@ import com.uh.starlite.enums.Day;
 import lombok.Getter;
 
 import java.time.LocalTime;
+import java.util.HexFormat;
 import java.util.Objects;
+
+import static com.uh.starlite.util.Util.getDigestInstance;
 
 /**
  * <b>File:</b> Meeting.java
@@ -53,6 +56,15 @@ public class Meeting implements TimeSpan {
      */
     public MeetingDTO toMeetingDTO() {
         return new MeetingDTO(day, startTime, endTime, buildingCode, roomCode);
+    }
+
+    /**
+     * Get the checksum digest of this meeting
+     *
+     * @return SHA-256 digest
+     */
+    public String digest() {
+        return HexFormat.of().formatHex(getDigestInstance(day, startTime, endTime, buildingCode, roomCode).digest());
     }
 
 

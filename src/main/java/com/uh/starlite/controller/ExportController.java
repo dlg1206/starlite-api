@@ -2,6 +2,7 @@ package com.uh.starlite.controller;
 
 
 import com.uh.starlite.dto.ExportJobStatusDTO;
+import com.uh.starlite.dto.ExportMetadataDTO;
 import com.uh.starlite.response.ExportJobStartResponse;
 import com.uh.starlite.service.ExportService;
 import com.uh.starlite.util.Uri;
@@ -15,8 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
-import static com.uh.starlite.util.Uri.exportStatus;
-import static com.uh.starlite.util.Uri.startExport;
+import static com.uh.starlite.util.Uri.*;
 
 /**
  * <b>File:</b> ExportController.java
@@ -48,7 +48,7 @@ public class ExportController {
 
     /**
      * GET Endpoint: /exports/{jobID}/status
-     * Check the status of a job
+     * Fetch metadata about a completed (or in-progress) export job,
      *
      * @return Status of the job if it exists
      */
@@ -56,6 +56,33 @@ public class ExportController {
     public ResponseEntity<ExportJobStatusDTO> checkExportJobStatus(@PathVariable String jobID) {
         LOGGER.info("GET | {} | Checking export job", exportStatus(jobID));
         return ResponseEntity.ok().body(exportService.getJobStatus(jobID));
+    }
+
+    /**
+     * GET Endpoint: /exports/{exportID}/metadata
+     * Fetch metadata about an export
+     * e.g. timestamp, record counts, source, size, etc.
+     *
+     * @param exportID Export id to fetch. Default is the latest export
+     * @return Metadata for the given job
+     */
+    @GetMapping("/{exportID}/metadata")
+    public ResponseEntity<ExportMetadataDTO> checkExportJobMetadata(@PathVariable String exportID) {
+        LOGGER.info("GET | {} | Checking export metadata", exportMetadata(exportID));
+        return ResponseEntity.ok().body(exportService.getExportMetadata(exportID));
+    }
+
+    /**
+     * GET Endpoint: /exports/latest/metadata
+     * Fetch metadata about the latest export
+     * e.g. timestamp, record counts, source, size, etc.
+     *
+     * @return Metadata for the given job
+     */
+    @GetMapping("/latest/metadata")
+    public ResponseEntity<ExportMetadataDTO> checkExportJobMetadata() {
+        LOGGER.info("GET | {} | Checking export metadata", exportMetadata("latest"));
+        return ResponseEntity.ok().body(exportService.getExportMetadata());
     }
 
     /**

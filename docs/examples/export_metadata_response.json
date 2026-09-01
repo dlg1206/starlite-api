@@ -1,0 +1,7 @@
+{
+  "timestamp": "<timestamp of request>",
+  "export_id": "<export_id>",
+  "finished_at": "<timestamp of when export was completed>",
+  "total_complete_offerings": "<number of offerings cached>",
+  "checksum": "<checksum of data>"
+}

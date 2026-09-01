@@ -1,14 +1,14 @@
-FROM gradle:9.6.0-jdk21-alpine AS build
+FROM gradle:jdk25-alpine AS build
 WORKDIR /build
 # cache deps
 COPY --chown=gradle:gradle build.gradle settings.gradle /build/
-RUN gradle build --no-daemon -x test || return 0
+RUN gradle build -x test || return 0
 # build
 COPY --chown=gradle:gradle src/ /build/src/
 RUN gradle build --no-daemon
 
-FROM eclipse-temurin:21-alpine AS runtime
-ENV API_VERSION=2.2.0
+FROM eclipse-temurin:25-alpine AS runtime
+ENV API_VERSION=2.3.0
 LABEL name="starlite-api"\
       author="Derek Garcia" \
       github="dlg1206" \

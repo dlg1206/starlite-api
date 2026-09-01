@@ -7,13 +7,17 @@ import com.uh.starlite.dto.SimpleCourseDTO;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.HexFormat;
+import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.uh.starlite.util.Util.getDigestInstance;
 
 /**
  * <b>File:</b> Course.java
@@ -35,7 +39,7 @@ public class Course {
     private final int credits;
     @Getter
     private final boolean canAudit;
-    private final Set<GradingOption> gradingOptions;
+    private final LinkedHashSet<GradingOption> gradingOptions;
     @Getter
     private final boolean majorRestriction;
     private final String approvalAuthority;
@@ -68,7 +72,7 @@ public class Course {
                    String prereqDescription,
                    int credits,
                    boolean canAudit,
-                   Set<GradingOption> gradingOptions,
+                   LinkedHashSet<GradingOption> gradingOptions,
                    boolean majorRestriction,
                    String approvalAuthority,
                    LocalDate startDate,
@@ -136,6 +140,30 @@ public class Course {
                 credits, sections.get(sectionCRN).toSectionDTO());
     }
 
+    /**
+     * Get the checksum digest of this course
+     *
+     * @return SHA-256 digest
+     */
+    public String digest() {
+        MessageDigest digest = getDigestInstance(courseID.subjectCode(), courseID.number(), name,
+                description, prereqDescription,
+                credits,
+                majorRestriction, approvalAuthority,
+                startDate, endDate);
+        // add grading
+        StringBuilder gradeSB = new StringBuilder();
+        gradingOptions.stream().map(GradingOption::digest).sorted().forEach(gradeSB::append);
+        digest.update(String.valueOf(gradeSB).getBytes(StandardCharsets.UTF_8));
+        // add sections
+        StringBuilder sb = new StringBuilder();
+        sections.values().stream().map(Section::digest).sorted().forEach(sb::append);  // sort digests before adding
+        digest.update(String.valueOf(sb).getBytes(StandardCharsets.UTF_8));
+
+        // return final digest
+        return HexFormat.of().formatHex(digest.digest());
+    }
+
 
     public static class Builder {
         private static final Pattern prereqRegex = Pattern.compile(" Pre: (?!consent)(.*)\\.?");
@@ -144,7 +172,7 @@ public class Course {
         private final String number;
         private final String name;
         private final int credits;
-        private final Set<GradingOption> gradingOptions;
+        private final LinkedHashSet<GradingOption> gradingOptions;
         private final Map<Integer, Section> sections;
         private boolean canAudit;
         private String description;
@@ -172,7 +200,7 @@ public class Course {
             this.name = name;
             this.credits = credits;
             this.canAudit = false; // assume false until find grading
-            this.gradingOptions = new HashSet<>();
+            this.gradingOptions = new LinkedHashSet<>();
             this.sections = new HashMap<>();
         }
 

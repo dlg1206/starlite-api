@@ -1,7 +1,7 @@
 package com.uh.starlite.exception;
 
+import java.time.Instant;
 import java.time.LocalTime;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -47,10 +47,10 @@ public class InvalidTimeSpansException extends IllegalArgumentException {
      * @param error            Error message
      * @param invalidTimeSpans List of invalid time spans
      */
-    public record Response(Date timestamp, String error, List<InvalidTimeSpan> invalidTimeSpans) {
+    public record Response(Instant timestamp, String error, List<InvalidTimeSpan> invalidTimeSpans) {
         // handle setting timestamp
         Response(String error, List<InvalidTimeSpan> invalidTimeSpans) {
-            this(new Date(), error, invalidTimeSpans);
+            this(Instant.now(), error, invalidTimeSpans);
         }
     }
 }

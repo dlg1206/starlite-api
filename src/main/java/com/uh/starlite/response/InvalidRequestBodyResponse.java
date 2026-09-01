@@ -6,7 +6,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import tools.jackson.databind.DatabindException;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @JsonPropertyOrder({"timestamp", "error", "fieldErrors"})
 public class InvalidRequestBodyResponse {
     public static final String error = "Validation error";  // do not remove
-    public final Date timestamp;
+    public final Instant timestamp;
     public final List<FieldErrorDTO> fieldErrors;
 
     /**
@@ -30,7 +30,7 @@ public class InvalidRequestBodyResponse {
      * @param e Details on why validation failed
      */
     public InvalidRequestBodyResponse(MethodArgumentNotValidException e) {
-        this.timestamp = new Date();
+        this.timestamp = Instant.now();
         this.fieldErrors = e.getBindingResult().getFieldErrors().stream()
                 .map(this::buildFieldErrorDetail)
                 .collect(Collectors.toList());
@@ -42,7 +42,7 @@ public class InvalidRequestBodyResponse {
      * @param e Details on why validation failed
      */
     public InvalidRequestBodyResponse(HttpMessageNotReadableException e) {
-        this.timestamp = new Date();
+        this.timestamp = Instant.now();
         Throwable cause = e.getCause();
         if (cause instanceof DatabindException jme && !jme.getPath().isEmpty()) {
             String fieldName = jme.getPath().stream()

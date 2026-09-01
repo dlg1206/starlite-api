@@ -4,6 +4,7 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.uh.starlite.dto.CompleteOfferingDTO;
 import com.uh.starlite.dto.ExportJobStatusDTO;
+import com.uh.starlite.dto.ExportMetadataDTO;
 import com.uh.starlite.dto.OfferingDTO;
 import com.uh.starlite.entities.Course;
 import com.uh.starlite.exception.ExportServiceBusyException;
@@ -18,13 +19,19 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicReference;
+
+import static com.uh.starlite.util.Util.getDigestInstance;
 
 /**
  * <b>File:</b> ExportService.java
@@ -38,7 +45,7 @@ public class ExportService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExportService.class);
     private static final DateTimeFormatter EXPORT_FILENAME_FORMAT =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmm");
+            DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmm").withZone(ZoneOffset.UTC);
 
     // cache
     private final Cache<String, ExportRecord> exportCache;
@@ -170,7 +177,7 @@ public class ExportService {
                 .filter(Objects::nonNull)
                 .toList();
         // save record
-        exportCache.put(exportJob.getUuid(), new ExportRecord(completeOfferings));
+        exportCache.put(exportJob.getUuid(), new ExportRecord(exportJob.getUuid(), completeOfferings));
     }
 
     /**
@@ -237,10 +244,7 @@ public class ExportService {
      * @return String timestamp
      */
     public String getExportTimestamp(String exportID) {
-        ExportRecord exportRecord = exportCache.getIfPresent(exportID);
-        if (exportRecord == null)
-            throw MissingExportIDException.missingExport(exportID);
-        return exportRecord.completedAt.format(EXPORT_FILENAME_FORMAT);
+        return EXPORT_FILENAME_FORMAT.format(getExportMetadata(exportID).finishedAt());
     }
 
     /**
@@ -249,10 +253,32 @@ public class ExportService {
      * @return String timestamp
      */
     public String getExportTimestamp() {
+        return EXPORT_FILENAME_FORMAT.format(getExportMetadata().finishedAt());
+    }
+
+    /**
+     * Get the metadata for an export
+     *
+     * @param exportID ID of export to get
+     * @return {@link ExportMetadataDTO}
+     */
+    public ExportMetadataDTO getExportMetadata(String exportID) {
+        ExportRecord exportRecord = exportCache.getIfPresent(exportID);
+        if (exportRecord == null)
+            throw MissingExportIDException.missingExport(exportID);
+        return exportRecord.toExportMetadataDTO();
+    }
+
+    /**
+     * Get the metadata for the lastest export
+     *
+     * @return {@link ExportMetadataDTO}
+     */
+    public ExportMetadataDTO getExportMetadata() {
         String latestExportID = mostRecentEntryID.get();
         if (latestExportID == null)
             throw MissingExportIDException.missingLatestExport();
-        return getExportTimestamp(latestExportID);
+        return getExportMetadata(latestExportID);
     }
 
 
@@ -307,17 +333,35 @@ public class ExportService {
     /**
      * Internal cache record for storing data
      *
-     * @param completedAt Time export completed at
-     * @param offerings   List of offerings
+     * @param exportID   ID of this export
+     * @param finishedAt Time export completed at
+     * @param offerings  List of offerings
      */
-    private record ExportRecord(LocalDateTime completedAt, List<CompleteOfferingDTO> offerings) {
+    private record ExportRecord(String exportID, Instant finishedAt,
+                                String checksum, List<CompleteOfferingDTO> offerings) {
         /**
          * Internal cache record for storing data
          *
+         * @param exportID  ID of this export
          * @param offerings List of offerings
          */
-        public ExportRecord(List<CompleteOfferingDTO> offerings) {
-            this(LocalDateTime.now(), offerings);
+        public ExportRecord(String exportID, List<CompleteOfferingDTO> offerings) {
+            // calculate checksum
+            MessageDigest digest = getDigestInstance();
+            StringBuilder sb = new StringBuilder();
+            offerings.stream().map(CompleteOfferingDTO::digest).sorted().forEach(sb::append);  // sort digests before adding
+            digest.update(String.valueOf(sb).getBytes(StandardCharsets.UTF_8));
+            // return record
+            this(exportID, Instant.now(), HexFormat.of().formatHex(digest.digest()), offerings);
+        }
+
+        /**
+         * Convert this record into metadata
+         *
+         * @return {@link ExportMetadataDTO}
+         */
+        public ExportMetadataDTO toExportMetadataDTO() {
+            return new ExportMetadataDTO(exportID, finishedAt, offerings.size(), checksum);
         }
     }
 }

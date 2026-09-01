@@ -3,8 +3,8 @@ package com.uh.starlite.response;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.uh.starlite.dto.IdentifierDTO;
 
+import java.time.Instant;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,7 +16,7 @@ import java.util.List;
  */
 @JsonPropertyOrder({"timestamp", "identifiers"})
 public class IdentifierResponse {
-    public final Date timestamp;
+    public final Instant timestamp;
     public final List<IdentifierDTO> identifiers;
 
     /**
@@ -25,7 +25,7 @@ public class IdentifierResponse {
      * @param identifiers List of identifiers
      */
     public IdentifierResponse(List<IdentifierDTO> identifiers) {
-        this.timestamp = new Date();
+        this.timestamp = Instant.now();
         this.identifiers = identifiers.stream()
                 .sorted(Comparator.comparing(IdentifierDTO::id))
                 .toList();

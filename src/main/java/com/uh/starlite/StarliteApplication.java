@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 public class StarliteApplication {
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         SpringApplication.run(StarliteApplication.class, args);
     }
 

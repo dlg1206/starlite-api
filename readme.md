@@ -10,13 +10,13 @@
 1. Build image
 
 ```bash
-docker build -t starlite-api:2.2.0 .
+docker build -t starlite-api:2.3.0 .
 ```
 
 2. Run container
 
 ```bash
-docker run --rm -p 8080:8080 starlite-api:2.2.0
+docker run --rm -p 8080:8080 starlite-api:2.3.0
 ```
 
 ### Gradle
@@ -44,7 +44,7 @@ gradle bootJar    # via Gradle
 2. Run jar
 
 ```bash
-java -jar ./build/libs/starlite-2.2.0.jar
+java -jar ./build/libs/starlite-2.3.0.jar
 ```
 
 ## Usage
@@ -73,6 +73,7 @@ API endpoint documentation can be found at [API Endpoints](docs/endpoints.md#api
 
 - [Start Export Job](docs/endpoints.md#start-export-job)
 - [Poll Export Job](docs/endpoints.md#poll-export-job)
+- [Get Export Metadata](docs/endpoints.md#get-export-metadata)
 - [Export endpoints](docs/endpoints.md#export-endpoints)
 - [Export course data](docs/endpoints.md#export-course-data)
 

@@ -1,6 +1,6 @@
 package com.uh.starlite.exception;
 
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * <b>File:</b> ExportBusyException.java
@@ -63,10 +63,10 @@ public class MissingExportIDException extends IllegalArgumentException {
      * @param missingID Missing requested ID
      * @param error     Error message
      */
-    public record Response(Date timestamp, String missingID, String error) {
+    public record Response(Instant timestamp, String missingID, String error) {
         // handle setting timestamp
         Response(String error, String missingID) {
-            this(new Date(), missingID, error);
+            this(Instant.now(), missingID, error);
         }
     }
 }

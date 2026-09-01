@@ -6,5 +6,7 @@
   "completed": "<number completed>",
   "total": "<total tasks>",
   "failed": "<total failures>",
-  "errors": ["<errors>"]
+  "errors": [
+    "<errors>"
+  ]
 }

@@ -4,7 +4,7 @@ package com.uh.starlite.response;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.uh.starlite.dto.ScheduleDTO;
 
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * <b>File:</b> ScheduleResponse.java
@@ -14,11 +14,11 @@ import java.util.Date;
  * @author Derek Garcia
  */
 @JsonPropertyOrder({"timestamp", "schedule"})
-public record ScheduleResponse(Date timestamp, ScheduleDTO schedule) {
+public record ScheduleResponse(Instant timestamp, ScheduleDTO schedule) {
     /**
      * Create new Schedule response with a single schedule
      */
     public ScheduleResponse(ScheduleDTO schedule) {
-        this(new Date(), schedule);
+        this(Instant.now(), schedule);
     }
 }

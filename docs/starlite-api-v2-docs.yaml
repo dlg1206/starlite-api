@@ -2,14 +2,14 @@ type: collection.insomnia.rest/5.0
 schema_version: "5.1"
 name: Starlite API v2
 meta:
-  id: wrk_ac701d2a76984c5a9bfc5663f30cb17c
-  created: 1788085701646
-  modified: 1788085701646
+  id: wrk_scratchpad
+  created: 1771886263537
+  modified: 1771886263537
   description: ""
 collection:
   - name: starlite
     meta:
-      id: fld_f4c9f715fe1548d5bb4c04af10d9ccd1
+      id: fld_703916b3274045a8a28234879cf5c7b3
       created: 1787783819106
       modified: 1787783819106
       sortKey: -1787783819106
@@ -17,7 +17,7 @@ collection:
     children:
       - name: General Info
         meta:
-          id: fld_921129f9953f4d6abc1df890e0305b25
+          id: fld_6f003a2f0db84111bc22c3c2af6e8e8d
           created: 1788085955953
           modified: 1788086006772
           sortKey: -1788085956153
@@ -26,7 +26,7 @@ collection:
           - url: http://{{ _.STARLITE_HOST }}/api/v2/campuses
             name: Get all Campuses
             meta:
-              id: req_32235803a1b148768ad87b558fda8ee2
+              id: req_7349e412fc4c4a59ae9e8e1d31a1bfc2
               created: 1783381092698
               modified: 1788085959066
               isPrivate: false
@@ -63,7 +63,7 @@ collection:
           - url: http://{{ _.STARLITE_HOST }}/api/v2/campuses/:campusCode/terms
             name: Get all Terms
             meta:
-              id: req_1ea73cea939e4828b1acc439a0bc2020
+              id: req_6cf32b389bc249e5ab5cffc84048fc93
               created: 1783381315516
               modified: 1788085968152
               isPrivate: false
@@ -112,7 +112,7 @@ collection:
               }}/api/v2/campuses/:campusCode/terms/:termCode/subjects
             name: Get all Subjects
             meta:
-              id: req_9b274bf70af54f04bc2ba72d211d9937
+              id: req_81d37e41907b4b1ebd17c76aa82b7238
               created: 1783381444580
               modified: 1788085970063
               isPrivate: false
@@ -165,7 +165,7 @@ collection:
               }}/api/v2/campuses/:campusCode/terms/:termCode/subjects/:subjectCode
             name: Get all Courses (Single Subject)
             meta:
-              id: req_75daec5d40634583b961e6a34ceb6947
+              id: req_67cde84bcc3b44cda12dc8b0fb3da264
               created: 1783381567532
               modified: 1788085971474
               isPrivate: false
@@ -233,7 +233,7 @@ collection:
               }}/api/v2/campuses/:campusCode/terms/:termCode/subjects/:subjectCode
             name: Filter Courses (Single Subject)
             meta:
-              id: req_e6ec1c4307f34b92973cb7198bd2baa3
+              id: req_406cd51b5c214bdf9c8040cf027a03b6
               created: 1783382753736
               modified: 1788085972952
               isPrivate: false
@@ -379,7 +379,7 @@ collection:
               }}/api/v2/campuses/:campusCode/terms/:termCode/courses
             name: Get all Courses (Multiple Subjects)
             meta:
-              id: req_f3165f459a5246aca2eea55b06ad1d70
+              id: req_746244d8a9b044709bc80ab50a713cff
               created: 1783383177614
               modified: 1788085974031
               isPrivate: false
@@ -454,7 +454,7 @@ collection:
               }}/api/v2/campuses/:campusCode/terms/:termCode/courses
             name: Filter Courses (Multiple Subjects)
             meta:
-              id: req_bc021d36dc514625ad0ba65805677617
+              id: req_eff76e6255a44aaaaa153bafd11eec7c
               created: 1783383274965
               modified: 1788085975269
               isPrivate: false
@@ -613,7 +613,7 @@ collection:
                 value: ""
       - name: Schedule Generation
         meta:
-          id: fld_1781e71525fd4b91a87ee1eaeb54a435
+          id: fld_5ee2b746261c466fb1df8440e69c48ba
           created: 1788085989278
           modified: 1788086322930
           sortKey: -1788085956128
@@ -623,7 +623,7 @@ collection:
               }}/api/v2/campuses/:campusCode/terms/:termCode/schedule
             name: Generate Schedules
             meta:
-              id: req_2392a39f8bca48908b3f63d073911f41
+              id: req_052c662298e042d6a13c8b25716a203a
               created: 1783383375970
               modified: 1788085992857
               isPrivate: false
@@ -773,7 +773,7 @@ collection:
           - url: http://{{ _.STARLITE_HOST }}/api/v2/schedule/:encoding/json
             name: Decode Schedule to json
             meta:
-              id: req_b64dc969dc9c4e66ae2d2ca7cb8f3758
+              id: req_744a6ab5ff864b77967e0a9153277797
               created: 1787783433419
               modified: 1788085998174
               isPrivate: false
@@ -824,7 +824,7 @@ collection:
           - url: http://{{ _.STARLITE_HOST }}/api/v2/schedule/:encoding/ics
             name: Decode Schedule to ics
             meta:
-              id: req_17421c8087e0413e8b6157761fb97d16
+              id: req_ebca7d1d6e014bfda167a881c42a7345
               created: 1787783629800
               modified: 1788085999306
               isPrivate: false
@@ -877,7 +877,7 @@ collection:
                 value: ""
       - name: Data Export
         meta:
-          id: fld_bb85de76b6d44250a88a147beffaabe3
+          id: fld_7b21457310564786a182fe2d15693963
           created: 1788086301747
           modified: 1788086320841
           sortKey: -1788085956103
@@ -886,7 +886,7 @@ collection:
           - url: http://{{ _.STARLITE_HOST }}/api/v2/export/start
             name: Start Export Job
             meta:
-              id: req_64aa21555f22409f85fe6ccb097dd602
+              id: req_20b34cb2ab374e95bd77ef21fde2ca1f
               created: 1788085719167
               modified: 1788086304907
               isPrivate: false
@@ -924,7 +924,7 @@ collection:
           - url: http://{{ _.STARLITE_HOST }}/api/v2/exports/:jobID/status
             name: Poll Export Job
             meta:
-              id: req_83e1bc6a3724491a99aa17f3069116e0
+              id: req_ed28dc7822e74c9094c78296ab71f045
               created: 1788085863156
               modified: 1788086313302
               isPrivate: false
@@ -967,7 +967,7 @@ collection:
           - url: http://{{ _.STARLITE_HOST }}/api/v2/exports/:jobID/endpoints
             name: Export Endpoints
             meta:
-              id: req_902a0cc82d774001ac6699d7fd3109c4
+              id: req_9cf4e3da70974d44b567ed72860418a4
               created: 1788086032478
               modified: 1788086316086
               isPrivate: false
@@ -1026,7 +1026,7 @@ collection:
           - url: http://{{ _.STARLITE_HOST }}/api/v2/exports/:jobID/records
             name: Export Course Data
             meta:
-              id: req_6a5661dc85ab460cb47c404929d87751
+              id: req_b6647047390c43be8872b1b42aca961f
               created: 1788086171848
               modified: 1788086314636
               isPrivate: false
@@ -1086,25 +1086,75 @@ collection:
             pathParameters:
               - name: jobID
                 value: latest
+          - url: http://{{ _.STARLITE_HOST }}/api/v2/exports/:jobID/metadata
+            name: Get Export Metadata
+            meta:
+              id: req_c9b8b3897e1846bd92a6f65bdf3621d6
+              created: 1788224706167
+              modified: 1788224766719
+              isPrivate: false
+              description: |-
+                ## Get Export Metadata
+
+                > Get metadata about an export
+
+                **Endpoint:** `http://localhost:8080/api/v2/exports/{jobID}/metadata`
+                **Endpoint:** `http://localhost:8080/api/v2/exports/latest/metadata`
+
+                **Request Method:** `GET`
+
+                ### Path Variables
+
+                | Variable | Type   | Description |
+                |:--------:|--------|-------------|
+                |  jobID   | String | Job ID      |
+
+                The `jobID` and polling url can be found in the JobStartResponse.
+
+                ### Responses
+
+                | Response Code | Type                     | Description                 |
+                |:-------------:|--------------------------|-----------------------------|
+                |      200      | ExportMetadataDTO        | Details about an export     |
+                |      404      | MissingExportIDException | Requested ID does not exist |
+
+                ### Example
+
+                ```bash
+                curl http://localhost:8080/api/v2/exports/nBJjqmqv2M2E/metadata
+                ```
+              sortKey: -1788086304753
+            method: GET
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+            pathParameters:
+              - name: jobID
+                value: latest
 cookieJar:
   name: Default Jar
   meta:
-    id: jar_953258cd2e974b58b0f2d3f34e5125f1
+    id: jar_99d30891da4bdcebc63947a8fc17f076de878684
     created: 1771886556651
     modified: 1787019389786
 environments:
   name: Base Environment
   meta:
-    id: env_ef76d5ea26f74a139ff6ed67f143dea7
+    id: env_99d30891da4bdcebc63947a8fc17f076de878684
     created: 1771886556646
     modified: 1787784675207
     isPrivate: false
   subEnvironments:
     - name: Starlite
       meta:
-        id: env_fcfa022027f6416b868f42a052911ea1
+        id: env_2a29096c849b4af4b5300f29bd2d3a5c
         created: 1787784920339
-        modified: 1787784975968
+        modified: 1788224792696
         isPrivate: false
         sortKey: 1787784920339
       data:

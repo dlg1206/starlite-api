@@ -5,7 +5,6 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Collection;
-import java.util.Objects;
 
 /**
  * <b>File:</b> Uri.java
@@ -192,6 +191,19 @@ public class Uri {
                 .toUriString();
     }
 
+    /**
+     * Build a complex uri with optional params for logging
+     *
+     * @param exportID ID of export
+     * @return Formatted uri
+     */
+    public static String exportMetadata(String exportID) {
+        return ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/exports/{exportID}/metadata")
+                .buildAndExpand(exportID)
+                .toUriString();
+    }
+
 
     /**
      * Build a complex uri with optional params for logging
@@ -230,10 +242,10 @@ public class Uri {
         UriComponents parsed = UriComponentsBuilder.fromUriString(fullURL).build();
         UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
         // add path iff exists
-        if (parsed.getPath()!= null)
+        if (parsed.getPath() != null)
             builder.path(parsed.getPath());
         // add params iff exits
-        if (parsed.getQuery()!= null)
+        if (parsed.getQuery() != null)
             builder.path(parsed.getQuery());
 
         return builder.toUriString();
